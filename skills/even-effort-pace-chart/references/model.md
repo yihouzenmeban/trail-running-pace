@@ -14,9 +14,7 @@
 
 ## 输入归一化
 
-GPX 和 KML 都转换为统一、有序的 `(latitude, longitude, elevation)` 轨迹，再计算距离、平滑、CP 投影和配速计划。KML LineString 以逗号分隔，gx:Track 以空格分隔，坐标均按经度在前读取。原始时间戳不决定目标配速；KML 的不同线几何是独立路线选项，不会自动拼接。
-
-KML 绝对高度可直接使用。未声明高度模式或声明为 clampToGround 时，`use_kml_altitudes: true` 表示显式信任原始坐标高度，并产生告警；这不证明其为实测海平面高程。所有轨迹位置仍需有限高度，相对地面和海底模式会报错。选择及覆盖规则见[配置文档](configuration.md)。
+GPX 和 KML 都转换为统一、有序的 `(latitude, longitude, elevation)` 轨迹，再计算距离、平滑、CP 投影和配速计划。原始时间戳不决定目标配速；不同线几何是独立路线选项，不会自动拼接。支持的格式、高度模式及显式覆盖规则统一见[配置文档](configuration.md#kml-输入)。允许读取坐标高度并不证明其为实测海平面高程。
 
 ## 距离与海拔
 

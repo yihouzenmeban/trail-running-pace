@@ -1,0 +1,51 @@
+{
+  "default_parameters": {
+    "sample_m": 5,
+    "smoothing_m": 20,
+    "ascent_smoothing_m": 100,
+    "ascent_km_per_100m": 1,
+    "fatigue_rate": 0.08,
+    "water_ml_per_10km": 700,
+    "target_step_minutes": 30,
+    "start_time": "06:00",
+    "secondary_display": "pace",
+    "pace_basis": "distance",
+    "output_formats": ["svg"]
+  },
+  "targets_seconds": [14400, 16200, 18000, 19800, 21600],
+  "cases": [
+    {
+      "id": "target_only",
+      "prompt_zh": "用提供的 course.gpx 生成体感一致配速表，目标完赛时间 5 小时。",
+      "prompt_en": "Generate an even-effort pace chart from the supplied course.gpx with a 5-hour finish target."
+    },
+    {
+      "id": "start_does_not_select_arrival",
+      "prompt_zh": "用提供的 course.gpx 生成体感一致配速表，目标完赛时间 5 小时，相邻方案间隔 30 分钟，出发时间早上六点。",
+      "prompt_en": "Generate an even-effort pace chart from the supplied course.gpx: 5-hour finish target, 30-minute spacing between schedules, starting at 06:00."
+    },
+    {
+      "id": "explicit_arrival",
+      "prompt_zh": "用提供的 course.gpx 生成体感一致配速表，目标完赛 5 小时，括号内显示到达时间。",
+      "prompt_en": "Generate an even-effort pace chart from the supplied course.gpx with a 5-hour finish target and arrival clock times in parentheses.",
+      "expected_parameters": {"secondary_display": "arrival_time"}
+    },
+    {
+      "id": "replace_target_list",
+      "prompt_zh": "复用提供的配置和 course.gpx，把目标列表改为以 5 小时为中心的五组方案，其他设置保持不变。",
+      "prompt_en": "Reuse the supplied configuration and course.gpx, replacing the target list with five schedules centered on 5 hours. Keep the other settings.",
+      "selected_config": {"targets": ["12:00", "13:00"], "start_time": "07:30", "fatigue_rate": 0.1},
+      "expected_parameters": {"start_time": "07:30", "fatigue_rate": 0.1},
+      "required_config": {"target": "05:00"},
+      "forbidden_config": ["targets"]
+    },
+    {
+      "id": "preserve_zero_false",
+      "prompt_zh": "复用提供的配置和 course.gpx，目标仍为 5 小时。将 smoothing_m、fatigue_rate、water_ml_per_10km 设为 0，use_kml_altitudes 设为 false，其他设置不变。",
+      "prompt_en": "Reuse the supplied configuration and course.gpx with the same 5-hour target. Set smoothing_m, fatigue_rate, and water_ml_per_10km to 0 and use_kml_altitudes to false. Keep the other settings.",
+      "selected_config": {"target": "05:00", "smoothing_m": 20, "fatigue_rate": 0.08, "water_ml_per_10km": 700, "use_kml_altitudes": true},
+      "expected_parameters": {"smoothing_m": 0, "fatigue_rate": 0, "water_ml_per_10km": 0},
+      "required_config": {"smoothing_m": 0, "fatigue_rate": 0, "water_ml_per_10km": 0, "use_kml_altitudes": false}
+    }
+  ]
+}

@@ -5,6 +5,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest import mock
 import xml.etree.ElementTree as ET
 
 
@@ -628,12 +629,163 @@ class TimingTests(Fixture):
             self.plan(pace_basis="typo")
 
 
+class RuntimeContractTests(Fixture):
+    def setUp(self):
+        super().setUp()
+        self.write()
+
+    def test_extreme_sampling_values_report_input_errors(self):
+        for config, message in (
+            ({"sample_m": 1e-320}, "sample_m"),
+            ({"smoothing_m": 1e-20}, "smoothing"),
+            ({"ascent_smoothing_m": 1e-20}, "smoothing"),
+            ({"sample_m": 10 ** 400}, "finite"),
+        ):
+            with self.subTest(config=config), self.assertRaisesRegex(pace.InputError, message):
+                self.plan(**config)
+
+    def test_target_conflict_is_reported_without_changing_list_precedence(self):
+        plan = self.plan(target="05:00", targets=["12:00", "13:00"])
+        self.assertEqual(plan["targets_seconds"], [43200, 46800])
+        self.assertTrue(any("target" in warning and "targets" in warning for warning in plan["warnings"]))
+
+    def test_summary_reports_effective_defaults_and_verification(self):
+        plan = self.plan(target="05:00")
+        summary = pace.plan_summary(plan)
+        self.assertEqual(summary["parameters"], plan["parameters"])
+        self.assertEqual(summary["target_source"], "target")
+        self.assertEqual(summary["targets_seconds"], [14400, 16200, 18000, 19800, 21600])
+        self.assertEqual(summary["route"], plan["route"])
+        self.assertEqual([cp["name"] for cp in summary["checkpoints"]],
+                         [cp["name"] for cp in plan["checkpoints"]])
+        checks = summary["verification"]
+        self.assertTrue(checks["finish_targets_match"])
+        self.assertTrue(checks["rests_match"])
+        self.assertEqual(checks["cutoff_checked_stations"], 0)
+        self.assertEqual(checks["cutoff_unchecked_stations"], 2)
+        self.assertEqual(checks["cutoff_failures"], [])
+        self.assertNotIn("profile", summary["checkpoints"][1])
+        json.dumps(summary, allow_nan=False)
+
+    def test_summary_detects_timing_mismatch_and_cutoff_failures(self):
+        plan = self.plan(targets=["04:00"], checkpoint_overrides={
+            "wpt:1": {"rest_minutes": 20, "cutoff": "00:30"},
+        })
+        summary = pace.plan_summary(plan)
+        self.assertEqual(summary["target_source"], "targets")
+        self.assertEqual(summary["verification"]["cutoff_checked_stations"], 1)
+        self.assertEqual(summary["verification"]["cutoff_failures"], [
+            {"target_seconds": 14400, "checkpoint_id": "wpt:1", "status": "arrival_late"},
+        ])
+        plan["schedules"][0]["checkpoints"][-1]["departure_seconds"] += 10
+        summary = pace.plan_summary(plan)
+        self.assertFalse(summary["verification"]["finish_targets_match"])
+        self.assertFalse(summary["verification"]["rests_match"])
+
+    def test_cli_returns_summary_without_extra_output_files(self):
+        config = Path(self.temp.name) / "config.json"
+        config.write_text('{"target":"05:00","start_time":"06:00"}')
+        output = Path(self.temp.name) / "out"
+        result = subprocess.run(
+            [sys.executable, str(SCRIPT), "generate", str(self.path),
+             "--config", str(config), "--output-dir", str(output)],
+            capture_output=True, text=True,
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+        payload = json.loads(result.stdout)
+        self.assertEqual(payload["summary"]["parameters"]["secondary_display"], "pace")
+        self.assertEqual(payload["summary"]["parameters"]["output_formats"], ["svg"])
+        self.assertEqual(list(output.iterdir()), [output / "pace-chart.svg"])
+
+    def test_invalid_later_output_preserves_existing_files(self):
+        output = Path(self.temp.name) / "out"
+        output.mkdir()
+        svg = output / "pace-chart.svg"
+        svg.write_text("original")
+        (output / "pace-chart.html").mkdir()
+        with self.assertRaises((pace.InputError, OSError)):
+            pace.write_outputs(self.plan(output_formats=["svg", "html"]), output, overwrite=True)
+        self.assertEqual(svg.read_text(), "original")
+
+    def test_export_replace_failure_rolls_back_existing_and_new_files(self):
+        for existing in (False, True):
+            with self.subTest(existing=existing):
+                output = Path(self.temp.name) / str(existing)
+                output.mkdir()
+                svg, html = output / "pace-chart.svg", output / "pace-chart.html"
+                if existing:
+                    svg.write_text("original svg")
+                html.write_text("original html")
+                original_replace = Path.replace
+
+                def fail_html(source, destination):
+                    if Path(destination) == html and source.name == "pace-chart.html":
+                        raise OSError("simulated replacement failure")
+                    return original_replace(source, destination)
+
+                with mock.patch.object(Path, "replace", fail_html):
+                    with self.assertRaisesRegex(OSError, "simulated"):
+                        pace.write_outputs(self.plan(output_formats=["svg", "html"]), output, overwrite=True)
+                self.assertEqual(svg.read_text() if existing else svg.exists(),
+                                 "original svg" if existing else False)
+                self.assertEqual(html.read_text(), "original html")
+                self.assertEqual(set(output.iterdir()), {svg, html} if existing else {html})
+
+    def test_staging_failure_leaves_all_outputs_unchanged(self):
+        output = Path(self.temp.name) / "out"
+        pace.write_outputs(self.plan(output_formats=["svg", "html"]), output)
+        before = {p.name: p.read_bytes() for p in output.iterdir()}
+        original_open = Path.open
+
+        def fail_staging_html(path, *args, **kwargs):
+            if path.parent != output and path.name == "pace-chart.html" and args and args[0] == "w":
+                raise OSError("simulated disk full")
+            return original_open(path, *args, **kwargs)
+
+        with mock.patch.object(Path, "open", fail_staging_html):
+            with self.assertRaisesRegex(OSError, "disk full"):
+                pace.write_outputs(self.plan(output_formats=["svg", "html"]), output, overwrite=True)
+        self.assertEqual({p.name: p.read_bytes() for p in output.iterdir()}, before)
+
+    def test_failed_rollback_retains_original_for_manual_recovery(self):
+        output = Path(self.temp.name) / "out"
+        output.mkdir()
+        svg = output / "pace-chart.svg"
+        svg.write_text("original svg")
+        original_replace = Path.replace
+
+        def fail_replace_and_recovery(source, destination):
+            if source.name in ("pace-chart.html", "pace-chart.svg.bak"):
+                raise OSError("simulated permission error")
+            return original_replace(source, destination)
+
+        with mock.patch.object(Path, "replace", fail_replace_and_recovery):
+            with self.assertRaisesRegex(pace.InputError, "rollback incomplete") as context:
+                pace.write_outputs(self.plan(output_formats=["svg", "html"]), output, overwrite=True)
+        recovery = Path(context.exception.details["recovery_directory"])
+        self.assertEqual((recovery / "pace-chart.svg.bak").read_text(), "original svg")
+        self.assertEqual(context.exception.details["rollback_failures"][0]["path"], str(svg))
+
+    def test_symlink_outputs_are_rejected_including_dangling_links(self):
+        for exists in (False, True):
+            output = Path(self.temp.name) / str(exists)
+            output.mkdir()
+            destination = output / "user-file"
+            if exists:
+                destination.write_text("original")
+            (output / "pace-chart.svg").symlink_to(destination)
+            with self.subTest(exists=exists), self.assertRaisesRegex(pace.InputError, "symlink"):
+                pace.write_outputs(self.plan(), output, overwrite=True)
+            self.assertEqual(destination.read_text() if exists else destination.exists(),
+                             "original" if exists else False)
+
+
 class ExportTests(Fixture):
     def setUp(self):
         super().setUp()
         self.write()
 
-    def test_default_export_is_svg_with_pace_for_five_hour_six_am_request(self):
+    def test_five_hour_configuration_defaults_to_svg_and_pace(self):
         plan = self.plan(target="05:00", target_step_minutes=30, start_time="06:00")
         self.assertEqual(plan["targets_seconds"], [4 * 3600, 4.5 * 3600, 5 * 3600, 5.5 * 3600, 6 * 3600])
         self.assertEqual(plan["parameters"]["output_formats"], ["svg"])

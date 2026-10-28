@@ -157,6 +157,17 @@ python3 -m unittest discover -s skills/even-effort-pace-chart/tests -v
 
 The full repository runs synthetic GPX/KML tests and real-route regressions for Tiandi Liubai 100K and the Dajingmen KML. Real-route tests are skipped when the Skill is copied without the repository examples.
 
+Natural-language cases in [evals/cases.json](skills/even-effort-pace-chart/evals/cases.json) cover defaults, start time independent of parenthesized display, explicit arrival display, replacing an old target list, and retaining `0/false`. Each case has Chinese and English prompts and uses the synthetic `course.gpx` in the same directory.
+
+For each case and language, open an independent agent session, load the Skill, and provide only that language's prompt, the route, and the case's `selected_config` if present. Do not supply the expected results. Retain the configuration actually written by the agent and its execution trace, then run:
+
+```bash
+python3 skills/even-effort-pace-chart/evals/evaluate.py \
+  --case start_does_not_select_arrival --config outputs/candidate.json
+```
+
+Exit code `0` means the configuration matches the case, `1` means it does not, and `2` indicates a command or file error. Manually review the trace for route inspection, no unnecessary questions about defaults, the requested exports actually being generated, and the verification summary being read. Record the model version, language, and outcome. The checker runs offline without calling an agent; it does not verify execution traces or actual files. Unit tests establish that the checker accepts correct configurations and rejects incorrect ones, not that natural-language evaluations have passed. Normal Skill use does not require loading evaluation materials.
+
 ## Model and reference material
 
 The model draws on [《耐力科学|体感一致配速表全面指南》](https://mp.weixin.qq.com/s/spYCP-upbqAZN0kzUm-0ng) by 耐力学社 / Pili（表哥）, with independently implemented equivalent-distance and fatigue curves. It is not official RunArt.Net output. Results depend on source elevations and filtering. Water values compare relative segment demand; example targets are not individual fitness assessments.

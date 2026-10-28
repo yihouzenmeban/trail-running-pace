@@ -14,9 +14,7 @@ This is an independent implementation of the article's equivalent-distance and f
 
 ## Input normalization
 
-Both GPX and KML become the same ordered `(latitude, longitude, elevation)` profile before distance, smoothing, CP projection, and schedule calculation. KML LineString comma-separated coordinates and gx:Track space-separated coordinates are read in longitude-first order. Original timestamps do not determine the target schedule. Distinct KML line geometries are separate route selections, not automatically concatenated segments.
-
-KML absolute altitudes can be used directly. When altitudeMode is omitted or clampToGround, `use_kml_altitudes: true` explicitly trusts the supplied coordinate heights, with a warning. It does not establish that those heights are surveyed sea-level elevations. All route points still require finite heights; relative-to-ground or sea-floor modes are rejected. See the [configuration reference](configuration.en.md) for selection and override details.
+Both GPX and KML become the same ordered `(latitude, longitude, elevation)` profile before distance, smoothing, CP projection, and schedule calculation. Original timestamps do not determine the target schedule; distinct line geometries remain separate route selections rather than automatically concatenated segments. Supported formats, altitude modes, and explicit overrides are defined in the [configuration reference](configuration.en.md#kml-input). Permission to use coordinate heights does not establish that they are surveyed sea-level elevations.
 
 ## Distance and elevation
 

@@ -157,6 +157,17 @@ python3 -m unittest discover -s skills/even-effort-pace-chart/tests -v
 
 完整仓库会执行 GPX/KML 合成轨迹测试，以及天地留白 100K 和大境门 KML 真实赛道回归测试；单独复制 Skill、未携带 examples 时，真实赛道测试会跳过。
 
+自然语言评测用例见 [evals/cases.json](skills/even-effort-pace-chart/evals/cases.json)，覆盖默认值、出发时间与括号内容独立、明确到达时间、替换旧目标列表和保留 `0/false`。每个用例提供中英文提示词，使用同目录的 `course.gpx` 合成轨迹。
+
+评测时为每个用例和语言开启独立 AI 会话，加载 Skill，只提供该语言的提示词、轨迹和用例中的 `selected_config`（若有），不要提供预期结果。保留 AI 实际写出的配置与执行记录，再运行检查器：
+
+```bash
+python3 skills/even-effort-pace-chart/evals/evaluate.py \
+  --case start_does_not_select_arrival --config outputs/candidate.json
+```
+
+退出码 `0` 表示配置符合该用例，`1` 表示不符合，`2` 表示调用或文件错误。人工复核执行记录中是否先检查轨迹、无多余默认值追问、实际生成了要求的文件且读取核对摘要，并记录模型版本、语言和结果。检查器离线运行，不调用 AI，也不验证执行记录或实际文件；单元测试只证明检查器能识别正确和错误配置，不代表自然语言评测已经通过。日常使用 Skill 无需读取评测材料。
+
 ## 模型与参考资料
 
 模型参考耐力学社 / Pili（表哥）的[《耐力科学|体感一致配速表全面指南》](https://mp.weixin.qq.com/s/spYCP-upbqAZN0kzUm-0ng)，采用独立实现的等效距离与疲劳曲线，不代表 RunArt.Net 的官方输出。结果依赖轨迹海拔和平滑参数，参考水量用于比较赛段差异；示例目标不代表个人能力评估。

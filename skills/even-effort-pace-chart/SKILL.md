@@ -7,13 +7,11 @@ description: Convert a GPX or KML race route into an even-effort trail running p
 
 Use `scripts/pace_chart.py` for deterministic, offline calculations and exports. It requires Python 3.10+ and the standard library only. Resolve script paths relative to this skill folder, regardless of the user's working directory.
 
-Read supporting references in the user's language, loading only the needed version: Chinese [configuration](references/configuration.md) and [model](references/model.md), or English [configuration](references/configuration.en.md) and [model](references/model.en.md).
+Read references only as needed, in the user's language: Chinese [configuration](references/configuration.md) / [model](references/model.md), or English [configuration](references/configuration.en.md) / [model](references/model.en.md). Configuration defines fields and CLI contracts; model explains equations and limitations.
 
-For every optional parameter, use the script's documented default unless the user explicitly overrides it or supplies a configuration to use. Apply a new explicit request over the selected configuration, then let omitted fields fall back to script defaults. Do not carry settings from unrelated earlier charts or repository examples into a new request. Examples demonstrate custom targets, exports, stops, cutoffs, and route selections; those are not project defaults.
+Apply **current explicit request > selected configuration > script defaults**. Use a minimal configuration with the requested target, explicit overrides, and confirmed route selections. Omit unspecified fields; preserve valid zeros and `false`. Do not inherit settings from unrelated charts or examples, fill defaults with `null`/empty strings, or ask about optional fields with usable defaults.
 
-Prefer a minimal configuration containing the requested target and explicit overrides, plus any route selections confirmed during inspection. Leave other fields absent rather than inventing values or filling them with `null` or empty strings. Keep valid explicit zeros and `false`. Do not ask about optional fields that already have usable defaults; obtain required or ambiguous inputs as described below. Read the configuration reference for the full default and precedence rules.
-
-In particular, omitted `output_formats` means SVG only, and omitted `secondary_display` means segment pace unless a user-selected legacy `pace_basis` changes it. A supplied departure/start time sets `start_time` only; it does not request arrival times in parentheses. Choose another display mode or export format only when the user explicitly requests it or provides a configuration selecting it.
+Default output is SVG, with segment pace in parentheses and a local 06:00 start. A supplied start time changes `start_time` only. Select `secondary_display: "arrival_time"` or `"equivalent_pace"` only when requested or already selected in the supplied configuration. Legacy `pace_basis: "equivalent"` still selects equivalent pace when `secondary_display` is absent.
 
 ## Inspect the route first
 
@@ -21,25 +19,20 @@ In particular, omitted `output_formats` means SVG only, and omitted `secondary_d
 python3 <skill-dir>/scripts/pace_chart.py inspect <race.gpx-or-kml>
 ```
 
-Prefer CPs embedded in the input. GPX waypoints/named route points and KML named Point placemarks supply candidates; ordinary turns and landmarks are not automatically included. Start and finish are added when absent; a shared start/finish venue is expanded into two rows. Keep the original station names and numbers even if they have gaps.
+Read the inspection JSON. Prefer embedded CPs, preserve their names and numbering, and use the returned candidate IDs. Start/finish rows are added automatically. Ask for manual names and cumulative distances only when embedded CPs are absent or unusable.
 
-Read the JSON inspection before requesting information. If multiple tracks exist, select the intended 1-based `track_index`. KML supports LineString and gx:Track, including nested containers; separate lines remain separate selections. KMZ and remote NetworkLink routes are not supported. Ask for manual CP names and cumulative distances only when embedded CPs are absent or unusable. Ambiguous named waypoints can instead be confirmed with `cp_selection`. Normalize user-provided CSV or pasted CP data into the JSON configuration.
+Resolve ambiguous inputs before generation:
 
-KML route coordinates need explicit altitudes. An absolute altitude mode is accepted directly. When altitudeMode is omitted or clampToGround, verify the supplied heights are suitable before using `inspect --use-kml-altitudes` and recording `use_kml_altitudes: true` in the configuration. This uses the raw heights with a warning; it does not fetch terrain or correct a vertical datum. Relative or sea-floor modes must be re-exported with absolute elevations. Never fill missing route altitudes with zero.
-
-For a loop, crossing, or out-and-back, confirm the intended route occurrence when multiple projections are plausible; record a cumulative input-route `distance_km` override. Confirm offsets over 100 m before enabling `allow_off_route`. Do not choose the nearest occurrence silently. See the configuration reference in the user's language for exact fields and examples.
+- Multiple routes: obtain the intended 1-based `track_index`; separate lines are not joined.
+- Unrecognized station names: confirm `cp_selection`, rather than treating every landmark as a CP.
+- Loops/crossings or offsets over 100 m: confirm the route occurrence with an input-route `distance_km` override, or confirm `allow_off_route`; do not silently choose the nearest projection.
+- KML missing/ground-clamped altitude mode: verify supplied heights before `inspect --use-kml-altitudes` and `use_kml_altitudes: true`. Never fill missing heights with zero. See configuration for supported KML modes and geometry.
 
 ## Set targets and assumptions
 
-Obtain the intended finish target if it has not been supplied. A single `target` generates five columns at -60, -30, 0, +30, +60 minutes by default. Use `target_step_minutes` for another interval, or `targets` for the user's exact list, including a single-column chart.
+Obtain the finish target if missing. A `target` expands to five columns with 30-minute spacing; `target_step_minutes` changes the interval. Use `targets` for an exact list, including a single column. When replacing a selected configuration's list with a new central target, remove old `targets`; otherwise the script keeps list precedence and warns. If expansion gives nonpositive durations, obtain an explicit list or interval.
 
-When replacing a selected configuration's target list with a newly requested central `target`, remove its old `targets` field; otherwise the list takes precedence and silently ignores the new central target. Prefer one target form when generating a new configuration. If default expansion gives nonpositive durations, obtain a suitable explicit list or interval rather than silently changing the default.
-
-Keep 5 m distance sampling and 20 m centered smoothing for the displayed profile and slope bins. Cumulative ascent/descent use a separate `ascent_smoothing_m` window, default 100 m, on the same 5 m grid. This suppresses accumulated small oscillations while preserving a detailed display. Do not confuse the two scales or claim that interpolation adds measurement accuracy. Change the recorded parameters when the source data or a known reference warrants it; never rescale computed climbs to force a desired total.
-
-Total targets include station rests. Rest defaults to zero; ask only when the user wants it modeled. `start_time` defaults to local 06:00 and accepts `HH:MM` or a full local date/time override; it does not change elapsed targets. Do not infer a race date when none is supplied. Cutoffs are elapsed durations since the start; never invent them or infer them from CP numbers. For clock-time cutoffs, confirm the actual start time, date, and rollover information before conversion. Missing cutoffs remain unchecked in JSON/CSV and produce CLI warnings; omit cutoff details from station cells when none are supplied.
-
-Use `secondary_display` to select the parenthesized chart value: `"pace"` (default) for horizontal-distance segment pace, `"equivalent_pace"` for equivalent-distance segment pace (labeled 等强配速), or `"arrival_time"` for local arrival clock time before the current station's rest. Arrival clock mode uses the default 06:00 unless overridden. It includes the gun time at the start and marks midnight rollover as 次日 or +N天, without time-zone or daylight-saving conversion. Primary times remain elapsed departures. Legacy `pace_basis: "equivalent"` selects equivalent pace when `secondary_display` is absent; the explicit new field takes precedence.
+Targets include station rests, which default to zero. Do not invent cutoffs or a race date. Cutoffs are elapsed durations; confirm start/date/rollover when converting clock cutoffs. Missing cutoffs stay unchecked and are omitted from station cells. For manual official-distance mismatches, confirm before using `distance_alignment: "scale"`; see configuration for the threshold and schema.
 
 For example, “生成体感一致配速表，目标完赛时间 5 小时，相邻方案间隔 30 分钟，出发时间早上六点” maps to:
 
@@ -47,15 +40,11 @@ For example, “生成体感一致配速表，目标完赛时间 5 小时，相�
 {
   "target": "05:00",
   "target_step_minutes": 30,
-  "start_time": "06:00",
-  "secondary_display": "pace",
-  "output_formats": ["svg"]
+  "start_time": "06:00"
 }
 ```
 
-For manually supplied official distances, differences over `max(100 m, 0.5% of route distance)` require confirmation before `distance_alignment: "scale"`. The table continues to show route-derived distances and preserves official labels separately.
-
-The calculation is an independent interpretation of the archived article, with an explicit fatigue power curve. Read the model reference in the user's language when explaining the formula, adjusting model parameters, or discussing limitations. Do not claim equivalence to RunArt.Net's implementation or assess a runner's fitness from the route alone.
+This keeps the default pace display and SVG export. Display smoothing and ascent smoothing are independent; consult the model when adjusting them or explaining calculations. Interpolation adds no measurement accuracy; never rescale climbs to force a desired total or claim equivalence to RunArt.Net.
 
 ## Generate and verify
 
@@ -66,10 +55,8 @@ python3 <skill-dir>/scripts/pace_chart.py generate <race.gpx-or-kml> \
   --config <race.json> --output-dir <output-dir>
 ```
 
-The command writes only `pace-chart.svg` by default. Set `output_formats` to the requested non-empty subset of `"svg"`, `"html"`, `"csv"`, and `"json"` when another export is wanted. Existing selected outputs require another directory or the user's authorized `--overwrite`; unselected files are preserved. The HTML and native SVG are self-contained; no network access is needed. Use the reference race-table layout: white background, gray rules, black slope/profile graphics, yellow distance, red ascent, green descent, blue water, station names, and target columns. Water at a station is for the next leg; finish water is zero. Cumulative times display hours/minutes with the selected secondary value in parentheses. Both pace measures and elapsed arrival/departure seconds are available when CSV/JSON exports are selected.
+Set `output_formats` only for explicitly selected exports (`svg`, `html`, `csv`, `json`). Existing selected files require another directory or authorized `--overwrite`. Use the script's native renderers; they implement the table style, cutoff visibility, and metadata.
 
-Check the generated configuration against the current request and documented defaults before running it. Verify that the chart's parenthesis label, start time, target columns, and exported files match those choices. Check that CP order and names match the intended route, every final departure equals its finish target, and station rests are included exactly once. Review the reported warnings and any cutoff failures. For presentation-sensitive requests, render the SVG or print the HTML with available local tools and inspect long station names and target columns.
+Before running, compare the configuration with the request. After success, read stdout `summary`: effective `parameters`, `target_source`, `targets_seconds`, route statistics, ordered `checkpoints`, and `verification`. Confirm finish targets/rest checks, review cutoff failures and warnings, and compare exported files with the request. For presentation-sensitive changes, render locally and inspect station names and target columns.
 
-Keep the visible charts limited to the heading and table, with no explanatory footer. Show cutoff information in station cells only when supplied. Retain source attribution in document metadata and JSON.
-
-Deliver the output paths, route statistics, target list, smoothing settings, and material assumptions in the user's language; chart labels default to Chinese. Describe the water column as a relative comparison, not an individual drinking prescription.
+Deliver output paths, route statistics, targets, and material assumptions in the user's language; chart labels remain Chinese. Water values compare next-leg demand, not individual drinking needs. Do not assess fitness from a route alone.

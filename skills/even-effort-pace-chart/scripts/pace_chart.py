@@ -15,7 +15,9 @@ import json
 import math
 from pathlib import Path
 import re
+import shutil
 import sys
+import tempfile
 import xml.etree.ElementTree as ET
 
 
@@ -72,7 +74,10 @@ class Route:
 def number(value, name: str, minimum=0.0, strictly_positive=False) -> float:
     if isinstance(value, bool) or not isinstance(value, (int, float)):
         raise InputError(f"{name} must be a finite number")
-    value = float(value)
+    try:
+        value = float(value)
+    except OverflowError as error:
+        raise InputError(f"{name} must be a finite number") from error
     if not math.isfinite(value) or value < minimum or (strictly_positive and value <= 0):
         raise InputError(f"{name} must be finite and {'positive' if strictly_positive else f'>= {minimum}'}")
     return value
@@ -316,12 +321,16 @@ def interpolate(samples: list[Sample], distance: float) -> float:
     return a.elevation_m + ratio * (b.elevation_m - a.elevation_m)
 
 
-def smooth_profile(route: Route, sample_m=5.0, smoothing_m=20.0) -> list[Sample]:
+def smooth_profile(route: Route, sample_m=DEFAULTS["sample_m"],
+                   smoothing_m=DEFAULTS["smoothing_m"]) -> list[Sample]:
     step = number(sample_m, "sample_m", strictly_positive=True)
     window = number(smoothing_m, "smoothing_m")
-    count = math.ceil(route.total_m / step)
-    if count > 2_000_000:
+    if step < route.total_m / 2_000_000:
         raise InputError("Sampling would exceed 2,000,000 points; increase sample_m")
+    count = math.ceil(route.total_m / step)
+    if 0 < window < 16 * math.ulp(route.total_m):
+        raise InputError("smoothing window is too small for this route's numeric precision; "
+                         "increase smoothing_m/ascent_smoothing_m or use 0 to disable smoothing")
     distances = [index * step for index in range(count)] + [route.total_m]
     resampled = [Sample(x, interpolate(route.samples, x)) for x in distances]
     if window == 0:
@@ -656,6 +665,8 @@ def build_plan(path: Path, config: dict) -> dict:
     route_stats = section_stats(profile, 0, route.total_m, parameters["ascent_km_per_100m"],
                                 parameters["water_ml_per_10km"], gain_profile)
     warnings = list(route.warnings or []) + cp_warnings
+    if "target" in config and "targets" in config:
+        warnings.append("同时提供 target 和 targets：使用 targets，忽略 target；如需中央目标，请移除 targets。")
     if any(cp["cutoff_seconds"] is None for cp in cps[1:]):
         warnings.append("部分或全部站点未提供关门时间，未校核这些站点。")
     warnings.extend([
@@ -679,12 +690,14 @@ def build_plan(path: Path, config: dict) -> dict:
     }
 
 
-def inspect_route(path: Path, track_index=None, sample_m=5.0, smoothing_m=20.0, ascent_smoothing_m=100.0,
+def inspect_route(path: Path, track_index=None, sample_m=DEFAULTS["sample_m"],
+                  smoothing_m=DEFAULTS["smoothing_m"], ascent_smoothing_m=DEFAULTS["ascent_smoothing_m"],
                   use_kml_altitudes=False) -> dict:
     route = load_route(path, track_index, use_kml_altitudes)
     profile = smooth_profile(route, sample_m, smoothing_m)
     gain_profile = smooth_profile(route, sample_m, ascent_smoothing_m)
-    stats = section_stats(profile, 0, route.total_m, 1, 700, gain_profile)
+    stats = section_stats(profile, 0, route.total_m, DEFAULTS["ascent_km_per_100m"],
+                          DEFAULTS["water_ml_per_10km"], gain_profile)
     candidates = []
     for candidate in route.candidates:
         candidates.append({**candidate, "projection_options": projection_options(route, candidate)})
@@ -1043,6 +1056,37 @@ def csv_text(plan: dict) -> str:
     return stream.getvalue()
 
 
+def plan_summary(plan: dict) -> dict:
+    cps, schedules = plan["checkpoints"], plan["schedules"]
+    close = lambda a, b: math.isclose(a, b, rel_tol=0, abs_tol=1e-7)
+    return {
+        "parameters": plan["parameters"],
+        "target_source": "targets" if "targets" in plan["configuration"] else "target",
+        "targets_seconds": plan["targets_seconds"],
+        "route": plan["route"],
+        "checkpoints": [
+            {key: cp[key] for key in ("id", "name", "distance_m", "rest_seconds", "cutoff_seconds")}
+            for cp in cps
+        ],
+        "verification": {
+            "finish_targets_match": all(
+                close(s["checkpoints"][-1]["departure_seconds"], s["target_seconds"]) for s in schedules
+            ),
+            "rests_match": all(
+                close(t["departure_seconds"] - t["arrival_seconds"], cp["rest_seconds"])
+                for s in schedules for cp, t in zip(cps, s["checkpoints"])
+            ),
+            "cutoff_checked_stations": sum(cp["cutoff_seconds"] is not None for cp in cps[1:]),
+            "cutoff_unchecked_stations": sum(cp["cutoff_seconds"] is None for cp in cps[1:]),
+            "cutoff_failures": [
+                {"target_seconds": s["target_seconds"], "checkpoint_id": cp["id"], "status": t["cutoff_status"]}
+                for s in schedules for cp, t in zip(cps[1:], s["checkpoints"][1:])
+                if t["cutoff_status"] in ("arrival_late", "departure_late")
+            ],
+        },
+    }
+
+
 def write_outputs(plan: dict, output_dir: Path, overwrite=False) -> list[Path]:
     output_dir = Path(output_dir)
     renderers = {
@@ -1053,13 +1097,49 @@ def write_outputs(plan: dict, output_dir: Path, overwrite=False) -> list[Path]:
     }
     formats = plan["parameters"]["output_formats"]
     paths = [output_dir / f"pace-chart.{fmt}" for fmt in formats]
+    for path in paths:
+        if path.is_symlink() or (path.exists() and not path.is_file()):
+            raise InputError(f"Output must be a regular file, not a directory or symlink: {path}")
     if not overwrite and any(path.exists() for path in paths):
         raise InputError("Output files already exist; choose a new directory or use --overwrite")
     contents = [renderers[fmt]() for fmt in formats]
     output_dir.mkdir(parents=True, exist_ok=True)
-    for path, text in zip(paths, contents):
-        with path.open("w", encoding="utf-8", newline="") as stream:
-            stream.write(text)
+    staging = Path(tempfile.mkdtemp(prefix=".pace-chart-", dir=output_dir))
+    backups, replaced = {}, []
+    keep_backup = False
+    try:
+        # Stage every export and backup before replacing any user-visible output.
+        for path, text in zip(paths, contents):
+            with (staging / path.name).open("w", encoding="utf-8", newline="") as stream:
+                stream.write(text)
+            if path.exists():
+                backup = staging / (path.name + ".bak")
+                shutil.copy2(path, backup)
+                backups[path] = backup
+        try:
+            for path in paths:
+                (staging / path.name).replace(path)
+                replaced.append(path)
+        except OSError as error:
+            failures = []
+            for path in reversed(replaced):
+                try:
+                    if path in backups:
+                        backups[path].replace(path)
+                    else:
+                        path.unlink()
+                except OSError as recovery_error:
+                    failures.append({"path": str(path), "error": str(recovery_error)})
+            if failures:
+                keep_backup = True
+                raise InputError(
+                    f"Export failed ({error}); rollback incomplete. Recovery files retained at {staging}",
+                    {"recovery_directory": str(staging), "rollback_failures": failures},
+                ) from error
+            raise
+    finally:
+        if not keep_backup:
+            shutil.rmtree(staging)
     return paths
 
 
@@ -1069,9 +1149,9 @@ def main(argv=None) -> int:
     inspect = commands.add_parser("inspect", help="Inspect geometry and embedded CP candidates")
     inspect.add_argument("route", type=Path, help="Local GPX or KML route")
     inspect.add_argument("--track-index", type=int)
-    inspect.add_argument("--sample-m", type=float, default=5)
-    inspect.add_argument("--smoothing-m", type=float, default=20)
-    inspect.add_argument("--ascent-smoothing-m", type=float, default=100)
+    inspect.add_argument("--sample-m", type=float, default=DEFAULTS["sample_m"])
+    inspect.add_argument("--smoothing-m", type=float, default=DEFAULTS["smoothing_m"])
+    inspect.add_argument("--ascent-smoothing-m", type=float, default=DEFAULTS["ascent_smoothing_m"])
     inspect.add_argument("--use-kml-altitudes", action="store_true",
                          help="Use supplied KML coordinate heights when altitudeMode is omitted or clampToGround")
     generate = commands.add_parser("generate", help="Generate SVG by default; select exports with output_formats")
@@ -1088,7 +1168,8 @@ def main(argv=None) -> int:
             config = json.loads(args.config.read_text(encoding="utf-8"))
             plan = build_plan(args.route, config)
             paths = write_outputs(plan, args.output_dir, args.overwrite)
-            result = {"outputs": [str(path) for path in paths], "warnings": plan["warnings"]}
+            result = {"outputs": [str(path) for path in paths], "warnings": plan["warnings"],
+                      "summary": plan_summary(plan)}
         print(json.dumps(result, ensure_ascii=False, indent=2, allow_nan=False))
         return 0
     except (InputError, OSError, UnicodeError, json.JSONDecodeError) as error:
