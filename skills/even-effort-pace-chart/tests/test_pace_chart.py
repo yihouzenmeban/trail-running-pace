@@ -230,13 +230,16 @@ class CheckpointTests(Fixture):
             self.assertAlmostEqual(sum(cp["grade_fractions"]), 1)
 
 
-REAL_GPX = SCRIPT.parents[3] / "assets" / "天地留白100K.gpx"
+EXAMPLE_DIR = SCRIPT.parents[3] / "examples" / "tiandi-liubai-100k"
+REAL_GPX = EXAMPLE_DIR / "天地留白100K.gpx"
 
 
-@unittest.skipUnless(REAL_GPX.is_file(), "Optional user-supplied real GPX is not present")
+@unittest.skipUnless(REAL_GPX.is_file(), "Repository example GPX is not present")
 class RealRouteTests(unittest.TestCase):
     def test_real_course_automatic_cps_and_four_outputs(self):
-        plan = pace.build_plan(REAL_GPX, {"target": "24:00", "name": "天地留白100K · 示例"})
+        config = json.loads((EXAMPLE_DIR / "config.json").read_text(encoding="utf-8"))
+        plan = pace.build_plan(REAL_GPX, config)
+        self.assertEqual(plan["targets_seconds"], [hours * 3600 for hours in (12, 13, 14, 15, 16)])
         self.assertAlmostEqual(plan["route"]["distance_m"], 101248.68, delta=1)
         reference_gains = [397, 394, 439, 666, 893, 583, 531, 403, 567, 233, 220]
         self.assertAlmostEqual(plan["route"]["ascent_m"], sum(reference_gains), delta=100)

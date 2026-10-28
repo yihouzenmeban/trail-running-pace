@@ -6,7 +6,7 @@ Conceptual reference: "耐力科学|体感一致配速表全面指南", 耐力�
 
 Original: https://mp.weixin.qq.com/s/spYCP-upbqAZN0kzUm-0ng
 
-The repository archive is `耐力科学_体感一致配速表全面指南.md` at its root. The skill remains usable when copied independently; it does not require the archive at runtime.
+The repository archive is `docs/reference/耐力科学_体感一致配速表全面指南.md`, with its illustrations under `docs/reference/assets/pace-chart/`. These paths are relative to the repository root. The skill remains usable when copied independently; it does not require the archive at runtime.
 
 This is an independent implementation of the article's equivalent-distance and fatigue-curve ideas. The article does not expose RunArt.Net's full algorithm. The equations below are this implementation's explicit, reproducible choices; generated charts must not be represented as official RunArt.Net output. Preserve the source attribution included by the exporters. The article's original copyright statement remains in the repository archive; this skill does not reinterpret the terms for third-party material.
 
@@ -22,7 +22,7 @@ Compute horizontal cumulative distance with the haversine formula on a sphere of
 
 Settings are adjustable; 0 disables the corresponding smoothing. Interpolation cannot recover missing terrain detail; sparse points over 100 m apart produce a warning. The 5 m grid and 20 m display retain short features, while the independent statistical scale avoids counting every small oscillation toward total ascent. The integral of positive changes on the displayed curve therefore need not equal reported ascent. Statistical filtering can also suppress real short undulations; neither its scale nor matching another platform establishes ground truth. No external DEM, road classifier, or elevation correction is applied.
 
-The user's reference table for the local `天地留白100K.gpx` contains eleven incoming-leg gains of 397, 394, 439, 666, 893, 583, 531, 403, 567, 233, and 220 m, summing to 5,326 m. With 5 m sampling, summing the 20 m curve gave 6,653 m; the independent 100 m statistical curve gives approximately 5,332 m with a mean absolute per-leg difference of 9.4 m. This is a comparison against one supplied reference, not a reproduction of COROS or RunArt.Net's internal algorithm. No gain is multiplied by a fitted correction factor.
+The supplied reference table for `examples/tiandi-liubai-100k/天地留白100K.gpx` contains eleven incoming-leg gains of 397, 394, 439, 666, 893, 583, 531, 403, 567, 233, and 220 m, summing to 5,326 m. With 5 m sampling, summing the 20 m curve gave 6,653 m; the independent 100 m statistical curve gives approximately 5,332 m with a mean absolute per-leg difference of 9.4 m. This is a comparison against one supplied reference, not a reproduction of COROS or RunArt.Net's internal algorithm. No gain is multiplied by a fitted correction factor.
 
 Each segment's seven slope bins are weighted by horizontal distance. Boundaries, in percent, are `(-inf, -15]`, `(-15, -10]`, `(-10, -5]`, `(-5, 5)`, `[5, 10)`, `[10, 15)`, `[15, inf)`. The center bar is white; descent is on the left and ascent on the right. Segment profile thumbnails use independent horizontal and vertical scales and must not be compared as equal-scale maps.
 
