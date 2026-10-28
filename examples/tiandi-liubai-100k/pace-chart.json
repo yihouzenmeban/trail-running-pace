@@ -34,6 +34,7 @@
     "water_ml_per_10km": 700.0,
     "target_step_minutes": 30.0,
     "pace_basis": "distance",
+    "secondary_display": "pace",
     "fatigue_exponent": 1.1110313123887439,
     "rest_total_seconds": 0.0
   },

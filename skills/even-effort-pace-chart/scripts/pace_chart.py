@@ -32,7 +32,8 @@ DEFAULTS = {
 }
 CONFIG_KEYS = set(DEFAULTS) | {
     "name", "target", "targets", "track_index", "checkpoints", "cp_selection",
-    "checkpoint_overrides", "distance_alignment", "start_time", "pace_basis", "use_kml_altitudes",
+    "checkpoint_overrides", "distance_alignment", "start_time", "pace_basis", "secondary_display",
+    "use_kml_altitudes",
 }
 CP_KEYS = {"name", "distance_km", "rest_minutes", "cutoff"}
 OVERRIDE_KEYS = CP_KEYS | {"allow_off_route"}
@@ -575,7 +576,15 @@ def build_plan(path: Path, config: dict) -> dict:
     pace_basis = config.get("pace_basis", "distance")
     if pace_basis not in ("distance", "equivalent"):
         raise InputError("pace_basis must be distance or equivalent")
+    secondary_display = config.get(
+        "secondary_display", "equivalent_pace" if pace_basis == "equivalent" else "pace"
+    )
+    if secondary_display not in ("pace", "equivalent_pace", "arrival_time"):
+        raise InputError("secondary_display must be pace, equivalent_pace, or arrival_time")
+    if secondary_display != "arrival_time":
+        pace_basis = "equivalent" if secondary_display == "equivalent_pace" else "distance"
     parameters["pace_basis"] = pace_basis
+    parameters["secondary_display"] = secondary_display
     if config.get("distance_alignment", "confirm") not in ("confirm", "scale"):
         raise InputError("distance_alignment must be confirm or scale")
     if "name" in config and (not isinstance(config["name"], str) or not config["name"].strip()):
@@ -588,6 +597,8 @@ def build_plan(path: Path, config: dict) -> dict:
             datetime.fromisoformat(value)
         except ValueError as error:
             raise InputError("Invalid start_time date or time") from error
+    if secondary_display == "arrival_time" and "start_time" not in config:
+        raise InputError("secondary_display arrival_time requires start_time (local race time)")
     route = load_route(path, config.get("track_index"), config.get("use_kml_altitudes", False))
     profile = smooth_profile(route, parameters["sample_m"], parameters["smoothing_m"])
     gain_profile = smooth_profile(route, parameters["sample_m"], parameters["ascent_smoothing_m"])
@@ -778,14 +789,20 @@ def target_header(target: float) -> list[str]:
     return ["Target", label]
 
 
-def pace_label(plan) -> str:
-    return "区间等效配速" if plan["parameters"]["pace_basis"] == "equivalent" else "区间配速"
+def format_arrival_time(start_time: str, seconds: float) -> str:
+    start = datetime.fromisoformat(start_time)
+    minutes = start.hour * 60 + start.minute + math.floor(seconds / 60 + 1e-9)
+    days, minutes = divmod(minutes, 24 * 60)
+    hours, minutes = divmod(minutes, 60)
+    prefix = "次日 " if days == 1 else f"+{days}天 " if days else ""
+    return f"{prefix}{hours:02}:{minutes:02}"
 
 
 def table_metadata(plan) -> str:
     start = plan["configuration"].get("start_time")
     prefix = f'发枪：{start.replace("T", " ")}　' if start else ""
-    return prefix + "括号内：" + pace_label(plan)
+    label = {"pace": "区间配速", "equivalent_pace": "区间等强配速", "arrival_time": "到达时间"}
+    return prefix + "括号内：" + label[plan["parameters"]["secondary_display"]]
 
 
 def display_station_name(cp) -> str:
@@ -832,11 +849,15 @@ def cp_details(cp) -> list[str]:
     return lines
 
 
-def timing_lines(cp, timing) -> list[str]:
+def timing_lines(plan, cp, timing) -> list[str]:
     lines = [format_chart_time(timing["departure_seconds"])]
-    if timing["pace_seconds_per_km"] is not None:
+    arrival_clock = plan["parameters"]["secondary_display"] == "arrival_time"
+    if arrival_clock:
+        value = format_arrival_time(plan["configuration"]["start_time"], timing["arrival_seconds"])
+        lines.append(f"({value})")
+    elif timing["pace_seconds_per_km"] is not None:
         lines.append(f'({format_chart_pace(timing["pace_seconds_per_km"])})')
-    if cp["rest_seconds"]:
+    if cp["rest_seconds"] and not arrival_clock:
         lines.append(f'到 {format_chart_time(timing["arrival_seconds"])}')
     if timing["cutoff_status"] in ("arrival_late", "departure_late"):
         lines.append(STATUS_LABELS[timing["cutoff_status"]])
@@ -844,7 +865,8 @@ def timing_lines(cp, timing) -> list[str]:
 
 
 def render_svg(plan: dict) -> str:
-    widths = [width for _, width in BASE_COLUMNS] + [116] * len(plan["schedules"])
+    target_width = 168 if plan["parameters"]["secondary_display"] == "arrival_time" else 116
+    widths = [width for _, width in BASE_COLUMNS] + [target_width] * len(plan["schedules"])
     width, margin = sum(widths) + 2, 1
     parts = [f'<rect width="{width}" height="100%" fill="#ffffff"/>']
     parts.append(svg_text(6, 30, [table_metadata(plan)], size=23))
@@ -863,7 +885,7 @@ def render_svg(plan: dict) -> str:
     for index, cp in enumerate(plan["checkpoints"]):
         details = cp_details(cp)
         names = wrap_text(details[0], 20)
-        timings = [timing_lines(cp, schedule["checkpoints"][index]) for schedule in plan["schedules"]]
+        timings = [timing_lines(plan, cp, schedule["checkpoints"][index]) for schedule in plan["schedules"]]
         name_line_height = 22 * 1.45
         name_height = len(names) * name_line_height + (len(details) - 1) * 18
         row_height = max(94, name_height + 26, max(len(lines) for lines in timings) * 28 + 20)
@@ -914,7 +936,8 @@ def render_html(plan: dict) -> str:
     headers = "".join("<th>" + "<br>".join(escape(line) for line in name.split("\n")) + "</th>"
                       for name, _ in BASE_COLUMNS)
     headers += "".join("<th>" + "<br>".join(target_header(t)) + "</th>" for t in plan["targets_seconds"])
-    widths = [width for _, width in BASE_COLUMNS] + [116] * len(plan["schedules"])
+    target_width = 168 if plan["parameters"]["secondary_display"] == "arrival_time" else 116
+    widths = [width for _, width in BASE_COLUMNS] + [target_width] * len(plan["schedules"])
     columns = "".join(f'<col style="width:{100 * width / sum(widths):.5f}%">' for width in widths)
     limits = heat_limits(plan)
     rows = []
@@ -938,7 +961,7 @@ def render_html(plan: dict) -> str:
             timing = schedule["checkpoints"][index]
             late = timing["cutoff_status"].endswith("_late")
             cells += f'<td class="{"late" if late else "timing"}">' + "<br>".join(
-                escape(line) for line in timing_lines(cp, timing)
+                escape(line) for line in timing_lines(plan, cp, timing)
             ) + "</td>"
         rows.append("<tr>" + cells + "</tr>")
     return f"""<!doctype html>

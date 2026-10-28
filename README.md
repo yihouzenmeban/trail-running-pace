@@ -110,8 +110,9 @@ python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate \
 | --- | --- | --- |
 | `target` / `targets` | 必须提供其一 | 中心目标或明确的目标列表，时长支持 `H:MM`、`H:MM:SS`，可超过 24 小时 |
 | `target_step_minutes` | `30` | 单个目标展开五组时的相邻间隔 |
-| `start_time` | 不展示 | 发枪日期时间，仅用于标注；表中仍显示比赛经过时长 |
-| `pace_basis` | `"distance"` | 括号内默认显示实际距离配速，可设为 `"equivalent"` 显示等效配速 |
+| `start_time` | 不展示 | 本地发枪日期时间；选择到达时间模式时必填，主行仍为比赛经过时长 |
+| `secondary_display` | `"pace"` | 括号内显示内容：`"pace"` 配速、`"equivalent_pace"` 等强配速、`"arrival_time"` 到达钟点 |
+| `pace_basis` | `"distance"` | 兼容旧配置：`"equivalent"` 对应等强配速；显式设置 `secondary_display` 优先 |
 | `sample_m` | `5` | 沿距离插值的间隔，单位米 |
 | `smoothing_m` | `20` | 海拔肖像与坡度分布的居中平滑窗口全宽，单位米 |
 | `ascent_smoothing_m` | `100` | 累计爬升、下降的独立统计窗口全宽，单位米 |
@@ -120,6 +121,17 @@ python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate \
 | `checkpoints` | 从轨迹读取 | 没有可用内嵌 CP 时，手动提供名称和累计公里数 |
 
 目标完赛时间包含站点停留。关门时间按发枪后经过时长填写；环线、折返或偏离轨迹的 CP 可能需要明确确认位置。
+
+例如，将以下字段加入配置，可在括号内显示到达钟点：
+
+```json
+{
+  "start_time": "2026-10-31 06:00",
+  "secondary_display": "arrival_time"
+}
+```
+
+默认配速按区间水平距离计算，等强配速按区间等效距离计算，均仅含移动时间。到达钟点使用本站停留前的时间，跨日显示“次日”或“+N天”；三种展示方式均不改变时间分配。
 
 完整字段、人工 CP 和关门时间示例见[配置文档](skills/even-effort-pace-chart/references/configuration.md)，计算公式与平滑方案见[模型文档](skills/even-effort-pace-chart/references/model.md)。
 

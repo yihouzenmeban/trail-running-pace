@@ -106,8 +106,9 @@ KML 中命名的 Point 地标提供 CP 候选，地标自身可以没有海拔�
 | 参数 | 默认值 | 含义 |
 | --- | --- | --- |
 | `name` | 输入文件名，不含扩展名 | 图表名称 |
-| `start_time` | 不展示 | 本地发枪时间，格式为 `YYYY-MM-DD HH:MM` 或 `YYYY-MM-DDTHH:MM`；不会把经过时长转换为钟表时间 |
-| `pace_basis` | `"distance"` | 括号内按水平距离计算移动配速；`"equivalent"` 改为等效配速 |
+| `start_time` | 不展示 | 本地发枪时间，格式为 `YYYY-MM-DD HH:MM` 或 `YYYY-MM-DDTHH:MM`；到达钟点模式必填，主行始终为经过时长 |
+| `secondary_display` | `"pace"` | 括号内显示：`"pace"` 区间配速、`"equivalent_pace"` 区间等强配速、`"arrival_time"` 到达钟点 |
+| `pace_basis` | `"distance"` | 兼容旧配置，`"equivalent"` 选择等强配速；显式设置 `secondary_display` 优先 |
 | `track_index` | 唯一的轨迹 | 从 1 开始的 GPX track/route 或 KML 线/track 序号 |
 | `use_kml_altitudes` | `false` | 布尔值；显式采用未声明模式或 clampToGround 的 KML 坐标高度，对 GPX 无影响 |
 | `sample_m` | 5 | 沿距离插值间隔，单位米，必须大于零 |
@@ -121,6 +122,29 @@ KML 中命名的 Point 地标提供 CP 候选，地标自身可以没有海拔�
 未知的配置或站点字段会报错，数值必须有限。不会获取或编造实测海拔；源数据缺失时应先补全。采样上限为 2,000,000 个点，防止意外分配过多内存。
 
 海拔处理和时间分配公式见[模型与限制](model.md)。
+
+## 括号内显示内容
+
+`secondary_display` 同时控制 HTML 和 SVG 的括号内容及表头标注：
+
+| 值 | 标注 | 计算方式 |
+| --- | --- | --- |
+| `"pace"` | 区间配速 | 本段移动秒数 / 本段水平公里数，默认值 |
+| `"equivalent_pace"` | 区间等强配速 | 本段移动秒数 / 本段等效公里数 |
+| `"arrival_time"` | 到达时间 | `start_time` + 本站累计到站时长，使用本站停留前的时间 |
+
+两种配速均显示 `MM:SS`，按秒取整；起点无上一段，因此没有配速括号。到达钟点显示 `HH:MM`，秒数向下截断，起点显示发枪钟点。跨过发枪日期的午夜后标注“次日”，两天及以上标注“+N天”，例如 `(次日 01:20)`、`(+2天 00:30)`。时间采用赛事当地时间，不进行时区或夏令时转换。到达钟点模式未提供 `start_time` 时会报错。
+
+例如，将以下字段加入含目标时间的配置：
+
+```json
+{
+  "start_time": "2026-10-31 23:30",
+  "secondary_display": "arrival_time"
+}
+```
+
+未设置 `secondary_display` 时，旧配置 `pace_basis: "equivalent"` 仍显示等强配速，其余默认显示配速。显式选择 `"pace"` 或 `"equivalent_pace"` 时，也会将输出参数 `pace_basis` 和 JSON/CSV 的 `pace_seconds_per_km` 同步到所选口径；选择 `"arrival_time"` 时保留原 `pace_basis` 的数值口径。两种原始配速字段始终保留，三种模式都不改变时间分配。
 
 ## 生成与输出
 
@@ -136,7 +160,7 @@ python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate race.gpx \
 - `pace-chart.csv`：UTF-8 BOM，按 CP 和目标展开为长表，包含原始秒数、累计时长、上一段的 `segment_water_ml` 和下一段的 `water_ml`；可能被表格软件识别为公式的站名会转义。
 - `pace-chart.json`：完整精度数据，包括参数、配置、输入 SHA-256、站点统计、配速计划、坡度比例、肖像、告警和文章来源。结构版本为 2，几何单位为米，时间为秒，等效距离为公里；版本 2 的 `water_ml` 对应下一段，`segment_water_ml` 对应上一段。
 
-累计主时间为出站时长，显示 `HH:MM`，秒数向下截断；有停留的站点额外显示到站时长。括号内是该段仅含移动时间、按秒取整的配速 `MM:SS`，默认使用水平距离。设置 `pace_basis: "equivalent"` 可切换为等效配速及对应标题，时间分配不变。JSON/CSV 同时保留 `distance_pace_seconds_per_km`、`eq_pace_seconds_per_km` 和所选的 `pace_seconds_per_km`。HTML/SVG 使用 Target 与小时数作列标题；CSV 格式化累计时间保留秒，原始 JSON/CSV 保留计算精度。位置列仅展示实际提供的关门时间；缺失时仍在 CLI 和 JSON 告警，实际超时在目标单元格标示。JSON/CSV 保留每个站点的校核状态。
+累计主时间为出站时长，显示 `HH:MM`，秒数向下截断，可超过 24 小时；配速模式下，有停留的站点额外显示到站时长。到达钟点模式将本站到达信息直接放入括号，不再增加该行。JSON/CSV 同时保留 `distance_pace_seconds_per_km`、`eq_pace_seconds_per_km` 和所选的 `pace_seconds_per_km`，到站、出站仍为发枪后的累计秒数，钟点仅用于图表展示。HTML/SVG 使用 Target 与小时数作列标题；CSV 格式化累计时间保留秒，原始 JSON/CSV 保留计算精度。位置列仅展示实际提供的关门时间；缺失时仍在 CLI 和 JSON 告警，实际超时在目标单元格标示。JSON/CSV 保留每个站点的校核状态。
 
 HTML/SVG 的可见内容到表格结束，不附加说明页脚；计算参数和告警保留在 JSON 与 CLI，来源保留在 HTML/SVG 元数据及 JSON 中。
 

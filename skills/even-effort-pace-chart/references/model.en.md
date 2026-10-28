@@ -63,7 +63,9 @@ departure_i = arrival_i + rest_i
 
 Rest is explicit and included once; no automatic extra delay or stop is inferred. Every target must exceed total rest. Time calculations retain floating-point precision; segment totals calculated from rounded display values may differ slightly.
 
-The reference-style table displays cumulative durations truncated to full minutes and the incoming segment's moving-time pace rounded to seconds. By default the parenthesized pace uses horizontal kilometres (`pace_basis: "distance"`), matching the supplied reference. The `"equivalent"` option uses equivalent kilometres and labels the header accordingly. Both are retained as full-precision values; changing the displayed basis does not change allocated moving times. CSV formatted cumulative durations continue to round to seconds.
+The reference-style table displays cumulative departure durations truncated to full minutes. `secondary_display` selects the parenthesized value: default `"pace"` divides incoming segment moving seconds by horizontal kilometres; `"equivalent_pace"` divides by equivalent kilometres. Both round to seconds as `MM:SS`; equivalent pace is labeled “等强配速” in the chart. `"arrival_time"` instead adds cumulative arrival duration to `start_time`, showing local clock time before the current rest as `HH:MM`, truncated to minutes. Midnight rollover is marked “次日” or “+N天”; missing start time is an error, and no time-zone or daylight-saving conversion is performed. Pace modes omit parentheses at the start; arrival clock mode shows the gun time there.
+
+All three modes preserve timing allocation and rest calculations. Legacy `pace_basis: "equivalent"` still selects equivalent pace when `secondary_display` is absent; the new field takes precedence. Both paces and cumulative arrival/departure durations retain full precision. CSV formatted cumulative durations continue to round to seconds.
 
 These columns are pre-race reference schedules. Switching to an adjacent column mid-race does not recompute the remaining schedule from the runner's current time, fatigue, or position.
 

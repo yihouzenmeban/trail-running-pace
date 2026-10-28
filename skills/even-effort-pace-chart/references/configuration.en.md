@@ -106,8 +106,9 @@ Default `distance_alignment` is `"confirm"`: differences over `max(100 m, 0.5% o
 | Key | Default | Meaning |
 | --- | --- | --- |
 | `name` | Input filename stem | Chart title |
-| `start_time` | Omitted | Displayed local race start, `YYYY-MM-DD HH:MM` or `YYYY-MM-DDTHH:MM`; does not convert durations to clock time |
-| `pace_basis` | `"distance"` | Parenthesized moving-time pace over horizontal distance; `"equivalent"` selects equivalent-distance pace |
+| `start_time` | Omitted | Local race start, `YYYY-MM-DD HH:MM` or `YYYY-MM-DDTHH:MM`; required for arrival clock mode, while primary times remain elapsed durations |
+| `secondary_display` | `"pace"` | Parenthesized value: `"pace"` for segment pace, `"equivalent_pace"` for equivalent segment pace, or `"arrival_time"` for arrival clock time |
+| `pace_basis` | `"distance"` | Legacy option: `"equivalent"` selects equivalent pace; explicit `secondary_display` takes precedence |
 | `track_index` | Only available track | 1-based GPX track/route or KML line/track selection |
 | `use_kml_altitudes` | `false` | Boolean opt-in to supplied KML heights when mode is omitted or clampToGround; no effect on GPX |
 | `sample_m` | 5 | Positive distance resampling step in metres |
@@ -121,6 +122,29 @@ Default `distance_alignment` is `"confirm"`: differences over `max(100 m, 0.5% o
 Unknown configuration and station fields are errors. Numbers must be finite. No measured elevation is fetched or invented; fix missing elevations in the source before generation. Sampling is limited to 2,000,000 points to prevent accidental excessive allocation.
 
 See the [model and limitations](model.en.md) for elevation filtering and timing equations.
+
+## Parenthesized display
+
+`secondary_display` controls the parenthesized value and heading label in both HTML and SVG:
+
+| Value | Chinese label | Calculation |
+| --- | --- | --- |
+| `"pace"` | 区间配速 | Segment moving seconds / horizontal segment kilometres; default |
+| `"equivalent_pace"` | 区间等强配速 | Segment moving seconds / equivalent segment kilometres |
+| `"arrival_time"` | 到达时间 | `start_time` + cumulative arrival duration, before this station's rest |
+
+Both pace modes show `MM:SS` rounded to seconds. The start has no incoming leg and therefore no parenthesized pace. Arrival clock mode shows `HH:MM` truncated to minutes, including the gun time at the start. After midnight relative to the start date, it labels the next day “次日” and later days “+N天”, for example `(次日 01:20)` and `(+2天 00:30)`. Times use local race time without time-zone or daylight-saving conversion. Selecting arrival clock mode without `start_time` is an error.
+
+For example, add these fields to a configuration that includes a finish target:
+
+```json
+{
+  "start_time": "2026-10-31 23:30",
+  "secondary_display": "arrival_time"
+}
+```
+
+When `secondary_display` is absent, legacy `pace_basis: "equivalent"` still selects equivalent pace; otherwise pace is the default. Explicit `"pace"` or `"equivalent_pace"` also sets the output `pace_basis` parameter and JSON/CSV `pace_seconds_per_km` to the selected basis. `"arrival_time"` keeps the original `pace_basis` for numeric pace fields. Both raw pace fields remain available, and all three modes preserve the timing allocation.
 
 ## Generate and outputs
 
@@ -136,7 +160,7 @@ Use `--overwrite` only when replacing those output files is intended. Otherwise 
 - `pace-chart.csv`: UTF-8 BOM, long form with one row per CP and target. Includes raw seconds and formatted cumulative durations, incoming `segment_water_ml`, and next-leg `water_ml`. Potential formula-leading CP names are escaped for spreadsheets.
 - `pace-chart.json`: full-precision source of truth with parameters, configuration, input SHA-256, station statistics, schedule values, slope fractions, profiles, warnings, and article attribution. Schema version 2; geometry in metres, times in seconds, equivalent distances in kilometres. In version 2, `water_ml` describes the outgoing leg; `segment_water_ml` describes the incoming leg.
 
-Primary cumulative times are departures, shown as `HH:MM` by truncating seconds. Resting CPs also show arrival. Parentheses contain the segment's moving-time pace rounded to seconds (`MM:SS`), using horizontal distance by default to match the supplied race-table reference. Set `pace_basis: "equivalent"` to show equivalent-distance pace instead; this changes the displayed pace and its label, not the underlying schedule. JSON/CSV include `distance_pace_seconds_per_km`, `eq_pace_seconds_per_km`, and the selected `pace_seconds_per_km`. HTML/SVG headers use `Target` and hours. CSV formatted arrival/departure retain seconds, and raw JSON/CSV values retain calculation precision. Station cells display cutoff information only when supplied; missing cutoffs remain in CLI warnings and JSON. Actual cutoff violations appear in their target cells. JSON/CSV include the status of every CP.
+Primary cumulative times are departures, shown as `HH:MM` by truncating seconds, including durations over 24 hours. In pace modes, resting CPs also show elapsed arrival on an extra line. Arrival clock mode puts arrival in parentheses and omits that extra line. JSON/CSV include `distance_pace_seconds_per_km`, `eq_pace_seconds_per_km`, and the selected `pace_seconds_per_km`; arrival and departure remain elapsed seconds since the start, with clock times used only for chart presentation. HTML/SVG headers use `Target` and hours. CSV formatted arrival/departure retain seconds, and raw JSON/CSV values retain calculation precision. Station cells display cutoff information only when supplied; missing cutoffs remain in CLI warnings and JSON. Actual cutoff violations appear in their target cells. JSON/CSV include the status of every CP.
 
 Visible HTML/SVG content ends with the table, without explanatory footer text. Calculation parameters and warnings remain in JSON and CLI output. Source attribution is retained in HTML/SVG metadata and JSON.
 

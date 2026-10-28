@@ -110,8 +110,9 @@ This configuration produces 13:00, 13:30, 14:00, 14:30, and 15:00 schedules. To 
 | --- | --- | --- |
 | `target` / `targets` | Supply one | Central target or exact target list; use `H:MM` or `H:MM:SS`, including durations beyond 24 hours |
 | `target_step_minutes` | `30` | Interval between the five schedules expanded from one target |
-| `start_time` | Omitted | Displayed race start date/time; chart times remain elapsed durations |
-| `pace_basis` | `"distance"` | Parenthesized horizontal-distance pace; `"equivalent"` selects equivalent-distance pace |
+| `start_time` | Omitted | Local race start date/time; required for arrival clock mode, while primary times remain elapsed durations |
+| `secondary_display` | `"pace"` | Parenthesized value: `"pace"` for pace, `"equivalent_pace"` for equivalent pace, or `"arrival_time"` for arrival clock time |
+| `pace_basis` | `"distance"` | Legacy option: `"equivalent"` selects equivalent pace; explicit `secondary_display` takes precedence |
 | `sample_m` | `5` | Distance interpolation step in metres |
 | `smoothing_m` | `20` | Full centered window for elevation thumbnails and slope bins, in metres |
 | `ascent_smoothing_m` | `100` | Independent full window for cumulative ascent/descent, in metres |
@@ -120,6 +121,17 @@ This configuration produces 13:00, 13:30, 14:00, 14:30, and 15:00 schedules. To 
 | `checkpoints` | Embedded stations | Manually supply names and cumulative kilometres when usable embedded CPs are unavailable |
 
 Finish targets include station rests. Cutoffs are elapsed durations since the race start. Loops, out-and-back courses, and off-route stations may require explicit position confirmation.
+
+For example, add these fields to the configuration to show arrival clock times in parentheses:
+
+```json
+{
+  "start_time": "2026-10-31 06:00",
+  "secondary_display": "arrival_time"
+}
+```
+
+Default pace uses horizontal segment distance; equivalent pace uses equivalent segment distance. Both use moving time only. Arrival clock time is before the current station's rest, with “次日” (next day) or “+N天” (+N days) for midnight rollover. All three display modes preserve the timing allocation.
 
 See the [configuration reference](skills/even-effort-pace-chart/references/configuration.en.md) for all fields, manual CPs, and cutoff examples, and the [model reference](skills/even-effort-pace-chart/references/model.en.md) for equations and smoothing.
 

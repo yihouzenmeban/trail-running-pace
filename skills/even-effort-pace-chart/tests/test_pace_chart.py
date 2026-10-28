@@ -510,7 +510,7 @@ class TimingTests(Fixture):
         equivalent = self.plan(targets=["04:00"], pace_basis="equivalent")
         alternate = equivalent["schedules"][0]["checkpoints"][1]
         self.assertAlmostEqual(alternate["pace_seconds_per_km"], alternate["eq_pace_seconds_per_km"])
-        self.assertIn("括号内：区间等效配速", pace.render_svg(equivalent))
+        self.assertIn("括号内：区间等强配速", pace.render_svg(equivalent))
         self.assertEqual(plan["targets_seconds"], equivalent["targets_seconds"])
         self.assertEqual(timing["departure_seconds"], alternate["departure_seconds"])
         with self.assertRaises(pace.InputError):
@@ -521,6 +521,84 @@ class ExportTests(Fixture):
     def setUp(self):
         super().setUp()
         self.write()
+
+    def test_secondary_display_selects_pace_without_changing_schedule(self):
+        baseline = self.plan(targets=["04:00"])
+        self.assertEqual(baseline["parameters"]["secondary_display"], "pace")
+        for mode, field, label in (
+            ("pace", "distance_pace_seconds_per_km", "区间配速"),
+            ("equivalent_pace", "eq_pace_seconds_per_km", "区间等强配速"),
+        ):
+            with self.subTest(mode=mode):
+                plan = self.plan(targets=["04:00"], secondary_display=mode)
+                cp, timing = plan["checkpoints"][1], plan["schedules"][0]["checkpoints"][1]
+                expected = f'({pace.format_chart_pace(timing[field])})'
+                self.assertEqual(pace.timing_lines(plan, cp, timing)[1], expected)
+                self.assertAlmostEqual(timing["pace_seconds_per_km"], timing[field])
+                for render in (pace.render_html, pace.render_svg):
+                    output = render(plan)
+                    self.assertIn(expected, output)
+                    self.assertIn("括号内：" + label, output)
+                self.assertEqual(pace.timing_lines(plan, plan["checkpoints"][0],
+                                                 plan["schedules"][0]["checkpoints"][0]), ["00:00"])
+                for original, selected in zip(baseline["schedules"][0]["checkpoints"],
+                                              plan["schedules"][0]["checkpoints"]):
+                    for key in ("arrival_seconds", "departure_seconds", "moving_seconds"):
+                        self.assertEqual(original[key], selected[key])
+
+    def test_secondary_display_overrides_legacy_pace_basis(self):
+        legacy = self.plan(pace_basis="equivalent")
+        self.assertEqual(legacy["parameters"]["secondary_display"], "equivalent_pace")
+        for mode, basis in (("pace", "distance"), ("equivalent_pace", "equivalent")):
+            plan = self.plan(pace_basis="equivalent" if basis == "distance" else "distance",
+                             secondary_display=mode)
+            self.assertEqual(plan["parameters"]["pace_basis"], basis)
+            timing = plan["schedules"][0]["checkpoints"][1]
+            self.assertEqual(timing["pace_seconds_per_km"],
+                             timing["distance_pace_seconds_per_km"] if basis == "distance"
+                             else timing["eq_pace_seconds_per_km"])
+
+    def test_arrival_clock_uses_arrival_before_rest_and_previous_rests(self):
+        self.write(points=[(0, 0, 0), (0, 0.01, 0), (0, 0.02, 0)])
+        plan = self.plan(targets=["04:00"], fatigue_rate=0,
+                         secondary_display="arrival_time", start_time="2026-10-31T23:30",
+                         checkpoint_overrides={"wpt:1": {"rest_minutes": 20}})
+        times = plan["schedules"][0]["checkpoints"]
+        for index, expected in enumerate((
+            ["00:00", "(23:30)"],
+            ["02:10", "(次日 01:20)"],
+            ["04:00", "(次日 03:30)"],
+        )):
+            self.assertEqual(pace.timing_lines(plan, plan["checkpoints"][index], times[index]), expected)
+            for output in (pace.render_html(plan), pace.render_svg(plan)):
+                self.assertIn(expected[1], output)
+                self.assertIn("括号内：到达时间", output)
+        baseline = self.plan(targets=["04:00"], fatigue_rate=0,
+                             checkpoint_overrides={"wpt:1": {"rest_minutes": 20}})
+        self.assertEqual(plan["schedules"], baseline["schedules"])
+        # Pace mode still preserves the elapsed arrival detail at resting stations.
+        self.assertEqual(pace.timing_lines(baseline, baseline["checkpoints"][1],
+                                         baseline["schedules"][0]["checkpoints"][1])[-1], "到 01:50")
+
+    def test_arrival_clock_rollover_and_minute_truncation(self):
+        for start, target, expected in (
+            ("2026-10-31 06:00", "04:00:59", "(10:00)"),
+            ("2026-10-31 23:30", "00:29:59", "(23:59)"),
+            ("2026-10-31 23:30", "00:30", "(次日 00:00)"),
+            ("2026-12-31 23:30", "25:00", "(+2天 00:30)"),
+        ):
+            with self.subTest(start=start, target=target):
+                plan = self.plan(targets=[target], secondary_display="arrival_time", start_time=start)
+                lines = pace.timing_lines(plan, plan["checkpoints"][-1],
+                                          plan["schedules"][0]["checkpoints"][-1])
+                self.assertEqual(lines[1], expected)
+
+    def test_invalid_secondary_display_and_missing_start_are_actionable(self):
+        for value in ("unknown", "", None, 1, True, []):
+            with self.subTest(value=value), self.assertRaisesRegex(pace.InputError, "secondary_display"):
+                self.plan(secondary_display=value)
+        with self.assertRaisesRegex(pace.InputError, "start_time"):
+            self.plan(secondary_display="arrival_time")
 
     def test_all_formats_share_values_and_svg_is_standalone(self):
         plan = self.plan()
