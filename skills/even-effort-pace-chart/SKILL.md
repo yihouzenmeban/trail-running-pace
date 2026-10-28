@@ -23,9 +23,9 @@ For a loop, crossing, or out-and-back, confirm the intended route occurrence whe
 
 Obtain the intended finish target if it has not been supplied. A single `target` generates five columns at -60, -30, 0, +30, +60 minutes by default. Use `target_step_minutes` for another interval, or `targets` for the user's exact list, including a single-column chart.
 
-Keep the default 5 m distance sampling and 20 m centered elevation smoothing unless the user requests alternatives or the source data warrants discussion. Finer interpolation does not create measurement detail. Do not replace these defaults with 25 m / 100 m.
+Keep 5 m distance sampling and 20 m centered smoothing for the displayed profile and slope bins. Cumulative ascent/descent use a separate `ascent_smoothing_m` window, default 100 m, on the same 5 m grid. This suppresses accumulated small oscillations while preserving a detailed display. Do not confuse the two scales or claim that interpolation adds measurement accuracy. Change the recorded parameters when the source data or a known reference warrants it; never rescale computed climbs to force a desired total.
 
-Total targets include station rests. Rest defaults to zero; ask only when the user wants it modeled. Cutoffs are elapsed durations since the start; never invent them or infer them from CP numbers. For clock-time cutoffs, obtain the start time, date, and rollover information before conversion. Missing cutoffs remain visibly unchecked.
+Total targets include station rests. Rest defaults to zero; ask only when the user wants it modeled. Optional `start_time` supplies the displayed local start date/time; it does not change elapsed targets. Cutoffs are elapsed durations since the start; never invent them or infer them from CP numbers. For clock-time cutoffs, obtain the start time, date, and rollover information before conversion. Missing cutoffs remain visibly unchecked.
 
 For manually supplied official distances, differences over `max(100 m, 0.5% of GPX distance)` require confirmation before `distance_alignment: "scale"`. The table continues to show GPX distances and preserves official labels separately.
 
@@ -40,7 +40,7 @@ python3 <skill-dir>/scripts/pace_chart.py generate <race.gpx> \
   --config <race.json> --output-dir <output-dir>
 ```
 
-The command writes `pace-chart.html`, `pace-chart.svg`, `pace-chart.csv`, and `pace-chart.json`. Existing outputs require another directory or the user's authorized `--overwrite`. The HTML and native SVG are self-contained; no network access is needed.
+The command writes `pace-chart.html`, `pace-chart.svg`, `pace-chart.csv`, and `pace-chart.json`. Existing outputs require another directory or the user's authorized `--overwrite`. The HTML and native SVG are self-contained; no network access is needed. Use the reference race-table layout: white background, gray rules, black slope/profile graphics, yellow distance, red ascent, green descent, blue water, station names, and target columns. Water at a station is for the next leg; finish water is zero. Cumulative times display hours/minutes, with horizontal-distance segment pace in parentheses by default (`pace_basis: "distance"`); use `"equivalent"` when the user requests equivalent pace. Both measures remain in CSV/JSON along with full seconds.
 
 Check that CP order and names match the intended route, every final departure equals its finish target, and station rests are included exactly once. Review the reported warnings and any cutoff failures. For presentation-sensitive requests, render the SVG or print the HTML with available local tools and inspect long station names and target columns.
 

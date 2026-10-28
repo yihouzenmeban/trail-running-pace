@@ -1,0 +1,9 @@
+{
+  "name": "天地留白100K",
+  "start_time": "2026-10-31 06:00",
+  "pace_basis": "distance",
+  "targets": ["12:00", "13:00", "14:00", "15:00", "16:00"],
+  "sample_m": 5,
+  "smoothing_m": 20,
+  "ascent_smoothing_m": 100
+}

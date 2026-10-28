@@ -17,9 +17,12 @@ Compute horizontal cumulative distance with the haversine formula on a sphere of
 1. Interpolate elevation linearly along cumulative distance, every **5 m**, plus the exact endpoint.
 2. At each sample, average the resampled piecewise-linear elevation over a **20 m full-width centered window** (10 m each side).
 3. Clip windows at the course boundaries and divide by their actual width. Integration uses exact trapezoid areas; this is a distance-weighted average, not a point-count average.
-4. Insert CP boundary elevations into the smoothed profile. Sum positive/negative elevation changes for ascent/descent in each segment.
+4. Independently average the same resampled elevations over a **100 m full-width centered window** for cumulative ascent/descent. This is controlled by `ascent_smoothing_m`, not by the display setting `smoothing_m`.
+5. Insert CP boundary elevations into each curve. Sum positive/negative changes on the statistical curve for ascent/descent; use the detailed curve for thumbnails and slope bins. Both curves are filtered over the whole route before any station split, so splitting at CPs cannot reset the filter or change route totals.
 
-Settings are adjustable. Interpolation cannot recover missing terrain detail; sparse points over 100 m apart produce a warning. The finer defaults retain shorter features than 25 m sampling with 100 m smoothing, while remaining susceptible to noisy GPS elevation. No external DEM, road classifier, or elevation correction is applied.
+Settings are adjustable; 0 disables the corresponding smoothing. Interpolation cannot recover missing terrain detail; sparse points over 100 m apart produce a warning. The 5 m grid and 20 m display retain short features, while the independent statistical scale avoids counting every small oscillation toward total ascent. The integral of positive changes on the displayed curve therefore need not equal reported ascent. Statistical filtering can also suppress real short undulations; neither its scale nor matching another platform establishes ground truth. No external DEM, road classifier, or elevation correction is applied.
+
+The user's reference table for the local `天地留白100K.gpx` contains eleven incoming-leg gains of 397, 394, 439, 666, 893, 583, 531, 403, 567, 233, and 220 m, summing to 5,326 m. With 5 m sampling, summing the 20 m curve gave 6,653 m; the independent 100 m statistical curve gives approximately 5,332 m with a mean absolute per-leg difference of 9.4 m. This is a comparison against one supplied reference, not a reproduction of COROS or RunArt.Net's internal algorithm. No gain is multiplied by a fitted correction factor.
 
 Each segment's seven slope bins are weighted by horizontal distance. Boundaries, in percent, are `(-inf, -15]`, `(-15, -10]`, `(-10, -5]`, `(-5, 5)`, `[5, 10)`, `[10, 15)`, `[15, inf)`. The center bar is white; descent is on the left and ascent on the right. Segment profile thumbnails use independent horizontal and vertical scales and must not be compared as equal-scale maps.
 
@@ -43,18 +46,21 @@ T_move = T_finish - sum(station_rest_seconds)
 M_i = T_move * (E_i / E_total)^b
 segment_moving_i = M_i - M_(i-1)
 segment_eq_pace_i = segment_moving_i / segment_equivalent_km
+segment_distance_pace_i = segment_moving_i / segment_horizontal_km
 arrival_i = M_i + sum(rest before station i)
 departure_i = arrival_i + rest_i
 ```
 
 `r = 0` gives constant equivalent pace. With the default, average pace over a doubled equivalent distance changes by the factor `2^(b-1) = 1.08`. This is a power-curve parameterization, not a claim that the article's illustrated interval examples or the proprietary tool use these exact equations. The curve is normalized separately for each target, so every final departure is exactly that target before presentation rounding.
 
-Rest is explicit and included once; no automatic extra delay or stop is inferred. Every target must exceed total rest. Time calculations retain floating-point precision. Displayed cumulative times and equivalent paces round to the nearest second; segment totals calculated from rounded values may differ slightly.
+Rest is explicit and included once; no automatic extra delay or stop is inferred. Every target must exceed total rest. Time calculations retain floating-point precision; segment totals calculated from rounded display values may differ slightly.
+
+The reference-style table displays cumulative durations truncated to full minutes and the incoming segment's moving-time pace rounded to seconds. By default the parenthesized pace uses horizontal kilometres (`pace_basis: "distance"`), matching the supplied reference. The `"equivalent"` option uses equivalent kilometres and labels the header accordingly. Both are retained as full-precision values; changing the displayed basis does not change allocated moving times. CSV formatted cumulative durations continue to round to seconds.
 
 These columns are pre-race reference schedules. Switching to an adjacent column mid-race does not recompute the remaining schedule from the runner's current time, fatigue, or position.
 
 ## Water and uncertainty
 
-Comparative water is `E / 10 * water_ml_per_10km`, defaulting to 700 mL per 10 equivalent kilometres as an article-inspired baseline. It communicates relative segment demand. It is not an individual hydration, medical, or race-safety recommendation.
+Comparative segment water is `E / 10 * water_ml_per_10km`, defaulting to 700 mL per 10 equivalent kilometres as an article-inspired baseline. `segment_water_ml` belongs to the incoming leg. The displayed `water_ml` belongs to the next leg, so it is shifted up one station and becomes zero at the finish. It communicates relative segment demand. It is not an individual hydration, medical, or race-safety recommendation.
 
 The GPX alone cannot establish an achievable finish target. Terrain surface, steep descent load, weather, congestion, altitude response, runner fitness, nutrition, and recovery are not modeled. Missing race cutoffs remain unchecked. Route-derived totals can differ from organizer statistics because of geometry, elevation source, smoothing, and distance mapping.

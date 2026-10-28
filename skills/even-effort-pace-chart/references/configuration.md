@@ -8,7 +8,7 @@ Run with Python 3.10+; no packages, credentials, or online services are required
 python3 skills/even-effort-pace-chart/scripts/pace_chart.py inspect race.gpx
 ```
 
-Optional flags: `--track-index 1`, `--sample-m 5`, `--smoothing-m 20`. Output includes horizontal distance, smoothed ascent/descent, warnings, and `cp_candidates` with stable IDs, names, recognition flags, and possible route projections in metres. A multiple-track error lists available track indices; repeat with the selected index.
+Optional flags: `--track-index 1`, `--sample-m 5`, `--smoothing-m 20`, `--ascent-smoothing-m 100`. The 20 m window controls detailed graphics/slope bins; the independent 100 m window controls ascent/descent statistics. Output includes horizontal distance, filtered ascent/descent, parameters, warnings, and `cp_candidates` with stable IDs, names, recognition flags, and possible route projections in metres. A multiple-track error lists available track indices; repeat with the selected index.
 
 Tracks take precedence over routes for course geometry. Separate route points and waypoints can still supply CPs. When only routes exist, the chosen route supplies both geometry and named CP candidates. GPX 1.0, 1.1, and unnamespaced files are accepted. Every track point needs valid coordinates and elevation. Duplicated positions are removed; disconnected track segments are rejected rather than connected by a fabricated line.
 
@@ -85,9 +85,12 @@ Default `distance_alignment` is `"confirm"`: differences over `max(100 m, 0.5% o
 | Key | Default | Meaning |
 | --- | --- | --- |
 | `name` | GPX filename stem | Chart title |
+| `start_time` | Omitted | Displayed local race start, `YYYY-MM-DD HH:MM` or `YYYY-MM-DDTHH:MM`; does not convert durations to clock time |
+| `pace_basis` | `"distance"` | Parenthesized moving-time pace over horizontal distance; `"equivalent"` selects equivalent-distance pace |
 | `track_index` | Only available track | 1-based track or route selection |
 | `sample_m` | 5 | Positive distance resampling step in metres |
-| `smoothing_m` | 20 | Full centered averaging window in metres; 0 disables smoothing |
+| `smoothing_m` | 20 | Full centered averaging window for graphics and slope bins; 0 disables this smoothing |
+| `ascent_smoothing_m` | 100 | Independent full centered window for cumulative ascent/descent on the same fine grid; 0 disables this filtering |
 | `ascent_km_per_100m` | 1 | Equivalent kilometres per 100 m ascent; nonnegative |
 | `fatigue_rate` | 0.08 | Pace multiplier minus one per doubling; range 0 to 1 |
 | `water_ml_per_10km` | 700 | Comparative water per 10 equivalent km; nonnegative |
@@ -104,9 +107,11 @@ python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate race.gpx \
 
 Use `--overwrite` only when replacing those output files is intended. Otherwise any existing output blocks writing. Success prints output paths and warnings to stdout. Expected input/file errors print a JSON object to stderr and exit with status 2.
 
-- `pace-chart.html`: printable landscape table, repeated headers, inline segment graphics, horizontal scrolling on small screens.
+- `pace-chart.html`: reference-style race table with white background, gray rules, black graphics, yellow/red/green/blue terrain/supply columns, repeated print headers, and horizontal scrolling on small screens.
 - `pace-chart.svg`: native SVG table with text and vector segment graphics; no HTML `foreignObject` or external assets.
-- `pace-chart.csv`: UTF-8 BOM, long form with one row per CP and target. Includes raw seconds and formatted cumulative durations. Potential formula-leading CP names are escaped for spreadsheets.
-- `pace-chart.json`: full-precision source of truth with parameters, configuration, input SHA-256, station statistics, schedule values, slope fractions, profiles, warnings, and article attribution. Schema version 1; geometry in metres, times in seconds, equivalent distances in kilometres.
+- `pace-chart.csv`: UTF-8 BOM, long form with one row per CP and target. Includes raw seconds and formatted cumulative durations, incoming `segment_water_ml`, and next-leg `water_ml`. Potential formula-leading CP names are escaped for spreadsheets.
+- `pace-chart.json`: full-precision source of truth with parameters, configuration, input SHA-256, station statistics, schedule values, slope fractions, profiles, warnings, and article attribution. Schema version 2; geometry in metres, times in seconds, equivalent distances in kilometres. In version 2, `water_ml` describes the outgoing leg; `segment_water_ml` describes the incoming leg.
 
-Primary cumulative times are departures. Resting CPs also show arrival. Parentheses contain the segment's moving-time equivalent pace, not actual min/km over horizontal distance. Missing cutoffs are listed in the warnings; actual cutoff violations appear in their target cells. JSON/CSV include the status of every CP.
+Primary cumulative times are departures, shown as `HH:MM` by truncating seconds. Resting CPs also show arrival. Parentheses contain the segment's moving-time pace rounded to seconds (`MM:SS`), using horizontal distance by default to match the supplied race-table reference. Set `pace_basis: "equivalent"` to show equivalent-distance pace instead; this changes the displayed pace and its label, not the underlying schedule. JSON/CSV include `distance_pace_seconds_per_km`, `eq_pace_seconds_per_km`, and the selected `pace_seconds_per_km`. HTML/SVG headers use `Target` and hours. CSV formatted arrival/departure retain seconds, and raw JSON/CSV values retain calculation precision. Missing cutoffs are listed in the warnings and station details; actual cutoff violations appear in their target cells. JSON/CSV include the status of every CP.
+
+The water column is a station supply reference for the **next** leg: the start contains the first leg's value, each intermediate station contains the following leg's value, and the finish contains 0. Terrain statistics and parenthesized pace describe the leg just completed. Segment equivalent distance remains in CSV/JSON rather than consuming an extra visual column.

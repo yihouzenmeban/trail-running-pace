@@ -7,6 +7,7 @@ import argparse
 from bisect import bisect_left, bisect_right
 import csv
 from dataclasses import dataclass
+from datetime import datetime
 import hashlib
 from html import escape
 import io
@@ -23,6 +24,7 @@ ARTICLE_TITLE = "耐力科学|体感一致配速表全面指南"
 DEFAULTS = {
     "sample_m": 5.0,
     "smoothing_m": 20.0,
+    "ascent_smoothing_m": 100.0,
     "ascent_km_per_100m": 1.0,
     "fatigue_rate": 0.08,
     "water_ml_per_10km": 700.0,
@@ -30,7 +32,7 @@ DEFAULTS = {
 }
 CONFIG_KEYS = set(DEFAULTS) | {
     "name", "target", "targets", "track_index", "checkpoints", "cp_selection",
-    "checkpoint_overrides", "distance_alignment",
+    "checkpoint_overrides", "distance_alignment", "start_time", "pace_basis",
 }
 CP_KEYS = {"name", "distance_km", "rest_minutes", "cutoff"}
 OVERRIDE_KEYS = CP_KEYS | {"allow_off_route"}
@@ -423,26 +425,30 @@ def grade_bin(grade_percent: float) -> int:
     return 6
 
 
-def section_stats(profile: list[Sample], left: float, right: float, factor: float, water: float) -> dict:
+def profile_section(profile: list[Sample], left: float, right: float) -> list[Sample]:
     if right == left:
-        segment = [Sample(left, interpolate(profile, left))]
-    else:
-        start = bisect_right(profile, left, key=lambda p: p.distance_m)
-        end = bisect_left(profile, right, key=lambda p: p.distance_m)
-        segment = [Sample(left, interpolate(profile, left)), *profile[start:end],
-                   Sample(right, interpolate(profile, right))]
-    ascent, descent = 0.0, 0.0
+        return [Sample(left, interpolate(profile, left))]
+    start = bisect_right(profile, left, key=lambda p: p.distance_m)
+    end = bisect_left(profile, right, key=lambda p: p.distance_m)
+    return [Sample(left, interpolate(profile, left)), *profile[start:end],
+            Sample(right, interpolate(profile, right))]
+
+
+def section_stats(profile: list[Sample], left: float, right: float, factor: float, water: float,
+                  gain_profile: list[Sample] | None = None) -> dict:
+    segment = profile_section(profile, left, right)
+    gain_segment = segment if gain_profile is None else profile_section(gain_profile, left, right)
+    ascent = sum(max(0, b.elevation_m - a.elevation_m) for a, b in zip(gain_segment, gain_segment[1:]))
+    descent = sum(max(0, a.elevation_m - b.elevation_m) for a, b in zip(gain_segment, gain_segment[1:]))
     bins = [0.0] * 7
     for a, b in zip(segment, segment[1:]):
         dz, dx = b.elevation_m - a.elevation_m, b.distance_m - a.distance_m
-        ascent += max(0, dz)
-        descent += max(0, -dz)
         bins[grade_bin(100 * dz / dx)] += dx
     distance = right - left
     eq = distance / 1000 + ascent / 100 * factor
     return {
         "segment_distance_m": distance, "ascent_m": ascent, "descent_m": descent,
-        "eq_distance_km": eq, "water_ml": eq / 10 * water,
+        "eq_distance_km": eq, "segment_water_ml": eq / 10 * water,
         "grade_fractions": [b / distance if distance else 0.0 for b in bins],
         "profile": [[p.distance_m, p.elevation_m] for p in segment],
     }
@@ -475,20 +481,36 @@ def build_plan(path: Path, config: dict) -> dict:
     }
     if parameters["fatigue_rate"] > 1:
         raise InputError("fatigue_rate must be between 0 and 1")
+    pace_basis = config.get("pace_basis", "distance")
+    if pace_basis not in ("distance", "equivalent"):
+        raise InputError("pace_basis must be distance or equivalent")
+    parameters["pace_basis"] = pace_basis
     if config.get("distance_alignment", "confirm") not in ("confirm", "scale"):
         raise InputError("distance_alignment must be confirm or scale")
     if "name" in config and (not isinstance(config["name"], str) or not config["name"].strip()):
         raise InputError("name must be a non-empty string")
+    if "start_time" in config:
+        value = config["start_time"]
+        if not isinstance(value, str) or not re.fullmatch(r"\d{4}-\d\d-\d\d[ T]\d\d:\d\d", value):
+            raise InputError("start_time must be YYYY-MM-DD HH:MM (local race time)")
+        try:
+            datetime.fromisoformat(value)
+        except ValueError as error:
+            raise InputError("Invalid start_time date or time") from error
     route = load_route(path, config.get("track_index"))
     profile = smooth_profile(route, parameters["sample_m"], parameters["smoothing_m"])
+    gain_profile = smooth_profile(route, parameters["sample_m"], parameters["ascent_smoothing_m"])
     cps, scale, cp_warnings = resolve_checkpoints(route, config)
     cumulative_eq = 0.0
     for index, cp in enumerate(cps):
         left = cps[index - 1]["distance_m"] if index else 0.0
         cp.update(section_stats(profile, left, cp["distance_m"],
-                                parameters["ascent_km_per_100m"], parameters["water_ml_per_10km"]))
+                                parameters["ascent_km_per_100m"], parameters["water_ml_per_10km"], gain_profile))
         cumulative_eq += cp["eq_distance_km"]
         cp["cumulative_eq_distance_km"] = cumulative_eq
+    for index, cp in enumerate(cps):
+        # Supplies at a station are for the next leg; terrain statistics describe the incoming leg.
+        cp["water_ml"] = cps[index + 1]["segment_water_ml"] if index + 1 < len(cps) else 0.0
     targets = target_times(config, parameters["target_step_minutes"])
     rest_total = sum(cp["rest_seconds"] for cp in cps)
     exponent = fatigue_exponent(parameters["fatigue_rate"])
@@ -514,13 +536,17 @@ def build_plan(path: Path, config: dict) -> dict:
                 "arrival_seconds": arrival, "departure_seconds": departure,
                 "moving_seconds": moving,
                 "eq_pace_seconds_per_km": moving / cp["eq_distance_km"] if index else None,
+                "distance_pace_seconds_per_km": moving / (cp["segment_distance_m"] / 1000) if index else None,
+                "pace_seconds_per_km": moving / (
+                    cp["eq_distance_km"] if pace_basis == "equivalent" else cp["segment_distance_m"] / 1000
+                ) if index else None,
                 "cutoff_status": status,
             })
             prior_moving = cumulative_moving
             prior_rest += cp["rest_seconds"]
         schedules.append({"target_seconds": target, "checkpoints": times})
     route_stats = section_stats(profile, 0, route.total_m, parameters["ascent_km_per_100m"],
-                                parameters["water_ml_per_10km"])
+                                parameters["water_ml_per_10km"], gain_profile)
     warnings = list(route.warnings or []) + cp_warnings
     if any(cp["cutoff_seconds"] is None for cp in cps[1:]):
         warnings.append("部分或全部站点未提供关门时间，未校核这些站点。")
@@ -530,7 +556,7 @@ def build_plan(path: Path, config: dict) -> dict:
         "插值不增加原始测量精度；爬升统计依赖海拔数据与平滑参数。",
     ])
     return {
-        "schema_version": 1,
+        "schema_version": 2,
         "name": config.get("name", Path(path).stem),
         "source": {"filename": Path(path).name, "sha256": hashlib.sha256(Path(path).read_bytes()).hexdigest()},
         "article": {"title": ARTICLE_TITLE, "author": "耐力学社 / Pili（表哥）", "url": ARTICLE_URL},
@@ -545,16 +571,17 @@ def build_plan(path: Path, config: dict) -> dict:
     }
 
 
-def inspect_route(path: Path, track_index=None, sample_m=5.0, smoothing_m=20.0) -> dict:
+def inspect_route(path: Path, track_index=None, sample_m=5.0, smoothing_m=20.0, ascent_smoothing_m=100.0) -> dict:
     route = load_route(path, track_index)
     profile = smooth_profile(route, sample_m, smoothing_m)
-    stats = section_stats(profile, 0, route.total_m, 1, 700)
+    gain_profile = smooth_profile(route, sample_m, ascent_smoothing_m)
+    stats = section_stats(profile, 0, route.total_m, 1, 700, gain_profile)
     candidates = []
     for candidate in route.candidates:
         candidates.append({**candidate, "projection_options": projection_options(route, candidate)})
     return {
         "distance_m": route.total_m, "ascent_m": stats["ascent_m"], "descent_m": stats["descent_m"],
-        "sample_m": sample_m, "smoothing_m": smoothing_m,
+        "sample_m": sample_m, "smoothing_m": smoothing_m, "ascent_smoothing_m": ascent_smoothing_m,
         "cp_candidates": candidates, "warnings": route.warnings or [],
     }
 
@@ -564,8 +591,8 @@ STATUS_LABELS = {
     "arrival_late": "到站超时", "departure_late": "出站超时",
 }
 BASE_COLUMNS = [
-    ("累计 km", 86), ("分段 km", 80), ("等效 km", 80), ("爬升 m", 65), ("下降 m", 65),
-    ("坡度分布", 100), ("赛段肖像", 140), ("参考水 mL", 90), ("CP / 停留 / 关门", 220),
+    ("累积\n距离", 110), ("坡度\n分布", 120), ("肖像图", 130), ("距离", 78),
+    ("爬升", 78), ("下降", 78), ("水", 88), ("位置", 240),
 ]
 
 
@@ -584,14 +611,15 @@ def wrap_text(text: str, units: int) -> list[str]:
     return result
 
 
-def svg_text(x, y, lines, size=12, color="#243c41", anchor="start", family="sans-serif") -> str:
+def svg_text(x, y, lines, size=12, color="#111111", anchor="start", family="sans-serif", underline=False) -> str:
     spans = "".join(
         f'<tspan x="{x:.2f}" dy="{0 if i == 0 else size * 1.45:.2f}">{escape(str(line))}</tspan>'
         for i, line in enumerate(lines)
     )
+    decoration = ' text-decoration="underline"' if underline else ""
     return (
         f'<text x="{x:.2f}" y="{y:.2f}" fill="{color}" font-size="{size}" '
-        f'text-anchor="{anchor}" font-family="{family}">{spans}</text>'
+        f'text-anchor="{anchor}" font-family="{family}"{decoration}>{spans}</text>'
     )
 
 
@@ -609,17 +637,17 @@ def histogram_svg(fractions, x=0, y=0, width=90, height=42, as_group=False) -> s
     labels = ("≤-15%", "-15~-10%", "-10~-5%", "-5~5%", "5~10%", "10~15%", "≥15%")
     for index, fraction in enumerate(fractions):
         bar_height = fraction * (height - 5)
-        fill = "#285c67" if index < 3 else ("#fffdf7" if index == 3 else "#c17836")
+        fill = "#ffffff" if index == 3 else "#111111"
         bars.append(
             f'<rect x="{index * width / 7 + 1:.2f}" y="{height - bar_height:.2f}" '
-            f'width="{width / 7 - 2:.2f}" height="{bar_height:.2f}" fill="{fill}" '
-            f'stroke="#9aaba9" stroke-width=".5"><title>{labels[index]}: {fraction:.1%}</title></rect>'
+            f'width="{width / 7 - 2:.2f}" height="{bar_height:.2f}" fill="{fill}">'
+            f'<title>{labels[index]}: {fraction:.1%}</title></rect>'
         )
     return graphic_frame("".join(bars), x, y, width, height, "坡度按距离加权的七档分布", as_group)
 
 
 def profile_svg(profile, x=0, y=0, width=125, height=42, as_group=False) -> str:
-    points = ""
+    points = f"3,{height - 5} {width - 3},{height - 5}"
     if len(profile) > 1:
         left, right = profile[0][0], profile[-1][0]
         low, high = min(p[1] for p in profile), max(p[1] for p in profile)
@@ -629,21 +657,80 @@ def profile_svg(profile, x=0, y=0, width=125, height=42, as_group=False) -> str:
             for distance, elevation in profile
         )
     content = (
-        f'<path d="M0 {height - 2} H{width}" stroke="#d1dad5"/>'
-        f'<polyline points="{points}" fill="none" stroke="#285c67" stroke-width="1.6"/>'
+        f'<polyline points="{points}" fill="none" stroke="#111111" stroke-width="1.6"/>'
     )
     return graphic_frame(content, x, y, width, height, "分段海拔肖像，各段独立缩放", as_group)
 
 
-def numeric_cells(cp) -> list[str]:
-    return [
-        f'{cp["distance_m"] / 1000:.2f}', f'{cp["segment_distance_m"] / 1000:.2f}',
-        f'{cp["eq_distance_km"]:.2f}', f'{cp["ascent_m"]:.0f}', f'{cp["descent_m"]:.0f}',
-    ]
+def numeric_cells(cp) -> dict[int, str]:
+    return {
+        0: f'{cp["distance_m"] / 1000:.2f}' if cp["distance_m"] else "0",
+        3: f'{cp["segment_distance_m"] / 1000:.1f}',
+        4: f'{cp["ascent_m"]:.0f}', 5: f'{cp["descent_m"]:.0f}',
+        6: f'{cp["water_ml"]:.0f}',
+    }
+
+
+def format_chart_time(seconds: float) -> str:
+    hours, minutes = divmod(math.floor(seconds / 60 + 1e-9), 60)
+    return f"{hours:02}:{minutes:02}"
+
+
+def format_chart_pace(seconds: float) -> str:
+    minutes, seconds = divmod(math.floor(seconds + 0.5), 60)
+    return f"{minutes:02}:{seconds:02}"
+
+
+def target_header(target: float) -> list[str]:
+    label = f"{target / 3600:.1f} Hr" if target % 1800 == 0 else format_duration(target)
+    return ["Target", label]
+
+
+def pace_label(plan) -> str:
+    return "区间等效配速" if plan["parameters"]["pace_basis"] == "equivalent" else "区间配速"
+
+
+def table_metadata(plan) -> str:
+    start = plan["configuration"].get("start_time")
+    prefix = f'发枪：{start.replace("T", " ")}　' if start else ""
+    return prefix + "括号内：" + pace_label(plan)
+
+
+def display_station_name(cp) -> str:
+    name = cp["name"]
+    for label in ("起点", "终点"):
+        if name.endswith(f"（{label}）"):
+            name = re.sub(r"起终点|起終點", label, name[:-4])
+            break
+    return name
+
+
+HEAT_COLUMNS = {
+    3: ("distance", "segment_distance_m", "#ffdb63"),
+    4: ("ascent", "ascent_m", "#ef6262"),
+    5: ("descent", "descent_m", "#52bda5"),
+    6: ("water", "water_ml", "#4777c5"),
+}
+
+
+def heat_limits(plan) -> dict[str, float]:
+    return {field: max(cp[field] for cp in plan["checkpoints"])
+            for _, field, _ in HEAT_COLUMNS.values()}
+
+
+def cell_fill(cp, column, limits) -> str:
+    if column not in HEAT_COLUMNS:
+        return "#ffffff"
+    _, field, color = HEAT_COLUMNS[column]
+    if cp[field] == 0:
+        return "#ffffff"
+    strength = 0.18 + 0.72 * cp[field] / limits[field]
+    rgb = [int(color[i:i + 2], 16) for i in (1, 3, 5)]
+    return "#" + "".join(f"{round(255 + (channel - 255) * strength):02x}" for channel in rgb)
 
 
 def cp_details(cp) -> list[str]:
-    lines = [cp["name"]]
+    lines = [display_station_name(cp)]
     if cp["official_distance_km"] is not None:
         lines.append(f'官方 {cp["official_distance_km"]:.2f} km')
     if cp["rest_seconds"]:
@@ -656,10 +743,11 @@ def cp_details(cp) -> list[str]:
 
 
 def timing_lines(cp, timing) -> list[str]:
-    lines = [format_duration(timing["departure_seconds"]),
-             f'({format_pace(timing["eq_pace_seconds_per_km"])})']
+    lines = [format_chart_time(timing["departure_seconds"])]
+    if timing["pace_seconds_per_km"] is not None:
+        lines.append(f'({format_chart_pace(timing["pace_seconds_per_km"])})')
     if cp["rest_seconds"]:
-        lines.append(f'到 {format_duration(timing["arrival_seconds"])}')
+        lines.append(f'到 {format_chart_time(timing["arrival_seconds"])}')
     if timing["cutoff_status"] in ("arrival_late", "departure_late"):
         lines.append(STATUS_LABELS[timing["cutoff_status"]])
     return lines
@@ -671,13 +759,17 @@ def summary_lines(plan) -> list[str]:
         f'GPX {route["distance_m"] / 1000:.2f} km · 爬升 {route["ascent_m"]:.0f} m · '
         f'下降 {route["descent_m"]:.0f} m · 等效 {route["eq_distance_km"]:.2f} km',
         f'采样 {p["sample_m"]:g} m / 居中平滑 {p["smoothing_m"]:g} m · '
+        f'爬升统计窗口 {p["ascent_smoothing_m"]:g} m · '
         f'每 100 m 爬升折算 {p["ascent_km_per_100m"]:g} km · 掉速参数 {p["fatigue_rate"]:.1%}',
-        f'目标包含停留 {p["rest_total_seconds"] / 60:g} min · 累计时间为出站时间 · 括号内为分段等效配速 min/km',
+        f'目标包含停留 {p["rest_total_seconds"] / 60:g} min · 累计时间为出站时间 · {pace_label(plan)} min/km',
     ]
 
 
 def footer_lines(plan) -> list[str]:
     return [
+        *summary_lines(plan),
+        "距离单位 km，爬升/下降单位 m，水量单位 mL；水量为从本站到下一站的参考量，终点为 0。",
+        "累计出站时间按分钟向下显示；括号内配速按秒取整、仅含移动时间，CSV/JSON 保留完整时间精度。",
         "海拔肖像为各赛段独立缩放；坡度直方图左侧为下降、右侧为爬升，中间平缓档留白。",
         f'里程展示 GPX 测算值；官方里程映射系数 {plan["route"]["distance_scale"]:.8f}。',
         *plan["warnings"],
@@ -688,78 +780,100 @@ def footer_lines(plan) -> list[str]:
 
 
 def render_svg(plan: dict) -> str:
-    widths = [width for _, width in BASE_COLUMNS] + [150] * len(plan["schedules"])
-    width, margin = sum(widths) + 48, 24
-    parts = [f'<rect width="{width}" height="100%" fill="#fffdf7"/>']
-    title = wrap_text(plan["name"] + " · 体感一致配速表", int((width - 48) / 12))
-    parts.append(svg_text(margin, 39, title, size=23, family="serif"))
-    y = 39 + len(title) * 34
-    for line in summary_lines(plan):
-        parts.append(svg_text(margin, y, [line], size=13))
-        y += 22
-    y += 14
-    headers = [name for name, _ in BASE_COLUMNS] + [
-        f'目标 {format_duration(t)}' for t in plan["targets_seconds"]
-    ]
+    widths = [width for _, width in BASE_COLUMNS] + [116] * len(plan["schedules"])
+    width, margin = sum(widths) + 2, 1
+    parts = [f'<rect width="{width}" height="100%" fill="#ffffff"/>']
+    parts.append(svg_text(6, 30, [table_metadata(plan)], size=23))
+    y = 50
+    headers = [name.split("\n") for name, _ in BASE_COLUMNS]
+    headers += [target_header(t) for t in plan["targets_seconds"]]
     x = margin
-    for index, (header, cell_width) in enumerate(zip(headers, widths)):
-        parts.append(f'<rect x="{x}" y="{y}" width="{cell_width}" height="40" fill="#234c54"/>')
-        parts.append(svg_text(x + cell_width / 2, y + 25, [header], color="#fffdf7", anchor="middle"))
+    for header, cell_width in zip(headers, widths):
+        parts.append(f'<rect x="{x}" y="{y}" width="{cell_width}" height="84" '
+                     'fill="#ffffff" stroke="#bbbbbb" stroke-width="1"/>')
+        parts.append(svg_text(x + cell_width / 2, y + (29 if len(header) > 1 else 48),
+                              header, size=24, anchor="middle"))
         x += cell_width
-    y += 40
+    y += 84
+    limits = heat_limits(plan)
     for index, cp in enumerate(plan["checkpoints"]):
-        names = [line for detail in cp_details(cp) for line in wrap_text(detail, 29)]
+        details = cp_details(cp)
+        names = wrap_text(details[0], 20)
         timings = [timing_lines(cp, schedule["checkpoints"][index]) for schedule in plan["schedules"]]
-        row_height = max(78, 18 * max([len(names)] + [len(lines) for lines in timings]) + 24)
+        name_line_height = 22 * 1.45
+        name_height = len(names) * name_line_height + (len(details) - 1) * 18
+        row_height = max(94, name_height + 26, max(len(lines) for lines in timings) * 28 + 20)
         x = margin
         for column, cell_width in enumerate(widths):
-            color = "#f0ede3" if index % 2 == 0 else "#fffdf7"
+            color = cell_fill(cp, column, limits)
+            column_id = HEAT_COLUMNS[column][0] if column in HEAT_COLUMNS else f"column-{column}"
             parts.append(
                 f'<rect x="{x}" y="{y}" width="{cell_width}" height="{row_height}" '
-                f'fill="{color}" stroke="#d1dad5" stroke-width=".5"/>'
+                f'fill="{color}" stroke="#bbbbbb" stroke-width="1" data-column="{column_id}"/>'
             )
-            if column < 5:
-                parts.append(svg_text(x + cell_width / 2, y + 34, [numeric_cells(cp)[column]],
-                                      size=13, anchor="middle", family="monospace"))
-            elif column == 5:
-                parts.append(histogram_svg(cp["grade_fractions"], x + 5, y + 17, as_group=True))
-            elif column == 6:
-                parts.append(profile_svg(cp["profile"], x + 7, y + 17, as_group=True))
+            if column in numeric_cells(cp):
+                parts.append(svg_text(x + cell_width / 2, y + row_height / 2 + 8,
+                                      [numeric_cells(cp)[column]], size=24, anchor="middle"))
+            elif column == 1:
+                parts.append(histogram_svg(cp["grade_fractions"], x + 10, y + row_height / 2 - 15,
+                                            width=100, height=48, as_group=True))
+            elif column == 2:
+                parts.append(profile_svg(cp["profile"], x + 8, y + row_height / 2 - 31,
+                                         width=114, height=62, as_group=True))
             elif column == 7:
-                parts.append(svg_text(x + cell_width / 2, y + 34, [f'{cp["water_ml"]:.0f}'],
-                                      size=13, anchor="middle", family="monospace"))
-            elif column == 8:
-                parts.append(svg_text(x + 10, y + 23, names, size=12))
+                name_y = y + (row_height - name_height) / 2 + 23
+                parts.append(svg_text(x + 12, name_y, names, size=22, color="#00008b", underline=True))
+                detail_y = name_y + (len(names) - 1) * name_line_height + 28
+                for detail in details[1:]:
+                    parts.append(svg_text(x + 12, detail_y, [detail], size=12, color="#666666"))
+                    detail_y += 18
             else:
-                timing = plan["schedules"][column - 9]["checkpoints"][index]
-                color = "#a13e26" if timing["cutoff_status"].endswith("_late") else "#243c41"
-                parts.append(svg_text(x + cell_width / 2, y + 24, timings[column - 9],
-                                      size=13, color=color, anchor="middle", family="monospace"))
+                timing = plan["schedules"][column - 8]["checkpoints"][index]
+                lines = timings[column - 8]
+                color = "#b82020" if timing["cutoff_status"].endswith("_late") else "#111111"
+                parts.append(svg_text(x + cell_width / 2,
+                                      y + (row_height - len(lines) * 32) / 2 + 25, lines,
+                                      size=23, color=color, anchor="middle"))
             x += cell_width
         y += row_height
-    y += 28
+    y += 24
     for note in footer_lines(plan):
-        lines = wrap_text(note, int((width - 48) / 6.5))
-        parts.append(svg_text(margin, y, lines, size=12, color="#5d706b"))
+        lines = wrap_text(note, int((width - 24) / 6.5))
+        parts.append(svg_text(8, y, lines, size=12, color="#666666"))
         y += len(lines) * 18 + 5
     return (
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{y + 20:.0f}" '
         f'viewBox="0 0 {width} {y + 20:.0f}" role="img">'
         f'<title>{escape(plan["name"])} 体感一致配速表</title>'
-        '<desc>累计出站时间与分段等效配速；所有图示和文字均在此文件内。</desc>'
+        f'<desc>{escape(table_metadata(plan))}；累计出站时间，图示和文字均在此文件内。</desc>'
         + "".join(parts) + "</svg>\n"
     )
 
 
 def render_html(plan: dict) -> str:
-    headers = "".join(f"<th>{escape(name)}</th>" for name, _ in BASE_COLUMNS)
-    headers += "".join(f"<th>目标 {format_duration(t)}</th>" for t in plan["targets_seconds"])
+    headers = "".join("<th>" + "<br>".join(escape(line) for line in name.split("\n")) + "</th>"
+                      for name, _ in BASE_COLUMNS)
+    headers += "".join("<th>" + "<br>".join(target_header(t)) + "</th>" for t in plan["targets_seconds"])
+    widths = [width for _, width in BASE_COLUMNS] + [116] * len(plan["schedules"])
+    columns = "".join(f'<col style="width:{100 * width / sum(widths):.5f}%">' for width in widths)
+    limits = heat_limits(plan)
     rows = []
     for index, cp in enumerate(plan["checkpoints"]):
-        cells = "".join(f"<td>{cell}</td>" for cell in numeric_cells(cp))
-        cells += f'<td>{histogram_svg(cp["grade_fractions"])}</td>'
-        cells += f'<td>{profile_svg(cp["profile"])}</td><td>{cp["water_ml"]:.0f}</td>'
-        cells += '<td class="cp">' + "<br>".join(escape(line) for line in cp_details(cp)) + "</td>"
+        cells = ""
+        for column in range(len(BASE_COLUMNS)):
+            if column in numeric_cells(cp):
+                content = numeric_cells(cp)[column]
+            elif column == 1:
+                content = histogram_svg(cp["grade_fractions"], width=100, height=48)
+            elif column == 2:
+                content = profile_svg(cp["profile"], width=114, height=62)
+            else:
+                details = cp_details(cp)
+                content = f'<span class="station-name">{escape(details[0])}</span>'
+                if len(details) > 1:
+                    content += '<small>' + "<br>".join(escape(line) for line in details[1:]) + "</small>"
+            css = ' class="cp"' if column == 7 else ""
+            cells += f'<td{css} style="background:{cell_fill(cp, column, limits)}">{content}</td>'
         for schedule in plan["schedules"]:
             timing = schedule["checkpoints"][index]
             late = timing["cutoff_status"].endswith("_late")
@@ -767,38 +881,41 @@ def render_html(plan: dict) -> str:
                 escape(line) for line in timing_lines(cp, timing)
             ) + "</td>"
         rows.append("<tr>" + cells + "</tr>")
-    summary = "".join(f"<p>{escape(line)}</p>" for line in summary_lines(plan))
     notes = "".join(f"<li>{escape(line)}</li>" for line in footer_lines(plan))
     return f"""<!doctype html>
 <html lang="zh-CN"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{escape(plan["name"])} · 体感一致配速表</title>
 <style>
-:root {{ --ink:#243c41; --paper:#fffdf7; --rule:#d1dad5; --accent:#234c54; }}
+:root {{ --ink:#111111; --paper:#ffffff; --rule:#bbbbbb; }}
 * {{ box-sizing:border-box; }}
-body {{ margin:0; color:var(--ink); background:linear-gradient(140deg,#e6eee9,var(--paper) 55%); font-family:"Noto Serif CJK SC","Songti SC",serif; }}
-main {{ padding:32px; }} h1 {{ margin:0 0 20px; font-weight:600; letter-spacing:.03em; }}
-header p {{ margin:6px 0; font-size:14px; }}
-.scroll {{ overflow-x:auto; margin-top:24px; border:1px solid var(--rule); background:var(--paper); }}
-table {{ width:100%; min-width:1200px; border-collapse:collapse; font-family:monospace; font-variant-numeric:tabular-nums; }}
-th {{ padding:15px 8px; background:var(--accent); color:var(--paper); white-space:nowrap; }}
-td {{ padding:12px 8px; text-align:center; border:1px solid var(--rule); line-height:1.6; }}
-tr:nth-child(odd) {{ background:#f0ede3; }} .cp {{ text-align:left; min-width:150px; max-width:260px; overflow-wrap:anywhere; font-family:serif; }}
-.timing,.late {{ white-space:nowrap; }} .late {{ color:#a13e26; font-weight:bold; }}
-td svg {{ display:block; margin:auto; }} footer {{ font-size:12px; line-height:1.8; overflow-wrap:anywhere; }}
-@media(max-width:600px) {{ main {{ padding:18px; }} h1 {{ font-size:23px; }} }}
+body {{ margin:0; color:var(--ink); background:var(--paper); font-family:"PingFang SC","Microsoft YaHei",sans-serif; }}
+main {{ padding:6px; }} header p {{ margin:0 0 12px; font-size:23px; }}
+.scroll {{ overflow-x:auto; }}
+table {{ width:100%; min-width:{sum(widths)}px; table-layout:fixed; border-collapse:collapse; font-size:23px; font-variant-numeric:tabular-nums; }}
+th {{ height:84px; padding:8px 4px; font-weight:600; line-height:1.35; }}
+th,td {{ border:1px solid var(--rule); text-align:center; }}
+td {{ height:94px; padding:12px 4px; line-height:1.4; }}
+.cp {{ padding-left:12px; text-align:left; overflow-wrap:anywhere; font-size:22px; }}
+.station-name {{ color:#00008b; text-decoration:underline; }} small {{ display:block; margin-top:4px; font-size:12px; color:#666666; }}
+.timing,.late {{ white-space:nowrap; }} .late {{ color:#b82020; font-weight:bold; }}
+td svg {{ display:block; max-width:100%; margin:auto; }} footer {{ color:#666666; font-size:12px; line-height:1.7; overflow-wrap:anywhere; }}
+footer ul {{ padding-left:18px; }} @media(max-width:600px) {{ header p {{ font-size:16px; }} }}
 @page {{ size:A4 landscape; margin:8mm; }}
 @media print {{
-body {{ background:white; }} main {{ padding:0; }} h1 {{ font-size:17px; margin-bottom:8px; }}
-header p {{ font-size:9px; margin:3px 0; }} .scroll {{ overflow:visible; margin-top:10px; border:0; }}
-table {{ min-width:0; font-size:7px; }} th,td {{ padding:4px 2px; }}
+* {{ print-color-adjust:exact; -webkit-print-color-adjust:exact; }} main {{ padding:0; }}
+header p {{ font-size:11px; margin-bottom:6px; }} .scroll {{ overflow:visible; }}
+table {{ min-width:0; font-size:10px; }} th {{ height:31px; }} td {{ height:35px; }}
+th,td {{ padding:3px 2px; }}
 thead {{ display:table-header-group; }} tr {{ break-inside:avoid; page-break-inside:avoid; }}
-.cp {{ min-width:0; max-width:95px; }} td svg {{ width:55px; height:auto; }}
-footer {{ font-size:8px; }} th {{ white-space:normal; }}
+.cp {{ padding-left:4px; font-size:10px; }} small {{ font-size:6px; margin-top:1px; }}
+td svg {{ width:100%; height:28px; }} footer {{ font-size:6px; line-height:1.5; }}
+footer ul {{ margin:6px 0 0; }} th {{ white-space:normal; }}
 }}
 </style></head><body><main>
-<header><h1>{escape(plan["name"])} · 体感一致配速表</h1>{summary}</header>
-<div class="scroll"><table><thead><tr>{headers}</tr></thead><tbody>{"".join(rows)}</tbody></table></div>
+<header><p>{escape(table_metadata(plan))}</p></header>
+<div class="scroll"><table aria-label="{escape(plan["name"])} 体感一致配速表"><colgroup>{columns}</colgroup>
+<thead><tr>{headers}</tr></thead><tbody>{"".join(rows)}</tbody></table></div>
 <footer><ul>{notes}</ul></footer></main></body></html>
 """
 
@@ -807,12 +924,13 @@ def csv_text(plan: dict) -> str:
     stream = io.StringIO(newline="")
     fields = [
         "checkpoint_id", "checkpoint_name", "gpx_distance_km", "official_distance_km",
-        "segment_distance_km", "ascent_m", "descent_m", "eq_distance_km", "water_ml",
+        "segment_distance_km", "ascent_m", "descent_m", "eq_distance_km", "segment_water_ml", "water_ml",
         "rest_seconds", "cutoff_seconds", "target_seconds", "arrival_seconds",
-        "departure_seconds", "moving_seconds", "eq_pace_seconds_per_km", "cutoff_status",
-        "arrival", "departure", "eq_pace",
+        "departure_seconds", "moving_seconds", "eq_pace_seconds_per_km",
+        "distance_pace_seconds_per_km", "pace_seconds_per_km", "cutoff_status",
+        "arrival", "departure", "eq_pace", "pace",
     ]
-    writer = csv.DictWriter(stream, fieldnames=fields)
+    writer = csv.DictWriter(stream, fieldnames=fields, lineterminator="\n")
     writer.writeheader()
     for schedule in plan["schedules"]:
         for cp, timing in zip(plan["checkpoints"], schedule["checkpoints"]):
@@ -825,12 +943,13 @@ def csv_text(plan: dict) -> str:
                 "official_distance_km": cp["official_distance_km"],
                 "segment_distance_km": cp["segment_distance_m"] / 1000,
                 **{key: cp[key] for key in ("ascent_m", "descent_m", "eq_distance_km",
-                                           "water_ml", "rest_seconds", "cutoff_seconds")},
+                                           "segment_water_ml", "water_ml", "rest_seconds", "cutoff_seconds")},
                 "target_seconds": schedule["target_seconds"],
                 **timing,
                 "arrival": format_duration(timing["arrival_seconds"]),
                 "departure": format_duration(timing["departure_seconds"]),
                 "eq_pace": format_pace(timing["eq_pace_seconds_per_km"]),
+                "pace": format_pace(timing["pace_seconds_per_km"]),
             })
     return stream.getvalue()
 
@@ -861,6 +980,7 @@ def main(argv=None) -> int:
     inspect.add_argument("--track-index", type=int)
     inspect.add_argument("--sample-m", type=float, default=5)
     inspect.add_argument("--smoothing-m", type=float, default=20)
+    inspect.add_argument("--ascent-smoothing-m", type=float, default=100)
     generate = commands.add_parser("generate", help="Generate HTML, SVG, CSV and JSON")
     generate.add_argument("gpx", type=Path)
     generate.add_argument("--config", type=Path, required=True)
@@ -869,7 +989,7 @@ def main(argv=None) -> int:
     args = parser.parse_args(argv)
     try:
         if args.command == "inspect":
-            result = inspect_route(args.gpx, args.track_index, args.sample_m, args.smoothing_m)
+            result = inspect_route(args.gpx, args.track_index, args.sample_m, args.smoothing_m, args.ascent_smoothing_m)
         else:
             config = json.loads(args.config.read_text(encoding="utf-8"))
             plan = build_plan(args.gpx, config)

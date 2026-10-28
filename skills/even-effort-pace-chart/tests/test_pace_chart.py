@@ -48,6 +48,33 @@ class Fixture(unittest.TestCase):
 
 
 class GeometryTests(Fixture):
+    def test_gain_smoothing_is_independent_from_detailed_profile_and_carries_across_cps(self):
+        points = [(0, i * 0.000045, 100 + (2 if i % 2 else -2)) for i in range(81)]
+        self.write(points=points, waypoints=[(0, 0.0018, None, "CP1")])
+        detailed = self.plan(ascent_smoothing_m=20)
+        filtered = self.plan(ascent_smoothing_m=100)
+        self.assertLess(filtered["route"]["ascent_m"], detailed["route"]["ascent_m"] / 2)
+        self.assertEqual(filtered["checkpoints"][1]["profile"], detailed["checkpoints"][1]["profile"])
+        self.assertEqual(filtered["route"]["grade_fractions"], detailed["route"]["grade_fractions"])
+        self.assertAlmostEqual(sum(cp["ascent_m"] for cp in filtered["checkpoints"]),
+                               filtered["route"]["ascent_m"])
+        self.assertAlmostEqual(sum(cp["descent_m"] for cp in filtered["checkpoints"]),
+                               filtered["route"]["descent_m"])
+        self.assertEqual(filtered["parameters"]["ascent_smoothing_m"], 100)
+
+    def test_gain_filter_preserves_long_climbs_and_visible_small_hill(self):
+        points = [(0, i * 0.000045, i * 0.2) for i in range(401)]
+        self.write(points=points, waypoints=[(0, 0.009, None, "CP1")])
+        plan = self.plan()
+        self.assertGreater(plan["route"]["ascent_m"], 77)
+        self.assertAlmostEqual(plan["route"]["descent_m"], 0)
+        self.write(points=[(0, i * 0.000045, 8 if i == 40 else 0) for i in range(81)],
+                   waypoints=[(0, 0.0018, None, "CP1")])
+        plan = self.plan()
+        elevations = [p[1] for cp in plan["checkpoints"] for p in cp["profile"]]
+        self.assertGreater(max(elevations), 1)
+        self.assertGreater(plan["route"]["ascent_m"], 0)
+
     def test_distance_namespace_and_duplicate_coordinates(self):
         for ns in ("", "http://www.topografix.com/GPX/1/0", "http://www.topografix.com/GPX/1/1"):
             self.write(points=[self.points[0], self.points[0], *self.points[1:]], namespace=ns)
@@ -211,7 +238,11 @@ class RealRouteTests(unittest.TestCase):
     def test_real_course_automatic_cps_and_four_outputs(self):
         plan = pace.build_plan(REAL_GPX, {"target": "24:00", "name": "天地留白100K · 示例"})
         self.assertAlmostEqual(plan["route"]["distance_m"], 101248.68, delta=1)
-        self.assertAlmostEqual(plan["route"]["ascent_m"], 6653.04, delta=1)
+        reference_gains = [397, 394, 439, 666, 893, 583, 531, 403, 567, 233, 220]
+        self.assertAlmostEqual(plan["route"]["ascent_m"], sum(reference_gains), delta=100)
+        error = sum(abs(cp["ascent_m"] - expected)
+                    for cp, expected in zip(plan["checkpoints"][1:], reference_gains))
+        self.assertLess(error / len(reference_gains), 20)
         self.assertEqual(len(plan["checkpoints"]), 12)
         self.assertEqual(plan["checkpoints"][0]["name"], "起终点-徽州古城（起点）")
         self.assertEqual(plan["checkpoints"][-1]["name"], "起终点-徽州古城（终点）")
@@ -225,6 +256,8 @@ class RealRouteTests(unittest.TestCase):
         for cp_key, route_key in (("segment_distance_m", "distance_m"), ("ascent_m", "ascent_m"),
                                   ("descent_m", "descent_m"), ("eq_distance_km", "eq_distance_km")):
             self.assertAlmostEqual(sum(cp[cp_key] for cp in plan["checkpoints"]), plan["route"][route_key])
+        inspected = pace.inspect_route(REAL_GPX)
+        self.assertAlmostEqual(inspected["ascent_m"], plan["route"]["ascent_m"])
         with tempfile.TemporaryDirectory() as output:
             paths = pace.write_outputs(plan, Path(output))
             self.assertEqual(len(paths), 4)
@@ -276,6 +309,7 @@ class TimingTests(Fixture):
             {"target": "00:30"}, {"targets": ["04:00", "04:00"]}, {"targets": []},
             {"target": "04:60"}, {"fatigue_rate": -0.1}, {"sample_m": 0},
             {"smoothing_m": -1}, {"sample_m": float("nan")}, {"typo": 1},
+            {"ascent_smoothing_m": -1}, {"start_time": "invalid date"},
             {"targets": ["00:10"], "checkpoint_overrides": {"wpt:1": {"rest_minutes": 20}}},
         ):
             with self.assertRaises(pace.InputError):
@@ -287,6 +321,28 @@ class TimingTests(Fixture):
                                plan["route"]["eq_distance_km"] * 70)
         self.assertEqual(pace.format_duration(91800), "25:30:00")
         self.assertEqual(pace.format_pace(359.6), "6:00")
+        cps = plan["checkpoints"]
+        self.assertAlmostEqual(cps[0]["water_ml"], cps[1]["eq_distance_km"] * 70)
+        self.assertAlmostEqual(cps[1]["water_ml"], cps[2]["eq_distance_km"] * 70)
+        self.assertEqual(cps[-1]["water_ml"], 0)
+
+    def test_reference_interval_pace_uses_horizontal_distance_and_can_select_equivalent(self):
+        self.write()
+        plan = self.plan(targets=["04:00"])
+        cp, timing = plan["checkpoints"][1], plan["schedules"][0]["checkpoints"][1]
+        expected = timing["moving_seconds"] / (cp["segment_distance_m"] / 1000)
+        self.assertAlmostEqual(timing["pace_seconds_per_km"], expected)
+        self.assertGreater(timing["pace_seconds_per_km"], timing["eq_pace_seconds_per_km"])
+        self.assertEqual(plan["parameters"]["pace_basis"], "distance")
+        self.assertIn("括号内：区间配速", pace.render_svg(plan))
+        equivalent = self.plan(targets=["04:00"], pace_basis="equivalent")
+        alternate = equivalent["schedules"][0]["checkpoints"][1]
+        self.assertAlmostEqual(alternate["pace_seconds_per_km"], alternate["eq_pace_seconds_per_km"])
+        self.assertIn("括号内：区间等效配速", pace.render_svg(equivalent))
+        self.assertEqual(plan["targets_seconds"], equivalent["targets_seconds"])
+        self.assertEqual(timing["departure_seconds"], alternate["departure_seconds"])
+        with self.assertRaises(pace.InputError):
+            self.plan(pace_basis="typo")
 
 
 class ExportTests(Fixture):
@@ -318,8 +374,9 @@ class ExportTests(Fixture):
                               and float(row["target_seconds"]) == schedule["target_seconds"])
                 self.assertAlmostEqual(float(record["departure_seconds"]), timing["departure_seconds"])
                 for output in (html, svg):
-                    self.assertIn(pace.format_duration(timing["departure_seconds"]), output)
-                    self.assertIn(pace.format_pace(timing["eq_pace_seconds_per_km"]), output)
+                    self.assertIn(pace.format_chart_time(timing["departure_seconds"]), output)
+                    if timing["pace_seconds_per_km"] is not None:
+                        self.assertIn(pace.format_chart_pace(timing["pace_seconds_per_km"]), output)
 
     def test_escape_text_and_long_names_many_columns(self):
         name = '赛事 & <script>alert("x")</script>'
@@ -345,10 +402,34 @@ class ExportTests(Fixture):
         for item in graphics:
             transform = item.attrib["transform"].removeprefix("translate(").removesuffix(")")
             x, y = (float(value) for value in transform.split())
-            self.assertGreaterEqual(x, 400)
-            self.assertGreaterEqual(y, 200)
+            self.assertGreaterEqual(x, 100)
+            self.assertLess(x, 360)
+            self.assertGreaterEqual(y, 100)
         self.assertIn("关门 未提供", pace.cp_details(plan["checkpoints"][1]))
         self.assertIn("关门 未提供", pace.render_html(plan))
+
+    def test_reference_table_layout_colours_start_time_and_minute_times(self):
+        plan = self.plan(start_time="2026-10-31 06:00", targets=["12:00", "13:00", "14:00", "15:00", "16:00"])
+        self.assertEqual([label for label, _ in pace.BASE_COLUMNS],
+                         ["累积\n距离", "坡度\n分布", "肖像图", "距离", "爬升", "下降", "水", "位置"])
+        for output in (pace.render_svg(plan), pace.render_html(plan)):
+            self.assertIn("2026-10-31 06:00", output)
+            self.assertIn("Target", output)
+            self.assertIn("14.0 Hr", output)
+        root = ET.fromstring(pace.render_svg(plan))
+        ns = {"svg": "http://www.w3.org/2000/svg"}
+        by_column = {}
+        for cell in root.findall("svg:rect", ns):
+            if "data-column" in cell.attrib:
+                by_column.setdefault(cell.attrib["data-column"], set()).add(cell.attrib["fill"])
+        for column in ("distance", "ascent", "descent", "water"):
+            self.assertTrue(by_column[column] - {"#ffffff"})
+        histogram = ET.fromstring(pace.histogram_svg([0.1, 0.1, 0.1, 0.4, 0.1, 0.1, 0.1]))
+        bars = histogram.findall("svg:rect", ns)
+        self.assertEqual([bar.attrib["fill"] for i, bar in enumerate(bars) if i != 3], ["#111111"] * 6)
+        self.assertEqual(bars[3].attrib["fill"], "#ffffff")
+        self.assertEqual(pace.format_chart_time(25 * 3600 + 59), "25:00")
+        self.assertEqual(pace.format_chart_pace(359.6), "06:00")
 
     def test_csv_formula_names_and_overwrite_protection(self):
         plan = self.plan(checkpoint_overrides={"wpt:1": {"name": "=SUM(1,2)"}})
