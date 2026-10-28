@@ -1,0 +1,2 @@
+# Preserve imported KML bytes and allow CRLF while retaining whitespace checks.
+*.kml -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

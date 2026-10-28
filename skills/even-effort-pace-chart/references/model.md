@@ -1,44 +1,52 @@
-# Model, provenance, and limitations
+# 模型、来源与限制
 
-## Source
+[简体中文](model.md) | [English](model.en.md)
 
-Conceptual reference: "耐力科学|体感一致配速表全面指南", 耐力学社 / Pili (表哥), published by 耐力學社 on 2025-08-26; the article credits 隆景体育.
+## 来源
 
-Original: https://mp.weixin.qq.com/s/spYCP-upbqAZN0kzUm-0ng
+概念参考：《耐力科学|体感一致配速表全面指南》，耐力学社 / Pili（表哥），由耐力學社于 2025-08-26 发布；原文注明文章来源于隆景体育。
 
-The repository archive is `docs/reference/耐力科学_体感一致配速表全面指南.md`, with its illustrations under `docs/reference/assets/pace-chart/`. These paths are relative to the repository root. The skill remains usable when copied independently; it does not require the archive at runtime.
+原文：[公众号文章](https://mp.weixin.qq.com/s/spYCP-upbqAZN0kzUm-0ng)。
 
-This is an independent implementation of the article's equivalent-distance and fatigue-curve ideas. The article does not expose RunArt.Net's full algorithm. The equations below are this implementation's explicit, reproducible choices; generated charts must not be represented as official RunArt.Net output. Preserve the source attribution included by the exporters. The article's original copyright statement remains in the repository archive; this skill does not reinterpret the terms for third-party material.
+仓库归档为 `docs/reference/耐力科学_体感一致配速表全面指南.md`，配图位于 `docs/reference/assets/pace-chart/`，均相对于仓库根目录。Skill 可以独立复制使用，运行时不依赖归档资料。
 
-## Distance and elevation
+本工具独立实现文章中的等效距离与疲劳曲线思路。文章没有公开 RunArt.Net 的完整算法，以下公式是本实现明确、可复现的选择，生成结果不能表示为 RunArt.Net 官方输出。导出器保留来源；原文章版权声明仍在归档中，本 Skill 不重新解释第三方资料的使用条款。
 
-Compute horizontal cumulative distance with the haversine formula on a sphere of radius 6,371,008.8 m. Elevation does not lengthen the geometric distance.
+## 输入归一化
 
-1. Interpolate elevation linearly along cumulative distance, every **5 m**, plus the exact endpoint.
-2. At each sample, average the resampled piecewise-linear elevation over a **20 m full-width centered window** (10 m each side).
-3. Clip windows at the course boundaries and divide by their actual width. Integration uses exact trapezoid areas; this is a distance-weighted average, not a point-count average.
-4. Independently average the same resampled elevations over a **100 m full-width centered window** for cumulative ascent/descent. This is controlled by `ascent_smoothing_m`, not by the display setting `smoothing_m`.
-5. Insert CP boundary elevations into each curve. Sum positive/negative changes on the statistical curve for ascent/descent; use the detailed curve for thumbnails and slope bins. Both curves are filtered over the whole route before any station split, so splitting at CPs cannot reset the filter or change route totals.
+GPX 和 KML 都转换为统一、有序的 `(latitude, longitude, elevation)` 轨迹，再计算距离、平滑、CP 投影和配速计划。KML LineString 以逗号分隔，gx:Track 以空格分隔，坐标均按经度在前读取。原始时间戳不决定目标配速；KML 的不同线几何是独立路线选项，不会自动拼接。
 
-Settings are adjustable; 0 disables the corresponding smoothing. Interpolation cannot recover missing terrain detail; sparse points over 100 m apart produce a warning. The 5 m grid and 20 m display retain short features, while the independent statistical scale avoids counting every small oscillation toward total ascent. The integral of positive changes on the displayed curve therefore need not equal reported ascent. Statistical filtering can also suppress real short undulations; neither its scale nor matching another platform establishes ground truth. No external DEM, road classifier, or elevation correction is applied.
+KML 绝对高度可直接使用。未声明高度模式或声明为 clampToGround 时，`use_kml_altitudes: true` 表示显式信任原始坐标高度，并产生告警；这不证明其为实测海平面高程。所有轨迹位置仍需有限高度，相对地面和海底模式会报错。选择及覆盖规则见[配置文档](configuration.md)。
 
-The supplied reference table for `examples/tiandi-liubai-100k/天地留白100K.gpx` contains eleven incoming-leg gains of 397, 394, 439, 666, 893, 583, 531, 403, 567, 233, and 220 m, summing to 5,326 m. With 5 m sampling, summing the 20 m curve gave 6,653 m; the independent 100 m statistical curve gives approximately 5,332 m with a mean absolute per-leg difference of 9.4 m. This is a comparison against one supplied reference, not a reproduction of COROS or RunArt.Net's internal algorithm. No gain is multiplied by a fitted correction factor.
+## 距离与海拔
 
-Each segment's seven slope bins are weighted by horizontal distance. Boundaries, in percent, are `(-inf, -15]`, `(-15, -10]`, `(-10, -5]`, `(-5, 5)`, `[5, 10)`, `[10, 15)`, `[15, inf)`. The center bar is white; descent is on the left and ascent on the right. Segment profile thumbnails use independent horizontal and vertical scales and must not be compared as equal-scale maps.
+使用半径为 6,371,008.8 米的球体和 haversine 公式计算累计水平距离，海拔不增加几何距离。
 
-## Equivalent distance
+1. 沿累计距离每 **5 米**线性插值海拔，并加入精确终点。
+2. 对每个采样点，计算 **20 米完整居中窗口**内分段线性海拔的平均值，即左右各 10 米。
+3. 边界处截断窗口，按实际宽度归一化。积分使用精确梯形面积，是按距离加权的平均，而非按点数平均。
+4. 同时对原始重采样海拔使用独立的 **100 米完整居中窗口**统计累计爬升下降，由 `ascent_smoothing_m` 控制，与显示用的 `smoothing_m` 分开。
+5. 在两条曲线上插入 CP 边界高度。统计曲线上的正负变化用于爬升下降，细节曲线用于肖像和坡度分布。两条曲线均先处理全程再分段，拆分 CP 不会重置滤波或改变总量。
 
-For a segment:
+窗口可调整，0 关闭对应平滑。插值不能补回原始缺失的地形细节，原始相邻点超过 100 米时告警。5 米网格和 20 米窗口保留短地形，独立统计尺度避免每次小波动都累加进爬升；显示曲线的正变化总和因此不一定等于报告爬升。统计滤波也可能抑制真实短起伏，窗口选择或与平台接近都不代表地面真值。本工具不使用外部 DEM、道路分类或海拔校正。
+
+`examples/tiandi-liubai-100k/天地留白100K.gpx` 所对应的参考表含 11 段爬升：397、394、439、666、893、583、531、403、567、233、220 米，合计 5,326 米。在 5 米采样下直接累加 20 米曲线得到 6,653 米，独立的 100 米统计曲线约为 5,332 米，逐段平均绝对差约 9.4 米。这仅是与一份参考表的比较，不代表复现 COROS 或 RunArt.Net 算法，也没有通过拟合系数缩放爬升。
+
+七档坡度按水平距离加权。百分比边界为 `(-inf, -15]`、`(-15, -10]`、`(-10, -5]`、`(-5, 5)`、`[5, 10)`、`[10, 15)`、`[15, inf)`。中间柱留白，左侧下降、右侧爬升。各段肖像独立缩放横纵轴，不能作为同尺度地图比较。
+
+## 等效距离
+
+每段采用：
 
 ```text
 E = horizontal_distance_km + ascent_m / 100 * ascent_km_per_100m
 ```
 
-The coefficient defaults to 1 km per 100 m of ascent, following the article's common baseline. Downhill does not subtract equivalent distance. Steep descents and technical terrain can demand extra effort that this scalar model does not capture.
+参考文章的常用基准，每爬升 100 米默认增加 1 等效公里。下降不扣减等效距离；陡下坡和技术路段的额外负担未被这个标量模型表达。
 
-## Fatigue and finish targets
+## 疲劳与目标时间
 
-Let `r` be `fatigue_rate` (default 0.08), `E_total` the total equivalent distance, and `E_i` the cumulative equivalent distance through station i.
+设 `r` 为 `fatigue_rate`，默认 0.08；`E_total` 为全程等效距离，`E_i` 为到第 i 站的累计等效距离：
 
 ```text
 b = 1 + log2(1 + r)
@@ -51,16 +59,16 @@ arrival_i = M_i + sum(rest before station i)
 departure_i = arrival_i + rest_i
 ```
 
-`r = 0` gives constant equivalent pace. With the default, average pace over a doubled equivalent distance changes by the factor `2^(b-1) = 1.08`. This is a power-curve parameterization, not a claim that the article's illustrated interval examples or the proprietary tool use these exact equations. The curve is normalized separately for each target, so every final departure is exactly that target before presentation rounding.
+`r = 0` 时等效配速恒定；默认参数下，等效距离翻倍的平均配速变化倍率为 `2^(b-1) = 1.08`。这是本实现的幂曲线参数化，不代表原文区间示例或专有工具一定使用这些公式。每组目标单独归一化，显示取整前最终出站时长精确等于目标。
 
-Rest is explicit and included once; no automatic extra delay or stop is inferred. Every target must exceed total rest. Time calculations retain floating-point precision; segment totals calculated from rounded display values may differ slightly.
+停留时间明确配置且仅计入一次，不自动推断额外延误或停留。每个目标都必须大于总停留；计算保留浮点精度，从显示值反推分段总和可能有少量取整差异。
 
-The reference-style table displays cumulative durations truncated to full minutes and the incoming segment's moving-time pace rounded to seconds. By default the parenthesized pace uses horizontal kilometres (`pace_basis: "distance"`), matching the supplied reference. The `"equivalent"` option uses equivalent kilometres and labels the header accordingly. Both are retained as full-precision values; changing the displayed basis does not change allocated moving times. CSV formatted cumulative durations continue to round to seconds.
+参考风格表格将累计经过时长截断到分钟，将刚完成赛段的移动配速取整到秒。括号内默认按水平公里数计算，即 `pace_basis: "distance"`；设置 `"equivalent"` 时按等效公里数计算，并切换标题。两种配速均保留完整精度，展示口径不会改变分配时间。CSV 中格式化累计时长仍按秒取整。
 
-These columns are pre-race reference schedules. Switching to an adjacent column mid-race does not recompute the remaining schedule from the runner's current time, fatigue, or position.
+每列是赛前参考计划，途中切换到相邻列不会根据选手当前时间、疲劳或位置重新计算剩余计划。
 
-## Water and uncertainty
+## 水量与不确定性
 
-Comparative segment water is `E / 10 * water_ml_per_10km`, defaulting to 700 mL per 10 equivalent kilometres as an article-inspired baseline. `segment_water_ml` belongs to the incoming leg. The displayed `water_ml` belongs to the next leg, so it is shifted up one station and becomes zero at the finish. It communicates relative segment demand. It is not an individual hydration, medical, or race-safety recommendation.
+比较用水量为 `E / 10 * water_ml_per_10km`，参考文章默认每 10 等效公里 700 毫升。`segment_water_ml` 对应上一段；表格的 `water_ml` 对应下一段，因此向上移一站，终点为零。它只表达赛段相对需求，不是个人饮水、医疗或赛事安全建议。
 
-The GPX alone cannot establish an achievable finish target. Terrain surface, steep descent load, weather, congestion, altitude response, runner fitness, nutrition, and recovery are not modeled. Missing race cutoffs remain unchecked. Route-derived totals can differ from organizer statistics because of geometry, elevation source, smoothing, and distance mapping.
+仅凭轨迹不能判断目标是否可达。模型未计入路面、陡下坡负担、天气、拥堵、海拔反应、体能、营养和恢复差异；缺失的关门时间不作校核。轨迹测量总量也可能因几何、海拔来源、平滑和里程映射而与赛事官方统计不同。

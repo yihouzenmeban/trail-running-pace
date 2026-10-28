@@ -1,23 +1,27 @@
 ---
 name: even-effort-pace-chart
-description: Convert a GPX race route into an even-effort trail running pace chart with checkpoint splits, elevation profiles, and multiple finish targets. Use when planning race pacing from GPX or generating HTML, SVG, CSV, and JSON pace tables.
+description: Convert a GPX or KML race route into an even-effort trail running pace chart with checkpoint splits, elevation profiles, and multiple finish targets. Use when planning race pacing from GPX/KML or generating HTML, SVG, CSV, and JSON pace tables.
 ---
 
 # Even-Effort Pace Chart
 
 Use `scripts/pace_chart.py` for deterministic, offline calculations and exports. It requires Python 3.10+ and the standard library only. Resolve script paths relative to this skill folder, regardless of the user's working directory.
 
+Read supporting references in the user's language, loading only the needed version: Chinese [configuration](references/configuration.md) and [model](references/model.md), or English [configuration](references/configuration.en.md) and [model](references/model.en.md).
+
 ## Inspect the route first
 
 ```bash
-python3 <skill-dir>/scripts/pace_chart.py inspect <race.gpx>
+python3 <skill-dir>/scripts/pace_chart.py inspect <race.gpx-or-kml>
 ```
 
-Prefer CPs embedded in the GPX. Recognized waypoint names/types and named route points supply the stations; ordinary turns and landmarks are not automatically included. Start and finish are added when absent; a shared start/finish venue is expanded into two rows. Keep the original CP numbers even if they have gaps.
+Prefer CPs embedded in the input. GPX waypoints/named route points and KML named Point placemarks supply candidates; ordinary turns and landmarks are not automatically included. Start and finish are added when absent; a shared start/finish venue is expanded into two rows. Keep the original station names and numbers even if they have gaps.
 
-Read the JSON inspection before requesting information. If multiple tracks exist, select the intended 1-based `track_index`. Ask for manual CP names and cumulative distances only when embedded CPs are absent or unusable. Ambiguous named waypoints can instead be confirmed with `cp_selection`. Normalize user-provided CSV or pasted CP data into the JSON configuration.
+Read the JSON inspection before requesting information. If multiple tracks exist, select the intended 1-based `track_index`. KML supports LineString and gx:Track, including nested containers; separate lines remain separate selections. KMZ and remote NetworkLink routes are not supported. Ask for manual CP names and cumulative distances only when embedded CPs are absent or unusable. Ambiguous named waypoints can instead be confirmed with `cp_selection`. Normalize user-provided CSV or pasted CP data into the JSON configuration.
 
-For a loop, crossing, or out-and-back, confirm the intended route occurrence when multiple projections are plausible; record a GPX cumulative `distance_km` override. Confirm offsets over 100 m before enabling `allow_off_route`. Do not choose the nearest occurrence silently. See [references/configuration.md](references/configuration.md) for exact fields and examples.
+KML route coordinates need explicit altitudes. An absolute altitude mode is accepted directly. When altitudeMode is omitted or clampToGround, verify the supplied heights are suitable before using `inspect --use-kml-altitudes` and recording `use_kml_altitudes: true` in the configuration. This uses the raw heights with a warning; it does not fetch terrain or correct a vertical datum. Relative or sea-floor modes must be re-exported with absolute elevations. Never fill missing route altitudes with zero.
+
+For a loop, crossing, or out-and-back, confirm the intended route occurrence when multiple projections are plausible; record a cumulative input-route `distance_km` override. Confirm offsets over 100 m before enabling `allow_off_route`. Do not choose the nearest occurrence silently. See the configuration reference in the user's language for exact fields and examples.
 
 ## Set targets and assumptions
 
@@ -27,16 +31,16 @@ Keep 5 m distance sampling and 20 m centered smoothing for the displayed profile
 
 Total targets include station rests. Rest defaults to zero; ask only when the user wants it modeled. Optional `start_time` supplies the displayed local start date/time; it does not change elapsed targets. Cutoffs are elapsed durations since the start; never invent them or infer them from CP numbers. For clock-time cutoffs, obtain the start time, date, and rollover information before conversion. Missing cutoffs remain unchecked in JSON/CSV and produce CLI warnings; omit cutoff details from station cells when none are supplied.
 
-For manually supplied official distances, differences over `max(100 m, 0.5% of GPX distance)` require confirmation before `distance_alignment: "scale"`. The table continues to show GPX distances and preserves official labels separately.
+For manually supplied official distances, differences over `max(100 m, 0.5% of route distance)` require confirmation before `distance_alignment: "scale"`. The table continues to show route-derived distances and preserves official labels separately.
 
-The calculation is an independent interpretation of the archived article, with an explicit fatigue power curve. Read [references/model.md](references/model.md) when explaining the formula, adjusting model parameters, or discussing limitations. Do not claim equivalence to RunArt.Net's implementation or assess a runner's fitness from the GPX alone.
+The calculation is an independent interpretation of the archived article, with an explicit fatigue power curve. Read the model reference in the user's language when explaining the formula, adjusting model parameters, or discussing limitations. Do not claim equivalence to RunArt.Net's implementation or assess a runner's fitness from the route alone.
 
 ## Generate and verify
 
 Write the selected assumptions to a JSON file, then run:
 
 ```bash
-python3 <skill-dir>/scripts/pace_chart.py generate <race.gpx> \
+python3 <skill-dir>/scripts/pace_chart.py generate <race.gpx-or-kml> \
   --config <race.json> --output-dir <output-dir>
 ```
 

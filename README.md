@@ -1,8 +1,10 @@
-# GPX 体感一致配速表 Skill
+# GPX / KML 体感一致配速表 Skill
 
-将 GPX 比赛轨迹转换成按 CP 分段的越野跑配速表，同时比较多组目标完赛时间。既可作为 `even-effort-pace-chart` Skill 使用，也可直接通过命令行生成。
+[简体中文](README.md) | [English](README.en.md)
 
-- 默认读取 GPX 内的 CP；缺少可用站点时再提供人工 CP 列表。
+将 GPX 或 KML 比赛轨迹转换成按 CP 分段的越野跑配速表，同时比较多组目标完赛时间。既可作为 `even-effort-pace-chart` Skill 使用，也可直接通过命令行生成。
+
+- 默认读取轨迹内的 CP；缺少可用站点时再提供人工 CP 列表。
 - 单个目标时间默认展开五组方案，相邻间隔 30 分钟；支持自定义间隔或目标列表。
 - 展示分段距离、爬升、下降、坡度分布、海拔肖像和下一段参考水量。
 - 支持站点停留和关门时间；未提供关门时间时，位置列不显示关门信息。
@@ -12,7 +14,7 @@
 
 ## 环境要求
 
-Python 3.10 或更高版本，仅使用标准库，无需安装额外依赖或配置在线服务。GPX 轨迹点需要包含坐标和海拔。
+Python 3.10 或更高版本，仅使用标准库，无需安装额外依赖或配置在线服务。轨迹点需要包含坐标和海拔，GPX/KML 根据 XML 根元素自动识别。
 
 ## 作为 Skill 使用
 
@@ -24,7 +26,7 @@ $even-effort-pace-chart
 目标完赛时间 14 小时，相邻方案间隔 30 分钟，输出到 output/my-race/。
 ```
 
-Skill 会先检查轨迹和 CP，再根据目标时间及配置生成结果。也可以提供自定义目标列表、各站停留时间和关门时间。
+Skill 会先检查轨迹和 CP，再根据目标时间及配置生成结果。也可以提供 KML、自定义目标列表、各站停留时间和关门时间。图表标签默认为中文。
 
 ## 命令行快速开始
 
@@ -48,6 +50,27 @@ python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate \
 
 完整示例保存在 `examples/tiandi-liubai-100k/`，包含 GPX、配置和四种导出结果；轨迹约 101.25 km，当前默认参数下累计爬升约 5,332 m。
 
+### KML 示例
+
+支持 LineString、gx:Track 和命名 Point 地标；多条路线通过 `track_index` 选择。KML 轨迹必须带高度，`altitudeMode` 为 `absolute` 时可直接使用。对于省略模式或 `clampToGround` 的文件，确认原始坐标高度适合计算后，检查时添加 `--use-kml-altitudes`，生成配置中添加 `"use_kml_altitudes": true`。工具会记录告警，不会填零、联网补海拔或将相对地面高度换算为海拔。不支持 KMZ 或远程 NetworkLink。
+
+大境门示例已在配置中明确选择站点和原始高度：
+
+```bash
+python3 skills/even-effort-pace-chart/scripts/pace_chart.py inspect \
+  'examples/大境门/2026京东大境门古长城越野赛by UTMB®DGW100K.kml' \
+  --use-kml-altitudes
+
+python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate \
+  'examples/大境门/2026京东大境门古长城越野赛by UTMB®DGW100K.kml' \
+  --config 'examples/大境门/config.json' \
+  --output-dir output/dajingmen
+```
+
+`examples/大境门/` 包含原始 KML、配置及四种结果。该文件未声明高度模式；示例配置显式采用坐标高度，并通过 `cp_selection` 选择 D1–D9、SP1 和共用起终点，排除重复端点。24 小时仅为示范目标，自动生成 23:00 至 25:00 五组方案。路线测算约 99.69 km、爬升约 3,635 m，未与赛事官方统计校准。
+
+### 输出文件
+
 | 文件 | 用途 |
 | --- | --- |
 | `pace-chart.html` | 浏览器离线查看，支持横向打印 |
@@ -68,7 +91,7 @@ python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate \
 }
 ```
 
-将 `race.gpx` 替换为自己的轨迹路径：
+将 `race.gpx` 替换为自己的 GPX 或 KML 路径：
 
 ```bash
 python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate \
@@ -92,8 +115,9 @@ python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate \
 | `sample_m` | `5` | 沿距离插值的间隔，单位米 |
 | `smoothing_m` | `20` | 海拔肖像与坡度分布的居中平滑窗口全宽，单位米 |
 | `ascent_smoothing_m` | `100` | 累计爬升、下降的独立统计窗口全宽，单位米 |
-| `checkpoint_overrides` | 不覆盖 | 按 GPX 候选点 ID 设置名称、停留分钟数 `rest_minutes`、关门时长 `cutoff` 等 |
-| `checkpoints` | 从 GPX 读取 | 没有可用 GPX CP 时，手动提供名称和累计公里数 |
+| `use_kml_altitudes` | `false` | 显式采用未声明高度模式或 clampToGround 的 KML 坐标高度 |
+| `checkpoint_overrides` | 不覆盖 | 按候选点 ID 设置名称、停留分钟数 `rest_minutes`、关门时长 `cutoff` 等 |
+| `checkpoints` | 从轨迹读取 | 没有可用内嵌 CP 时，手动提供名称和累计公里数 |
 
 目标完赛时间包含站点停留。关门时间按发枪后经过时长填写；环线、折返或偏离轨迹的 CP 可能需要明确确认位置。
 
@@ -105,7 +129,7 @@ python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate \
 python3 -m unittest discover -s skills/even-effort-pace-chart/tests -v
 ```
 
-完整仓库会执行合成轨迹测试和天地留白 100K 真实赛道回归测试；单独复制 Skill、未携带 examples 时，真实赛道测试会跳过。
+完整仓库会执行 GPX/KML 合成轨迹测试，以及天地留白 100K 和大境门 KML 真实赛道回归测试；单独复制 Skill、未携带 examples 时，真实赛道测试会跳过。
 
 ## 模型与参考资料
 

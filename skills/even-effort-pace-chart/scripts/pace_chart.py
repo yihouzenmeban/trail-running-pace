@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Offline, reproducible GPX even-effort pace charts. Python 3.10+; stdlib only."""
+"""Offline, reproducible GPX/KML even-effort pace charts. Python 3.10+; stdlib only."""
 
 from __future__ import annotations
 
@@ -32,7 +32,7 @@ DEFAULTS = {
 }
 CONFIG_KEYS = set(DEFAULTS) | {
     "name", "target", "targets", "track_index", "checkpoints", "cp_selection",
-    "checkpoint_overrides", "distance_alignment", "start_time", "pace_basis",
+    "checkpoint_overrides", "distance_alignment", "start_time", "pace_basis", "use_kml_altitudes",
 }
 CP_KEYS = {"name", "distance_km", "rest_minutes", "cutoff"}
 OVERRIDE_KEYS = CP_KEYS | {"allow_off_route"}
@@ -146,16 +146,107 @@ def haversine(a, b) -> float:
     return 6371008.8 * 2 * math.asin(math.sqrt(min(1.0, max(0.0, h))))
 
 
-def load_route(path: Path, track_index: int | None = None) -> Route:
+def kml_coordinate(text: str, gx=False, require_elevation=True) -> tuple[float, float, float]:
+    values = text.split() if gx else text.split(",")
+    if len(values) not in (2, 3) or (require_elevation and len(values) != 3):
+        raise InputError("KML coordinates require longitude,latitude,altitude; supply a complete elevation profile")
+    try:
+        lon, lat = float(values[0]), float(values[1])
+        elevation = float(values[2]) if len(values) == 3 else 0.0
+    except ValueError as error:
+        raise InputError("Invalid KML coordinates or altitude") from error
+    if not math.isfinite(lat) or not -90 <= lat <= 90 or not math.isfinite(lon) or not -180 <= lon <= 180:
+        raise InputError("Invalid KML latitude/longitude")
+    if not math.isfinite(elevation):
+        raise InputError("Non-finite KML altitude; supply a complete elevation profile")
+    return lat, lon, elevation
+
+
+def kml_geometries(element, altitude_mode=""):
+    for child in element:
+        kind = tag(child)
+        mode = child_text(child, "altitudeMode") or altitude_mode
+        if kind in ("Point", "LineString", "Track"):
+            yield child, mode
+        elif kind in ("MultiGeometry", "MultiTrack"):
+            yield from kml_geometries(child, mode)
+
+
+def load_kml_route(root, track_index: int | None, use_kml_altitudes: bool) -> Route:
+    alternatives, candidates = [], []
+    for index, placemark in enumerate((e for e in root.iter() if tag(e) == "Placemark"), 1):
+        name = child_text(placemark, "name")
+        point_index = 0
+        for geometry, mode in kml_geometries(placemark):
+            if tag(geometry) != "Point":
+                alternatives.append((name, geometry, mode))
+                continue
+            point_index += 1
+            if not name:
+                continue
+            positions = child_text(geometry, "coordinates").split()
+            if len(positions) != 1:
+                raise InputError("KML Point needs exactly one coordinate tuple")
+            lat, lon, _ = kml_coordinate(positions[0], require_elevation=False)
+            candidates.append({
+                "id": f"placemark:{index}:point:{point_index}", "name": name, "type": "",
+                "lat": lat, "lon": lon, "recognized": bool(CP_PATTERN.search(name)),
+            })
+    if not alternatives:
+        raise InputError("No KML LineString or gx:Track found; supply a local KML route, not a NetworkLink or KMZ")
+    if track_index is None:
+        if len(alternatives) != 1:
+            raise InputError("Multiple KML routes; set track_index (1-based)", [
+                {"track_index": i, "name": name, "geometry": tag(geometry)}
+                for i, (name, geometry, _) in enumerate(alternatives, 1)
+            ])
+        track_index = 1
+    if isinstance(track_index, bool) or not isinstance(track_index, int) or not 1 <= track_index <= len(alternatives):
+        raise InputError("track_index is outside the available routes")
+    _, geometry, mode = alternatives[track_index - 1]
+    warnings = []
+    if mode != "absolute":
+        if mode not in ("", "clampToGround"):
+            raise InputError(f"Unsupported KML altitude mode {mode!r}; export absolute elevations above sea level")
+        if not use_kml_altitudes:
+            raise InputError("KML altitude mode is not absolute; confirm coordinate heights with "
+                             "use_kml_altitudes=true (inspect: --use-kml-altitudes), or export absolute elevations")
+        warnings.append("KML altitude mode is omitted or clampToGround; explicitly using coordinate altitudes "
+                        "as the elevation profile. No terrain or vertical-datum correction was applied.")
+    gx = tag(geometry) == "Track"
+    positions = [(e.text or "").strip() for e in children(geometry, "coord")] if gx else (
+        child_text(geometry, "coordinates").split()
+    )
+    points = []
+    for position in positions:
+        point = kml_coordinate(position, gx=gx)
+        if not points or haversine(points[-1], point) >= 0.001:
+            points.append(point)
+    if len(points) < 2:
+        raise InputError("KML needs at least two distinct positions")
+    samples = [Sample(0.0, points[0][2])]
+    for previous, point in zip(points, points[1:]):
+        samples.append(Sample(samples[-1].distance_m + haversine(previous, point), point[2]))
+    max_gap = max(b.distance_m - a.distance_m for a, b in zip(samples, samples[1:]))
+    if max_gap > 100:
+        warnings.append(f"Sparse KML: maximum original point spacing is {max_gap:.1f} m; interpolation adds no measurement detail.")
+    return Route(points, samples, candidates, warnings)
+
+
+def load_route(path: Path, track_index: int | None = None, use_kml_altitudes=False) -> Route:
+    if not isinstance(use_kml_altitudes, bool):
+        raise InputError("use_kml_altitudes must be boolean")
     raw = Path(path).read_bytes()
     if re.search(br"<!\s*(?:DOCTYPE|ENTITY)", raw, flags=re.IGNORECASE):
-        raise InputError("GPX DTD/entity declarations are not supported")
+        raise InputError("Route XML DTD/entity declarations are not supported")
     try:
         root = ET.fromstring(raw)
     except ET.ParseError as error:
-        raise InputError(f"Invalid GPX XML: {error}") from error
+        raise InputError(f"Invalid route XML: {error}") from error
+    if tag(root) == "kml":
+        return load_kml_route(root, track_index, use_kml_altitudes)
     if tag(root) != "gpx":
-        raise InputError("Expected a GPX root element")
+        raise InputError("Expected a GPX or KML root element")
     tracks = children(root, "trk")
     routes = children(root, "rte")
     alternatives = tracks or routes
@@ -311,7 +402,7 @@ def resolve_checkpoints(route: Route, config: dict) -> tuple[list[dict], float, 
         if alignment not in ("confirm", "scale"):
             raise InputError("distance_alignment must be confirm or scale")
         if abs(official_total - route.total_m) > tolerance and alignment != "scale":
-            raise InputError("Official/GPX distance mismatch; confirm then set distance_alignment=scale",
+            raise InputError("Official/route distance mismatch; confirm then set distance_alignment=scale",
                              {"official_m": official_total, "gpx_m": route.total_m,
                               "scale": route.total_m / official_total})
         scale = route.total_m / official_total if alignment == "scale" else 1.0
@@ -319,9 +410,9 @@ def resolve_checkpoints(route: Route, config: dict) -> tuple[list[dict], float, 
             cp["distance_m"] *= scale
         cps[-1]["distance_m"] = route.total_m
         if len(cps) > 1 and cps[-2]["distance_m"] >= route.total_m:
-            raise InputError("An intermediate checkpoint falls beyond the GPX finish")
+            raise InputError("An intermediate checkpoint falls beyond the route finish")
         if alignment == "scale":
-            warnings.append(f"Confirmed official-distance mapping: {scale:.8f} GPX metres per official metre.")
+            warnings.append(f"Confirmed official-distance mapping: {scale:.8f} route metres per official metre.")
     else:
         scale = 1.0
         candidates = route.candidates
@@ -337,8 +428,8 @@ def resolve_checkpoints(route: Route, config: dict) -> tuple[list[dict], float, 
             selected = [p for p in candidates if p["recognized"]]
         if not selected:
             if candidates:
-                raise InputError("Named GPX waypoints need confirmation via cp_selection, or supply checkpoints", candidates)
-            raise InputError("No GPX CPs found; provide checkpoints with names and cumulative kilometres")
+                raise InputError("Named route waypoints need confirmation via cp_selection, or supply checkpoints", candidates)
+            raise InputError("No embedded CPs found; provide checkpoints with names and cumulative kilometres")
         overrides = config.get("checkpoint_overrides", {})
         if not isinstance(overrides, dict) or not set(overrides) <= {p["id"] for p in selected}:
             raise InputError("checkpoint_overrides must reference selected CP IDs")
@@ -357,7 +448,7 @@ def resolve_checkpoints(route: Route, config: dict) -> tuple[list[dict], float, 
             if combined and "distance_km" not in override:
                 if any(haversine((item["lat"], item["lon"]), point) > 100
                        for point in (route.points[0], route.points[-1])):
-                    raise InputError("Named combined start/finish must be within 100 m of both GPX endpoints; "
+                    raise InputError("Named combined start/finish must be within 100 m of both route endpoints; "
                                      "provide separate checkpoints or a distance_km override")
                 fields = station_fields(item)
                 # A shared venue is two route occurrences; its cutoff applies only at the finish.
@@ -371,17 +462,17 @@ def resolve_checkpoints(route: Route, config: dict) -> tuple[list[dict], float, 
             if "distance_km" in override:
                 position = number(override["distance_km"], "distance_km") * 1000
                 if position > route.total_m:
-                    raise InputError("CP distance override is beyond the GPX finish")
+                    raise InputError("CP distance override is beyond the route finish")
                 # A distance override explicitly selects a route occurrence and position.
-                warnings.append(f'{candidate["id"]}: confirmed position override at {position / 1000:.3f} GPX km.')
+                warnings.append(f'{candidate["id"]}: confirmed position override at {position / 1000:.3f} route km.')
             elif re.search(r"\bstart\b|起点|起點", endpoint, re.IGNORECASE):
                 position = 0.0
                 if haversine((item["lat"], item["lon"]), route.points[0]) > 100:
-                    raise InputError("Named start is over 100 m from GPX start; provide distance_km override")
+                    raise InputError("Named start is over 100 m from route start; provide distance_km override")
             elif re.search(r"\bfinish\b|终点|終點", endpoint, re.IGNORECASE):
                 position = route.total_m
                 if haversine((item["lat"], item["lon"]), route.points[-1]) > 100:
-                    raise InputError("Named finish is over 100 m from GPX finish; provide distance_km override")
+                    raise InputError("Named finish is over 100 m from route finish; provide distance_km override")
             else:
                 options = projection_options(route, candidate)
                 if len(options) > 1:
@@ -497,7 +588,7 @@ def build_plan(path: Path, config: dict) -> dict:
             datetime.fromisoformat(value)
         except ValueError as error:
             raise InputError("Invalid start_time date or time") from error
-    route = load_route(path, config.get("track_index"))
+    route = load_route(path, config.get("track_index"), config.get("use_kml_altitudes", False))
     profile = smooth_profile(route, parameters["sample_m"], parameters["smoothing_m"])
     gain_profile = smooth_profile(route, parameters["sample_m"], parameters["ascent_smoothing_m"])
     cps, scale, cp_warnings = resolve_checkpoints(route, config)
@@ -571,8 +662,9 @@ def build_plan(path: Path, config: dict) -> dict:
     }
 
 
-def inspect_route(path: Path, track_index=None, sample_m=5.0, smoothing_m=20.0, ascent_smoothing_m=100.0) -> dict:
-    route = load_route(path, track_index)
+def inspect_route(path: Path, track_index=None, sample_m=5.0, smoothing_m=20.0, ascent_smoothing_m=100.0,
+                  use_kml_altitudes=False) -> dict:
+    route = load_route(path, track_index, use_kml_altitudes)
     profile = smooth_profile(route, sample_m, smoothing_m)
     gain_profile = smooth_profile(route, sample_m, ascent_smoothing_m)
     stats = section_stats(profile, 0, route.total_m, 1, 700, gain_profile)
@@ -944,23 +1036,26 @@ def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest="command", required=True)
     inspect = commands.add_parser("inspect", help="Inspect geometry and embedded CP candidates")
-    inspect.add_argument("gpx", type=Path)
+    inspect.add_argument("route", type=Path, help="Local GPX or KML route")
     inspect.add_argument("--track-index", type=int)
     inspect.add_argument("--sample-m", type=float, default=5)
     inspect.add_argument("--smoothing-m", type=float, default=20)
     inspect.add_argument("--ascent-smoothing-m", type=float, default=100)
+    inspect.add_argument("--use-kml-altitudes", action="store_true",
+                         help="Use supplied KML coordinate heights when altitudeMode is omitted or clampToGround")
     generate = commands.add_parser("generate", help="Generate HTML, SVG, CSV and JSON")
-    generate.add_argument("gpx", type=Path)
+    generate.add_argument("route", type=Path, help="Local GPX or KML route")
     generate.add_argument("--config", type=Path, required=True)
     generate.add_argument("--output-dir", type=Path, required=True)
     generate.add_argument("--overwrite", action="store_true")
     args = parser.parse_args(argv)
     try:
         if args.command == "inspect":
-            result = inspect_route(args.gpx, args.track_index, args.sample_m, args.smoothing_m, args.ascent_smoothing_m)
+            result = inspect_route(args.route, args.track_index, args.sample_m, args.smoothing_m,
+                                   args.ascent_smoothing_m, args.use_kml_altitudes)
         else:
             config = json.loads(args.config.read_text(encoding="utf-8"))
-            plan = build_plan(args.gpx, config)
+            plan = build_plan(args.route, config)
             paths = write_outputs(plan, args.output_dir, args.overwrite)
             result = {"outputs": [str(path) for path in paths], "warnings": plan["warnings"]}
         print(json.dumps(result, ensure_ascii=False, indent=2, allow_nan=False))

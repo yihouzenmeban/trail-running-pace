@@ -25,6 +25,25 @@ def gpx(points, waypoints=(), namespace="http://www.topografix.com/GPX/1/1"):
     return f'<gpx version="1.1" xmlns="{namespace}">{wpts}<trk><trkseg>{trk}</trkseg></trk></gpx>'
 
 
+def kml(points, waypoints=(), geometry="LineString", altitude_mode="absolute", namespace="http://www.opengis.net/kml/2.2"):
+    def coordinate(point, separator=","):
+        lat, lon, elevation, *_ = point
+        return separator.join(str(value) for value in (lon, lat, elevation) if value is not None)
+
+    stations = "".join(
+        f'<Placemark><name>{p[3]}</name><Point><coordinates>{coordinate(p)}</coordinates></Point></Placemark>'
+        for p in waypoints
+    )
+    mode = "" if altitude_mode is None else f"<altitudeMode>{altitude_mode}</altitudeMode>"
+    if geometry == "gx:Track":
+        positions = "".join(f"<gx:coord>{coordinate(p, ' ')}</gx:coord>" for p in points)
+    else:
+        positions = "<coordinates>" + " ".join(coordinate(p) for p in points) + "</coordinates>"
+    line = f"<Placemark><name>Course</name><{geometry}>{mode}{positions}</{geometry}></Placemark>"
+    return (f'<kml xmlns="{namespace}" xmlns:gx="http://www.google.com/kml/ext/2.2">'
+            f"<Document><Folder>{stations}{line}</Folder></Document></kml>")
+
+
 class Fixture(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
@@ -147,6 +166,130 @@ class GeometryTests(Fixture):
         )
 
 
+class KmlTests(Fixture):
+    def test_equivalent_gpx_and_kml_share_statistics_and_schedules(self):
+        self.write()
+        original = self.plan()
+        self.path.write_text(kml(self.points, [(0, 0.01, None, "CP1")]))
+        converted = self.plan()
+        for key in ("route", "targets_seconds", "schedules"):
+            self.assertEqual(converted[key], original[key], key)
+        self.assertEqual([cp["name"] for cp in converted["checkpoints"]], ["起点", "CP1", "终点"])
+        self.assertEqual(converted["checkpoints"][1]["id"], "placemark:1:point:1")
+        self.assertEqual(converted["parameters"], original["parameters"])
+
+    def test_namespaces_gx_track_and_point_ids(self):
+        for namespace in ("http://www.opengis.net/kml/2.2", ""):
+            for geometry in ("LineString", "gx:Track"):
+                with self.subTest(namespace=namespace, geometry=geometry):
+                    self.path.write_text(kml(self.points, [(0, 0.01, None, "CP1")], geometry, namespace=namespace))
+                    route = pace.load_route(self.path)
+                    self.assertEqual(route.points, self.points)
+                    self.assertEqual(route.candidates[0]["id"], "placemark:1:point:1")
+                    self.assertTrue(route.candidates[0]["recognized"])
+                    self.assertAlmostEqual(route.total_m, 2223.90, delta=0.1)
+
+    def test_altitude_mode_requires_explicit_coordinate_override(self):
+        for mode in (None, "clampToGround"):
+            with self.subTest(mode=mode):
+                self.path.write_text(kml(self.points, altitude_mode=mode))
+                with self.assertRaisesRegex(pace.InputError, "use_kml_altitudes"):
+                    pace.load_route(self.path)
+                route = pace.load_route(self.path, use_kml_altitudes=True)
+                self.assertEqual(route.points, self.points)
+                self.assertTrue(any("altitude" in warning.lower() for warning in route.warnings))
+        for mode in ("relativeToGround", "relativeToSeaFloor", "clampToSeaFloor", "unknown"):
+            self.path.write_text(kml(self.points, altitude_mode=mode))
+            with self.assertRaisesRegex(pace.InputError, "altitude"):
+                pace.load_route(self.path, use_kml_altitudes=True)
+        with self.assertRaisesRegex(pace.InputError, "boolean"):
+            pace.load_route(self.path, use_kml_altitudes="yes")
+
+    def test_missing_invalid_and_duplicate_coordinates(self):
+        for point in ((0, 0.01, None), (91, 0.01, 0), (0, 181, 0), (0, 0.01, float("nan"))):
+            self.path.write_text(kml([self.points[0], point, self.points[-1]]))
+            with self.assertRaises(pace.InputError):
+                pace.load_route(self.path, use_kml_altitudes=True)
+        for coordinates in ("0,0,0 0.01,0,1,2", "0,0,0 bad,0,1", "0,0,0"):
+            self.path.write_text(
+                '<kml><Placemark><LineString><altitudeMode>absolute</altitudeMode>'
+                f'<coordinates>{coordinates}</coordinates></LineString></Placemark></kml>'
+            )
+            with self.assertRaises(pace.InputError):
+                pace.load_route(self.path)
+        self.path.write_text(kml([self.points[0], *self.points]))
+        self.assertEqual(pace.load_route(self.path).points, self.points)
+
+    def test_multigeometry_and_multitrack_require_selection(self):
+        xml = kml(self.points, [(0, 0.01, None, "CP1")])
+        root = ET.fromstring(xml)
+        namespace = {"k": "http://www.opengis.net/kml/2.2"}
+        line = root.find(".//k:LineString", namespace)
+        line_xml = ET.tostring(line, encoding="unicode")
+        gx_root = ET.fromstring(kml([(0, 0, 0), (0.02, 0, 0)], geometry="gx:Track"))
+        track = next(e for e in gx_root.iter() if pace.tag(e) == "Track")
+        track_xml = ET.tostring(track, encoding="unicode")
+        geometry = f'<MultiGeometry>{line_xml}<gx:MultiTrack>{track_xml}</gx:MultiTrack></MultiGeometry>'
+        self.path.write_text(xml.replace(
+            xml[xml.index("<LineString>"):xml.index("</LineString>") + len("</LineString>")], geometry
+        ))
+        with self.assertRaises(pace.InputError) as error:
+            pace.load_route(self.path)
+        self.assertEqual([item["track_index"] for item in error.exception.details], [1, 2])
+        self.assertEqual(pace.load_route(self.path, 1).points, self.points)
+        self.assertEqual(pace.load_route(self.path, 2).points, [(0, 0, 0), (0.02, 0, 0)])
+        for index in (0, 3, True):
+            with self.assertRaises(pace.InputError):
+                pace.load_route(self.path, index)
+
+    def test_named_landmarks_require_selection_and_cp_overrides_work(self):
+        self.path.write_text(kml(self.points, [(0, 0.01, None, "Village")]))
+        with self.assertRaisesRegex(pace.InputError, "cp_selection"):
+            self.plan()
+        plan = self.plan(cp_selection=["placemark:1:point:1"],
+                         checkpoint_overrides={"placemark:1:point:1": {"rest_minutes": 5, "cutoff": "02:00"}})
+        self.assertEqual(plan["checkpoints"][1]["rest_seconds"], 300)
+        self.assertEqual(plan["checkpoints"][1]["cutoff_seconds"], 7200)
+        self.assertAlmostEqual(plan["schedules"][0]["checkpoints"][-1]["departure_seconds"], 10800)
+
+    def test_multitrack_inherits_altitude_mode(self):
+        xml = kml(self.points, geometry="gx:Track", altitude_mode=None)
+        self.path.write_text(xml.replace("<gx:Track>", "<gx:MultiTrack><altitudeMode>absolute</altitudeMode><gx:Track>")
+                             .replace("</gx:Track>", "</gx:Track></gx:MultiTrack>"))
+        self.assertEqual(pace.load_route(self.path).points, self.points)
+        self.path.write_text(self.path.read_text().replace("absolute", "relativeToGround"))
+        with self.assertRaisesRegex(pace.InputError, "altitude"):
+            pace.load_route(self.path, use_kml_altitudes=True)
+
+    def test_empty_invalid_xml_and_dtd_errors(self):
+        for text in ("<kml><NetworkLink/></kml>", "<other/>", "<kml>", '<!DOCTYPE kml [<!ENTITY x "a">]><kml/>'):
+            self.path.write_text(text)
+            with self.assertRaises(pace.InputError):
+                pace.load_route(self.path)
+
+    def test_kml_cli_generates_all_formats_and_reports_height_errors(self):
+        self.path = Path(self.temp.name) / "race.kml"
+        self.path.write_text(kml(self.points, [(0, 0.01, None, "CP1")], altitude_mode=None))
+        inspected = subprocess.run([sys.executable, str(SCRIPT), "inspect", str(self.path), "--use-kml-altitudes"],
+                                   capture_output=True, text=True)
+        self.assertEqual(inspected.returncode, 0, inspected.stderr)
+        self.assertEqual(json.loads(inspected.stdout)["cp_candidates"][0]["name"], "CP1")
+        config = Path(self.temp.name) / "race.json"
+        config.write_text(json.dumps({"targets": ["04:00"], "use_kml_altitudes": True}))
+        result = subprocess.run([sys.executable, str(SCRIPT), "generate", str(self.path),
+                                 "--config", str(config), "--output-dir", str(Path(self.temp.name) / "out")],
+                                capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(len(json.loads(result.stdout)["outputs"]), 4)
+        plan = json.loads((Path(self.temp.name) / "out/pace-chart.json").read_text())
+        self.assertEqual(plan["source"]["filename"], "race.kml")
+        self.assertEqual(plan["schedules"][0]["checkpoints"][-1]["departure_seconds"], 14400)
+        result = subprocess.run([sys.executable, str(SCRIPT), "inspect", str(self.path)],
+                                capture_output=True, text=True)
+        self.assertEqual(result.returncode, 2)
+        self.assertIn("use_kml_altitudes", json.loads(result.stderr)["error"])
+
+
 class CheckpointTests(Fixture):
     def test_recognized_cp_excludes_landmarks_and_turns(self):
         self.write(waypoints=[
@@ -232,6 +375,8 @@ class CheckpointTests(Fixture):
 
 EXAMPLE_DIR = SCRIPT.parents[3] / "examples" / "tiandi-liubai-100k"
 REAL_GPX = EXAMPLE_DIR / "天地留白100K.gpx"
+KML_EXAMPLE_DIR = SCRIPT.parents[3] / "examples" / "大境门"
+REAL_KML = KML_EXAMPLE_DIR / "2026京东大境门古长城越野赛by UTMB®DGW100K.kml"
 
 
 @unittest.skipUnless(REAL_GPX.is_file(), "Repository example GPX is not present")
@@ -264,6 +409,30 @@ class RealRouteTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as output:
             paths = pace.write_outputs(plan, Path(output))
             self.assertEqual(len(paths), 4)
+            ET.parse(Path(output) / "pace-chart.svg")
+            with (Path(output) / "pace-chart.csv").open(encoding="utf-8-sig", newline="") as stream:
+                self.assertEqual(len(list(csv.DictReader(stream))), 60)
+
+
+@unittest.skipUnless(REAL_KML.is_file(), "Repository KML example is not present")
+class RealKmlRouteTests(unittest.TestCase):
+    def test_dajingmen_course_checkpoint_order_and_exports(self):
+        config = json.loads((KML_EXAMPLE_DIR / "config.json").read_text(encoding="utf-8"))
+        plan = pace.build_plan(REAL_KML, config)
+        self.assertAlmostEqual(plan["route"]["distance_m"], 99694.41, delta=1)
+        self.assertAlmostEqual(plan["route"]["ascent_m"], 3635, delta=1)
+        names = [cp["name"] for cp in plan["checkpoints"]]
+        self.assertEqual(names, ["起终点-大境门（起点）", "D1四岔村7.9", "D2啕北营村21.3",
+                                 "D3察汗陀螺村28.1", "D4窑子沟36.7", "D5五十家45.5",
+                                 "SP1小红泥湾54.5", "D6黄土窑61.1", "D7土井子72.8",
+                                 "D8清河村80.1", "D9翠屏庵89.5", "起终点-大境门（终点）"])
+        self.assertTrue(any("altitude" in warning.lower() for warning in plan["warnings"]))
+        for schedule in plan["schedules"]:
+            self.assertAlmostEqual(schedule["checkpoints"][-1]["departure_seconds"], schedule["target_seconds"])
+        with tempfile.TemporaryDirectory() as output:
+            paths = pace.write_outputs(plan, Path(output))
+            self.assertEqual(len(paths), 4)
+            self.assertEqual(json.loads((Path(output) / "pace-chart.json").read_text())["configuration"], config)
             ET.parse(Path(output) / "pace-chart.svg")
             with (Path(output) / "pace-chart.csv").open(encoding="utf-8-sig", newline="") as stream:
                 self.assertEqual(len(list(csv.DictReader(stream))), 60)
