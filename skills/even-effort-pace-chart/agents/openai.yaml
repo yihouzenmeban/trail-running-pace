@@ -1,0 +1,4 @@
+interface:
+  display_name: "Even-Effort Pace Chart"
+  short_description: "Turn GPX race routes into checkpoint pace charts"
+  default_prompt: "Use $even-effort-pace-chart to turn my GPX race route into a pace chart using its embedded checkpoints and my finish targets."

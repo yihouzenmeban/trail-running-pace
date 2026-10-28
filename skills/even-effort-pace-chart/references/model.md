@@ -1,0 +1,60 @@
+# Model, provenance, and limitations
+
+## Source
+
+Conceptual reference: "耐力科学|体感一致配速表全面指南", 耐力学社 / Pili (表哥), published by 耐力學社 on 2025-08-26; the article credits 隆景体育.
+
+Original: https://mp.weixin.qq.com/s/spYCP-upbqAZN0kzUm-0ng
+
+The repository archive is `耐力科学_体感一致配速表全面指南.md` at its root. The skill remains usable when copied independently; it does not require the archive at runtime.
+
+This is an independent implementation of the article's equivalent-distance and fatigue-curve ideas. The article does not expose RunArt.Net's full algorithm. The equations below are this implementation's explicit, reproducible choices; generated charts must not be represented as official RunArt.Net output. Preserve the source attribution included by the exporters. The article's original copyright statement remains in the repository archive; this skill does not reinterpret the terms for third-party material.
+
+## Distance and elevation
+
+Compute horizontal cumulative distance with the haversine formula on a sphere of radius 6,371,008.8 m. Elevation does not lengthen the geometric distance.
+
+1. Interpolate elevation linearly along cumulative distance, every **5 m**, plus the exact endpoint.
+2. At each sample, average the resampled piecewise-linear elevation over a **20 m full-width centered window** (10 m each side).
+3. Clip windows at the course boundaries and divide by their actual width. Integration uses exact trapezoid areas; this is a distance-weighted average, not a point-count average.
+4. Insert CP boundary elevations into the smoothed profile. Sum positive/negative elevation changes for ascent/descent in each segment.
+
+Settings are adjustable. Interpolation cannot recover missing terrain detail; sparse points over 100 m apart produce a warning. The finer defaults retain shorter features than 25 m sampling with 100 m smoothing, while remaining susceptible to noisy GPS elevation. No external DEM, road classifier, or elevation correction is applied.
+
+Each segment's seven slope bins are weighted by horizontal distance. Boundaries, in percent, are `(-inf, -15]`, `(-15, -10]`, `(-10, -5]`, `(-5, 5)`, `[5, 10)`, `[10, 15)`, `[15, inf)`. The center bar is white; descent is on the left and ascent on the right. Segment profile thumbnails use independent horizontal and vertical scales and must not be compared as equal-scale maps.
+
+## Equivalent distance
+
+For a segment:
+
+```text
+E = horizontal_distance_km + ascent_m / 100 * ascent_km_per_100m
+```
+
+The coefficient defaults to 1 km per 100 m of ascent, following the article's common baseline. Downhill does not subtract equivalent distance. Steep descents and technical terrain can demand extra effort that this scalar model does not capture.
+
+## Fatigue and finish targets
+
+Let `r` be `fatigue_rate` (default 0.08), `E_total` the total equivalent distance, and `E_i` the cumulative equivalent distance through station i.
+
+```text
+b = 1 + log2(1 + r)
+T_move = T_finish - sum(station_rest_seconds)
+M_i = T_move * (E_i / E_total)^b
+segment_moving_i = M_i - M_(i-1)
+segment_eq_pace_i = segment_moving_i / segment_equivalent_km
+arrival_i = M_i + sum(rest before station i)
+departure_i = arrival_i + rest_i
+```
+
+`r = 0` gives constant equivalent pace. With the default, average pace over a doubled equivalent distance changes by the factor `2^(b-1) = 1.08`. This is a power-curve parameterization, not a claim that the article's illustrated interval examples or the proprietary tool use these exact equations. The curve is normalized separately for each target, so every final departure is exactly that target before presentation rounding.
+
+Rest is explicit and included once; no automatic extra delay or stop is inferred. Every target must exceed total rest. Time calculations retain floating-point precision. Displayed cumulative times and equivalent paces round to the nearest second; segment totals calculated from rounded values may differ slightly.
+
+These columns are pre-race reference schedules. Switching to an adjacent column mid-race does not recompute the remaining schedule from the runner's current time, fatigue, or position.
+
+## Water and uncertainty
+
+Comparative water is `E / 10 * water_ml_per_10km`, defaulting to 700 mL per 10 equivalent kilometres as an article-inspired baseline. It communicates relative segment demand. It is not an individual hydration, medical, or race-safety recommendation.
+
+The GPX alone cannot establish an achievable finish target. Terrain surface, steep descent load, weather, congestion, altitude response, runner fitness, nutrition, and recovery are not modeled. Missing race cutoffs remain unchecked. Route-derived totals can differ from organizer statistics because of geometry, elevation source, smoothing, and distance mapping.
