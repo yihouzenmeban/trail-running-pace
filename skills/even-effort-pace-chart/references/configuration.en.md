@@ -106,7 +106,7 @@ Default `distance_alignment` is `"confirm"`: differences over `max(100 m, 0.5% o
 | Key | Default | Meaning |
 | --- | --- | --- |
 | `name` | Input filename stem | Chart title |
-| `start_time` | Omitted | Local race start, `YYYY-MM-DD HH:MM` or `YYYY-MM-DDTHH:MM`; required for arrival clock mode, while primary times remain elapsed durations |
+| `start_time` | `"06:00"` | Local race start as `HH:MM`, `YYYY-MM-DD HH:MM`, or `YYYY-MM-DDTHH:MM`; primary times remain elapsed durations |
 | `secondary_display` | `"pace"` | Parenthesized value: `"pace"` for segment pace, `"equivalent_pace"` for equivalent segment pace, or `"arrival_time"` for arrival clock time |
 | `pace_basis` | `"distance"` | Legacy option: `"equivalent"` selects equivalent pace; explicit `secondary_display` takes precedence |
 | `track_index` | Only available track | 1-based GPX track/route or KML line/track selection |
@@ -133,7 +133,7 @@ See the [model and limitations](model.en.md) for elevation filtering and timing 
 | `"equivalent_pace"` | 区间等强配速 | Segment moving seconds / equivalent segment kilometres |
 | `"arrival_time"` | 到达时间 | `start_time` + cumulative arrival duration, before this station's rest |
 
-Both pace modes show `MM:SS` rounded to seconds. The start has no incoming leg and therefore no parenthesized pace. Arrival clock mode shows `HH:MM` truncated to minutes, including the gun time at the start. After midnight relative to the start date, it labels the next day “次日” and later days “+N天”, for example `(次日 01:20)` and `(+2天 00:30)`. Times use local race time without time-zone or daylight-saving conversion. Selecting arrival clock mode without `start_time` is an error.
+Both pace modes show `MM:SS` rounded to seconds. The start has no incoming leg and therefore no parenthesized pace. Arrival clock mode shows `HH:MM` truncated to minutes, including the gun time at the start. After midnight relative to the start day, it labels the next day “次日” and later days “+N天”, for example `(次日 01:20)` and `(+2天 00:30)`. Times use local race time without time-zone or daylight-saving conversion. Omitted `start_time` defaults to 06:00 without assuming a race date; an explicit time takes precedence. JSON `parameters.start_time` records the effective value.
 
 For example, add these fields to a configuration that includes a finish target:
 

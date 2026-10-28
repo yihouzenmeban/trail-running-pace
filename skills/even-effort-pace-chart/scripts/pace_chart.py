@@ -7,7 +7,7 @@ import argparse
 from bisect import bisect_left, bisect_right
 import csv
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, time
 import hashlib
 from html import escape
 import io
@@ -589,16 +589,16 @@ def build_plan(path: Path, config: dict) -> dict:
         raise InputError("distance_alignment must be confirm or scale")
     if "name" in config and (not isinstance(config["name"], str) or not config["name"].strip()):
         raise InputError("name must be a non-empty string")
-    if "start_time" in config:
-        value = config["start_time"]
-        if not isinstance(value, str) or not re.fullmatch(r"\d{4}-\d\d-\d\d[ T]\d\d:\d\d", value):
-            raise InputError("start_time must be YYYY-MM-DD HH:MM (local race time)")
-        try:
-            datetime.fromisoformat(value)
-        except ValueError as error:
-            raise InputError("Invalid start_time date or time") from error
-    if secondary_display == "arrival_time" and "start_time" not in config:
-        raise InputError("secondary_display arrival_time requires start_time (local race time)")
+    start_time = config.get("start_time", "06:00")
+    if not isinstance(start_time, str) or not re.fullmatch(r"(?:\d{4}-\d\d-\d\d[ T])?\d\d:\d\d", start_time):
+        raise InputError("start_time must be HH:MM or YYYY-MM-DD HH:MM (local race time)")
+    try:
+        time(int(start_time[-5:-3]), int(start_time[-2:]))
+        if len(start_time) > 5:
+            datetime.fromisoformat(start_time)
+    except ValueError as error:
+        raise InputError("Invalid start_time date or time") from error
+    parameters["start_time"] = start_time
     route = load_route(path, config.get("track_index"), config.get("use_kml_altitudes", False))
     profile = smooth_profile(route, parameters["sample_m"], parameters["smoothing_m"])
     gain_profile = smooth_profile(route, parameters["sample_m"], parameters["ascent_smoothing_m"])
@@ -790,7 +790,7 @@ def target_header(target: float) -> list[str]:
 
 
 def format_arrival_time(start_time: str, seconds: float) -> str:
-    start = datetime.fromisoformat(start_time)
+    start = time.fromisoformat(start_time[-5:])
     minutes = start.hour * 60 + start.minute + math.floor(seconds / 60 + 1e-9)
     days, minutes = divmod(minutes, 24 * 60)
     hours, minutes = divmod(minutes, 60)
@@ -799,8 +799,8 @@ def format_arrival_time(start_time: str, seconds: float) -> str:
 
 
 def table_metadata(plan) -> str:
-    start = plan["configuration"].get("start_time")
-    prefix = f'发枪：{start.replace("T", " ")}　' if start else ""
+    start = plan["parameters"]["start_time"]
+    prefix = f'发枪：{start.replace("T", " ")}　'
     label = {"pace": "区间配速", "equivalent_pace": "区间等强配速", "arrival_time": "到达时间"}
     return prefix + "括号内：" + label[plan["parameters"]["secondary_display"]]
 
@@ -853,7 +853,7 @@ def timing_lines(plan, cp, timing) -> list[str]:
     lines = [format_chart_time(timing["departure_seconds"])]
     arrival_clock = plan["parameters"]["secondary_display"] == "arrival_time"
     if arrival_clock:
-        value = format_arrival_time(plan["configuration"]["start_time"], timing["arrival_seconds"])
+        value = format_arrival_time(plan["parameters"]["start_time"], timing["arrival_seconds"])
         lines.append(f"({value})")
     elif timing["pace_seconds_per_km"] is not None:
         lines.append(f'({format_chart_pace(timing["pace_seconds_per_km"])})')

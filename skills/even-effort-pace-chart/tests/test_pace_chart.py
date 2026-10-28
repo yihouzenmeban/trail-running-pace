@@ -593,12 +593,41 @@ class ExportTests(Fixture):
                                           plan["schedules"][0]["checkpoints"][-1])
                 self.assertEqual(lines[1], expected)
 
-    def test_invalid_secondary_display_and_missing_start_are_actionable(self):
+    def test_default_start_is_six_am_in_all_display_modes(self):
+        for mode in ("pace", "equivalent_pace", "arrival_time"):
+            with self.subTest(mode=mode):
+                plan = self.plan(targets=["30:00"], secondary_display=mode)
+                self.assertEqual(plan["parameters"]["start_time"], "06:00")
+                for render in (pace.render_html, pace.render_svg):
+                    output = render(plan)
+                    self.assertIn("发枪：06:00", output)
+                    if mode == "arrival_time":
+                        self.assertIn("(06:00)", output)
+                        self.assertIn("(次日 12:00)", output)
+                paths = pace.write_outputs(plan, Path(self.temp.name) / mode)
+                saved = json.loads(next(p for p in paths if p.suffix == ".json").read_text())
+                self.assertEqual(saved["parameters"]["start_time"], "06:00")
+
+    def test_explicit_start_overrides_default_with_or_without_date(self):
+        baseline = self.plan(targets=["25:00"])
+        for start in ("07:30", "2026-10-31 07:30", "2026-10-31T07:30"):
+            with self.subTest(start=start):
+                plan = self.plan(targets=["25:00"], secondary_display="arrival_time", start_time=start)
+                self.assertEqual(plan["parameters"]["start_time"], start)
+                self.assertEqual(plan["schedules"], baseline["schedules"])
+                for render in (pace.render_html, pace.render_svg):
+                    output = render(plan)
+                    self.assertIn("发枪：" + start.replace("T", " "), output)
+                    self.assertIn("(07:30)", output)
+                    self.assertIn("(次日 08:30)", output)
+
+    def test_invalid_secondary_display_and_start_are_actionable(self):
         for value in ("unknown", "", None, 1, True, []):
             with self.subTest(value=value), self.assertRaisesRegex(pace.InputError, "secondary_display"):
                 self.plan(secondary_display=value)
-        with self.assertRaisesRegex(pace.InputError, "start_time"):
-            self.plan(secondary_display="arrival_time")
+        for value in ("6:00", "24:00", "06:60", "", None, 600, "2026-02-30 06:00"):
+            with self.subTest(value=value), self.assertRaisesRegex(pace.InputError, "start_time"):
+                self.plan(secondary_display="arrival_time", start_time=value)
 
     def test_all_formats_share_values_and_svg_is_standalone(self):
         plan = self.plan()

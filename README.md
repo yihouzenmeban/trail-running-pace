@@ -110,7 +110,7 @@ python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate \
 | --- | --- | --- |
 | `target` / `targets` | 必须提供其一 | 中心目标或明确的目标列表，时长支持 `H:MM`、`H:MM:SS`，可超过 24 小时 |
 | `target_step_minutes` | `30` | 单个目标展开五组时的相邻间隔 |
-| `start_time` | 不展示 | 本地发枪日期时间；选择到达时间模式时必填，主行仍为比赛经过时长 |
+| `start_time` | `"06:00"` | 本地发枪时间，可填 `HH:MM` 或完整日期时间；主行仍为比赛经过时长 |
 | `secondary_display` | `"pace"` | 括号内显示内容：`"pace"` 配速、`"equivalent_pace"` 等强配速、`"arrival_time"` 到达钟点 |
 | `pace_basis` | `"distance"` | 兼容旧配置：`"equivalent"` 对应等强配速；显式设置 `secondary_display` 优先 |
 | `sample_m` | `5` | 沿距离插值的间隔，单位米 |
@@ -131,7 +131,7 @@ python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate \
 }
 ```
 
-默认配速按区间水平距离计算，等强配速按区间等效距离计算，均仅含移动时间。到达钟点使用本站停留前的时间，跨日显示“次日”或“+N天”；三种展示方式均不改变时间分配。
+未提供 `start_time` 时默认早上六点发枪，不指定比赛日期；可用 `"07:30"` 或完整日期时间覆盖。默认配速按区间水平距离计算，等强配速按区间等效距离计算，均仅含移动时间。到达钟点使用本站停留前的时间，跨日显示“次日”或“+N天”；三种展示方式均不改变时间分配。
 
 完整字段、人工 CP 和关门时间示例见[配置文档](skills/even-effort-pace-chart/references/configuration.md)，计算公式与平滑方案见[模型文档](skills/even-effort-pace-chart/references/model.md)。
 
