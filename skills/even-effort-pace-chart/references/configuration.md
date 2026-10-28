@@ -108,6 +108,7 @@ KML 中命名的 Point 地标提供 CP 候选，地标自身可以没有海拔�
 | `name` | 输入文件名，不含扩展名 | 图表名称 |
 | `start_time` | `"06:00"` | 本地发枪时间，格式为 `HH:MM`、`YYYY-MM-DD HH:MM` 或 `YYYY-MM-DDTHH:MM`；主行始终为经过时长 |
 | `secondary_display` | `"pace"` | 括号内显示：`"pace"` 区间配速、`"equivalent_pace"` 区间等强配速、`"arrival_time"` 到达钟点 |
+| `output_formats` | `["svg"]` | 非空且无重复的输出格式列表，可选 `"svg"`、`"html"`、`"csv"`、`"json"` |
 | `pace_basis` | `"distance"` | 兼容旧配置，`"equivalent"` 选择等强配速；显式设置 `secondary_display` 优先 |
 | `track_index` | 唯一的轨迹 | 从 1 开始的 GPX track/route 或 KML 线/track 序号 |
 | `use_kml_altitudes` | `false` | 布尔值；显式采用未声明模式或 clampToGround 的 KML 坐标高度，对 GPX 无影响 |
@@ -126,6 +127,8 @@ KML 中命名的 Point 地标提供 CP 候选，地标自身可以没有海拔�
 ## 括号内显示内容
 
 `secondary_display` 同时控制 HTML 和 SVG 的括号内容及表头标注：
+
+`start_time` 与括号显示内容独立。只提供“出发时间早上六点”时，括号仍默认显示配速；只有明确要求或提供配置选择到达时间时，才设置 `"arrival_time"`。
 
 | 值 | 标注 | 计算方式 |
 | --- | --- | --- |
@@ -153,7 +156,17 @@ python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate race.gpx \
   --config race.json --output-dir output/race
 ```
 
-仅在确实需要替换已有结果时使用 `--overwrite`，否则任一目标文件已存在都会阻止写入。成功时 stdout 输出路径和告警；预期的输入或文件错误通过 stderr 输出 JSON，退出状态为 2。
+默认只写入 `pace-chart.svg`。如需其他格式，在比赛配置中设置 `output_formats`；以下配置选择全部四种格式，也可以只选择其中一种或几种，文件路径按数组顺序返回：
+
+```json
+{
+  "output_formats": ["svg", "html", "csv", "json"]
+}
+```
+
+空列表、不支持的格式和重复格式会报错。仅在确实需要替换已有结果时使用 `--overwrite`，否则任一**已选择格式**的目标文件存在都会阻止写入；未选择的已有文件不影响生成，也不会被修改或删除。成功时 stdout 输出本次生成的路径和告警；预期的输入或文件错误通过 stderr 输出 JSON，退出状态为 2。
+
+可选输出如下，默认只生成 SVG，其余文件需显式选择：
 
 - `pace-chart.html`：白底灰线、黑色图示及黄/红/绿/蓝色地形补给列，打印重复表头，小屏可横向滚动。
 - `pace-chart.svg`：包含文字及分段矢量图的独立 SVG，不使用 HTML foreignObject 或外部资源。

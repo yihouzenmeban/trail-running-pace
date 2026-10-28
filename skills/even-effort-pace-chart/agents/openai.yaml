@@ -1,4 +1,4 @@
 interface:
   display_name: "Even-Effort Pace Chart"
   short_description: "Turn GPX/KML race routes into checkpoint pace charts"
-  default_prompt: "Use $even-effort-pace-chart to turn my GPX or KML race route into a pace chart using its embedded checkpoints and my finish targets."
+  default_prompt: "Use $even-effort-pace-chart to turn my GPX or KML race route into an SVG pace chart with segment pace in parentheses, using its embedded checkpoints and my finish targets."

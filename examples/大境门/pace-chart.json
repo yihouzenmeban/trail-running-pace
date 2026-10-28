@@ -13,6 +13,12 @@
   "configuration": {
     "name": "大境门 DGW100K · 示例",
     "target": "24:00",
+    "output_formats": [
+      "svg",
+      "html",
+      "csv",
+      "json"
+    ],
     "use_kml_altitudes": true,
     "cp_selection": [
       "placemark:13:point:1",
@@ -36,6 +42,12 @@
     "fatigue_rate": 0.08,
     "water_ml_per_10km": 700.0,
     "target_step_minutes": 30.0,
+    "output_formats": [
+      "svg",
+      "html",
+      "csv",
+      "json"
+    ],
     "pace_basis": "distance",
     "secondary_display": "pace",
     "start_time": "06:00",

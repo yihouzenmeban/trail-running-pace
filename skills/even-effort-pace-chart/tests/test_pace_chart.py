@@ -275,7 +275,8 @@ class KmlTests(Fixture):
         self.assertEqual(inspected.returncode, 0, inspected.stderr)
         self.assertEqual(json.loads(inspected.stdout)["cp_candidates"][0]["name"], "CP1")
         config = Path(self.temp.name) / "race.json"
-        config.write_text(json.dumps({"targets": ["04:00"], "use_kml_altitudes": True}))
+        config.write_text(json.dumps({"targets": ["04:00"], "use_kml_altitudes": True,
+                                     "output_formats": ["svg", "html", "csv", "json"]}))
         result = subprocess.run([sys.executable, str(SCRIPT), "generate", str(self.path),
                                  "--config", str(config), "--output-dir", str(Path(self.temp.name) / "out")],
                                 capture_output=True, text=True)
@@ -522,6 +523,66 @@ class ExportTests(Fixture):
         super().setUp()
         self.write()
 
+    def test_default_export_is_svg_with_pace_for_five_hour_six_am_request(self):
+        plan = self.plan(target="05:00", target_step_minutes=30, start_time="06:00")
+        self.assertEqual(plan["targets_seconds"], [4 * 3600, 4.5 * 3600, 5 * 3600, 5.5 * 3600, 6 * 3600])
+        self.assertEqual(plan["parameters"]["output_formats"], ["svg"])
+        self.assertEqual(plan["parameters"]["secondary_display"], "pace")
+        output_dir = Path(self.temp.name) / "default"
+        paths = pace.write_outputs(plan, output_dir)
+        self.assertEqual(paths, [output_dir / "pace-chart.svg"])
+        self.assertEqual(set(output_dir.iterdir()), set(paths))
+        svg = paths[0].read_text()
+        self.assertIn("发枪：06:00", svg)
+        self.assertIn("括号内：区间配速", svg)
+        for cp, timing in zip(plan["checkpoints"][1:], plan["schedules"][0]["checkpoints"][1:]):
+            expected = timing["moving_seconds"] / (cp["segment_distance_m"] / 1000)
+            self.assertIn(f"({pace.format_chart_pace(expected)})", svg)
+
+    def test_output_format_subsets_and_order(self):
+        for formats in (["html"], ["csv"], ["json"], ["svg", "json"], ["json", "csv", "html", "svg"]):
+            with self.subTest(formats=formats):
+                plan = self.plan(output_formats=formats)
+                output_dir = Path(self.temp.name) / "-".join(formats)
+                paths = pace.write_outputs(plan, output_dir)
+                self.assertEqual([path.suffix[1:] for path in paths], formats)
+                self.assertEqual(set(output_dir.iterdir()), set(paths))
+                for path in paths:
+                    if path.suffix == ".json":
+                        self.assertEqual(json.loads(path.read_text()), plan)
+                    elif path.suffix == ".svg":
+                        ET.parse(path)
+                    elif path.suffix == ".csv":
+                        with path.open(encoding="utf-8-sig", newline="") as stream:
+                            self.assertEqual(len(list(csv.DictReader(stream))),
+                                             len(plan["checkpoints"]) * len(plan["schedules"]))
+                    else:
+                        self.assertIn("<!doctype html>", path.read_text())
+
+    def test_invalid_output_formats_fail_before_creating_files(self):
+        for value in (None, "svg", [], ["pdf"], ["SVG"], ["svg", "svg"], [True], [{}]):
+            with self.subTest(value=value), self.assertRaisesRegex(pace.InputError, "output_formats"):
+                self.plan(output_formats=value)
+
+    def test_output_conflicts_only_apply_to_selected_files(self):
+        output_dir = Path(self.temp.name) / "selected"
+        output_dir.mkdir()
+        other = output_dir / "pace-chart.json"
+        other.write_text("existing user output")
+        plan = self.plan()
+        paths = pace.write_outputs(plan, output_dir)
+        self.assertEqual(paths, [output_dir / "pace-chart.svg"])
+        self.assertEqual(other.read_text(), "existing user output")
+        with self.assertRaises(pace.InputError):
+            pace.write_outputs(plan, output_dir)
+        pace.write_outputs(plan, output_dir, overwrite=True)
+        self.assertEqual(other.read_text(), "existing user output")
+        svg_before = paths[0].read_bytes()
+        with self.assertRaises(pace.InputError):
+            pace.write_outputs(self.plan(output_formats=["svg", "json"]), output_dir)
+        self.assertEqual(paths[0].read_bytes(), svg_before)
+        self.assertEqual(other.read_text(), "existing user output")
+
     def test_secondary_display_selects_pace_without_changing_schedule(self):
         baseline = self.plan(targets=["04:00"])
         self.assertEqual(baseline["parameters"]["secondary_display"], "pace")
@@ -596,7 +657,7 @@ class ExportTests(Fixture):
     def test_default_start_is_six_am_in_all_display_modes(self):
         for mode in ("pace", "equivalent_pace", "arrival_time"):
             with self.subTest(mode=mode):
-                plan = self.plan(targets=["30:00"], secondary_display=mode)
+                plan = self.plan(targets=["30:00"], secondary_display=mode, output_formats=["json"])
                 self.assertEqual(plan["parameters"]["start_time"], "06:00")
                 for render in (pace.render_html, pace.render_svg):
                     output = render(plan)
@@ -630,7 +691,7 @@ class ExportTests(Fixture):
                 self.plan(secondary_display="arrival_time", start_time=value)
 
     def test_all_formats_share_values_and_svg_is_standalone(self):
-        plan = self.plan()
+        plan = self.plan(output_formats=["svg", "html", "csv", "json"])
         paths = pace.write_outputs(plan, Path(self.temp.name) / "result")
         self.assertEqual({p.suffix for p in paths}, {".svg", ".html", ".csv", ".json"})
         saved = json.loads(next(p for p in paths if p.suffix == ".json").read_text())
@@ -743,7 +804,7 @@ class ExportTests(Fixture):
         self.assertEqual(pace.format_chart_pace(359.6), "06:00")
 
     def test_csv_formula_names_and_overwrite_protection(self):
-        plan = self.plan(checkpoint_overrides={"wpt:1": {"name": "=SUM(1,2)"}})
+        plan = self.plan(checkpoint_overrides={"wpt:1": {"name": "=SUM(1,2)"}}, output_formats=["csv"])
         output = Path(self.temp.name) / "out"
         paths = pace.write_outputs(plan, output)
         csv_path = next(p for p in paths if p.suffix == ".csv")
@@ -767,7 +828,8 @@ class ExportTests(Fixture):
              "--output-dir", str(Path(self.temp.name) / "cli")], text=True, capture_output=True,
         )
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertEqual(len(json.loads(result.stdout)["outputs"]), 4)
+        self.assertEqual(json.loads(result.stdout)["outputs"],
+                         [str(Path(self.temp.name) / "cli/pace-chart.svg")])
         self.write(waypoints=[])
         result = subprocess.run(
             [sys.executable, str(SCRIPT), "generate", str(self.path), "--config", str(config),

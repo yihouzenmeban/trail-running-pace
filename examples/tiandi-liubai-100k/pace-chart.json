@@ -14,6 +14,12 @@
     "name": "天地留白100K",
     "start_time": "2026-10-31 06:00",
     "pace_basis": "distance",
+    "output_formats": [
+      "svg",
+      "html",
+      "csv",
+      "json"
+    ],
     "targets": [
       "12:00",
       "13:00",
@@ -33,6 +39,12 @@
     "fatigue_rate": 0.08,
     "water_ml_per_10km": 700.0,
     "target_step_minutes": 30.0,
+    "output_formats": [
+      "svg",
+      "html",
+      "csv",
+      "json"
+    ],
     "pace_basis": "distance",
     "secondary_display": "pace",
     "start_time": "2026-10-31 06:00",

@@ -33,7 +33,7 @@ DEFAULTS = {
 CONFIG_KEYS = set(DEFAULTS) | {
     "name", "target", "targets", "track_index", "checkpoints", "cp_selection",
     "checkpoint_overrides", "distance_alignment", "start_time", "pace_basis", "secondary_display",
-    "use_kml_altitudes",
+    "use_kml_altitudes", "output_formats",
 }
 CP_KEYS = {"name", "distance_km", "rest_minutes", "cutoff"}
 OVERRIDE_KEYS = CP_KEYS | {"allow_off_route"}
@@ -566,11 +566,17 @@ def target_times(config: dict, step: float) -> list[float]:
 
 def build_plan(path: Path, config: dict) -> dict:
     keys(config, CONFIG_KEYS, "configuration")
+    output_formats = config.get("output_formats", ["svg"])
+    if (not isinstance(output_formats, list) or not output_formats
+            or any(fmt not in ("svg", "html", "csv", "json") for fmt in output_formats)
+            or len(set(output_formats)) != len(output_formats)):
+        raise InputError("output_formats must be a non-empty list of unique formats: svg, html, csv, json")
     parameters = {
         key: number(config.get(key, value), key,
                     strictly_positive=key in ("sample_m", "target_step_minutes"))
         for key, value in DEFAULTS.items()
     }
+    parameters["output_formats"] = list(output_formats)
     if parameters["fatigue_rate"] > 1:
         raise InputError("fatigue_rate must be between 0 and 1")
     pace_basis = config.get("pace_basis", "distance")
@@ -1039,17 +1045,19 @@ def csv_text(plan: dict) -> str:
 
 def write_outputs(plan: dict, output_dir: Path, overwrite=False) -> list[Path]:
     output_dir = Path(output_dir)
-    files = {
-        "pace-chart.json": json.dumps(plan, ensure_ascii=False, indent=2, allow_nan=False) + "\n",
-        "pace-chart.csv": "\ufeff" + csv_text(plan),
-        "pace-chart.html": render_html(plan),
-        "pace-chart.svg": render_svg(plan),
+    renderers = {
+        "json": lambda: json.dumps(plan, ensure_ascii=False, indent=2, allow_nan=False) + "\n",
+        "csv": lambda: "\ufeff" + csv_text(plan),
+        "html": lambda: render_html(plan),
+        "svg": lambda: render_svg(plan),
     }
-    paths = [output_dir / name for name in files]
+    formats = plan["parameters"]["output_formats"]
+    paths = [output_dir / f"pace-chart.{fmt}" for fmt in formats]
     if not overwrite and any(path.exists() for path in paths):
         raise InputError("Output files already exist; choose a new directory or use --overwrite")
+    contents = [renderers[fmt]() for fmt in formats]
     output_dir.mkdir(parents=True, exist_ok=True)
-    for path, text in zip(paths, files.values()):
+    for path, text in zip(paths, contents):
         with path.open("w", encoding="utf-8", newline="") as stream:
             stream.write(text)
     return paths
@@ -1066,7 +1074,7 @@ def main(argv=None) -> int:
     inspect.add_argument("--ascent-smoothing-m", type=float, default=100)
     inspect.add_argument("--use-kml-altitudes", action="store_true",
                          help="Use supplied KML coordinate heights when altitudeMode is omitted or clampToGround")
-    generate = commands.add_parser("generate", help="Generate HTML, SVG, CSV and JSON")
+    generate = commands.add_parser("generate", help="Generate SVG by default; select exports with output_formats")
     generate.add_argument("route", type=Path, help="Local GPX or KML route")
     generate.add_argument("--config", type=Path, required=True)
     generate.add_argument("--output-dir", type=Path, required=True)

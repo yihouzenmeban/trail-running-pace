@@ -1,6 +1,6 @@
 ---
 name: even-effort-pace-chart
-description: Convert a GPX or KML race route into an even-effort trail running pace chart with checkpoint splits, elevation profiles, and multiple finish targets. Use when planning race pacing from GPX/KML or generating HTML, SVG, CSV, and JSON pace tables.
+description: Convert a GPX or KML race route into an even-effort trail running pace chart with checkpoint splits, elevation profiles, and multiple finish targets. Use when planning race pacing from GPX/KML or generating SVG pace tables, with optional HTML, CSV, and JSON exports.
 ---
 
 # Even-Effort Pace Chart
@@ -8,6 +8,8 @@ description: Convert a GPX or KML race route into an even-effort trail running p
 Use `scripts/pace_chart.py` for deterministic, offline calculations and exports. It requires Python 3.10+ and the standard library only. Resolve script paths relative to this skill folder, regardless of the user's working directory.
 
 Read supporting references in the user's language, loading only the needed version: Chinese [configuration](references/configuration.md) and [model](references/model.md), or English [configuration](references/configuration.en.md) and [model](references/model.en.md).
+
+For a new request, default to `output_formats: ["svg"]` and `secondary_display: "pace"`. A supplied departure/start time sets `start_time` only; it does not request arrival times in parentheses. Choose another display mode or export format only when the user explicitly requests it or provides a configuration selecting it. Preserve these defaults when adapting a repository example configuration, which explicitly exports all four formats for demonstration.
 
 ## Inspect the route first
 
@@ -33,6 +35,18 @@ Total targets include station rests. Rest defaults to zero; ask only when the us
 
 Use `secondary_display` to select the parenthesized chart value: `"pace"` (default) for horizontal-distance segment pace, `"equivalent_pace"` for equivalent-distance segment pace (labeled 等强配速), or `"arrival_time"` for local arrival clock time before the current station's rest. Arrival clock mode uses the default 06:00 unless overridden. It includes the gun time at the start and marks midnight rollover as 次日 or +N天, without time-zone or daylight-saving conversion. Primary times remain elapsed departures. Legacy `pace_basis: "equivalent"` selects equivalent pace when `secondary_display` is absent; the explicit new field takes precedence.
 
+For example, “生成体感一致配速表，目标完赛时间 5 小时，相邻方案间隔 30 分钟，出发时间早上六点” maps to:
+
+```json
+{
+  "target": "05:00",
+  "target_step_minutes": 30,
+  "start_time": "06:00",
+  "secondary_display": "pace",
+  "output_formats": ["svg"]
+}
+```
+
 For manually supplied official distances, differences over `max(100 m, 0.5% of route distance)` require confirmation before `distance_alignment: "scale"`. The table continues to show route-derived distances and preserves official labels separately.
 
 The calculation is an independent interpretation of the archived article, with an explicit fatigue power curve. Read the model reference in the user's language when explaining the formula, adjusting model parameters, or discussing limitations. Do not claim equivalence to RunArt.Net's implementation or assess a runner's fitness from the route alone.
@@ -46,7 +60,7 @@ python3 <skill-dir>/scripts/pace_chart.py generate <race.gpx-or-kml> \
   --config <race.json> --output-dir <output-dir>
 ```
 
-The command writes `pace-chart.html`, `pace-chart.svg`, `pace-chart.csv`, and `pace-chart.json`. Existing outputs require another directory or the user's authorized `--overwrite`. The HTML and native SVG are self-contained; no network access is needed. Use the reference race-table layout: white background, gray rules, black slope/profile graphics, yellow distance, red ascent, green descent, blue water, station names, and target columns. Water at a station is for the next leg; finish water is zero. Cumulative times display hours/minutes with the selected secondary value in parentheses. Both pace measures and elapsed arrival/departure seconds remain in CSV/JSON.
+The command writes only `pace-chart.svg` by default. Set `output_formats` to the requested non-empty subset of `"svg"`, `"html"`, `"csv"`, and `"json"` when another export is wanted. Existing selected outputs require another directory or the user's authorized `--overwrite`; unselected files are preserved. The HTML and native SVG are self-contained; no network access is needed. Use the reference race-table layout: white background, gray rules, black slope/profile graphics, yellow distance, red ascent, green descent, blue water, station names, and target columns. Water at a station is for the next leg; finish water is zero. Cumulative times display hours/minutes with the selected secondary value in parentheses. Both pace measures and elapsed arrival/departure seconds are available when CSV/JSON exports are selected.
 
 Check that CP order and names match the intended route, every final departure equals its finish target, and station rests are included exactly once. Review the reported warnings and any cutoff failures. For presentation-sensitive requests, render the SVG or print the HTML with available local tools and inspect long station names and target columns.
 

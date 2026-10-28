@@ -8,7 +8,7 @@
 - 单个目标时间默认展开五组方案，相邻间隔 30 分钟；支持自定义间隔或目标列表。
 - 展示分段距离、爬升、下降、坡度分布、海拔肖像和下一段参考水量。
 - 支持站点停留和关门时间；未提供关门时间时，位置列不显示关门信息。
-- 同时导出 HTML、SVG、CSV 和 JSON，可离线查看、打印或继续处理。
+- 默认仅导出 SVG；可通过配置选择 HTML、CSV、JSON 等其他格式。
 
 ![天地留白100K 配速表示例](examples/tiandi-liubai-100k/pace-chart.svg)
 
@@ -23,10 +23,10 @@ Python 3.10 或更高版本，仅使用标准库，无需安装额外依赖或�
 ```text
 $even-effort-pace-chart
 用 examples/tiandi-liubai-100k/天地留白100K.gpx 生成体感一致配速表，
-目标完赛时间 14 小时，相邻方案间隔 30 分钟，输出到 output/my-race/。
+目标完赛时间 14 小时，相邻方案间隔 30 分钟，出发时间早上六点，输出到 output/my-race/。
 ```
 
-Skill 会先检查轨迹和 CP，再根据目标时间及配置生成结果。也可以提供 KML、自定义目标列表、各站停留时间和关门时间。图表标签默认为中文。
+Skill 会先检查轨迹和 CP，再根据目标时间及配置生成结果。上面的请求默认只输出 SVG，括号内显示区间配速；提供出发时间不会切换为到达时间。也可以提供 KML、自定义目标列表、各站停留时间和关门时间。图表标签默认为中文。
 
 ## 命令行快速开始
 
@@ -48,7 +48,7 @@ python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate \
 
 输出写入 `output/`，该目录已加入 Git 忽略规则。需要替换已有结果时，在命令后加 `--overwrite`。
 
-完整示例保存在 `examples/tiandi-liubai-100k/`，包含 GPX、配置和四种导出结果；轨迹约 101.25 km，当前默认参数下累计爬升约 5,332 m。
+完整示例保存在 `examples/tiandi-liubai-100k/`，包含 GPX、配置和四种导出结果；示例配置显式设置 `output_formats` 为全部四种格式，普通配置默认仅导出 SVG。轨迹约 101.25 km，当前默认参数下累计爬升约 5,332 m。
 
 ### KML 示例
 
@@ -70,6 +70,14 @@ python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate \
 `examples/大境门/` 包含原始 KML、配置及四种结果。该文件未声明高度模式；示例配置显式采用坐标高度，并通过 `cp_selection` 选择 D1–D9、SP1 和共用起终点，排除重复端点。24 小时仅为示范目标，自动生成 23:00 至 25:00 五组方案。路线测算约 99.69 km、爬升约 3,635 m，未与赛事官方统计校准。
 
 ### 输出文件
+
+默认仅生成 `pace-chart.svg`。如需额外导出，在比赛配置中加入以下字段；数组也可以只选择其中一种格式：
+
+```json
+{
+  "output_formats": ["svg", "html", "csv", "json"]
+}
+```
 
 | 文件 | 用途 |
 | --- | --- |
@@ -112,6 +120,7 @@ python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate \
 | `target_step_minutes` | `30` | 单个目标展开五组时的相邻间隔 |
 | `start_time` | `"06:00"` | 本地发枪时间，可填 `HH:MM` 或完整日期时间；主行仍为比赛经过时长 |
 | `secondary_display` | `"pace"` | 括号内显示内容：`"pace"` 配速、`"equivalent_pace"` 等强配速、`"arrival_time"` 到达钟点 |
+| `output_formats` | `["svg"]` | 输出格式列表，可选 `"svg"`、`"html"`、`"csv"`、`"json"` |
 | `pace_basis` | `"distance"` | 兼容旧配置：`"equivalent"` 对应等强配速；显式设置 `secondary_display` 优先 |
 | `sample_m` | `5` | 沿距离插值的间隔，单位米 |
 | `smoothing_m` | `20` | 海拔肖像与坡度分布的居中平滑窗口全宽，单位米 |
@@ -122,16 +131,19 @@ python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate \
 
 目标完赛时间包含站点停留。关门时间按发枪后经过时长填写；环线、折返或偏离轨迹的 CP 可能需要明确确认位置。
 
-例如，将以下字段加入配置，可在括号内显示到达钟点：
+“目标完赛时间 5 小时，相邻方案间隔 30 分钟，出发时间早上六点”对应的配置如下：
 
 ```json
 {
-  "start_time": "2026-10-31 06:00",
-  "secondary_display": "arrival_time"
+  "target": "05:00",
+  "target_step_minutes": 30,
+  "start_time": "06:00",
+  "secondary_display": "pace",
+  "output_formats": ["svg"]
 }
 ```
 
-未提供 `start_time` 时默认早上六点发枪，不指定比赛日期；可用 `"07:30"` 或完整日期时间覆盖。默认配速按区间水平距离计算，等强配速按区间等效距离计算，均仅含移动时间。到达钟点使用本站停留前的时间，跨日显示“次日”或“+N天”；三种展示方式均不改变时间分配。
+未提供 `start_time` 时默认早上六点发枪，不指定比赛日期；可用 `"07:30"` 或完整日期时间覆盖。出发时间与括号内容独立；只有明确要求显示到达时间时才设置 `secondary_display: "arrival_time"`。默认配速按区间水平距离计算，等强配速按区间等效距离计算，均仅含移动时间。到达钟点使用本站停留前的时间，跨日显示“次日”或“+N天”；三种展示方式均不改变时间分配。
 
 完整字段、人工 CP 和关门时间示例见[配置文档](skills/even-effort-pace-chart/references/configuration.md)，计算公式与平滑方案见[模型文档](skills/even-effort-pace-chart/references/model.md)。
 

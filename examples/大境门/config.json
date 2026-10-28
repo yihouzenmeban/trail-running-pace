@@ -1,6 +1,7 @@
 {
   "name": "大境门 DGW100K · 示例",
   "target": "24:00",
+  "output_formats": ["svg", "html", "csv", "json"],
   "use_kml_altitudes": true,
   "cp_selection": [
     "placemark:13:point:1",

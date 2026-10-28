@@ -67,6 +67,8 @@ The reference-style table displays cumulative departure durations truncated to f
 
 All three modes preserve timing allocation and rest calculations. Legacy `pace_basis: "equivalent"` still selects equivalent pace when `secondary_display` is absent; the new field takes precedence. Both paces and cumulative arrival/departure durations retain full precision. CSV formatted cumulative durations continue to round to seconds.
 
+Start time and the parenthesized display are independent; providing a start time still defaults to pace. Arrival clock time appears only when `secondary_display: "arrival_time"` is explicitly selected. Only SVG is exported by default; additional `output_formats` affect exported files without changing model calculations. CSV/JSON fields discussed here are exported when those formats are selected.
+
 These columns are pre-race reference schedules. Switching to an adjacent column mid-race does not recompute the remaining schedule from the runner's current time, fatigue, or position.
 
 ## Water and uncertainty
