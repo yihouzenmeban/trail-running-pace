@@ -1,42 +1,44 @@
-# GPX / KML 体感一致配速表 Skill
+# 耐力学社体感一致配速表 Skills
 
 [简体中文](README.md) | [English](README.en.md)
 
-将 GPX 或 KML 比赛轨迹转换成按 CP 分段的越野跑配速表，同时比较多组目标完赛时间。既可作为 `even-effort-pace-chart` Skill 使用，也可直接通过命令行生成。
+基于耐力学社体感一致配速思路的社区独立实现，将 GPX 或 KML 比赛轨迹转换成按检查点（CP）分段的越野跑配速表，同时比较多组目标完赛时间。可通过 AI 助手调用 `even-effort-pace-chart`，也可直接使用命令行。
 
-> **来源与版权说明**：体感一致配速思路参考耐力学社 / Pili（表哥）的[《耐力科学|体感一致配速表全面指南》](https://mp.weixin.qq.com/s/spYCP-upbqAZN0kzUm-0ng)。本项目采用独立实现的等效距离与疲劳曲线，并非 RunArt.Net 官方工具或输出。原文及配图的权利归原权利人所有；[仓库归档](docs/reference/)保留原文来源与版权声明，第三方资料的使用条件以原文声明为准。
+> **来源与版权说明**：思路参考耐力学社 / Pili（表哥）的[《耐力科学|体感一致配速表全面指南》](https://mp.weixin.qq.com/s/spYCP-upbqAZN0kzUm-0ng)。本项目独立实现等效距离与疲劳曲线，并非 RunArt.Net 官方工具或输出。原文及配图的权利归原权利人所有；[仓库归档](docs/reference/)保留来源与版权声明，第三方资料的使用条件以原文声明为准。
 
-- 默认读取轨迹内的 CP；缺少可用站点时再提供人工 CP 列表。
-- 单个目标时间默认展开五组方案，相邻间隔 30 分钟；支持自定义间隔或目标列表。
-- 展示分段距离、爬升、下降、坡度分布、海拔肖像和下一段参考水量。
+- 优先读取轨迹内的 CP；缺少可用站点时再提供人工 CP 列表。
+- 单个目标默认展开五组方案，相邻间隔 30 分钟；支持自定义间隔或目标列表。
+- 展示分段距离、爬升、下降、坡度分布、海拔剖面和下一段参考水量。
 - 支持站点停留和关门时间；未提供关门时间时，位置列不显示关门信息。
-- 默认仅导出 SVG；可通过配置选择 HTML、CSV、JSON 等其他格式。
+- 默认仅导出 SVG，括号内显示区间配速；可选等强配速、到达钟点及其他导出格式。
 
-## 快速安装 Skill
+## 环境要求
 
-已安装 Node.js、npm 和 Git 的用户，可在需要使用 Skill 的项目目录执行：
+- **运行**：Python 3.10 或更高版本，仅使用标准库，无需额外 Python 依赖或在线服务。
+- **快捷安装**：使用下方安装器时，需要 Node.js、npm 和 Git；也可手动复制安装。
+- **轨迹**：本地 GPX 或 KML 文件，轨迹点需要包含坐标和海拔。
+
+## 安装与使用 Skills
+
+### 快速安装
+
+在需要使用 Skills 的项目目录执行：
 
 ```bash
 npx skills add yihouzenmeban/trail-running-pace --skill even-effort-pace-chart
 ```
 
-按提示选择要使用的代理。不加 `-g` 时安装到当前项目；如需在多个项目中使用，添加 `-g` 安装到用户级技能目录：
+按提示选择 AI 助手。不加 `-g` 时安装到当前项目；添加 `-g` 可安装到用户级技能目录，供多个项目使用：
 
 ```bash
 npx skills add yihouzenmeban/trail-running-pace --skill even-effort-pace-chart -g
 ```
 
-只安装所选 Skill 即可，运行时不依赖仓库中的示例或参考文章。也可以按下文的手动复制方式安装。
+手动安装时，将 `skills/even-effort-pace-chart/` 整个目录复制到所用 AI 助手的技能目录。运行时不依赖仓库中的示例或参考文章。
 
-![天地留白100K 配速表示例](examples/tiandi-liubai-100k/pace-chart.svg)
+### 首次使用
 
-## 环境要求
-
-Python 3.10 或更高版本，仅使用标准库，无需安装额外依赖或配置在线服务。轨迹点需要包含坐标和海拔，GPX/KML 根据 XML 根元素自动识别。
-
-## 作为 Skill 使用
-
-使用上面的安装命令，或手动将 `skills/even-effort-pace-chart/` 整个目录复制到所用代理的技能目录，保留其中的 `SKILL.md`、`agents/`、`scripts/` 和 `references/`。安装完成后，在对话中调用（将 `race.gpx` 替换为自己的轨迹路径）：
+将 `race.gpx` 替换为自己的 GPX 或 KML 轨迹路径，向 AI 助手提供目标时间。在支持 `$名称` 调用的助手中，可以使用：
 
 ```text
 $even-effort-pace-chart
@@ -44,52 +46,75 @@ $even-effort-pace-chart
 目标完赛时间 14 小时，相邻方案间隔 30 分钟，出发时间早上六点，输出到 output/my-race/。
 ```
 
-Skill 会先检查轨迹和 CP，再根据目标时间及配置生成结果。上面的请求默认只输出 SVG，括号内显示区间配速；提供出发时间不会切换为到达时间。也可以提供 KML、自定义目标列表、各站停留时间和关门时间。图表标签默认为中文。
+也可以在自然语言请求中指定使用 `even-effort-pace-chart`。助手会先检查轨迹和 CP，再生成配速表。上述请求默认只输出 SVG，括号内为区间配速；提供出发时间不会切换为到达钟点。图表标签默认为中文。
+
+## 效果预览与示例
+
+![天地留白100K 配速表示例](examples/tiandi-liubai-100k/pace-chart.svg)
+
+| 示例 | 轨迹 | 配置 | 配速表 |
+| --- | --- | --- | --- |
+| 天地留白 100K | [GPX](examples/tiandi-liubai-100k/天地留白100K.gpx) | [12–16 小时方案](examples/tiandi-liubai-100k/config.json) | [SVG](examples/tiandi-liubai-100k/pace-chart.svg) |
+| 大境门 DGW100K | [KML](examples/大境门/2026京东大境门古长城越野赛by%20UTMB®DGW100K.kml) | [24 小时中心目标](examples/大境门/config.json) | [SVG](examples/大境门/pace-chart.svg) |
+
+两个示例目录均保留原始轨迹、配置和四种导出结果。示例配置显式选择全部四种格式，不代表默认输出；其中的目标时间也不代表个人能力评估。
 
 ## 命令行快速开始
 
-以下命令在仓库根目录执行。先检查示例轨迹和 CP：
+以下命令在克隆后的仓库根目录执行。先检查示例轨迹和 CP，再使用示例配置生成 12、13、14、15、16 小时五组方案：
 
 ```bash
 python3 skills/even-effort-pace-chart/scripts/pace_chart.py inspect \
   'examples/tiandi-liubai-100k/天地留白100K.gpx'
-```
 
-使用示例配置生成 12、13、14、15、16 小时五组方案：
-
-```bash
 python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate \
   'examples/tiandi-liubai-100k/天地留白100K.gpx' \
   --config examples/tiandi-liubai-100k/config.json \
   --output-dir output/tiandi-liubai-100k
 ```
 
-输出写入 `output/`，该目录已加入 Git 忽略规则。需要替换已有结果时，在命令后加 `--overwrite`。
+结果写入已被 Git 忽略的 `output/`。需要替换已有结果时添加 `--overwrite`。
 
-完整示例保存在 `examples/tiandi-liubai-100k/`，包含 GPX、配置和四种导出结果；示例配置显式设置 `output_formats` 为全部四种格式，普通配置默认仅导出 SVG。轨迹约 101.25 km，当前默认参数下累计爬升约 5,332 m。
+KML 示例见上表。对于未声明高度模式或采用 `clampToGround` 的文件，需要先确认坐标高度可用于计算，再显式启用 `use_kml_altitudes`；完整规则和检查命令见[配置文档的 KML 输入说明](skills/even-effort-pace-chart/references/configuration.md#kml-输入)。
 
-### KML 示例
+## 配置与输出
 
-支持 LineString、gx:Track 和命名 Point 地标；多条路线通过 `track_index` 选择。KML 轨迹必须带高度，`altitudeMode` 为 `absolute` 时可直接使用。对于省略模式或 `clampToGround` 的文件，确认原始坐标高度适合计算后，检查时添加 `--use-kml-altitudes`，生成配置中添加 `"use_kml_altitudes": true`。工具会记录告警，不会填零、联网补海拔或将相对地面高度换算为海拔。不支持 KMZ 或远程 NetworkLink。
+通过 AI 助手使用时，直接说明自己的需求即可。命令行用户可将以下内容保存为 `race.json`：
 
-大境门示例已在配置中明确选择站点和原始高度：
-
-```bash
-python3 skills/even-effort-pace-chart/scripts/pace_chart.py inspect \
-  'examples/大境门/2026京东大境门古长城越野赛by UTMB®DGW100K.kml' \
-  --use-kml-altitudes
-
-python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate \
-  'examples/大境门/2026京东大境门古长城越野赛by UTMB®DGW100K.kml' \
-  --config 'examples/大境门/config.json' \
-  --output-dir output/dajingmen
+```json
+{
+  "name": "我的比赛",
+  "target": "14:00"
+}
 ```
 
-`examples/大境门/` 包含原始 KML、配置及四种结果。该文件未声明高度模式；示例配置显式采用坐标高度，并通过 `cp_selection` 选择 D1–D9、SP1 和共用起终点，排除重复端点。24 小时仅为示范目标，自动生成 23:00 至 25:00 五组方案。路线测算约 99.69 km、爬升约 3,635 m，未与赛事官方统计校准。
+```bash
+python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate \
+  race.gpx --config race.json --output-dir output/my-race
+```
 
-### 输出文件
+这份最小配置生成 13:00、13:30、14:00、14:30、15:00 五组方案，默认早上六点发枪，输出 SVG。
 
-默认仅生成 `pace-chart.svg`。如需额外导出，在比赛配置中加入以下字段；数组也可以只选择其中一种格式：
+| 常用参数 | 默认值 | 说明 |
+| --- | --- | --- |
+| `target` / `targets` | 必须提供其一 | 中心目标或明确的目标列表，时长支持 `H:MM`、`H:MM:SS`，可超过 24 小时 |
+| `target_step_minutes` | `30` | 单个目标展开五组时的相邻间隔，单位分钟 |
+| `start_time` | `"06:00"` | 本地发枪时间，可填 `HH:MM` 或完整日期时间 |
+| `secondary_display` | `"pace"` | 括号内显示区间配速、等强配速或到达钟点 |
+| `output_formats` | `["svg"]` | 选择导出格式，可组合使用 |
+
+括号内的三种模式分别为 `"pace"`、`"equivalent_pace"`、`"arrival_time"`。出发时间与括号内容独立。可选参数按“当前明确要求 > 指定使用的配置 > 脚本默认值”处理，不从示例继承；完整字段及 CP、停留、关门时间配置见[配置文档](skills/even-effort-pace-chart/references/configuration.md)。
+
+### 导出格式
+
+| 格式 | 文件名 | 用途 |
+| --- | --- | --- |
+| SVG（默认） | `pace-chart.svg` | 独立矢量表，适合预览、缩放和分享 |
+| HTML | `pace-chart.html` | 浏览器离线查看，支持横向打印 |
+| CSV | `pace-chart.csv` | 在表格软件中处理各 CP、各目标的时间数据 |
+| JSON | `pace-chart.json` | 保留完整计算精度、参数、来源和告警 |
+
+如需全部四种格式，在配置中显式加入：
 
 ```json
 {
@@ -97,95 +122,14 @@ python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate \
 }
 ```
 
-| 文件 | 用途 |
-| --- | --- |
-| `pace-chart.html` | 浏览器离线查看，支持横向打印 |
-| `pace-chart.svg` | 独立矢量表，适合预览、缩放和分享 |
-| `pace-chart.csv` | 在表格软件中处理各 CP、各目标的时间数据 |
-| `pace-chart.json` | 保留完整计算精度、参数、来源和告警 |
-
-## 配置自己的比赛
-
-将以下配置保存为 `race.json`：
-
-```json
-{
-  "name": "我的比赛",
-  "target": "14:00",
-  "target_step_minutes": 30,
-  "start_time": "2026-10-31 06:00"
-}
-```
-
-将 `race.gpx` 替换为自己的 GPX 或 KML 路径：
-
-```bash
-python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate \
-  race.gpx --config race.json --output-dir output/my-race
-```
-
-这份配置生成 13:00、13:30、14:00、14:30、15:00 五组方案。若要指定准确的目标列表，用 `targets` 替换 `target`：
-
-```json
-{
-  "targets": ["12:00", "14:00", "16:00"]
-}
-```
-
-| 常用参数 | 默认值 | 说明 |
-| --- | --- | --- |
-| `target` / `targets` | 必须提供其一 | 中心目标或明确的目标列表，时长支持 `H:MM`、`H:MM:SS`，可超过 24 小时 |
-| `target_step_minutes` | `30` | 单个目标展开五组时的相邻间隔 |
-| `start_time` | `"06:00"` | 本地发枪时间，可填 `HH:MM` 或完整日期时间；主行仍为比赛经过时长 |
-| `secondary_display` | `"pace"` | 括号内显示内容：`"pace"` 配速、`"equivalent_pace"` 等强配速、`"arrival_time"` 到达钟点 |
-| `output_formats` | `["svg"]` | 输出格式列表，可选 `"svg"`、`"html"`、`"csv"`、`"json"` |
-| `pace_basis` | `"distance"` | 兼容旧配置：`"equivalent"` 对应等强配速；显式设置 `secondary_display` 优先 |
-| `sample_m` | `5` | 沿距离插值的间隔，单位米 |
-| `smoothing_m` | `20` | 海拔肖像与坡度分布的居中平滑窗口全宽，单位米 |
-| `ascent_smoothing_m` | `100` | 累计爬升、下降的独立统计窗口全宽，单位米 |
-| `use_kml_altitudes` | `false` | 显式采用未声明高度模式或 clampToGround 的 KML 坐标高度 |
-| `checkpoint_overrides` | 不覆盖 | 按候选点 ID 设置名称、停留分钟数 `rest_minutes`、关门时长 `cutoff` 等 |
-| `checkpoints` | 从轨迹读取 | 没有可用内嵌 CP 时，手动提供名称和累计公里数 |
-
-目标完赛时间包含站点停留。关门时间按发枪后经过时长填写；环线、折返或偏离轨迹的 CP 可能需要明确确认位置。
-
-“目标完赛时间 5 小时，相邻方案间隔 30 分钟，出发时间早上六点”对应的配置如下：
-
-```json
-{
-  "target": "05:00",
-  "target_step_minutes": 30,
-  "start_time": "06:00",
-  "secondary_display": "pace",
-  "output_formats": ["svg"]
-}
-```
-
-未提供 `start_time` 时默认早上六点发枪，不指定比赛日期；可用 `"07:30"` 或完整日期时间覆盖。出发时间与括号内容独立；只有明确要求显示到达时间时才设置 `secondary_display: "arrival_time"`。默认配速按区间水平距离计算，等强配速按区间等效距离计算，均仅含移动时间。到达钟点使用本站停留前的时间，跨日显示“次日”或“+N天”；三种展示方式均不改变时间分配。
-
-完整字段、人工 CP 和关门时间示例见[配置文档](skills/even-effort-pace-chart/references/configuration.md)，计算公式与平滑方案见[模型文档](skills/even-effort-pace-chart/references/model.md)。
-
-所有可选参数都按“当前明确要求 > 指定使用的配置 > 脚本默认值”处理。未指定的字段省略，不从示例或无关任务继承；合法的 `0` 和 `false` 会保留，`null` 或空字符串不能通用地代替默认值。复用配置并将目标列表改成中心目标时，应删除旧 `targets`，避免其优先于新 `target`。必需的目标时间和有歧义的轨迹、站点仍需明确提供。
-
 ## 开发与测试
 
 ```bash
 python3 -m unittest discover -s skills/even-effort-pace-chart/tests -v
 ```
 
-完整仓库会执行 GPX/KML 合成轨迹测试，以及天地留白 100K 和大境门 KML 真实赛道回归测试；单独复制 Skill、未携带 examples 时，真实赛道测试会跳过。
+测试覆盖合成 GPX/KML 和两个真实赛道；独立复制 Skills、未携带 `examples/` 时，真实赛道测试会跳过。自然语言用例、检查器使用方式和人工复核步骤见[行为评测指南](skills/even-effort-pace-chart/evals/guide.md)。
 
-自然语言评测用例见 [evals/cases.json](skills/even-effort-pace-chart/evals/cases.json)，覆盖默认值、出发时间与括号内容独立、明确到达时间、替换旧目标列表和保留 `0/false`。每个用例提供中英文提示词，使用同目录的 `course.gpx` 合成轨迹。
+## 模型与限制
 
-评测时为每个用例和语言开启独立 AI 会话，加载 Skill，只提供该语言的提示词、轨迹和用例中的 `selected_config`（若有），不要提供预期结果。保留 AI 实际写出的配置与执行记录，再运行检查器：
-
-```bash
-python3 skills/even-effort-pace-chart/evals/evaluate.py \
-  --case start_does_not_select_arrival --config outputs/candidate.json
-```
-
-退出码 `0` 表示配置符合该用例，`1` 表示不符合，`2` 表示调用或文件错误。人工复核执行记录中是否先检查轨迹、无多余默认值追问、实际生成了要求的文件且读取核对摘要，并记录模型版本、语言和结果。检查器离线运行，不调用 AI，也不验证执行记录或实际文件；单元测试只证明检查器能识别正确和错误配置，不代表自然语言评测已经通过。日常使用 Skill 无需读取评测材料。
-
-## 模型说明
-
-结果依赖轨迹海拔和平滑参数，参考水量用于比较赛段差异；示例目标不代表个人能力评估。文章及配图仅作为背景资料，使用 Skill 无需读取。
+计算公式、海拔平滑及假设见[模型文档](skills/even-effort-pace-chart/references/model.md)。结果依赖轨迹海拔和平滑参数，不保证复现赛事或其他平台的统计。参考水量用于比较赛段差异，不能据此评估个人补水需求或完赛能力。

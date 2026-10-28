@@ -8,9 +8,9 @@ Conceptual reference: "耐力科学|体感一致配速表全面指南", 耐力�
 
 Original: https://mp.weixin.qq.com/s/spYCP-upbqAZN0kzUm-0ng
 
-The repository archive is `docs/reference/耐力科学_体感一致配速表全面指南.md`, with its illustrations under `docs/reference/assets/pace-chart/`. These paths are relative to the repository root. The skill remains usable when copied independently; it does not require the archive at runtime.
+The repository archive is `docs/reference/耐力科学_体感一致配速表全面指南.md`, with its illustrations under `docs/reference/assets/pace-chart/`. These paths are relative to the repository root. The Skills package remains usable when copied independently; it does not require the archive at runtime.
 
-This is an independent implementation of the article's equivalent-distance and fatigue-curve ideas. The article does not expose RunArt.Net's full algorithm. The equations below are this implementation's explicit, reproducible choices; generated charts must not be represented as official RunArt.Net output. Preserve the source attribution included by the exporters. The article's original copyright statement remains in the repository archive; this skill does not reinterpret the terms for third-party material.
+This is an independent implementation of the article's equivalent-distance and fatigue-curve ideas. The article does not expose RunArt.Net's full algorithm. The equations below are this implementation's explicit, reproducible choices; generated charts must not be represented as official RunArt.Net output. Preserve the source attribution included by the exporters. The article's original copyright statement remains in the repository archive; this project does not reinterpret the terms for third-party material.
 
 ## Input normalization
 

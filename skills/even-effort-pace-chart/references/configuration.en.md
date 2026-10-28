@@ -2,7 +2,7 @@
 
 [简体中文](configuration.md) | [English](configuration.en.md)
 
-Run with Python 3.10+; no packages, credentials, or online services are required. Paths in these examples assume the repository root. For an installed skill, resolve `scripts/pace_chart.py` relative to its skill folder.
+Run with Python 3.10+; no packages, credentials, or online services are required. Paths in these examples assume the repository root. For an installed Skills package, resolve `scripts/pace_chart.py` relative to the package directory.
 
 ## Defaults and overrides
 

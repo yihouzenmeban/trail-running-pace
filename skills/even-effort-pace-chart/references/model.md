@@ -8,9 +8,9 @@
 
 原文：[公众号文章](https://mp.weixin.qq.com/s/spYCP-upbqAZN0kzUm-0ng)。
 
-仓库归档为 `docs/reference/耐力科学_体感一致配速表全面指南.md`，配图位于 `docs/reference/assets/pace-chart/`，均相对于仓库根目录。Skill 可以独立复制使用，运行时不依赖归档资料。
+仓库归档为 `docs/reference/耐力科学_体感一致配速表全面指南.md`，配图位于 `docs/reference/assets/pace-chart/`，均相对于仓库根目录。Skills 可以独立复制使用，运行时不依赖归档资料。
 
-本工具独立实现文章中的等效距离与疲劳曲线思路。文章没有公开 RunArt.Net 的完整算法，以下公式是本实现明确、可复现的选择，生成结果不能表示为 RunArt.Net 官方输出。导出器保留来源；原文章版权声明仍在归档中，本 Skill 不重新解释第三方资料的使用条款。
+本工具独立实现文章中的等效距离与疲劳曲线思路。文章没有公开 RunArt.Net 的完整算法，以下公式是本实现明确、可复现的选择，生成结果不能表示为 RunArt.Net 官方输出。导出器保留来源；原文章版权声明仍在归档中，本项目不重新解释第三方资料的使用条款。
 
 ## 输入归一化
 

@@ -3,9 +3,9 @@ name: even-effort-pace-chart
 description: Convert a GPX or KML race route into an even-effort trail running pace chart with checkpoint splits, elevation profiles, and multiple finish targets. Use when planning race pacing from GPX/KML or generating SVG pace tables, with optional HTML, CSV, and JSON exports.
 ---
 
-# Even-Effort Pace Chart
+# 耐力学社 Even-Effort Pace Chart Skills
 
-Use `scripts/pace_chart.py` for deterministic, offline calculations and exports. It requires Python 3.10+ and the standard library only. Resolve script paths relative to this skill folder, regardless of the user's working directory.
+Use `scripts/pace_chart.py` for deterministic, offline calculations and exports. It requires Python 3.10+ and the standard library only. Resolve script paths relative to this file's directory, regardless of the user's working directory.
 
 Read references only as needed, in the user's language: Chinese [configuration](references/configuration.md) / [model](references/model.md), or English [configuration](references/configuration.en.md) / [model](references/model.en.md). Configuration defines fields and CLI contracts; model explains equations and limitations.
 
