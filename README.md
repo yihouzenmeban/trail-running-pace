@@ -109,6 +109,6 @@ python3 -m unittest discover -s skills/even-effort-pace-chart/tests -v
 
 ## 模型与参考资料
 
-模型参考耐力学社 / Pili（表哥）的《耐力科学|体感一致配速表全面指南》，采用独立实现的等效距离与疲劳曲线，不代表 RunArt.Net 的官方输出。结果依赖轨迹海拔和平滑参数，参考水量用于比较赛段差异；示例目标不代表个人能力评估。
+模型参考耐力学社 / Pili（表哥）的[《耐力科学|体感一致配速表全面指南》](https://mp.weixin.qq.com/s/spYCP-upbqAZN0kzUm-0ng)，采用独立实现的等效距离与疲劳曲线，不代表 RunArt.Net 的官方输出。结果依赖轨迹海拔和平滑参数，参考水量用于比较赛段差异；示例目标不代表个人能力评估。
 
-文章及配图保存在 `docs/reference/`，仅作为背景资料，保留原文来源与版权声明；使用 Skill 无需读取这些资料。
+文章及配图保存在 [docs/reference/](docs/reference/)，仅作为背景资料，保留原文来源与版权声明；使用 Skill 无需读取这些资料。
