@@ -9,7 +9,11 @@ Use `scripts/pace_chart.py` for deterministic, offline calculations and exports.
 
 Read supporting references in the user's language, loading only the needed version: Chinese [configuration](references/configuration.md) and [model](references/model.md), or English [configuration](references/configuration.en.md) and [model](references/model.en.md).
 
-For a new request, default to `output_formats: ["svg"]` and `secondary_display: "pace"`. A supplied departure/start time sets `start_time` only; it does not request arrival times in parentheses. Choose another display mode or export format only when the user explicitly requests it or provides a configuration selecting it. Preserve these defaults when adapting a repository example configuration, which explicitly exports all four formats for demonstration.
+For every optional parameter, use the script's documented default unless the user explicitly overrides it or supplies a configuration to use. Apply a new explicit request over the selected configuration, then let omitted fields fall back to script defaults. Do not carry settings from unrelated earlier charts or repository examples into a new request. Examples demonstrate custom targets, exports, stops, cutoffs, and route selections; those are not project defaults.
+
+Prefer a minimal configuration containing the requested target and explicit overrides, plus any route selections confirmed during inspection. Leave other fields absent rather than inventing values or filling them with `null` or empty strings. Keep valid explicit zeros and `false`. Do not ask about optional fields that already have usable defaults; obtain required or ambiguous inputs as described below. Read the configuration reference for the full default and precedence rules.
+
+In particular, omitted `output_formats` means SVG only, and omitted `secondary_display` means segment pace unless a user-selected legacy `pace_basis` changes it. A supplied departure/start time sets `start_time` only; it does not request arrival times in parentheses. Choose another display mode or export format only when the user explicitly requests it or provides a configuration selecting it.
 
 ## Inspect the route first
 
@@ -28,6 +32,8 @@ For a loop, crossing, or out-and-back, confirm the intended route occurrence whe
 ## Set targets and assumptions
 
 Obtain the intended finish target if it has not been supplied. A single `target` generates five columns at -60, -30, 0, +30, +60 minutes by default. Use `target_step_minutes` for another interval, or `targets` for the user's exact list, including a single-column chart.
+
+When replacing a selected configuration's target list with a newly requested central `target`, remove its old `targets` field; otherwise the list takes precedence and silently ignores the new central target. Prefer one target form when generating a new configuration. If default expansion gives nonpositive durations, obtain a suitable explicit list or interval rather than silently changing the default.
 
 Keep 5 m distance sampling and 20 m centered smoothing for the displayed profile and slope bins. Cumulative ascent/descent use a separate `ascent_smoothing_m` window, default 100 m, on the same 5 m grid. This suppresses accumulated small oscillations while preserving a detailed display. Do not confuse the two scales or claim that interpolation adds measurement accuracy. Change the recorded parameters when the source data or a known reference warrants it; never rescale computed climbs to force a desired total.
 
@@ -62,7 +68,7 @@ python3 <skill-dir>/scripts/pace_chart.py generate <race.gpx-or-kml> \
 
 The command writes only `pace-chart.svg` by default. Set `output_formats` to the requested non-empty subset of `"svg"`, `"html"`, `"csv"`, and `"json"` when another export is wanted. Existing selected outputs require another directory or the user's authorized `--overwrite`; unselected files are preserved. The HTML and native SVG are self-contained; no network access is needed. Use the reference race-table layout: white background, gray rules, black slope/profile graphics, yellow distance, red ascent, green descent, blue water, station names, and target columns. Water at a station is for the next leg; finish water is zero. Cumulative times display hours/minutes with the selected secondary value in parentheses. Both pace measures and elapsed arrival/departure seconds are available when CSV/JSON exports are selected.
 
-Check that CP order and names match the intended route, every final departure equals its finish target, and station rests are included exactly once. Review the reported warnings and any cutoff failures. For presentation-sensitive requests, render the SVG or print the HTML with available local tools and inspect long station names and target columns.
+Check the generated configuration against the current request and documented defaults before running it. Verify that the chart's parenthesis label, start time, target columns, and exported files match those choices. Check that CP order and names match the intended route, every final departure equals its finish target, and station rests are included exactly once. Review the reported warnings and any cutoff failures. For presentation-sensitive requests, render the SVG or print the HTML with available local tools and inspect long station names and target columns.
 
 Keep the visible charts limited to the heading and table, with no explanatory footer. Show cutoff information in station cells only when supplied. Retain source attribution in document metadata and JSON.
 

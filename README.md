@@ -147,6 +147,8 @@ python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate \
 
 完整字段、人工 CP 和关门时间示例见[配置文档](skills/even-effort-pace-chart/references/configuration.md)，计算公式与平滑方案见[模型文档](skills/even-effort-pace-chart/references/model.md)。
 
+所有可选参数都按“当前明确要求 > 指定使用的配置 > 脚本默认值”处理。未指定的字段省略，不从示例或无关任务继承；合法的 `0` 和 `false` 会保留，`null` 或空字符串不能通用地代替默认值。复用配置并将目标列表改成中心目标时，应删除旧 `targets`，避免其优先于新 `target`。必需的目标时间和有歧义的轨迹、站点仍需明确提供。
+
 ## 开发与测试
 
 ```bash

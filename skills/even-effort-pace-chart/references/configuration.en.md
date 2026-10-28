@@ -4,6 +4,14 @@
 
 Run with Python 3.10+; no packages, credentials, or online services are required. Paths in these examples assume the repository root. For an installed skill, resolve `scripts/pace_chart.py` relative to its skill folder.
 
+## Defaults and overrides
+
+All optional parameters follow the same rule: **current explicit request > user-selected configuration > script defaults**. Build a new task's configuration from the target and explicit overrides, leaving other optional fields absent. Retain route and CP selections only when confirmed by inspection of the current route. Example targets, exports, rests, cutoffs, and track indices are example choices, not defaults to inherit.
+
+Omitted fields use defaults. Valid `0` and `false` values take effect without being replaced; for example, `fatigue_rate: 0` disables fatigue progression and `smoothing_m: 0` disables that smoothing. `null`, empty strings, and empty lists are not general ways to request defaults; invalid types or values raise errors. `track_index: null` selects the only available track automatically, and station `cutoff: null` means no supplied cutoff.
+
+Two compatibility precedence rules apply: a present `targets` list takes precedence over `target`, and omitted `secondary_display` honors an explicitly supplied legacy `pace_basis`. Remove the old `targets` when replacing a list with a central target. Changing one parameter does not automatically adjust other parameters. Missing finish targets, unselected multiple routes, and absent or ambiguous CPs require input rather than invented choices. If five-column expansion produces nonpositive durations, supply an explicit target list or interval instead of silently reducing the interval.
+
 ## Inspect
 
 ```bash
@@ -76,6 +84,8 @@ Without `cp_selection`, recognized CP/SP, checkpoint, aid station, water station
 
 Overrides may contain `name`, `distance_km`, `rest_minutes`, `cutoff`, and `allow_off_route`. A distance override is a confirmed cumulative **input-route kilometre** position, and explicitly chooses both the occurrence and location; it bypasses coordinate projection. It must lie on the route's distance interval.
 
+Stations retain their embedded names by default, with `rest_minutes` set to `0`, no cutoff check when `cutoff` is absent, and `allow_off_route` set to `false`. Without a `distance_km` override, coordinate projection and endpoint rules determine the position; manual CP names and cumulative distances are required. Do not infer rests, cutoffs, distance overrides, or off-route permission from finish targets, station names, or examples.
+
 A recognized shared start/finish waypoint within 100 m of both endpoints becomes `<candidate-id>:start` and `<candidate-id>:finish`, with the venue name preserved. Configure it using the original candidate ID. Its cutoff applies to the finish only, and rest must be zero. A `distance_km` override treats it as one explicitly positioned station instead.
 
 Cutoffs are elapsed durations since the race start. Arrival after cutoff yields `arrival_late`; arrival on time followed by departure after cutoff yields `departure_late`. This flags both interpretations without assuming the organizer's rule. Times exactly equal to the cutoff are on time. An absent cutoff is `not_checked`. Start and finish cannot have departure rests.
@@ -105,12 +115,17 @@ Default `distance_alignment` is `"confirm"`: differences over `max(100 m, 0.5% o
 
 | Key | Default | Meaning |
 | --- | --- | --- |
+| `target` / `targets` | Supply one | Central target or explicit target list; `targets` takes precedence |
 | `name` | Input filename stem | Chart title |
 | `start_time` | `"06:00"` | Local race start as `HH:MM`, `YYYY-MM-DD HH:MM`, or `YYYY-MM-DDTHH:MM`; primary times remain elapsed durations |
 | `secondary_display` | `"pace"` | Parenthesized value: `"pace"` for segment pace, `"equivalent_pace"` for equivalent segment pace, or `"arrival_time"` for arrival clock time |
 | `output_formats` | `["svg"]` | Non-empty list of unique export formats: `"svg"`, `"html"`, `"csv"`, and `"json"` |
 | `pace_basis` | `"distance"` | Legacy option: `"equivalent"` selects equivalent pace; explicit `secondary_display` takes precedence |
 | `track_index` | Only available track | 1-based GPX track/route or KML line/track selection |
+| `checkpoints` | Embedded CPs | Manual list when usable embedded CPs are missing; incompatible with candidate selections or overrides |
+| `cp_selection` | Recognized stations | Explicit candidate IDs from `inspect` |
+| `checkpoint_overrides` | `{}` | Override selected station names, rests, cutoffs, positions, and related fields |
+| `distance_alignment` | `"confirm"` | Require confirmation for a distance mismatch; only explicit `"scale"` enables proportional mapping |
 | `use_kml_altitudes` | `false` | Boolean opt-in to supplied KML heights when mode is omitted or clampToGround; no effect on GPX |
 | `sample_m` | 5 | Positive distance resampling step in metres |
 | `smoothing_m` | 20 | Full centered averaging window for graphics and slope bins; 0 disables this smoothing |

@@ -66,6 +66,116 @@ class Fixture(unittest.TestCase):
         return pace.build_plan(self.path, {"target": "04:00", **config})
 
 
+class ConfigurationDefaultTests(Fixture):
+    def setUp(self):
+        super().setUp()
+        self.write()
+
+    def test_omitted_options_match_explicit_documented_defaults(self):
+        minimal = self.plan()
+        explicit = self.plan(
+            name="course", sample_m=5, smoothing_m=20, ascent_smoothing_m=100,
+            ascent_km_per_100m=1, fatigue_rate=0.08, water_ml_per_10km=700,
+            target_step_minutes=30, start_time="06:00", output_formats=["svg"],
+            secondary_display="pace", pace_basis="distance", track_index=1,
+            use_kml_altitudes=False, distance_alignment="confirm",
+            cp_selection=["wpt:1"], checkpoint_overrides={},
+        )
+        for key in ("name", "parameters", "route", "checkpoints", "targets_seconds", "schedules"):
+            self.assertEqual(minimal[key], explicit[key], key)
+        self.assertEqual(minimal["name"], self.path.stem)
+        self.assertEqual(minimal["targets_seconds"], [10800, 12600, 14400, 16200, 18000])
+        self.assertEqual([cp["id"] for cp in minimal["checkpoints"]], ["start", "wpt:1", "finish"])
+        self.assertTrue(all(cp["rest_seconds"] == 0 and cp["cutoff_seconds"] is None
+                            for cp in minimal["checkpoints"]))
+
+    def test_each_omitted_numeric_option_keeps_its_default(self):
+        expected = {
+            "sample_m": 5, "smoothing_m": 20, "ascent_smoothing_m": 100,
+            "ascent_km_per_100m": 1, "fatigue_rate": 0.08,
+            "water_ml_per_10km": 700, "target_step_minutes": 30,
+        }
+        for omitted in expected:
+            with self.subTest(omitted=omitted):
+                config = {key: value for key, value in expected.items() if key != omitted}
+                plan = self.plan(**config)
+                for key, value in expected.items():
+                    self.assertEqual(plan["parameters"][key], value)
+
+    def test_explicit_override_preserves_other_parameter_defaults(self):
+        expected = {
+            "sample_m": 5, "smoothing_m": 20, "ascent_smoothing_m": 100,
+            "ascent_km_per_100m": 1, "fatigue_rate": 0.08,
+            "water_ml_per_10km": 700, "target_step_minutes": 30,
+            "start_time": "06:00", "output_formats": ["svg"], "secondary_display": "pace",
+        }
+        for key, value in (
+            ("sample_m", 10), ("smoothing_m", 40), ("ascent_smoothing_m", 60),
+            ("ascent_km_per_100m", 0.5), ("fatigue_rate", 0.15),
+            ("water_ml_per_10km", 900), ("target_step_minutes", 15),
+            ("start_time", "07:30"), ("output_formats", ["json"]),
+            ("secondary_display", "arrival_time"),
+        ):
+            with self.subTest(key=key):
+                plan = self.plan(**{key: value})
+                for other, default in expected.items():
+                    self.assertEqual(plan["parameters"][other], value if other == key else default, other)
+
+    def test_explicit_zero_is_preserved_instead_of_replaced_by_default(self):
+        config = {key: 0 for key in (
+            "smoothing_m", "ascent_smoothing_m", "ascent_km_per_100m",
+            "fatigue_rate", "water_ml_per_10km",
+        )}
+        plan = self.plan(**config, checkpoint_overrides={"wpt:1": {"rest_minutes": 0}})
+        for key in config:
+            self.assertEqual(plan["parameters"][key], 0)
+        self.assertEqual(plan["parameters"]["fatigue_exponent"], 1)
+        self.assertEqual(plan["parameters"]["rest_total_seconds"], 0)
+        self.assertTrue(all(cp["water_ml"] == 0 for cp in plan["checkpoints"]))
+        self.assertAlmostEqual(plan["route"]["eq_distance_km"], plan["route"]["distance_m"] / 1000)
+
+    def test_invalid_empty_values_do_not_silently_fall_back_to_defaults(self):
+        for key in (
+            "sample_m", "smoothing_m", "ascent_smoothing_m", "ascent_km_per_100m",
+            "fatigue_rate", "water_ml_per_10km", "target_step_minutes", "name",
+            "start_time", "secondary_display", "pace_basis", "output_formats",
+            "use_kml_altitudes", "distance_alignment", "checkpoint_overrides", "cp_selection",
+        ):
+            for value in (None, ""):
+                with self.subTest(key=key, value=value), self.assertRaisesRegex(pace.InputError, key):
+                    self.plan(**{key: value})
+        with self.assertRaisesRegex(pace.InputError, "rest_minutes"):
+            self.plan(checkpoint_overrides={"wpt:1": {"rest_minutes": None}})
+        default = self.plan()
+        nullable = self.plan(track_index=None, checkpoint_overrides={"wpt:1": {"cutoff": None}})
+        for key in ("checkpoints", "route", "schedules"):
+            self.assertEqual(nullable[key], default[key])
+
+    def test_target_list_and_legacy_pace_are_explicit_priority_exceptions(self):
+        plan = self.plan(target="05:00", targets=["03:00", "06:00"], target_step_minutes=15,
+                         pace_basis="equivalent")
+        self.assertEqual(plan["targets_seconds"], [10800, 21600])
+        self.assertEqual(plan["parameters"]["secondary_display"], "equivalent_pace")
+        selected = self.plan(pace_basis="equivalent", secondary_display="pace")
+        self.assertEqual(selected["parameters"]["pace_basis"], "distance")
+        self.assertEqual(selected["parameters"]["secondary_display"], "pace")
+        with self.assertRaisesRegex(pace.InputError, "target"):
+            pace.build_plan(self.path, {})
+
+    def test_inspection_defaults_match_generation(self):
+        inspected = pace.inspect_route(self.path)
+        plan = self.plan()
+        for key, expected in (("sample_m", 5), ("smoothing_m", 20), ("ascent_smoothing_m", 100)):
+            self.assertEqual(inspected[key], expected)
+            self.assertEqual(inspected[key], plan["parameters"][key])
+        for key in ("distance_m", "ascent_m", "descent_m"):
+            self.assertAlmostEqual(inspected[key], plan["route"][key])
+        result = subprocess.run([sys.executable, str(SCRIPT), "inspect", str(self.path)],
+                                text=True, capture_output=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(json.loads(result.stdout), inspected)
+
+
 class GeometryTests(Fixture):
     def test_gain_smoothing_is_independent_from_detailed_profile_and_carries_across_cps(self):
         points = [(0, i * 0.000045, 100 + (2 if i % 2 else -2)) for i in range(81)]

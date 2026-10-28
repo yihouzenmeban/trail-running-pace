@@ -4,6 +4,14 @@
 
 需要 Python 3.10+，无需额外依赖、凭据或在线服务。下列命令以仓库根目录为工作目录；独立安装 Skill 后，脚本路径应相对于 Skill 目录解析。
 
+## 默认值与覆盖规则
+
+所有可选参数都遵循同一规则：**当前明确要求 > 用户指定使用的配置 > 脚本默认值**。新任务应从目标时间和明确覆盖项构建配置，其余可选字段省略；仅保留当前轨迹检查后确认需要的路线与 CP 选择。示例中的目标、导出格式、停留、关门时间和轨迹序号都是示例选择，不能自动继承为默认值。
+
+省略字段才会使用默认值。合法的 `0` 或 `false` 按配置生效，不会被默认值替换；例如 `fatigue_rate: 0` 关闭疲劳递增，`smoothing_m: 0` 关闭对应平滑。`null`、空字符串或空列表不能通用地表示“使用默认值”，无效类型或值会报错；`track_index: null` 表示自动选择唯一轨迹，站点 `cutoff: null` 表示未提供关门时间。
+
+有两项兼容优先级：`targets` 存在时优先于 `target`，`secondary_display` 未设置时会沿用显式提供的旧 `pace_basis`。把原目标列表改成单个中心目标时，应删除原 `targets`；调整一个参数不会自动调整其他参数。没有目标时间、多条轨迹未选定、CP 缺失或有歧义等情况需要补充信息，不会凭空指定目标、轨迹或站点。五组目标展开后若出现非正时长，应明确提供目标列表或间隔，不自动缩小间隔。
+
 ## 检查轨迹
 
 ```bash
@@ -76,6 +84,8 @@ KML 中命名的 Point 地标提供 CP 候选，地标自身可以没有海拔�
 
 覆盖字段包括 `name`、`distance_km`、`rest_minutes`、`cutoff`、`allow_off_route`。其中 `distance_km` 明确指定**输入轨迹的累计公里数**，同时确认该点在环线或折返中的出现位置，跳过坐标投影；位置必须在轨迹范围内。
 
+站点默认保留轨迹内名称，`rest_minutes` 为 `0`，`cutoff` 未提供时不校核，`allow_off_route` 为 `false`。未提供 `distance_km` 覆盖时按坐标与端点规则定位；手工 CP 列表中的名称与累计距离则是必填项。不能根据目标时间、站名或示例推断停留、关门、里程覆盖或偏离许可。
+
 共用起终点在距轨迹首尾均不超过 100 米时，展开成 `<candidate-id>:start` 和 `<candidate-id>:finish`，保留场地名称。配置仍使用原始候选 ID，关门时间只应用于终点，停留必须为零。设置 `distance_km` 则将其作为单个明确定位的站点。
 
 关门时间是从发枪起算的经过时长。到站已超时记为 `arrival_late`；到站未超时、停留后出站超时记为 `departure_late`，不擅自替赛事选择判定规则。恰好等于关门时间视为按时；缺失时记为 `not_checked`。起终点不能设置出站停留。
@@ -105,12 +115,17 @@ KML 中命名的 Point 地标提供 CP 候选，地标自身可以没有海拔�
 
 | 参数 | 默认值 | 含义 |
 | --- | --- | --- |
+| `target` / `targets` | 必须提供其一 | 中心目标或明确的目标列表；`targets` 优先 |
 | `name` | 输入文件名，不含扩展名 | 图表名称 |
 | `start_time` | `"06:00"` | 本地发枪时间，格式为 `HH:MM`、`YYYY-MM-DD HH:MM` 或 `YYYY-MM-DDTHH:MM`；主行始终为经过时长 |
 | `secondary_display` | `"pace"` | 括号内显示：`"pace"` 区间配速、`"equivalent_pace"` 区间等强配速、`"arrival_time"` 到达钟点 |
 | `output_formats` | `["svg"]` | 非空且无重复的输出格式列表，可选 `"svg"`、`"html"`、`"csv"`、`"json"` |
 | `pace_basis` | `"distance"` | 兼容旧配置，`"equivalent"` 选择等强配速；显式设置 `secondary_display` 优先 |
 | `track_index` | 唯一的轨迹 | 从 1 开始的 GPX track/route 或 KML 线/track 序号 |
+| `checkpoints` | 使用轨迹内 CP | 缺少可用内嵌 CP 时提供手工列表，不能与候选点选择或覆盖混用 |
+| `cp_selection` | 自动识别的站点 | 显式选择 `inspect` 返回的候选点 ID |
+| `checkpoint_overrides` | `{}` | 覆盖选定站点的名称、停留、关门或定位等字段 |
+| `distance_alignment` | `"confirm"` | 官方距离不匹配时要求确认；明确设置 `"scale"` 才按比例映射 |
 | `use_kml_altitudes` | `false` | 布尔值；显式采用未声明模式或 clampToGround 的 KML 坐标高度，对 GPX 无影响 |
 | `sample_m` | 5 | 沿距离插值间隔，单位米，必须大于零 |
 | `smoothing_m` | 20 | 图示与坡度分布的完整居中平均窗口，单位米；0 关闭 |

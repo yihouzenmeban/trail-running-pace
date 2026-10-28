@@ -147,6 +147,8 @@ When `start_time` is omitted, the race starts at 06:00 with no assumed race date
 
 See the [configuration reference](skills/even-effort-pace-chart/references/configuration.en.md) for all fields, manual CPs, and cutoff examples, and the [model reference](skills/even-effort-pace-chart/references/model.en.md) for equations and smoothing.
 
+All optional parameters follow “current explicit request > selected configuration > script defaults.” Omit unspecified fields instead of inheriting them from examples or unrelated tasks. Valid `0` and `false` values are preserved; `null` or empty strings are not general substitutes for defaults. When reusing a configuration and replacing a target list with a central target, remove old `targets` so it does not override the new `target`. Required finish targets and ambiguous routes or stations still need explicit input.
+
 ## Development and tests
 
 ```bash
