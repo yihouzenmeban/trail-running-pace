@@ -4,11 +4,29 @@
 
 将 GPX 或 KML 比赛轨迹转换成按 CP 分段的越野跑配速表，同时比较多组目标完赛时间。既可作为 `even-effort-pace-chart` Skill 使用，也可直接通过命令行生成。
 
+> **来源与版权说明**：体感一致配速思路参考耐力学社 / Pili（表哥）的[《耐力科学|体感一致配速表全面指南》](https://mp.weixin.qq.com/s/spYCP-upbqAZN0kzUm-0ng)。本项目采用独立实现的等效距离与疲劳曲线，并非 RunArt.Net 官方工具或输出。原文及配图的权利归原权利人所有；[仓库归档](docs/reference/)保留原文来源与版权声明，第三方资料的使用条件以原文声明为准。
+
 - 默认读取轨迹内的 CP；缺少可用站点时再提供人工 CP 列表。
 - 单个目标时间默认展开五组方案，相邻间隔 30 分钟；支持自定义间隔或目标列表。
 - 展示分段距离、爬升、下降、坡度分布、海拔肖像和下一段参考水量。
 - 支持站点停留和关门时间；未提供关门时间时，位置列不显示关门信息。
 - 默认仅导出 SVG；可通过配置选择 HTML、CSV、JSON 等其他格式。
+
+## 快速安装 Skill
+
+已安装 Node.js、npm 和 Git 的用户，可在需要使用 Skill 的项目目录执行：
+
+```bash
+npx skills add yihouzenmeban/trail-running-pace --skill even-effort-pace-chart
+```
+
+按提示选择要使用的代理。不加 `-g` 时安装到当前项目；如需在多个项目中使用，添加 `-g` 安装到用户级技能目录：
+
+```bash
+npx skills add yihouzenmeban/trail-running-pace --skill even-effort-pace-chart -g
+```
+
+只安装所选 Skill 即可，运行时不依赖仓库中的示例或参考文章。也可以按下文的手动复制方式安装。
 
 ![天地留白100K 配速表示例](examples/tiandi-liubai-100k/pace-chart.svg)
 
@@ -18,11 +36,11 @@ Python 3.10 或更高版本，仅使用标准库，无需安装额外依赖或�
 
 ## 作为 Skill 使用
 
-将 `skills/even-effort-pace-chart/` 整个目录复制到所用代理的技能目录，保留其中的 `SKILL.md`、`agents/`、`scripts/` 和 `references/`，然后在对话中调用：
+使用上面的安装命令，或手动将 `skills/even-effort-pace-chart/` 整个目录复制到所用代理的技能目录，保留其中的 `SKILL.md`、`agents/`、`scripts/` 和 `references/`。安装完成后，在对话中调用（将 `race.gpx` 替换为自己的轨迹路径）：
 
 ```text
 $even-effort-pace-chart
-用 examples/tiandi-liubai-100k/天地留白100K.gpx 生成体感一致配速表，
+用 race.gpx 生成体感一致配速表，
 目标完赛时间 14 小时，相邻方案间隔 30 分钟，出发时间早上六点，输出到 output/my-race/。
 ```
 
@@ -168,8 +186,6 @@ python3 skills/even-effort-pace-chart/evals/evaluate.py \
 
 退出码 `0` 表示配置符合该用例，`1` 表示不符合，`2` 表示调用或文件错误。人工复核执行记录中是否先检查轨迹、无多余默认值追问、实际生成了要求的文件且读取核对摘要，并记录模型版本、语言和结果。检查器离线运行，不调用 AI，也不验证执行记录或实际文件；单元测试只证明检查器能识别正确和错误配置，不代表自然语言评测已经通过。日常使用 Skill 无需读取评测材料。
 
-## 模型与参考资料
+## 模型说明
 
-模型参考耐力学社 / Pili（表哥）的[《耐力科学|体感一致配速表全面指南》](https://mp.weixin.qq.com/s/spYCP-upbqAZN0kzUm-0ng)，采用独立实现的等效距离与疲劳曲线，不代表 RunArt.Net 的官方输出。结果依赖轨迹海拔和平滑参数，参考水量用于比较赛段差异；示例目标不代表个人能力评估。
-
-文章及配图保存在 [docs/reference/](docs/reference/)，仅作为背景资料，保留原文来源与版权声明；使用 Skill 无需读取这些资料。
+结果依赖轨迹海拔和平滑参数，参考水量用于比较赛段差异；示例目标不代表个人能力评估。文章及配图仅作为背景资料，使用 Skill 无需读取。

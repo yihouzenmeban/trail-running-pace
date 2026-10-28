@@ -4,11 +4,29 @@
 
 Turn a GPX or KML race route into a checkpoint-based trail-running pace chart and compare multiple finish targets. Use it as the `even-effort-pace-chart` Skill or run the command-line tool directly.
 
+> **Source and copyright notice:** The even-effort pacing approach draws on [《耐力科学|体感一致配速表全面指南》](https://mp.weixin.qq.com/s/spYCP-upbqAZN0kzUm-0ng) by 耐力学社 / Pili（表哥）. This project independently implements equivalent-distance and fatigue curves; it is not an official RunArt.Net tool or output. Rights to the article and illustrations remain with their respective rights holders. The [repository archive](docs/reference/) preserves the original source and copyright notice; use of third-party material is subject to that notice.
+
 - Prefer checkpoints embedded in the route; supply a manual list only when usable stations are missing.
 - Expand one finish target into five schedules, 30 minutes apart by default, or specify an interval or exact target list.
 - Show segment distance, ascent, descent, slope distribution, elevation thumbnails, and reference water for the next leg.
 - Include station rests and supplied cutoffs; omit cutoff details from station cells when none are supplied.
 - Export only SVG by default; select HTML, CSV, JSON, or additional formats through configuration.
+
+## Quick Skill installation
+
+With Node.js, npm, and Git installed, run this from the project where you want to use the Skill:
+
+```bash
+npx skills add yihouzenmeban/trail-running-pace --skill even-effort-pace-chart
+```
+
+Follow the prompts to select your agent. Without `-g`, installation is scoped to the current project. Add `-g` for a user-level installation available across projects:
+
+```bash
+npx skills add yihouzenmeban/trail-running-pace --skill even-effort-pace-chart -g
+```
+
+Only the selected Skill is needed; it does not depend on the repository examples or reference article at runtime. Manual copying is also supported as described below.
 
 ![Tiandi Liubai 100K pace chart](examples/tiandi-liubai-100k/pace-chart.svg)
 
@@ -18,11 +36,11 @@ Python 3.10 or newer, using only the standard library. No extra packages or onli
 
 ## Use as a Skill
 
-Copy the entire `skills/even-effort-pace-chart/` directory into your agent's skills directory, including `SKILL.md`, `agents/`, `scripts/`, and `references/`. Then invoke it in a conversation:
+Use the installation command above, or manually copy the entire `skills/even-effort-pace-chart/` directory into your agent's skills directory, including `SKILL.md`, `agents/`, `scripts/`, and `references/`. After installation, invoke it in a conversation, replacing `race.gpx` with your own route path:
 
 ```text
 $even-effort-pace-chart
-Create an even-effort pace chart from examples/tiandi-liubai-100k/天地留白100K.gpx,
+Create an even-effort pace chart from race.gpx,
 with a 14-hour finish target, 30-minute target intervals, and a 06:00 start. Save it to output/my-race/.
 ```
 
@@ -168,8 +186,6 @@ python3 skills/even-effort-pace-chart/evals/evaluate.py \
 
 Exit code `0` means the configuration matches the case, `1` means it does not, and `2` indicates a command or file error. Manually review the trace for route inspection, no unnecessary questions about defaults, the requested exports actually being generated, and the verification summary being read. Record the model version, language, and outcome. The checker runs offline without calling an agent; it does not verify execution traces or actual files. Unit tests establish that the checker accepts correct configurations and rejects incorrect ones, not that natural-language evaluations have passed. Normal Skill use does not require loading evaluation materials.
 
-## Model and reference material
+## Model notes
 
-The model draws on [《耐力科学|体感一致配速表全面指南》](https://mp.weixin.qq.com/s/spYCP-upbqAZN0kzUm-0ng) by 耐力学社 / Pili（表哥）, with independently implemented equivalent-distance and fatigue curves. It is not official RunArt.Net output. Results depend on source elevations and filtering. Water values compare relative segment demand; example targets are not individual fitness assessments.
-
-The article and illustrations are preserved in [docs/reference/](docs/reference/) as background material, with their source and copyright statement. The Skill does not need those materials at runtime.
+Results depend on source elevations and filtering. Water values compare relative segment demand; example targets are not individual fitness assessments. The article and illustrations are background material and are not required to use the Skill.
