@@ -392,7 +392,7 @@ class ExportTests(Fixture):
         self.assertGreater(float(root.attrib["width"]), 1500)
         self.assertIn("超长补给站名称", "".join(root.itertext()))
 
-    def test_vector_graphics_have_cell_positions_and_missing_cutoffs_are_visible(self):
+    def test_vector_graphics_have_cell_positions(self):
         plan = self.plan()
         root = ET.fromstring(pace.render_svg(plan))
         ns = {"svg": "http://www.w3.org/2000/svg"}
@@ -405,8 +405,40 @@ class ExportTests(Fixture):
             self.assertGreaterEqual(x, 100)
             self.assertLess(x, 360)
             self.assertGreaterEqual(y, 100)
-        self.assertIn("关门 未提供", pace.cp_details(plan["checkpoints"][1]))
-        self.assertIn("关门 未提供", pace.render_html(plan))
+
+    def test_station_details_show_supplied_cutoffs_only(self):
+        for config, details in (
+            ({}, ["CP1"]),
+            ({"rest_minutes": 5}, ["CP1", "停留 5 min"]),
+            ({"cutoff": "02:00"}, ["CP1", "关门 02:00:00"]),
+            ({"cutoff": "02:00", "rest_minutes": 5}, ["CP1", "停留 5 min", "关门 02:00:00"]),
+        ):
+            plan = self.plan(checkpoint_overrides={"wpt:1": config})
+            self.assertEqual(pace.cp_details(plan["checkpoints"][1]), details)
+            for output in (pace.render_html(plan), pace.render_svg(plan)):
+                self.assertIn("CP1", output)
+                if "cutoff" in config:
+                    self.assertIn("关门 02:00:00", output)
+                else:
+                    self.assertNotIn("关门", output)
+
+    def test_chart_ends_at_table_and_retains_source_metadata(self):
+        plan = self.plan()
+        root = ET.fromstring(pace.render_svg(plan))
+        ns = {"svg": "http://www.w3.org/2000/svg"}
+        cells = [rect for rect in root.findall("svg:rect", ns) if "data-column" in rect.attrib]
+        table_bottom = max(float(cell.attrib["y"]) + float(cell.attrib["height"]) for cell in cells)
+        self.assertAlmostEqual(float(root.attrib["height"]), table_bottom + 1)
+        for text in root.findall("svg:text", ns):
+            self.assertLess(float(text.attrib["y"]), table_bottom)
+        metadata = json.loads(root.find("svg:metadata", ns).text)
+        self.assertEqual(metadata, plan["article"])
+        html = pace.render_html(plan)
+        self.assertIn("</table></div>\n</main>", html)
+        self.assertIn(f'<meta name="author" content="{plan["article"]["author"]}">', html)
+        self.assertIn(plan["article"]["url"], html)
+        self.assertTrue(plan["warnings"])
+        self.assertIsNone(plan["checkpoints"][1]["cutoff_seconds"])
 
     def test_reference_table_layout_colours_start_time_and_minute_times(self):
         plan = self.plan(start_time="2026-10-31 06:00", targets=["12:00", "13:00", "14:00", "15:00", "16:00"])

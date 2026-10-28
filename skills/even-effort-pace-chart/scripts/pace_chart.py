@@ -737,8 +737,6 @@ def cp_details(cp) -> list[str]:
         lines.append(f'停留 {cp["rest_seconds"] / 60:g} min')
     if cp["cutoff_seconds"] is not None:
         lines.append(f'关门 {format_duration(cp["cutoff_seconds"])}')
-    elif cp["distance_m"] > 0:
-        lines.append("关门 未提供")
     return lines
 
 
@@ -751,32 +749,6 @@ def timing_lines(cp, timing) -> list[str]:
     if timing["cutoff_status"] in ("arrival_late", "departure_late"):
         lines.append(STATUS_LABELS[timing["cutoff_status"]])
     return lines
-
-
-def summary_lines(plan) -> list[str]:
-    route, p = plan["route"], plan["parameters"]
-    return [
-        f'GPX {route["distance_m"] / 1000:.2f} km · 爬升 {route["ascent_m"]:.0f} m · '
-        f'下降 {route["descent_m"]:.0f} m · 等效 {route["eq_distance_km"]:.2f} km',
-        f'采样 {p["sample_m"]:g} m / 居中平滑 {p["smoothing_m"]:g} m · '
-        f'爬升统计窗口 {p["ascent_smoothing_m"]:g} m · '
-        f'每 100 m 爬升折算 {p["ascent_km_per_100m"]:g} km · 掉速参数 {p["fatigue_rate"]:.1%}',
-        f'目标包含停留 {p["rest_total_seconds"] / 60:g} min · 累计时间为出站时间 · {pace_label(plan)} min/km',
-    ]
-
-
-def footer_lines(plan) -> list[str]:
-    return [
-        *summary_lines(plan),
-        "距离单位 km，爬升/下降单位 m，水量单位 mL；水量为从本站到下一站的参考量，终点为 0。",
-        "累计出站时间按分钟向下显示；括号内配速按秒取整、仅含移动时间，CSV/JSON 保留完整时间精度。",
-        "海拔肖像为各赛段独立缩放；坡度直方图左侧为下降、右侧为爬升，中间平缓档留白。",
-        f'里程展示 GPX 测算值；官方里程映射系数 {plan["route"]["distance_scale"]:.8f}。',
-        *plan["warnings"],
-        f'依据《{ARTICLE_TITLE}》，耐力学社 / Pili（表哥）。独立实现，非 RunArt.Net 官方输出。',
-        ARTICLE_URL,
-        f'输入：{plan["source"]["filename"]} · SHA-256 {plan["source"]["sha256"]}',
-    ]
 
 
 def render_svg(plan: dict) -> str:
@@ -836,16 +808,12 @@ def render_svg(plan: dict) -> str:
                                       size=23, color=color, anchor="middle"))
             x += cell_width
         y += row_height
-    y += 24
-    for note in footer_lines(plan):
-        lines = wrap_text(note, int((width - 24) / 6.5))
-        parts.append(svg_text(8, y, lines, size=12, color="#666666"))
-        y += len(lines) * 18 + 5
     return (
-        f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{y + 20:.0f}" '
-        f'viewBox="0 0 {width} {y + 20:.0f}" role="img">'
+        f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{y + 1:.0f}" '
+        f'viewBox="0 0 {width} {y + 1:.0f}" role="img">'
         f'<title>{escape(plan["name"])} 体感一致配速表</title>'
         f'<desc>{escape(table_metadata(plan))}；累计出站时间，图示和文字均在此文件内。</desc>'
+        f'<metadata>{escape(json.dumps(plan["article"], ensure_ascii=False))}</metadata>'
         + "".join(parts) + "</svg>\n"
     )
 
@@ -881,10 +849,11 @@ def render_html(plan: dict) -> str:
                 escape(line) for line in timing_lines(cp, timing)
             ) + "</td>"
         rows.append("<tr>" + cells + "</tr>")
-    notes = "".join(f"<li>{escape(line)}</li>" for line in footer_lines(plan))
     return f"""<!doctype html>
 <html lang="zh-CN"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="author" content="{escape(plan["article"]["author"])}">
+<meta name="source" content="{escape(plan["article"]["url"])}">
 <title>{escape(plan["name"])} · 体感一致配速表</title>
 <style>
 :root {{ --ink:#111111; --paper:#ffffff; --rule:#bbbbbb; }}
@@ -899,8 +868,8 @@ td {{ height:94px; padding:12px 4px; line-height:1.4; }}
 .cp {{ padding-left:12px; text-align:left; overflow-wrap:anywhere; font-size:22px; }}
 .station-name {{ color:#00008b; text-decoration:underline; }} small {{ display:block; margin-top:4px; font-size:12px; color:#666666; }}
 .timing,.late {{ white-space:nowrap; }} .late {{ color:#b82020; font-weight:bold; }}
-td svg {{ display:block; max-width:100%; margin:auto; }} footer {{ color:#666666; font-size:12px; line-height:1.7; overflow-wrap:anywhere; }}
-footer ul {{ padding-left:18px; }} @media(max-width:600px) {{ header p {{ font-size:16px; }} }}
+td svg {{ display:block; max-width:100%; margin:auto; }}
+@media(max-width:600px) {{ header p {{ font-size:16px; }} }}
 @page {{ size:A4 landscape; margin:8mm; }}
 @media print {{
 * {{ print-color-adjust:exact; -webkit-print-color-adjust:exact; }} main {{ padding:0; }}
@@ -909,14 +878,13 @@ table {{ min-width:0; font-size:10px; }} th {{ height:31px; }} td {{ height:35px
 th,td {{ padding:3px 2px; }}
 thead {{ display:table-header-group; }} tr {{ break-inside:avoid; page-break-inside:avoid; }}
 .cp {{ padding-left:4px; font-size:10px; }} small {{ font-size:6px; margin-top:1px; }}
-td svg {{ width:100%; height:28px; }} footer {{ font-size:6px; line-height:1.5; }}
-footer ul {{ margin:6px 0 0; }} th {{ white-space:normal; }}
+td svg {{ width:100%; height:28px; }} th {{ white-space:normal; }}
 }}
 </style></head><body><main>
 <header><p>{escape(table_metadata(plan))}</p></header>
 <div class="scroll"><table aria-label="{escape(plan["name"])} 体感一致配速表"><colgroup>{columns}</colgroup>
 <thead><tr>{headers}</tr></thead><tbody>{"".join(rows)}</tbody></table></div>
-<footer><ul>{notes}</ul></footer></main></body></html>
+</main></body></html>
 """
 
 

@@ -44,4 +44,6 @@ The command writes `pace-chart.html`, `pace-chart.svg`, `pace-chart.csv`, and `p
 
 Check that CP order and names match the intended route, every final departure equals its finish target, and station rests are included exactly once. Review the reported warnings and any cutoff failures. For presentation-sensitive requests, render the SVG or print the HTML with available local tools and inspect long station names and target columns.
 
-Deliver the output paths, route statistics, target list, smoothing settings, and material assumptions in the user's language; chart labels default to Chinese. Retain the attribution already included in the outputs. Describe the water column as a relative comparison, not an individual drinking prescription.
+Keep the visible charts limited to the heading and table, with no explanatory footer. Show cutoff information in station cells only when supplied. Retain source attribution in document metadata and JSON.
+
+Deliver the output paths, route statistics, target list, smoothing settings, and material assumptions in the user's language; chart labels default to Chinese. Describe the water column as a relative comparison, not an individual drinking prescription.
