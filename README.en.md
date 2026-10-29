@@ -60,17 +60,9 @@ You can also name `even-effort-pace-chart` in a natural-language request. The as
 
 The two 100K examples explicitly select all four export formats. The 50K example uses the defaults: SVG, a 06:00 start, and segment pace in parentheses. Example targets are not individual fitness assessments. The 50K directory is named `DGW50K`; chart titles retain the race category name `MGW50K`.
 
-The original 50K GPX lacks elevation at 59 points in two gaps spanning about 834.6 m and 34.1 m between known endpoints. Its chart uses a copy with linear elevation interpolation along distance. The original is unchanged; the [repair report](examples/大境门/DGW50K/elevation-repair.json) records the gaps and file hashes.
+The original 50K GPX lacks elevation at 59 points in two gaps spanning about 834.6 m and 34.1 m between known endpoints. Generate its pace chart using the copy with linear elevation interpolation along distance and its adjacent configuration. The original is unchanged; the [repair report](examples/大境门/DGW50K/elevation-repair.json) records the gaps and file hashes.
 
-Both comparisons include SVG and PNG. The [screenshot transcription](examples/大境门/DGW50K/runart-reference.json) preserves RunArt's minute-resolution times and terrain values, with the apparently shifted headers mapped explicitly. The Garmin chart uses the September 12, 2026 Dajingmen activity and compares each station against the 6h and 6.5h plans. Elapsed times include stops. Station ascent/descent are estimates interpolated within FIT laps; finish totals come from the platform. Only the [necessary activity metrics](examples/大境门/DGW50K/garmin-activity.json) are included; original Garmin recordings remain outside the repository.
-
-Rebuild the comparison SVGs and [comparison data](examples/大境门/DGW50K/comparison-data.json) from the repository root using the Python standard library:
-
-```bash
-python3 examples/大境门/DGW50K/comparison.py generate
-```
-
-Generate the 50K pace chart using the elevation-filled copy and its adjacent configuration. `comparison.py prepare-route <original.gpx>` rebuilds the filled copy. `prepare-activity --fit <ZIP> --details <JSON>` extracts local Garmin metrics and separately requires `garmin-fit-sdk==21.218.0`. PNGs can be rendered from the SVGs.
+The two comparison SVGs are for reference only. RunArt values come from the user-provided screenshot. The Garmin chart uses the September 12, 2026 Dajingmen activity and compares each station against the 6h and 6.5h plans. Elapsed times include stops. Station ascent/descent are estimates interpolated within FIT laps; finish totals come from the platform.
 
 ## CLI quick start
 
@@ -139,10 +131,9 @@ To export all four formats, explicitly add:
 
 ```bash
 python3 -m unittest discover -s skills/even-effort-pace-chart/tests -v
-python3 -m unittest discover -s examples/大境门/DGW50K -p 'test_*.py' -v
 ```
 
-Tests cover synthetic GPX/KML, real courses, and the 50K comparison data processing. Package-level real-route tests are skipped when the Skills package is copied without `examples/`. See the [behavior evaluation guide](skills/even-effort-pace-chart/evals/guide.en.md) for natural-language cases, the checker, and manual review steps.
+Tests cover synthetic GPX/KML and real courses. Package-level real-route tests are skipped when the Skills package is copied without `examples/`. See the [behavior evaluation guide](skills/even-effort-pace-chart/evals/guide.en.md) for natural-language cases, the checker, and manual review steps.
 
 ## Model and limitations
 
