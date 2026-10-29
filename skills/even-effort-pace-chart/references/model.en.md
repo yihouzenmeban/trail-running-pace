@@ -61,7 +61,7 @@ Select the window method explicitly with `"ascent_method": "window", "ascent_smo
 
 ### Examples and limitations
 
-Current defaults produce approximately **101.249 km / 5,965 m ascent** for Tiandi Liubai and **99.694 km / 3,729 m ascent** for Dajingmen. Neither example triggers isolated spike correction or enables horizontal simplification. Explicitly using a 40 m ascent window with the 10 m threshold yields about 5,521 m and 3,575 m, respectively. The previous 100 m window method gave Tiandi Liubai about 5,332 m, close to the supplied reference table's 5,326 m. These differences show sensitivity to filtering scale; agreement with a reference is neither ground truth nor general calibration, and parameters must not be tuned solely to match a platform total.
+See [ascent methods and selection rationale](ascent-options.en.md) for the default choice and activity/route comparisons. Results depend on filtering scale; agreement with a reference is neither ground truth nor general calibration, and parameters must not be tuned solely to match a platform total.
 
 For methodological comparisons, see [GPS Visualizer's elevation thresholds](https://www.gpsvisualizer.com/tutorials/elevation_gain.php), [GPSBabel's quality filters](https://www.gpsbabel.org/htmldoc-1.10.0/filter_discard.html), and [Strava's elevation FAQ](https://support.strava.com/en-us/articles/15402093-elevation-on-strava-faqs). This implementation's peak/valley envelope and defaults are independent choices, not reproductions of those tools.
 

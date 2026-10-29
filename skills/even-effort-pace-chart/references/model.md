@@ -61,7 +61,7 @@ GPX 和 KML 都转换为统一、有序的 `(latitude, longitude, elevation)` �
 
 ### 示例与方法边界
 
-当前默认下，天地留白约 **101.249 公里 / 5,965 米爬升**，大境门约 **99.694 公里 / 3,729 米爬升**；两条路线均没有触发默认孤立尖峰修正，也未启用水平简化。显式采用 40 米爬升窗口、保留 10 米阈值时，两条路线分别约 5,521 米和 3,575 米。天地留白的旧版 100 米窗口法约 5,332 米，与用户提供的参考表 5,326 米接近。不同口径下的变化说明结果依赖过滤尺度，接近参考值不是地面真值或通用校准依据，不应仅为匹配平台总量调参。
+默认方案的选择依据、活动与赛道对比见[爬升算法方案](ascent-options.md)。结果依赖过滤尺度，接近参考值不是地面真值或通用校准依据，不应仅为匹配平台总量调参。
 
 方法对照可参阅 [GPS Visualizer 的海拔阈值说明](https://www.gpsvisualizer.com/tutorials/elevation_gain.php)、[GPSBabel 的质量筛点](https://www.gpsbabel.org/htmldoc-1.10.0/filter_discard.html) 和 [Strava 的海拔统计说明](https://support.strava.com/en-us/articles/15402093-elevation-on-strava-faqs)。本实现的峰谷包络与默认参数是独立选择，不声称复现这些工具。
 
