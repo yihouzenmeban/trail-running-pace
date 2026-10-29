@@ -35,7 +35,7 @@ class BehaviorCheckerTests(unittest.TestCase):
         for override in (
             {"secondary_display": "arrival_time"}, {"output_formats": ["svg", "json"]},
             {"sample_m": 25}, {"fatigue_rate": 0},
-            {"ascent_method": "window"}, {"ascent_smoothing_m": 0}, {"ascent_threshold_m": 3},
+            {"ascent_method": "window"}, {"ascent_smoothing_m": 40}, {"ascent_threshold_m": 3},
             {"elevation_spike_m": 0}, {"distance_tolerance_m": 5},
             {"checkpoint_overrides": {"wpt:1": {"rest_minutes": 10}}},
             {"checkpoint_overrides": {"wpt:1": {"cutoff": "04:00"}}},

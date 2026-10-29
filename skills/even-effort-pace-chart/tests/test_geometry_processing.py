@@ -32,6 +32,15 @@ class ProfileProcessingTests(unittest.TestCase):
         result = pace.smooth_profile(source, 5, 20)
         self.assertAlmostEqual(result[3].elevation_m, 0.5)
 
+    def test_default_hysteresis_uses_source_peaks_and_ten_metre_threshold(self):
+        for height, expected in ((9, 0), (10, 10), (12, 12)):
+            with self.subTest(height=height):
+                source = route([(0, 0), (11, 0), (12, height), (13, 0), (30, 0)])
+                result = pace.ascent_profile(source)
+                self.assertEqual(totals(result), (expected, expected))
+                self.assertEqual([p.distance_m for p in result],
+                                 [p.distance_m for p in source.samples])
+
     def test_hysteresis_preserves_short_hills_at_different_sampling_densities(self):
         for spacing in (1, 2, 5, 10):
             source = route([(x, max(0, 20 * (1 - abs(x - 150) / 50)))

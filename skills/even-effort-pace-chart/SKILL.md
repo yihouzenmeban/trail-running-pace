@@ -46,7 +46,7 @@ For example, “生成体感一致配速表，目标完赛时间 5 小时，相�
 }
 ```
 
-This keeps the default pace display and SVG export. Ascent defaults to a 40 m full-width centered average (20 m on each side), followed by a 10 m peak/valley reversal threshold. Display smoothing is independent. An explicit `ascent_smoothing_m: 0` disables ascent averaging. Consult the model for filtering choices and the explicit `window` alternative. Interpolation adds no measurement accuracy; never tune filters or rescale climbs solely to force a platform's total or claim equivalence to RunArt.Net.
+This keeps the default pace display and SVG export. Ascent defaults to no window averaging (`ascent_smoothing_m: 0`), applying a 10 m peak/valley reversal threshold directly to cleaned source elevation vertices. Display smoothing is independent. An explicit positive `ascent_smoothing_m` enables ascent averaging. Consult the model for filtering choices and the explicit `window` alternative. Interpolation adds no measurement accuracy; never tune filters or rescale climbs solely to force a platform's total or claim equivalence to RunArt.Net.
 
 ## Generate and verify
 

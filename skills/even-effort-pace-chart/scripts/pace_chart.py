@@ -27,7 +27,7 @@ ARTICLE_TITLE = "耐力科学|体感一致配速表全面指南"
 DEFAULTS = {
     "sample_m": 5.0,
     "smoothing_m": 20.0,
-    "ascent_smoothing_m": 40.0,
+    "ascent_smoothing_m": 0.0,
     "ascent_threshold_m": 10.0,
     "elevation_spike_m": 30.0,
     "distance_tolerance_m": 0.0,

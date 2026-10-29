@@ -18,7 +18,7 @@ Two compatibility precedence rules apply: a present `targets` list takes precede
 python3 skills/even-effort-pace-chart/scripts/pace_chart.py inspect race.gpx
 ```
 
-Optional flags: `--track-index 1`, `--sample-m 5`, `--smoothing-m 20`, `--ascent-method hysteresis`, `--ascent-threshold-m 10`, `--ascent-smoothing-m 40`, `--elevation-spike-m 30`, and `--distance-tolerance-m 0`. The 20 m window controls graphics/slope bins. Default ascent first averages cleaned elevations over a 40 m full-width centered window (20 m on each side), then applies a 10 m peak/valley reversal threshold. Output includes horizontal distance, ascent/descent, parameters, `diagnostics`, warnings, and `cp_candidates` with IDs, names, recognition flags, and possible route projections in metres. A multiple-track error lists available track indices; repeat with the selected index.
+Optional flags: `--track-index 1`, `--sample-m 5`, `--smoothing-m 20`, `--ascent-method hysteresis`, `--ascent-threshold-m 10`, `--ascent-smoothing-m 0`, `--elevation-spike-m 30`, and `--distance-tolerance-m 0`. The 20 m window controls graphics/slope bins. Default ascent uses no window averaging and applies a 10 m peak/valley reversal threshold directly to cleaned source elevation vertices. Output includes horizontal distance, ascent/descent, parameters, `diagnostics`, warnings, and `cp_candidates` with IDs, names, recognition flags, and possible route projections in metres. A multiple-track error lists available track indices; repeat with the selected index.
 
 Use the same processing parameters for inspection and generation. `diagnostics` includes original/processed distance, raw/cleaned sums of positive elevation changes, minimum/median/maximum point spacing, quality flags, spike correction counts/indices, and trial distance simplification. Final filtered ascent is the top-level `ascent_m`. Trial simplification is diagnostic, not proof of GPS drift; the horizontal path is unchanged by default.
 
@@ -133,7 +133,7 @@ Default `distance_alignment` is `"confirm"`: differences over `max(100 m, 0.5% o
 | `smoothing_m` | 20 | Full centered averaging window for graphics and slope bins; 0 disables this smoothing |
 | `ascent_method` | `"hysteresis"` | Peak/valley reversal threshold method; `"window"` selects window statistics without the reversal threshold |
 | `ascent_threshold_m` | 10 | Nonnegative reversal threshold in metres; 0 disables peak/valley filtering; not a minimum adjacent-point difference |
-| `ascent_smoothing_m` | 40 | Independent full centered averaging window before ascent calculation, in metres; default is 20 m on each side; 0 disables it; large windows still suppress short hills |
+| `ascent_smoothing_m` | 0 | Independent full centered averaging window before ascent calculation, in metres; disabled by default; positive values enable it; large windows still suppress short hills |
 | `elevation_spike_m` | 30 | Minimum residual in metres for isolated elevation spikes; 0 disables correction; distance/grade conditions also apply |
 | `distance_tolerance_m` | 0 | Horizontal simplification tolerance in metres; 0 disables it; positive values can shorten real small turns |
 | `ascent_km_per_100m` | 1 | Equivalent kilometres per 100 m ascent; nonnegative |
