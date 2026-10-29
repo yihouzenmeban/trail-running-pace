@@ -55,7 +55,7 @@ You can also name `even-effort-pace-chart` in a natural-language request. The as
 | Example | Route | Configuration | Pace chart |
 | --- | --- | --- | --- |
 | Tiandi Liubai 100K | [GPX](examples/tiandi-liubai-100k/天地留白100K.gpx) | [12–16 hour schedules](examples/tiandi-liubai-100k/config.json) | [SVG](examples/tiandi-liubai-100k/pace-chart.svg) |
-| Dajingmen DGW100K | [KML](examples/大境门/2026京东大境门古长城越野赛by%20UTMB®DGW100K.kml) | [24-hour central target](examples/大境门/config.json) | [SVG](examples/大境门/pace-chart.svg) |
+| Dajingmen DGW100K | [KML](examples/大境门/2026京东大境门古长城越野赛by%20UTMB®DGW100K.kml) | [10–24 hours, 1-hour intervals](examples/大境门/config.json) | [SVG](examples/大境门/pace-chart.svg) |
 
 Both example directories retain the original route, configuration, and all four exports. Their configurations explicitly select every format; these are not the default exports, and the example targets are not individual fitness assessments.
 
@@ -131,8 +131,6 @@ python3 -m unittest discover -s skills/even-effort-pace-chart/tests -v
 Tests cover synthetic GPX/KML and both real courses. Real-route tests are skipped when the Skills package is copied without `examples/`. See the [behavior evaluation guide](skills/even-effort-pace-chart/evals/guide.en.md) for natural-language cases, the checker, and manual review steps.
 
 ## Model and limitations
-
-The default linear fatigue curve has a finite starting pace: the second half of adjusted work takes 16% more moving time than the first. Explicit terrain difficulty factors can be applied over route ranges. Existing `fatigue_rate` configurations retain the legacy power curve with a warning. Defaults are engineering assumptions, not individual calibration; see [configuration and migration](skills/even-effort-pace-chart/references/configuration.en.md#fatigue-models-and-terrain-adjustments). Use [split-model evaluation](skills/even-effort-pace-chart/evals/pacing-validation.en.md) with independent training and validation activities to assess observed splits.
 
 Default ascent uses no window averaging (`ascent_smoothing_m: 0`) and applies a 10 m peak/valley reversal threshold directly to cleaned source elevation vertices. The display curve independently uses 5 m sampling and 20 m smoothing. An explicit positive `ascent_smoothing_m` enables ascent averaging. Isolated elevation corrections are reported; horizontal simplification requires an explicit setting. Both inspection and generation summaries include input quality and before/after metrics. The previous 100 m window approach remains selectable; see the [migration configuration](skills/even-effort-pace-chart/references/configuration.en.md#previous-window-method-and-explicit-filtering).
 

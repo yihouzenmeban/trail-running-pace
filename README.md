@@ -55,7 +55,7 @@ $even-effort-pace-chart
 | 示例 | 轨迹 | 配置 | 配速表 |
 | --- | --- | --- | --- |
 | 天地留白 100K | [GPX](examples/tiandi-liubai-100k/天地留白100K.gpx) | [12–16 小时方案](examples/tiandi-liubai-100k/config.json) | [SVG](examples/tiandi-liubai-100k/pace-chart.svg) |
-| 大境门 DGW100K | [KML](examples/大境门/2026京东大境门古长城越野赛by%20UTMB®DGW100K.kml) | [24 小时中心目标](examples/大境门/config.json) | [SVG](examples/大境门/pace-chart.svg) |
+| 大境门 DGW100K | [KML](examples/大境门/2026京东大境门古长城越野赛by%20UTMB®DGW100K.kml) | [10–24 小时，每隔 1 小时](examples/大境门/config.json) | [SVG](examples/大境门/pace-chart.svg) |
 
 两个示例目录均保留原始轨迹、配置和四种导出结果。示例配置显式选择全部四种格式，不代表默认输出；其中的目标时间也不代表个人能力评估。
 
@@ -131,8 +131,6 @@ python3 -m unittest discover -s skills/even-effort-pace-chart/tests -v
 测试覆盖合成 GPX/KML 和两个真实赛道；独立复制 Skills、未携带 `examples/` 时，真实赛道测试会跳过。自然语言用例、检查器使用方式和人工复核步骤见[行为评测指南](skills/even-effort-pace-chart/evals/guide.md)。
 
 ## 模型与限制
-
-默认使用起点配速有限的线性疲劳曲线：后半程修正工作量比前半程多用 16% 移动时间。可选按里程范围显式设置路面难度；旧 `fatigue_rate` 配置保持旧幂曲线并提示。默认系数是工程假设，不代表个人能力校准；迁移与参数见[配置文档](skills/even-effort-pace-chart/references/configuration.md#疲劳模型与路面修正)。评估实际分段表现时，使用[分段模型评估](skills/even-effort-pace-chart/evals/pacing-validation.md)隔离训练集与验证集。
 
 爬升默认不做窗口平滑（`ascent_smoothing_m: 0`），直接在清理后的原始海拔顶点上采用 10 米峰谷反转阈值；显示曲线独立使用 5 米采样、20 米平滑。显式设置正数 `ascent_smoothing_m` 可启用爬升平滑。孤立海拔尖峰修正会报告改动，水平简化需显式开启。`inspect` 和生成摘要均提供输入质量与处理前后对比。旧的 100 米窗口统计可显式选择，迁移方式见[配置文档](skills/even-effort-pace-chart/references/configuration.md#旧窗口口径与显式过滤)。
 

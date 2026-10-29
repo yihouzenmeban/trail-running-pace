@@ -32,7 +32,7 @@ DEFAULTS = {
     "elevation_spike_m": 30.0,
     "distance_tolerance_m": 0.0,
     "ascent_km_per_100m": 1.0,
-    "fatigue_half_slowdown": 0.16,
+    "fatigue_rate": 0.08,
     "water_ml_per_10km": 700.0,
     "target_step_minutes": 30.0,
 }
@@ -40,7 +40,6 @@ CONFIG_KEYS = set(DEFAULTS) | {
     "name", "target", "targets", "track_index", "checkpoints", "cp_selection",
     "checkpoint_overrides", "distance_alignment", "start_time", "pace_basis", "secondary_display",
     "use_kml_altitudes", "output_formats", "ascent_method",
-    "fatigue_model", "fatigue_rate", "terrain_sections",
 }
 CP_KEYS = {"name", "distance_km", "rest_minutes", "cutoff"}
 OVERRIDE_KEYS = CP_KEYS | {"allow_off_route"}
@@ -763,74 +762,6 @@ def fatigue_exponent(rate: float) -> float:
     return 1 + math.log2(1 + rate)
 
 
-def fatigue_parameters(config: dict) -> dict:
-    model = config.get("fatigue_model", "legacy_power" if "fatigue_rate" in config else "linear")
-    if model not in ("linear", "legacy_power"):
-        raise InputError("fatigue_model must be linear or legacy_power")
-    if model == "linear":
-        if "fatigue_rate" in config:
-            raise InputError("fatigue_rate requires legacy_power; use fatigue_half_slowdown for linear")
-        half = number(config.get("fatigue_half_slowdown", DEFAULTS["fatigue_half_slowdown"]),
-                      "fatigue_half_slowdown")
-        if half > 1:
-            raise InputError("fatigue_half_slowdown must be between 0 and 1")
-        return {"fatigue_model": model, "fatigue_half_slowdown": half,
-                "fatigue_rate": None, "fatigue_exponent": None}
-    if "fatigue_half_slowdown" in config:
-        raise InputError("fatigue_half_slowdown requires linear; use fatigue_rate for legacy_power")
-    rate = number(config.get("fatigue_rate", .08), "fatigue_rate")
-    if rate > 1:
-        raise InputError("fatigue_rate must be between 0 and 1")
-    return {"fatigue_model": model, "fatigue_half_slowdown": None,
-            "fatigue_rate": rate, "fatigue_exponent": fatigue_exponent(rate)}
-
-
-def fatigue_fraction(progress: float, parameters: dict) -> float:
-    if parameters["fatigue_model"] == "legacy_power":
-        return progress ** parameters["fatigue_exponent"]
-    half = parameters["fatigue_half_slowdown"]
-    # Integrate a finite linear pace, preserving the requested second/first-half time ratio.
-    slope = 4 * half / (2 - half)
-    return progress * (1 + slope * progress / 2) / (1 + slope / 2)
-
-
-def terrain_sections(config: dict, total_m: float) -> list[dict]:
-    sections = config.get("terrain_sections", [])
-    if not isinstance(sections, list):
-        raise InputError("terrain_sections must be a list")
-    result = []
-    for item in sections:
-        keys(item, {"start_km", "end_km", "factor"}, "terrain_sections item")
-        start = number(item.get("start_km"), "terrain_sections.start_km")
-        end = number(item.get("end_km"), "terrain_sections.end_km")
-        factor = number(item.get("factor"), "terrain_sections.factor", minimum=1)
-        if start >= end or end > total_m / 1000 + 1e-9:
-            raise InputError("terrain_sections must have start_km < end_km within the processed route")
-        result.append({"start_km": start, "end_km": min(end, total_m / 1000), "factor": factor})
-    result.sort(key=lambda item: item["start_km"])
-    if any(a["end_km"] > b["start_km"] for a, b in zip(result, result[1:])):
-        raise InputError("terrain_sections must not overlap")
-    return result
-
-
-def effort_distance(profile: list[Sample], left: float, right: float,
-                    ascent_factor: float, sections: list[dict]) -> float:
-    boundaries = {left, right}
-    for item in sections:
-        boundaries.update(value * 1000 for value in (item["start_km"], item["end_km"])
-                          if left < value * 1000 < right)
-    ordered = sorted(boundaries)
-    effort = 0.0
-    for start, end in zip(ordered, ordered[1:]):
-        middle_km = (start + end) / 2000
-        factor = next((item["factor"] for item in sections
-                       if item["start_km"] <= middle_km < item["end_km"]), 1.0)
-        points = profile_section(profile, start, end)
-        ascent = sum(max(0, b.elevation_m - a.elevation_m) for a, b in zip(points, points[1:]))
-        effort += ((end - start) / 1000 + ascent / 100 * ascent_factor) * factor
-    return number(effort, "effort_distance_km")
-
-
 def target_times(config: dict, step: float) -> list[float]:
     if "targets" in config:
         values = config["targets"]
@@ -855,13 +786,14 @@ def build_plan(path: Path, config: dict) -> dict:
     parameters = {
         key: number(config.get(key, value), key,
                     strictly_positive=key in ("sample_m", "target_step_minutes"))
-        for key, value in DEFAULTS.items() if key != "fatigue_half_slowdown"
+        for key, value in DEFAULTS.items()
     }
-    parameters.update(fatigue_parameters(config))
     parameters["output_formats"] = list(output_formats)
     parameters["ascent_method"] = config.get("ascent_method", "hysteresis")
     if parameters["ascent_method"] not in ("hysteresis", "window"):
         raise InputError("ascent_method must be hysteresis or window")
+    if parameters["fatigue_rate"] > 1:
+        raise InputError("fatigue_rate must be between 0 and 1")
     pace_basis = config.get("pace_basis", "distance")
     if pace_basis not in ("distance", "equivalent"):
         raise InputError("pace_basis must be distance or equivalent")
@@ -894,26 +826,19 @@ def build_plan(path: Path, config: dict) -> dict:
     gain_profile = ascent_profile(route, parameters["sample_m"], parameters["ascent_smoothing_m"],
                                   parameters["ascent_method"], parameters["ascent_threshold_m"])
     cps, scale, cp_warnings = resolve_checkpoints(route, config)
-    parameters["terrain_sections"] = terrain_sections(config, route.total_m)
-    cumulative_eq = cumulative_effort = 0.0
+    cumulative_eq = 0.0
     for index, cp in enumerate(cps):
         left = cps[index - 1]["distance_m"] if index else 0.0
         cp.update(section_stats(profile, left, cp["distance_m"],
                                 parameters["ascent_km_per_100m"], parameters["water_ml_per_10km"], gain_profile))
         cumulative_eq += cp["eq_distance_km"]
         cp["cumulative_eq_distance_km"] = cumulative_eq
-        cp["effort_distance_km"] = effort_distance(
-            gain_profile, left, cp["distance_m"], parameters["ascent_km_per_100m"],
-            parameters["terrain_sections"],
-        ) if parameters["terrain_sections"] else cp["eq_distance_km"]
-        cumulative_effort += cp["effort_distance_km"]
-        cp["cumulative_effort_distance_km"] = cumulative_effort
-    number(cumulative_effort, "total effort_distance_km", strictly_positive=True)
     for index, cp in enumerate(cps):
         # Supplies at a station are for the next leg; terrain statistics describe the incoming leg.
         cp["water_ml"] = cps[index + 1]["segment_water_ml"] if index + 1 < len(cps) else 0.0
     targets = target_times(config, parameters["target_step_minutes"])
     rest_total = sum(cp["rest_seconds"] for cp in cps)
+    exponent = fatigue_exponent(parameters["fatigue_rate"])
     schedules = []
     for target in targets:
         if target <= rest_total:
@@ -922,9 +847,7 @@ def build_plan(path: Path, config: dict) -> dict:
         prior_moving, prior_rest = 0.0, 0.0
         times = []
         for index, cp in enumerate(cps):
-            cumulative_moving = moving_target * fatigue_fraction(
-                cp["cumulative_effort_distance_km"] / cumulative_effort, parameters,
-            )
+            cumulative_moving = moving_target * (cp["cumulative_eq_distance_km"] / cumulative_eq) ** exponent
             moving = cumulative_moving - prior_moving
             arrival = cumulative_moving + prior_rest
             departure = arrival + cp["rest_seconds"]
@@ -950,29 +873,25 @@ def build_plan(path: Path, config: dict) -> dict:
     route_stats = section_stats(profile, 0, route.total_m, parameters["ascent_km_per_100m"],
                                 parameters["water_ml_per_10km"], gain_profile)
     warnings = list(route.warnings or []) + cp_warnings
-    if parameters["fatigue_model"] == "legacy_power":
-        warnings.append("legacy_power 保留旧 fatigue_rate 语义，短首段可能过快；"
-                        "迁移时移除 fatigue_rate，选择 linear 与 fatigue_half_slowdown。")
     if "target" in config and "targets" in config:
         warnings.append("同时提供 target 和 targets：使用 targets，忽略 target；如需中央目标，请移除 targets。")
     if any(cp["cutoff_seconds"] is None for cp in cps[1:]):
         warnings.append("部分或全部站点未提供关门时间，未校核这些站点。")
     warnings.extend([
-        "路面难度仅采用显式 terrain_sections；未自动识别陡下坡负担、天气或个人肌力差异。",
-        "疲劳参数是计划假设，未自动按时长或个人数据校准；终点对齐不证明分段预测准确。",
+        "模型未计入技术路面、陡下坡额外负担、天气和个人肌力差异；请结合赛事规程判断。",
         "水量仅供比较赛段差异，并非个人饮水建议。",
         "插值不增加原始测量精度；爬升统计依赖海拔数据、过滤方法与阈值。",
     ])
     return {
-        "schema_version": 3,
+        "schema_version": 2,
         "name": config.get("name", Path(path).stem),
         "source": {"filename": Path(path).name, "sha256": hashlib.sha256(Path(path).read_bytes()).hexdigest()},
         "article": {"title": ARTICLE_TITLE, "author": "耐力学社 / Pili（表哥）", "url": ARTICLE_URL},
         "configuration": config,
-        "parameters": {**parameters, "rest_total_seconds": rest_total},
+        "parameters": {**parameters, "fatigue_exponent": exponent, "rest_total_seconds": rest_total},
         "route": {"distance_m": route.total_m, "distance_scale": scale,
                   "ascent_m": route_stats["ascent_m"], "descent_m": route_stats["descent_m"],
-                  "eq_distance_km": cumulative_eq, "effort_distance_km": cumulative_effort,
+                  "eq_distance_km": cumulative_eq,
                   "original_points": len(route.points), "sampled_points": len(profile),
                   "diagnostics": route.diagnostics,
                   "grade_fractions": route_stats["grade_fractions"]},
@@ -1323,8 +1242,7 @@ def csv_text(plan: dict) -> str:
     stream = io.StringIO(newline="")
     fields = [
         "checkpoint_id", "checkpoint_name", "gpx_distance_km", "official_distance_km",
-        "segment_distance_km", "ascent_m", "descent_m", "eq_distance_km", "effort_distance_km",
-        "segment_water_ml", "water_ml",
+        "segment_distance_km", "ascent_m", "descent_m", "eq_distance_km", "segment_water_ml", "water_ml",
         "rest_seconds", "cutoff_seconds", "target_seconds", "arrival_seconds",
         "departure_seconds", "moving_seconds", "eq_pace_seconds_per_km",
         "distance_pace_seconds_per_km", "pace_seconds_per_km", "cutoff_status",
@@ -1342,7 +1260,7 @@ def csv_text(plan: dict) -> str:
                 "gpx_distance_km": cp["distance_m"] / 1000,
                 "official_distance_km": cp["official_distance_km"],
                 "segment_distance_km": cp["segment_distance_m"] / 1000,
-                **{key: cp[key] for key in ("ascent_m", "descent_m", "eq_distance_km", "effort_distance_km",
+                **{key: cp[key] for key in ("ascent_m", "descent_m", "eq_distance_km",
                                            "segment_water_ml", "water_ml", "rest_seconds", "cutoff_seconds")},
                 "target_seconds": schedule["target_seconds"],
                 **timing,

@@ -19,10 +19,6 @@ class BehaviorCheckerTests(unittest.TestCase):
                 "target": "05:00", "start_time": "06:00", "target_step_minutes": 30,
             },
             "explicit_arrival": {"target": "05:00", "secondary_display": "arrival_time"},
-            "linear_zero": {"target": "05:00", "fatigue_half_slowdown": 0},
-            "explicit_terrain": {"target": "05:00", "terrain_sections": [
-                {"start_km": .2, "end_km": .8, "factor": 1.2},
-            ]},
             "replace_target_list": {"target": "05:00", "start_time": "07:30", "fatigue_rate": 0.1},
             "preserve_zero_false": {
                 "target": "05:00", "smoothing_m": 0, "ascent_smoothing_m": 0, "fatigue_rate": 0,
@@ -39,8 +35,6 @@ class BehaviorCheckerTests(unittest.TestCase):
         for override in (
             {"secondary_display": "arrival_time"}, {"output_formats": ["svg", "json"]},
             {"sample_m": 25}, {"fatigue_rate": 0},
-            {"fatigue_half_slowdown": 0}, {"fatigue_model": "legacy_power"},
-            {"terrain_sections": [{"start_km": .2, "end_km": .8, "factor": 1.2}]},
             {"ascent_method": "window"}, {"ascent_smoothing_m": 40}, {"ascent_threshold_m": 3},
             {"elevation_spike_m": 0}, {"distance_tolerance_m": 5},
             {"checkpoint_overrides": {"wpt:1": {"rest_minutes": 10}}},

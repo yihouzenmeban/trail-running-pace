@@ -48,10 +48,6 @@ For example, “生成体感一致配速表，目标完赛时间 5 小时，相�
 
 This keeps the default pace display and SVG export. Ascent defaults to no window averaging (`ascent_smoothing_m: 0`), applying a 10 m peak/valley reversal threshold directly to cleaned source elevation vertices. Display smoothing is independent. An explicit positive `ascent_smoothing_m` enables ascent averaging. Consult the model for filtering choices and the explicit `window` alternative. Interpolation adds no measurement accuracy; never tune filters or rescale climbs solely to force a platform's total or claim equivalence to RunArt.Net.
 
-Fatigue defaults to `linear` with `fatigue_half_slowdown: 0.16`: the second half of adjusted work takes 16% more moving time. Keep these fields omitted unless requested. A selected old `fatigue_rate` configuration retains `legacy_power`; do not reinterpret it as the new parameter. Migration requires removing the old field. Apply `terrain_sections` only for explicitly supplied processed-route ranges and factors; do not infer technical difficulty or downhill ability from GPX. See configuration for conflicts and range rules.
-
-For requested model calibration, use the offline [split evaluation](evals/pacing-validation.md) / [English guide](evals/pacing-validation.en.md). Keep whole activities independent across training and validation, distinguish moving from unseparated elapsed time, and never treat finish-target equality as accuracy evidence. Do not change global defaults from a personal fit.
-
 ## Generate and verify
 
 Write the selected assumptions to a JSON file, then run:

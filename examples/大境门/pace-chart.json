@@ -1,6 +1,6 @@
 {
-  "schema_version": 3,
-  "name": "大境门 DGW100K · 示例",
+  "schema_version": 2,
+  "name": "大境门 DGW100K · 10–24 小时",
   "source": {
     "filename": "2026京东大境门古长城越野赛by UTMB®DGW100K.kml",
     "sha256": "9d5cae6214d73b75ad2e901785153cb88175066e5aaf341700266b8c4ed0a94d"
@@ -11,8 +11,25 @@
     "url": "https://mp.weixin.qq.com/s/spYCP-upbqAZN0kzUm-0ng"
   },
   "configuration": {
-    "name": "大境门 DGW100K · 示例",
-    "target": "24:00",
+    "name": "大境门 DGW100K · 10–24 小时",
+    "start_time": "06:00",
+    "targets": [
+      "10:00",
+      "11:00",
+      "12:00",
+      "13:00",
+      "14:00",
+      "15:00",
+      "16:00",
+      "17:00",
+      "18:00",
+      "19:00",
+      "20:00",
+      "21:00",
+      "22:00",
+      "23:00",
+      "24:00"
+    ],
     "output_formats": [
       "svg",
       "html",
@@ -42,12 +59,9 @@
     "elevation_spike_m": 30.0,
     "distance_tolerance_m": 0.0,
     "ascent_km_per_100m": 1.0,
+    "fatigue_rate": 0.08,
     "water_ml_per_10km": 700.0,
     "target_step_minutes": 30.0,
-    "fatigue_model": "linear",
-    "fatigue_half_slowdown": 0.16,
-    "fatigue_rate": null,
-    "fatigue_exponent": null,
     "output_formats": [
       "svg",
       "html",
@@ -58,7 +72,7 @@
     "pace_basis": "distance",
     "secondary_display": "pace",
     "start_time": "06:00",
-    "terrain_sections": [],
+    "fatigue_exponent": 1.1110313123887439,
     "rest_total_seconds": 0.0
   },
   "route": {
@@ -67,7 +81,6 @@
     "ascent_m": 3729.0,
     "descent_m": 3765.0,
     "eq_distance_km": 136.98440666241186,
-    "effort_distance_km": 136.98440666241186,
     "original_points": 9296,
     "sampled_points": 19940,
     "diagnostics": {
@@ -128,8 +141,6 @@
         ]
       ],
       "cumulative_eq_distance_km": 0.0,
-      "effort_distance_km": 0.0,
-      "cumulative_effort_distance_km": 0.0,
       "water_ml": 776.2069478867402
     },
     {
@@ -6424,8 +6435,6 @@
         ]
       ],
       "cumulative_eq_distance_km": 11.08867068409629,
-      "effort_distance_km": 11.08867068409629,
-      "cumulative_effort_distance_km": 11.08867068409629,
       "water_ml": 1423.8868444499822
     },
     {
@@ -17740,8 +17749,6 @@
         ]
       ],
       "cumulative_eq_distance_km": 31.429911319096032,
-      "effort_distance_km": 20.341240634999743,
-      "cumulative_effort_distance_km": 31.429911319096032,
       "water_ml": 646.5509237477789
     },
     {
@@ -23344,8 +23351,6 @@
         ]
       ],
       "cumulative_eq_distance_km": 40.66635308692145,
-      "effort_distance_km": 9.236441767825413,
-      "cumulative_effort_distance_km": 40.66635308692145,
       "water_ml": 969.1817213050748
     },
     {
@@ -30308,8 +30313,6 @@
         ]
       ],
       "cumulative_eq_distance_km": 54.511806248422516,
-      "effort_distance_km": 13.84545316150107,
-      "cumulative_effort_distance_km": 54.511806248422516,
       "water_ml": 638.6280531144921
     },
     {
@@ -37320,8 +37323,6 @@
         ]
       ],
       "cumulative_eq_distance_km": 63.63506415005811,
-      "effort_distance_km": 9.1232579016356,
-      "cumulative_effort_distance_km": 63.63506415005811,
       "water_ml": 815.3452120921486
     },
     {
@@ -44472,8 +44473,6 @@
         ]
       ],
       "cumulative_eq_distance_km": 75.28285289423167,
-      "effort_distance_km": 11.647788744173551,
-      "cumulative_effort_distance_km": 75.28285289423167,
       "water_ml": 662.7575177938138
     },
     {
@@ -49604,8 +49603,6 @@
         ]
       ],
       "cumulative_eq_distance_km": 84.7508174341433,
-      "effort_distance_km": 9.467964539911627,
-      "cumulative_effort_distance_km": 84.7508174341433,
       "water_ml": 1129.8080549504066
     },
     {
@@ -59032,8 +59029,6 @@
         ]
       ],
       "cumulative_eq_distance_km": 100.8909325048634,
-      "effort_distance_km": 16.140115070720093,
-      "cumulative_effort_distance_km": 100.8909325048634,
       "water_ml": 585.6436266303184
     },
     {
@@ -64840,8 +64835,6 @@
         ]
       ],
       "cumulative_eq_distance_km": 109.25727002815367,
-      "effort_distance_km": 8.366337523290262,
-      "cumulative_effort_distance_km": 109.25727002815367,
       "water_ml": 891.4220206105623
     },
     {
@@ -72368,8 +72361,6 @@
         ]
       ],
       "cumulative_eq_distance_km": 121.99187032259027,
-      "effort_distance_km": 12.734600294436603,
-      "cumulative_effort_distance_km": 121.99187032259027,
       "water_ml": 1049.477543787511
     },
     {
@@ -80276,19 +80267,1496 @@
         ]
       ],
       "cumulative_eq_distance_km": 136.98440666241186,
-      "effort_distance_km": 14.992536339821585,
-      "cumulative_effort_distance_km": 136.98440666241186,
       "water_ml": 0.0
     }
   ],
   "targets_seconds": [
+    36000.0,
+    39600.0,
+    43200.0,
+    46800.0,
+    50400.0,
+    54000.0,
+    57600.0,
+    61200.0,
+    64800.0,
+    68400.0,
+    72000.0,
+    75600.0,
+    79200.0,
     82800.0,
-    84600.0,
-    86400.0,
-    88200.0,
-    90000.0
+    86400.0
   ],
   "schedules": [
+    {
+      "target_seconds": 36000.0,
+      "checkpoints": [
+        {
+          "arrival_seconds": 0.0,
+          "departure_seconds": 0.0,
+          "moving_seconds": 0.0,
+          "eq_pace_seconds_per_km": null,
+          "distance_pace_seconds_per_km": null,
+          "pace_seconds_per_km": null,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 2204.3867614593355,
+          "departure_seconds": 2204.3867614593355,
+          "moving_seconds": 2204.3867614593355,
+          "eq_pace_seconds_per_km": 198.7963051893077,
+          "distance_pace_seconds_per_km": 281.5786805207532,
+          "pace_seconds_per_km": 281.5786805207532,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 7014.376919124493,
+          "departure_seconds": 7014.376919124493,
+          "moving_seconds": 4809.990157665157,
+          "eq_pace_seconds_per_km": 236.46493564354898,
+          "distance_pace_seconds_per_km": 341.1040405711965,
+          "pace_seconds_per_km": 341.1040405711965,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 9339.092868946578,
+          "departure_seconds": 9339.092868946578,
+          "moving_seconds": 2324.7159498220853,
+          "eq_pace_seconds_per_km": 251.68955840982974,
+          "distance_pace_seconds_per_km": 334.1817594986916,
+          "pace_seconds_per_km": 334.1817594986916,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 12932.704891528309,
+          "departure_seconds": 12932.704891528309,
+          "moving_seconds": 3593.6120225817303,
+          "eq_pace_seconds_per_km": 259.55178069391013,
+          "distance_pace_seconds_per_km": 414.9647508019447,
+          "pace_seconds_per_km": 414.9647508019447,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 15358.798477230797,
+          "departure_seconds": 15358.798477230797,
+          "moving_seconds": 2426.093585702489,
+          "eq_pace_seconds_per_km": 265.92403852438974,
+          "distance_pace_seconds_per_km": 278.2642016766194,
+          "pace_seconds_per_km": 278.2642016766194,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 18512.37179304006,
+          "departure_seconds": 18512.37179304006,
+          "moving_seconds": 3153.5733158092626,
+          "eq_pace_seconds_per_km": 270.74437775897513,
+          "distance_pace_seconds_per_km": 354.42213863239726,
+          "pace_seconds_per_km": 354.42213863239726,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 21116.51332155284,
+          "departure_seconds": 21116.51332155284,
+          "moving_seconds": 2604.1415285127805,
+          "eq_pace_seconds_per_km": 275.0476638917669,
+          "distance_pace_seconds_per_km": 408.94410014238554,
+          "pace_seconds_per_km": 408.94410014238554,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 25629.28180666624,
+          "departure_seconds": 25629.28180666624,
+          "moving_seconds": 4512.7684851134,
+          "eq_pace_seconds_per_km": 279.5995236304138,
+          "distance_pace_seconds_per_km": 384.3887779574041,
+          "pace_seconds_per_km": 384.3887779574041,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 28001.166859034118,
+          "departure_seconds": 28001.166859034118,
+          "moving_seconds": 2371.8850523678775,
+          "eq_pace_seconds_per_km": 283.50339031446066,
+          "distance_pace_seconds_per_km": 328.6826655090303,
+          "pace_seconds_per_km": 328.6826655090303,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 31649.941695155463,
+          "departure_seconds": 31649.941695155463,
+          "moving_seconds": 3648.7748361213453,
+          "eq_pace_seconds_per_km": 286.5244885397302,
+          "distance_pace_seconds_per_km": 389.6348719004097,
+          "pace_seconds_per_km": 389.6348719004097,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 36000.0,
+          "departure_seconds": 36000.0,
+          "moving_seconds": 4350.058304844537,
+          "eq_pace_seconds_per_km": 290.14825818966824,
+          "distance_pace_seconds_per_km": 441.9651759114958,
+          "pace_seconds_per_km": 441.9651759114958,
+          "cutoff_status": "not_checked"
+        }
+      ]
+    },
+    {
+      "target_seconds": 39600.0,
+      "checkpoints": [
+        {
+          "arrival_seconds": 0.0,
+          "departure_seconds": 0.0,
+          "moving_seconds": 0.0,
+          "eq_pace_seconds_per_km": null,
+          "distance_pace_seconds_per_km": null,
+          "pace_seconds_per_km": null,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 2424.825437605269,
+          "departure_seconds": 2424.825437605269,
+          "moving_seconds": 2424.825437605269,
+          "eq_pace_seconds_per_km": 218.67593570823848,
+          "distance_pace_seconds_per_km": 309.73654857282855,
+          "pace_seconds_per_km": 309.73654857282855,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 7715.814611036942,
+          "departure_seconds": 7715.814611036942,
+          "moving_seconds": 5290.9891734316725,
+          "eq_pace_seconds_per_km": 260.1114292079038,
+          "distance_pace_seconds_per_km": 375.21444462831613,
+          "pace_seconds_per_km": 375.21444462831613,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 10273.002155841235,
+          "departure_seconds": 10273.002155841235,
+          "moving_seconds": 2557.187544804294,
+          "eq_pace_seconds_per_km": 276.8585142508127,
+          "distance_pace_seconds_per_km": 367.59993544856076,
+          "pace_seconds_per_km": 367.59993544856076,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 14225.97538068114,
+          "departure_seconds": 14225.97538068114,
+          "moving_seconds": 3952.973224839905,
+          "eq_pace_seconds_per_km": 285.50695876330127,
+          "distance_pace_seconds_per_km": 456.46122588213933,
+          "pace_seconds_per_km": 456.46122588213933,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 16894.678324953875,
+          "departure_seconds": 16894.678324953875,
+          "moving_seconds": 2668.7029442727344,
+          "eq_pace_seconds_per_km": 292.51644237682837,
+          "distance_pace_seconds_per_km": 306.090621844281,
+          "pace_seconds_per_km": 306.090621844281,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 20363.608972344067,
+          "departure_seconds": 20363.608972344067,
+          "moving_seconds": 3468.9306473901925,
+          "eq_pace_seconds_per_km": 297.81881553487295,
+          "distance_pace_seconds_per_km": 389.86435249563743,
+          "pace_seconds_per_km": 389.86435249563743,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 23228.164653708125,
+          "departure_seconds": 23228.164653708125,
+          "moving_seconds": 2864.555681364058,
+          "eq_pace_seconds_per_km": 302.5524302809435,
+          "distance_pace_seconds_per_km": 449.83851015662395,
+          "pace_seconds_per_km": 449.83851015662395,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 28192.209987332866,
+          "departure_seconds": 28192.209987332866,
+          "moving_seconds": 4964.045333624741,
+          "eq_pace_seconds_per_km": 307.55947599345524,
+          "distance_pace_seconds_per_km": 422.8276557531446,
+          "pace_seconds_per_km": 422.8276557531446,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 30801.283544937527,
+          "departure_seconds": 30801.283544937527,
+          "moving_seconds": 2609.073557604661,
+          "eq_pace_seconds_per_km": 311.85372934590623,
+          "distance_pace_seconds_per_km": 361.55093205993273,
+          "pace_seconds_per_km": 361.55093205993273,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 34814.93586467101,
+          "departure_seconds": 34814.93586467101,
+          "moving_seconds": 4013.6523197334827,
+          "eq_pace_seconds_per_km": 315.17693739370344,
+          "distance_pace_seconds_per_km": 428.59835909045097,
+          "pace_seconds_per_km": 428.59835909045097,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 39600.0,
+          "departure_seconds": 39600.0,
+          "moving_seconds": 4785.06413532899,
+          "eq_pace_seconds_per_km": 319.16308400863505,
+          "distance_pace_seconds_per_km": 486.16169350264533,
+          "pace_seconds_per_km": 486.16169350264533,
+          "cutoff_status": "not_checked"
+        }
+      ]
+    },
+    {
+      "target_seconds": 43200.0,
+      "checkpoints": [
+        {
+          "arrival_seconds": 0.0,
+          "departure_seconds": 0.0,
+          "moving_seconds": 0.0,
+          "eq_pace_seconds_per_km": null,
+          "distance_pace_seconds_per_km": null,
+          "pace_seconds_per_km": null,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 2645.264113751203,
+          "departure_seconds": 2645.264113751203,
+          "moving_seconds": 2645.264113751203,
+          "eq_pace_seconds_per_km": 238.55556622716927,
+          "distance_pace_seconds_per_km": 337.89441662490384,
+          "pace_seconds_per_km": 337.89441662490384,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 8417.252302949391,
+          "departure_seconds": 8417.252302949391,
+          "moving_seconds": 5771.988189198189,
+          "eq_pace_seconds_per_km": 283.7579227722588,
+          "distance_pace_seconds_per_km": 409.32484868543577,
+          "pace_seconds_per_km": 409.32484868543577,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 11206.911442735893,
+          "departure_seconds": 11206.911442735893,
+          "moving_seconds": 2789.6591397865013,
+          "eq_pace_seconds_per_km": 302.0274700917956,
+          "distance_pace_seconds_per_km": 401.01811139842977,
+          "pace_seconds_per_km": 401.01811139842977,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 15519.24586983397,
+          "departure_seconds": 15519.24586983397,
+          "moving_seconds": 4312.334427098078,
+          "eq_pace_seconds_per_km": 311.4621368326923,
+          "distance_pace_seconds_per_km": 497.9577009623338,
+          "pace_seconds_per_km": 497.9577009623338,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 18430.558172676956,
+          "departure_seconds": 18430.558172676956,
+          "moving_seconds": 2911.3123028429854,
+          "eq_pace_seconds_per_km": 319.1088462292676,
+          "distance_pace_seconds_per_km": 333.9170420119432,
+          "pace_seconds_per_km": 333.9170420119432,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 22214.84615164807,
+          "departure_seconds": 22214.84615164807,
+          "moving_seconds": 3784.287978971115,
+          "eq_pace_seconds_per_km": 324.89325331077015,
+          "distance_pace_seconds_per_km": 425.30656635887675,
+          "pace_seconds_per_km": 425.30656635887675,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 25339.81598586341,
+          "departure_seconds": 25339.81598586341,
+          "moving_seconds": 3124.969834215339,
+          "eq_pace_seconds_per_km": 330.0571966701205,
+          "distance_pace_seconds_per_km": 490.732920170863,
+          "pace_seconds_per_km": 490.732920170863,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 30755.13816799949,
+          "departure_seconds": 30755.13816799949,
+          "moving_seconds": 5415.3221821360785,
+          "eq_pace_seconds_per_km": 335.5194283564964,
+          "distance_pace_seconds_per_km": 461.2665335488848,
+          "pace_seconds_per_km": 461.2665335488848,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 33601.40023084094,
+          "departure_seconds": 33601.40023084094,
+          "moving_seconds": 2846.2620628414516,
+          "eq_pace_seconds_per_km": 340.20406837735266,
+          "distance_pace_seconds_per_km": 394.4191986108362,
+          "pace_seconds_per_km": 394.4191986108362,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 37979.93003418655,
+          "departure_seconds": 37979.93003418655,
+          "moving_seconds": 4378.529803345613,
+          "eq_pace_seconds_per_km": 343.8293862476761,
+          "distance_pace_seconds_per_km": 467.56184628049147,
+          "pace_seconds_per_km": 467.56184628049147,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 43200.0,
+          "departure_seconds": 43200.0,
+          "moving_seconds": 5220.069965813447,
+          "eq_pace_seconds_per_km": 348.1779098276021,
+          "distance_pace_seconds_per_km": 530.3582110937953,
+          "pace_seconds_per_km": 530.3582110937953,
+          "cutoff_status": "not_checked"
+        }
+      ]
+    },
+    {
+      "target_seconds": 46800.0,
+      "checkpoints": [
+        {
+          "arrival_seconds": 0.0,
+          "departure_seconds": 0.0,
+          "moving_seconds": 0.0,
+          "eq_pace_seconds_per_km": null,
+          "distance_pace_seconds_per_km": null,
+          "pace_seconds_per_km": null,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 2865.7027898971364,
+          "departure_seconds": 2865.7027898971364,
+          "moving_seconds": 2865.7027898971364,
+          "eq_pace_seconds_per_km": 258.4351967461001,
+          "distance_pace_seconds_per_km": 366.0522846769792,
+          "pace_seconds_per_km": 366.0522846769792,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 9118.689994861841,
+          "departure_seconds": 9118.689994861841,
+          "moving_seconds": 6252.987204964705,
+          "eq_pace_seconds_per_km": 307.4044163366137,
+          "distance_pace_seconds_per_km": 443.43525274255546,
+          "pace_seconds_per_km": 443.43525274255546,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 12140.82072963055,
+          "departure_seconds": 12140.82072963055,
+          "moving_seconds": 3022.130734768709,
+          "eq_pace_seconds_per_km": 327.1964259327784,
+          "distance_pace_seconds_per_km": 434.4362873482988,
+          "pace_seconds_per_km": 434.4362873482988,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 16812.516358986803,
+          "departure_seconds": 16812.516358986803,
+          "moving_seconds": 4671.6956293562525,
+          "eq_pace_seconds_per_km": 337.4173149020834,
+          "distance_pace_seconds_per_km": 539.4541760425285,
+          "pace_seconds_per_km": 539.4541760425285,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 19966.438020400034,
+          "departure_seconds": 19966.438020400034,
+          "moving_seconds": 3153.921661413231,
+          "eq_pace_seconds_per_km": 345.70125008170623,
+          "distance_pace_seconds_per_km": 361.7434621796047,
+          "pace_seconds_per_km": 361.7434621796047,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 24066.08333095208,
+          "departure_seconds": 24066.08333095208,
+          "moving_seconds": 4099.645310552045,
+          "eq_pace_seconds_per_km": 351.96769108666797,
+          "distance_pace_seconds_per_km": 460.74878022211686,
+          "pace_seconds_per_km": 460.74878022211686,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 27451.467318018695,
+          "departure_seconds": 27451.467318018695,
+          "moving_seconds": 3385.383987066616,
+          "eq_pace_seconds_per_km": 357.5619630592971,
+          "distance_pace_seconds_per_km": 531.6273301851014,
+          "pace_seconds_per_km": 531.6273301851014,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 33318.066348666114,
+          "departure_seconds": 33318.066348666114,
+          "moving_seconds": 5866.59903064742,
+          "eq_pace_seconds_per_km": 363.47938071953786,
+          "distance_pace_seconds_per_km": 499.7054113446253,
+          "pace_seconds_per_km": 499.7054113446253,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 36401.51691674435,
+          "departure_seconds": 36401.51691674435,
+          "moving_seconds": 3083.4505680782386,
+          "eq_pace_seconds_per_km": 368.5544074087986,
+          "distance_pace_seconds_per_km": 427.28746516173914,
+          "pace_seconds_per_km": 427.28746516173914,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 41144.9242037021,
+          "departure_seconds": 41144.9242037021,
+          "moving_seconds": 4743.40728695775,
+          "eq_pace_seconds_per_km": 372.4818351016494,
+          "distance_pace_seconds_per_km": 506.52533347053276,
+          "pace_seconds_per_km": 506.52533347053276,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 46800.0,
+          "departure_seconds": 46800.0,
+          "moving_seconds": 5655.075796297897,
+          "eq_pace_seconds_per_km": 377.1927356465686,
+          "distance_pace_seconds_per_km": 574.5547286849444,
+          "pace_seconds_per_km": 574.5547286849444,
+          "cutoff_status": "not_checked"
+        }
+      ]
+    },
+    {
+      "target_seconds": 50400.0,
+      "checkpoints": [
+        {
+          "arrival_seconds": 0.0,
+          "departure_seconds": 0.0,
+          "moving_seconds": 0.0,
+          "eq_pace_seconds_per_km": null,
+          "distance_pace_seconds_per_km": null,
+          "pace_seconds_per_km": null,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 3086.1414660430696,
+          "departure_seconds": 3086.1414660430696,
+          "moving_seconds": 3086.1414660430696,
+          "eq_pace_seconds_per_km": 278.3148272650308,
+          "distance_pace_seconds_per_km": 394.21015272905447,
+          "pace_seconds_per_km": 394.21015272905447,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 9820.127686774289,
+          "departure_seconds": 9820.127686774289,
+          "moving_seconds": 6733.98622073122,
+          "eq_pace_seconds_per_km": 331.0509099009685,
+          "distance_pace_seconds_per_km": 477.54565679967504,
+          "pace_seconds_per_km": 477.54565679967504,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 13074.730016525209,
+          "departure_seconds": 13074.730016525209,
+          "moving_seconds": 3254.60232975092,
+          "eq_pace_seconds_per_km": 352.36538177376167,
+          "distance_pace_seconds_per_km": 467.8544632981683,
+          "pace_seconds_per_km": 467.8544632981683,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 18105.786848139633,
+          "departure_seconds": 18105.786848139633,
+          "moving_seconds": 5031.056831614424,
+          "eq_pace_seconds_per_km": 363.3724929714743,
+          "distance_pace_seconds_per_km": 580.9506511227227,
+          "pace_seconds_per_km": 580.9506511227227,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 21502.317868123115,
+          "departure_seconds": 21502.317868123115,
+          "moving_seconds": 3396.531019983482,
+          "eq_pace_seconds_per_km": 372.2936539341454,
+          "distance_pace_seconds_per_km": 389.5698823472669,
+          "pace_seconds_per_km": 389.5698823472669,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 25917.320510256082,
+          "departure_seconds": 25917.320510256082,
+          "moving_seconds": 4415.002642132968,
+          "eq_pace_seconds_per_km": 379.04212886256516,
+          "distance_pace_seconds_per_km": 496.1909940853562,
+          "pace_seconds_per_km": 496.1909940853562,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 29563.11865017398,
+          "departure_seconds": 29563.11865017398,
+          "moving_seconds": 3645.798139917897,
+          "eq_pace_seconds_per_km": 385.0667294484741,
+          "distance_pace_seconds_per_km": 572.5217401993405,
+          "pace_seconds_per_km": 572.5217401993405,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 35880.99452933274,
+          "departure_seconds": 35880.99452933274,
+          "moving_seconds": 6317.875879158761,
+          "eq_pace_seconds_per_km": 391.4393330825793,
+          "distance_pace_seconds_per_km": 538.1442891403658,
+          "pace_seconds_per_km": 538.1442891403658,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 39201.633602647766,
+          "departure_seconds": 39201.633602647766,
+          "moving_seconds": 3320.6390733150256,
+          "eq_pace_seconds_per_km": 396.9047464402446,
+          "distance_pace_seconds_per_km": 460.155731712642,
+          "pace_seconds_per_km": 460.155731712642,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 44309.918373217646,
+          "departure_seconds": 44309.918373217646,
+          "moving_seconds": 5108.2847705698805,
+          "eq_pace_seconds_per_km": 401.13428395562204,
+          "distance_pace_seconds_per_km": 545.4888206605733,
+          "pace_seconds_per_km": 545.4888206605733,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 50400.0,
+          "departure_seconds": 50400.0,
+          "moving_seconds": 6090.081626782354,
+          "eq_pace_seconds_per_km": 406.20756146553566,
+          "distance_pace_seconds_per_km": 618.7512462760943,
+          "pace_seconds_per_km": 618.7512462760943,
+          "cutoff_status": "not_checked"
+        }
+      ]
+    },
+    {
+      "target_seconds": 54000.0,
+      "checkpoints": [
+        {
+          "arrival_seconds": 0.0,
+          "departure_seconds": 0.0,
+          "moving_seconds": 0.0,
+          "eq_pace_seconds_per_km": null,
+          "distance_pace_seconds_per_km": null,
+          "pace_seconds_per_km": null,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 3306.5801421890033,
+          "departure_seconds": 3306.5801421890033,
+          "moving_seconds": 3306.5801421890033,
+          "eq_pace_seconds_per_km": 298.1944577839616,
+          "distance_pace_seconds_per_km": 422.3680207811298,
+          "pace_seconds_per_km": 422.3680207811298,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 10521.565378686739,
+          "departure_seconds": 10521.565378686739,
+          "moving_seconds": 7214.985236497736,
+          "eq_pace_seconds_per_km": 354.6974034653235,
+          "distance_pace_seconds_per_km": 511.65606085679474,
+          "pace_seconds_per_km": 511.65606085679474,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 14008.639303419866,
+          "departure_seconds": 14008.639303419866,
+          "moving_seconds": 3487.0739247331276,
+          "eq_pace_seconds_per_km": 377.5343376147446,
+          "distance_pace_seconds_per_km": 501.2726392480373,
+          "pace_seconds_per_km": 501.2726392480373,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 19399.057337292463,
+          "departure_seconds": 19399.057337292463,
+          "moving_seconds": 5390.418033872596,
+          "eq_pace_seconds_per_km": 389.32767104086525,
+          "distance_pace_seconds_per_km": 622.4471262029172,
+          "pace_seconds_per_km": 622.4471262029172,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 23038.197715846196,
+          "departure_seconds": 23038.197715846196,
+          "moving_seconds": 3639.140378553733,
+          "eq_pace_seconds_per_km": 398.8860577865847,
+          "distance_pace_seconds_per_km": 417.3963025149291,
+          "pace_seconds_per_km": 417.3963025149291,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 27768.55768956009,
+          "departure_seconds": 27768.55768956009,
+          "moving_seconds": 4730.359973713894,
+          "eq_pace_seconds_per_km": 406.1165666384627,
+          "distance_pace_seconds_per_km": 531.6332079485959,
+          "pace_seconds_per_km": 531.6332079485959,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 31674.769982329264,
+          "departure_seconds": 31674.769982329264,
+          "moving_seconds": 3906.2122927691744,
+          "eq_pace_seconds_per_km": 412.57149583765073,
+          "distance_pace_seconds_per_km": 613.4161502135789,
+          "pace_seconds_per_km": 613.4161502135789,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 38443.922709999366,
+          "departure_seconds": 38443.922709999366,
+          "moving_seconds": 6769.152727670102,
+          "eq_pace_seconds_per_km": 419.39928544562076,
+          "distance_pace_seconds_per_km": 576.5831669361063,
+          "pace_seconds_per_km": 576.5831669361063,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 42001.75028855118,
+          "departure_seconds": 42001.75028855118,
+          "moving_seconds": 3557.8275785518126,
+          "eq_pace_seconds_per_km": 425.25508547169056,
+          "distance_pace_seconds_per_km": 493.02399826354497,
+          "pace_seconds_per_km": 493.02399826354497,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 47474.9125427332,
+          "departure_seconds": 47474.9125427332,
+          "moving_seconds": 5473.162254182018,
+          "eq_pace_seconds_per_km": 429.78673280959526,
+          "distance_pace_seconds_per_km": 584.4523078506146,
+          "pace_seconds_per_km": 584.4523078506146,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 54000.0,
+          "departure_seconds": 54000.0,
+          "moving_seconds": 6525.0874572668035,
+          "eq_pace_seconds_per_km": 435.22238728450225,
+          "distance_pace_seconds_per_km": 662.9477638672436,
+          "pace_seconds_per_km": 662.9477638672436,
+          "cutoff_status": "not_checked"
+        }
+      ]
+    },
+    {
+      "target_seconds": 57600.0,
+      "checkpoints": [
+        {
+          "arrival_seconds": 0.0,
+          "departure_seconds": 0.0,
+          "moving_seconds": 0.0,
+          "eq_pace_seconds_per_km": null,
+          "distance_pace_seconds_per_km": null,
+          "pace_seconds_per_km": null,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 3527.018818334937,
+          "departure_seconds": 3527.018818334937,
+          "moving_seconds": 3527.018818334937,
+          "eq_pace_seconds_per_km": 318.07408830289233,
+          "distance_pace_seconds_per_km": 450.5258888332051,
+          "pace_seconds_per_km": 450.5258888332051,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 11223.003070599189,
+          "departure_seconds": 11223.003070599189,
+          "moving_seconds": 7695.984252264252,
+          "eq_pace_seconds_per_km": 378.3438970296784,
+          "distance_pace_seconds_per_km": 545.7664649139144,
+          "pace_seconds_per_km": 545.7664649139144,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 14942.548590314524,
+          "departure_seconds": 14942.548590314524,
+          "moving_seconds": 3719.545519715335,
+          "eq_pace_seconds_per_km": 402.7032934557274,
+          "distance_pace_seconds_per_km": 534.6908151979063,
+          "pace_seconds_per_km": 534.6908151979063,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 20692.327826445293,
+          "departure_seconds": 20692.327826445293,
+          "moving_seconds": 5749.779236130769,
+          "eq_pace_seconds_per_km": 415.2828491102563,
+          "distance_pace_seconds_per_km": 663.9436012831115,
+          "pace_seconds_per_km": 663.9436012831115,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 24574.077563569273,
+          "departure_seconds": 24574.077563569273,
+          "moving_seconds": 3881.7497371239806,
+          "eq_pace_seconds_per_km": 425.47846163902346,
+          "distance_pace_seconds_per_km": 445.22272268259087,
+          "pace_seconds_per_km": 445.22272268259087,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 29619.794868864097,
+          "departure_seconds": 29619.794868864097,
+          "moving_seconds": 5045.717305294824,
+          "eq_pace_seconds_per_km": 433.1910044143605,
+          "distance_pace_seconds_per_km": 567.075421811836,
+          "pace_seconds_per_km": 567.075421811836,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 33786.42131448455,
+          "departure_seconds": 33786.42131448455,
+          "moving_seconds": 4166.626445620452,
+          "eq_pace_seconds_per_km": 440.07626222682734,
+          "distance_pace_seconds_per_km": 654.3105602278173,
+          "pace_seconds_per_km": 654.3105602278173,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 41006.850890665984,
+          "departure_seconds": 41006.850890665984,
+          "moving_seconds": 7220.429576181436,
+          "eq_pace_seconds_per_km": 447.35923780866176,
+          "distance_pace_seconds_per_km": 615.0220447318462,
+          "pace_seconds_per_km": 615.0220447318462,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 44801.866974454584,
+          "departure_seconds": 44801.866974454584,
+          "moving_seconds": 3795.0160837885996,
+          "eq_pace_seconds_per_km": 453.6054245031366,
+          "distance_pace_seconds_per_km": 525.8922648144479,
+          "pace_seconds_per_km": 525.8922648144479,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 50639.90671224874,
+          "departure_seconds": 50639.90671224874,
+          "moving_seconds": 5838.039737794155,
+          "eq_pace_seconds_per_km": 458.43918166356855,
+          "distance_pace_seconds_per_km": 623.4157950406558,
+          "pace_seconds_per_km": 623.4157950406558,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 57600.0,
+          "departure_seconds": 57600.0,
+          "moving_seconds": 6960.0932877512605,
+          "eq_pace_seconds_per_km": 464.2372131034693,
+          "distance_pace_seconds_per_km": 707.1442814583935,
+          "pace_seconds_per_km": 707.1442814583935,
+          "cutoff_status": "not_checked"
+        }
+      ]
+    },
+    {
+      "target_seconds": 61200.0,
+      "checkpoints": [
+        {
+          "arrival_seconds": 0.0,
+          "departure_seconds": 0.0,
+          "moving_seconds": 0.0,
+          "eq_pace_seconds_per_km": null,
+          "distance_pace_seconds_per_km": null,
+          "pace_seconds_per_km": null,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 3747.4574944808705,
+          "departure_seconds": 3747.4574944808705,
+          "moving_seconds": 3747.4574944808705,
+          "eq_pace_seconds_per_km": 337.95371882182314,
+          "distance_pace_seconds_per_km": 478.68375688528045,
+          "pace_seconds_per_km": 478.68375688528045,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 11924.440762511638,
+          "departure_seconds": 11924.440762511638,
+          "moving_seconds": 8176.983268030768,
+          "eq_pace_seconds_per_km": 401.9903905940333,
+          "distance_pace_seconds_per_km": 579.8768689710341,
+          "pace_seconds_per_km": 579.8768689710341,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 15876.457877209183,
+          "departure_seconds": 15876.457877209183,
+          "moving_seconds": 3952.0171146975445,
+          "eq_pace_seconds_per_km": 427.8722492967105,
+          "distance_pace_seconds_per_km": 568.1089911477756,
+          "pace_seconds_per_km": 568.1089911477756,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 21985.598315598127,
+          "departure_seconds": 21985.598315598127,
+          "moving_seconds": 6109.140438388944,
+          "eq_pace_seconds_per_km": 441.2380271796474,
+          "distance_pace_seconds_per_km": 705.4400763633063,
+          "pace_seconds_per_km": 705.4400763633063,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 26109.957411292355,
+          "departure_seconds": 26109.957411292355,
+          "moving_seconds": 4124.359095694228,
+          "eq_pace_seconds_per_km": 452.07086549146226,
+          "distance_pace_seconds_per_km": 473.0491428502526,
+          "pace_seconds_per_km": 473.0491428502526,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 31471.0320481681,
+          "departure_seconds": 31471.0320481681,
+          "moving_seconds": 5361.074636875746,
+          "eq_pace_seconds_per_km": 460.2654421902577,
+          "distance_pace_seconds_per_km": 602.5176356750753,
+          "pace_seconds_per_km": 602.5176356750753,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 35898.072646639834,
+          "departure_seconds": 35898.072646639834,
+          "moving_seconds": 4427.040598471733,
+          "eq_pace_seconds_per_km": 467.58102861600435,
+          "distance_pace_seconds_per_km": 695.2049702420563,
+          "pace_seconds_per_km": 695.2049702420563,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 43569.77907133261,
+          "departure_seconds": 43569.77907133261,
+          "moving_seconds": 7671.706424692777,
+          "eq_pace_seconds_per_km": 475.3191901717032,
+          "distance_pace_seconds_per_km": 653.4609225275867,
+          "pace_seconds_per_km": 653.4609225275867,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 47601.983660358,
+          "departure_seconds": 47601.983660358,
+          "moving_seconds": 4032.2045890253867,
+          "eq_pace_seconds_per_km": 481.95576353458256,
+          "distance_pace_seconds_per_km": 558.7605313653509,
+          "pace_seconds_per_km": 558.7605313653509,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 53804.90088176429,
+          "departure_seconds": 53804.90088176429,
+          "moving_seconds": 6202.917221406293,
+          "eq_pace_seconds_per_km": 487.0916305175418,
+          "distance_pace_seconds_per_km": 662.3792822306971,
+          "pace_seconds_per_km": 662.3792822306971,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 61200.0,
+          "departure_seconds": 61200.0,
+          "moving_seconds": 7395.09911823571,
+          "eq_pace_seconds_per_km": 493.2520389224358,
+          "distance_pace_seconds_per_km": 751.3407990495426,
+          "pace_seconds_per_km": 751.3407990495426,
+          "cutoff_status": "not_checked"
+        }
+      ]
+    },
+    {
+      "target_seconds": 64800.0,
+      "checkpoints": [
+        {
+          "arrival_seconds": 0.0,
+          "departure_seconds": 0.0,
+          "moving_seconds": 0.0,
+          "eq_pace_seconds_per_km": null,
+          "distance_pace_seconds_per_km": null,
+          "pace_seconds_per_km": null,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 3967.896170626804,
+          "departure_seconds": 3967.896170626804,
+          "moving_seconds": 3967.896170626804,
+          "eq_pace_seconds_per_km": 357.8333493407539,
+          "distance_pace_seconds_per_km": 506.8416249373558,
+          "pace_seconds_per_km": 506.8416249373558,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 12625.878454424086,
+          "departure_seconds": 12625.878454424086,
+          "moving_seconds": 8657.982283797282,
+          "eq_pace_seconds_per_km": 425.6368841583881,
+          "distance_pace_seconds_per_km": 613.9872730281536,
+          "pace_seconds_per_km": 613.9872730281536,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 16810.367164103838,
+          "departure_seconds": 16810.367164103838,
+          "moving_seconds": 4184.488709679752,
+          "eq_pace_seconds_per_km": 453.04120513769334,
+          "distance_pace_seconds_per_km": 601.5271670976446,
+          "pace_seconds_per_km": 601.5271670976446,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 23278.868804750957,
+          "departure_seconds": 23278.868804750957,
+          "moving_seconds": 6468.501640647119,
+          "eq_pace_seconds_per_km": 467.19320524903856,
+          "distance_pace_seconds_per_km": 746.9365514435009,
+          "pace_seconds_per_km": 746.9365514435009,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 27645.837259015432,
+          "departure_seconds": 27645.837259015432,
+          "moving_seconds": 4366.968454264475,
+          "eq_pace_seconds_per_km": 478.6632693439011,
+          "distance_pace_seconds_per_km": 500.87556301791443,
+          "pace_seconds_per_km": 500.87556301791443,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 33322.269227472105,
+          "departure_seconds": 33322.269227472105,
+          "moving_seconds": 5676.431968456673,
+          "eq_pace_seconds_per_km": 487.33987996615525,
+          "distance_pace_seconds_per_km": 637.9598495383151,
+          "pace_seconds_per_km": 637.9598495383151,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 38009.72397879512,
+          "departure_seconds": 38009.72397879512,
+          "moving_seconds": 4687.454751323014,
+          "eq_pace_seconds_per_km": 495.08579500518135,
+          "distance_pace_seconds_per_km": 736.0993802562954,
+          "pace_seconds_per_km": 736.0993802562954,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 46132.707251999236,
+          "departure_seconds": 46132.707251999236,
+          "moving_seconds": 8122.983273204118,
+          "eq_pace_seconds_per_km": 503.27914253474466,
+          "distance_pace_seconds_per_km": 691.8998003233272,
+          "pace_seconds_per_km": 691.8998003233272,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 50402.10034626141,
+          "departure_seconds": 50402.10034626141,
+          "moving_seconds": 4269.393094262174,
+          "eq_pace_seconds_per_km": 510.3061025660285,
+          "distance_pace_seconds_per_km": 591.6287979162538,
+          "pace_seconds_per_km": 591.6287979162538,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 56969.89505127983,
+          "departure_seconds": 56969.89505127983,
+          "moving_seconds": 6567.794705018423,
+          "eq_pace_seconds_per_km": 515.7440793715144,
+          "distance_pace_seconds_per_km": 701.3427694207376,
+          "pace_seconds_per_km": 701.3427694207376,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 64800.0,
+          "departure_seconds": 64800.0,
+          "moving_seconds": 7830.104948720167,
+          "eq_pace_seconds_per_km": 522.2668647414029,
+          "distance_pace_seconds_per_km": 795.5373166406926,
+          "pace_seconds_per_km": 795.5373166406926,
+          "cutoff_status": "not_checked"
+        }
+      ]
+    },
+    {
+      "target_seconds": 68400.0,
+      "checkpoints": [
+        {
+          "arrival_seconds": 0.0,
+          "departure_seconds": 0.0,
+          "moving_seconds": 0.0,
+          "eq_pace_seconds_per_km": null,
+          "distance_pace_seconds_per_km": null,
+          "pace_seconds_per_km": null,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 4188.334846772737,
+          "departure_seconds": 4188.334846772737,
+          "moving_seconds": 4188.334846772737,
+          "eq_pace_seconds_per_km": 377.71297985968465,
+          "distance_pace_seconds_per_km": 534.999492989431,
+          "pace_seconds_per_km": 534.999492989431,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 13327.316146336536,
+          "departure_seconds": 13327.316146336536,
+          "moving_seconds": 9138.981299563799,
+          "eq_pace_seconds_per_km": 449.283377722743,
+          "distance_pace_seconds_per_km": 648.0976770852733,
+          "pace_seconds_per_km": 648.0976770852733,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 17744.2764509985,
+          "departure_seconds": 17744.2764509985,
+          "moving_seconds": 4416.960304661963,
+          "eq_pace_seconds_per_km": 478.2101609786766,
+          "distance_pace_seconds_per_km": 634.9453430475141,
+          "pace_seconds_per_km": 634.9453430475141,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 24572.139293903787,
+          "departure_seconds": 24572.139293903787,
+          "moving_seconds": 6827.862842905288,
+          "eq_pace_seconds_per_km": 493.1483833184293,
+          "distance_pace_seconds_per_km": 788.4330265236949,
+          "pace_seconds_per_km": 788.4330265236949,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 29181.717106738513,
+          "departure_seconds": 29181.717106738513,
+          "moving_seconds": 4609.5778128347265,
+          "eq_pace_seconds_per_km": 505.2556731963403,
+          "distance_pace_seconds_per_km": 528.7019831855766,
+          "pace_seconds_per_km": 528.7019831855766,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 35173.50640677611,
+          "departure_seconds": 35173.50640677611,
+          "moving_seconds": 5991.789300037599,
+          "eq_pace_seconds_per_km": 514.4143177420527,
+          "distance_pace_seconds_per_km": 673.4020634015549,
+          "pace_seconds_per_km": 673.4020634015549,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 40121.3753109504,
+          "departure_seconds": 40121.3753109504,
+          "moving_seconds": 4947.868904174291,
+          "eq_pace_seconds_per_km": 522.5905613943579,
+          "distance_pace_seconds_per_km": 776.9937902705337,
+          "pace_seconds_per_km": 776.9937902705337,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 48695.63543266586,
+          "departure_seconds": 48695.63543266586,
+          "moving_seconds": 8574.260121715459,
+          "eq_pace_seconds_per_km": 531.2390948977861,
+          "distance_pace_seconds_per_km": 730.3386781190677,
+          "pace_seconds_per_km": 730.3386781190677,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 53202.21703216482,
+          "departure_seconds": 53202.21703216482,
+          "moving_seconds": 4506.581599498961,
+          "eq_pace_seconds_per_km": 538.6564415974746,
+          "distance_pace_seconds_per_km": 624.4970644671567,
+          "pace_seconds_per_km": 624.4970644671567,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 60134.88922079538,
+          "departure_seconds": 60134.88922079538,
+          "moving_seconds": 6932.67218863056,
+          "eq_pace_seconds_per_km": 544.3965282254877,
+          "distance_pace_seconds_per_km": 740.3062566107789,
+          "pace_seconds_per_km": 740.3062566107789,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 68400.0,
+          "departure_seconds": 68400.0,
+          "moving_seconds": 8265.110779204617,
+          "eq_pace_seconds_per_km": 551.2816905603694,
+          "distance_pace_seconds_per_km": 839.7338342318417,
+          "pace_seconds_per_km": 839.7338342318417,
+          "cutoff_status": "not_checked"
+        }
+      ]
+    },
+    {
+      "target_seconds": 72000.0,
+      "checkpoints": [
+        {
+          "arrival_seconds": 0.0,
+          "departure_seconds": 0.0,
+          "moving_seconds": 0.0,
+          "eq_pace_seconds_per_km": null,
+          "distance_pace_seconds_per_km": null,
+          "pace_seconds_per_km": null,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 4408.773522918671,
+          "departure_seconds": 4408.773522918671,
+          "moving_seconds": 4408.773522918671,
+          "eq_pace_seconds_per_km": 397.5926103786154,
+          "distance_pace_seconds_per_km": 563.1573610415064,
+          "pace_seconds_per_km": 563.1573610415064,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 14028.753838248986,
+          "departure_seconds": 14028.753838248986,
+          "moving_seconds": 9619.980315330315,
+          "eq_pace_seconds_per_km": 472.92987128709797,
+          "distance_pace_seconds_per_km": 682.208081142393,
+          "pace_seconds_per_km": 682.208081142393,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 18678.185737893156,
+          "departure_seconds": 18678.185737893156,
+          "moving_seconds": 4649.431899644171,
+          "eq_pace_seconds_per_km": 503.3791168196595,
+          "distance_pace_seconds_per_km": 668.3635189973832,
+          "pace_seconds_per_km": 668.3635189973832,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 25865.409783056617,
+          "departure_seconds": 25865.409783056617,
+          "moving_seconds": 7187.224045163461,
+          "eq_pace_seconds_per_km": 519.1035613878203,
+          "distance_pace_seconds_per_km": 829.9295016038894,
+          "pace_seconds_per_km": 829.9295016038894,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 30717.596954461595,
+          "departure_seconds": 30717.596954461595,
+          "moving_seconds": 4852.187171404978,
+          "eq_pace_seconds_per_km": 531.8480770487795,
+          "distance_pace_seconds_per_km": 556.5284033532388,
+          "pace_seconds_per_km": 556.5284033532388,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 37024.74358608012,
+          "departure_seconds": 37024.74358608012,
+          "moving_seconds": 6307.146631618525,
+          "eq_pace_seconds_per_km": 541.4887555179503,
+          "distance_pace_seconds_per_km": 708.8442772647945,
+          "pace_seconds_per_km": 708.8442772647945,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 42233.02664310568,
+          "departure_seconds": 42233.02664310568,
+          "moving_seconds": 5208.283057025561,
+          "eq_pace_seconds_per_km": 550.0953277835338,
+          "distance_pace_seconds_per_km": 817.8882002847711,
+          "pace_seconds_per_km": 817.8882002847711,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 51258.56361333248,
+          "departure_seconds": 51258.56361333248,
+          "moving_seconds": 9025.5369702268,
+          "eq_pace_seconds_per_km": 559.1990472608276,
+          "distance_pace_seconds_per_km": 768.7775559148082,
+          "pace_seconds_per_km": 768.7775559148082,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 56002.333718068236,
+          "departure_seconds": 56002.333718068236,
+          "moving_seconds": 4743.770104735755,
+          "eq_pace_seconds_per_km": 567.0067806289213,
+          "distance_pace_seconds_per_km": 657.3653310180606,
+          "pace_seconds_per_km": 657.3653310180606,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 63299.883390310926,
+          "departure_seconds": 63299.883390310926,
+          "moving_seconds": 7297.549672242691,
+          "eq_pace_seconds_per_km": 573.0489770794604,
+          "distance_pace_seconds_per_km": 779.2697438008194,
+          "pace_seconds_per_km": 779.2697438008194,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 72000.0,
+          "departure_seconds": 72000.0,
+          "moving_seconds": 8700.116609689074,
+          "eq_pace_seconds_per_km": 580.2965163793365,
+          "distance_pace_seconds_per_km": 883.9303518229916,
+          "pace_seconds_per_km": 883.9303518229916,
+          "cutoff_status": "not_checked"
+        }
+      ]
+    },
+    {
+      "target_seconds": 75600.0,
+      "checkpoints": [
+        {
+          "arrival_seconds": 0.0,
+          "departure_seconds": 0.0,
+          "moving_seconds": 0.0,
+          "eq_pace_seconds_per_km": null,
+          "distance_pace_seconds_per_km": null,
+          "pace_seconds_per_km": null,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 4629.212199064605,
+          "departure_seconds": 4629.212199064605,
+          "moving_seconds": 4629.212199064605,
+          "eq_pace_seconds_per_km": 417.4722408975462,
+          "distance_pace_seconds_per_km": 591.3152290935817,
+          "pace_seconds_per_km": 591.3152290935817,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 14730.191530161435,
+          "departure_seconds": 14730.191530161435,
+          "moving_seconds": 10100.97933109683,
+          "eq_pace_seconds_per_km": 496.57636485145287,
+          "distance_pace_seconds_per_km": 716.3184851995127,
+          "pace_seconds_per_km": 716.3184851995127,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 19612.095024787814,
+          "departure_seconds": 19612.095024787814,
+          "moving_seconds": 4881.903494626378,
+          "eq_pace_seconds_per_km": 528.5480726606423,
+          "distance_pace_seconds_per_km": 701.7816949472522,
+          "pace_seconds_per_km": 701.7816949472522,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 27158.680272209447,
+          "departure_seconds": 27158.680272209447,
+          "moving_seconds": 7546.5852474216335,
+          "eq_pace_seconds_per_km": 545.0587394572112,
+          "distance_pace_seconds_per_km": 871.4259766840838,
+          "pace_seconds_per_km": 871.4259766840838,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 32253.476802184672,
+          "departure_seconds": 32253.476802184672,
+          "moving_seconds": 5094.796529975225,
+          "eq_pace_seconds_per_km": 558.4404809012184,
+          "distance_pace_seconds_per_km": 584.3548235209006,
+          "pace_seconds_per_km": 584.3548235209006,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 38875.98076538413,
+          "departure_seconds": 38875.98076538413,
+          "moving_seconds": 6622.503963199455,
+          "eq_pace_seconds_per_km": 568.5631932938481,
+          "distance_pace_seconds_per_km": 744.2864911280348,
+          "pace_seconds_per_km": 744.2864911280348,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 44344.677975260965,
+          "departure_seconds": 44344.677975260965,
+          "moving_seconds": 5468.697209876838,
+          "eq_pace_seconds_per_km": 577.6000941727104,
+          "distance_pace_seconds_per_km": 858.7826102990095,
+          "pace_seconds_per_km": 858.7826102990095,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 53821.49179399911,
+          "departure_seconds": 53821.49179399911,
+          "moving_seconds": 9476.813818738141,
+          "eq_pace_seconds_per_km": 587.158999623869,
+          "distance_pace_seconds_per_km": 807.2164337105487,
+          "pace_seconds_per_km": 807.2164337105487,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 58802.45040397165,
+          "departure_seconds": 58802.45040397165,
+          "moving_seconds": 4980.958609972542,
+          "eq_pace_seconds_per_km": 595.3571196603673,
+          "distance_pace_seconds_per_km": 690.2335975689635,
+          "pace_seconds_per_km": 690.2335975689635,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 66464.87755982648,
+          "departure_seconds": 66464.87755982648,
+          "moving_seconds": 7662.427155854828,
+          "eq_pace_seconds_per_km": 601.7014259334336,
+          "distance_pace_seconds_per_km": 818.2332309908606,
+          "pace_seconds_per_km": 818.2332309908606,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 75600.0,
+          "departure_seconds": 75600.0,
+          "moving_seconds": 9135.122440173524,
+          "eq_pace_seconds_per_km": 609.311342198303,
+          "distance_pace_seconds_per_km": 928.1268694141407,
+          "pace_seconds_per_km": 928.1268694141407,
+          "cutoff_status": "not_checked"
+        }
+      ]
+    },
+    {
+      "target_seconds": 79200.0,
+      "checkpoints": [
+        {
+          "arrival_seconds": 0.0,
+          "departure_seconds": 0.0,
+          "moving_seconds": 0.0,
+          "eq_pace_seconds_per_km": null,
+          "distance_pace_seconds_per_km": null,
+          "pace_seconds_per_km": null,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 4849.650875210538,
+          "departure_seconds": 4849.650875210538,
+          "moving_seconds": 4849.650875210538,
+          "eq_pace_seconds_per_km": 437.35187141647697,
+          "distance_pace_seconds_per_km": 619.4730971456571,
+          "pace_seconds_per_km": 619.4730971456571,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 15431.629222073883,
+          "departure_seconds": 15431.629222073883,
+          "moving_seconds": 10581.978346863345,
+          "eq_pace_seconds_per_km": 520.2228584158077,
+          "distance_pace_seconds_per_km": 750.4288892566323,
+          "pace_seconds_per_km": 750.4288892566323,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 20546.00431168247,
+          "departure_seconds": 20546.00431168247,
+          "moving_seconds": 5114.375089608588,
+          "eq_pace_seconds_per_km": 553.7170285016254,
+          "distance_pace_seconds_per_km": 735.1998708971215,
+          "pace_seconds_per_km": 735.1998708971215,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 28451.95076136228,
+          "departure_seconds": 28451.95076136228,
+          "moving_seconds": 7905.94644967981,
+          "eq_pace_seconds_per_km": 571.0139175266025,
+          "distance_pace_seconds_per_km": 912.9224517642787,
+          "pace_seconds_per_km": 912.9224517642787,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 33789.35664990775,
+          "departure_seconds": 33789.35664990775,
+          "moving_seconds": 5337.405888545469,
+          "eq_pace_seconds_per_km": 585.0328847536567,
+          "distance_pace_seconds_per_km": 612.181243688562,
+          "pace_seconds_per_km": 612.181243688562,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 40727.217944688135,
+          "departure_seconds": 40727.217944688135,
+          "moving_seconds": 6937.861294780385,
+          "eq_pace_seconds_per_km": 595.6376310697459,
+          "distance_pace_seconds_per_km": 779.7287049912749,
+          "pace_seconds_per_km": 779.7287049912749,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 46456.32930741625,
+          "departure_seconds": 46456.32930741625,
+          "moving_seconds": 5729.111362728116,
+          "eq_pace_seconds_per_km": 605.104860561887,
+          "distance_pace_seconds_per_km": 899.6770203132479,
+          "pace_seconds_per_km": 899.6770203132479,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 56384.41997466573,
+          "departure_seconds": 56384.41997466573,
+          "moving_seconds": 9928.090667249482,
+          "eq_pace_seconds_per_km": 615.1189519869105,
+          "distance_pace_seconds_per_km": 845.6553115062892,
+          "pace_seconds_per_km": 845.6553115062892,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 61602.567089875054,
+          "departure_seconds": 61602.567089875054,
+          "moving_seconds": 5218.147115209322,
+          "eq_pace_seconds_per_km": 623.7074586918125,
+          "distance_pace_seconds_per_km": 723.1018641198655,
+          "pace_seconds_per_km": 723.1018641198655,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 69629.87172934202,
+          "departure_seconds": 69629.87172934202,
+          "moving_seconds": 8027.304639466965,
+          "eq_pace_seconds_per_km": 630.3538747874069,
+          "distance_pace_seconds_per_km": 857.1967181809019,
+          "pace_seconds_per_km": 857.1967181809019,
+          "cutoff_status": "not_checked"
+        },
+        {
+          "arrival_seconds": 79200.0,
+          "departure_seconds": 79200.0,
+          "moving_seconds": 9570.12827065798,
+          "eq_pace_seconds_per_km": 638.3261680172701,
+          "distance_pace_seconds_per_km": 972.3233870052907,
+          "pace_seconds_per_km": 972.3233870052907,
+          "cutoff_status": "not_checked"
+        }
+      ]
+    },
     {
       "target_seconds": 82800.0,
       "checkpoints": [
@@ -80302,215 +81770,102 @@
           "cutoff_status": "not_checked"
         },
         {
-          "arrival_seconds": 5789.940705959606,
-          "departure_seconds": 5789.940705959606,
-          "moving_seconds": 5789.940705959606,
-          "eq_pace_seconds_per_km": 522.1492161602126,
-          "distance_pace_seconds_per_km": 739.5815892117799,
-          "pace_seconds_per_km": 739.5815892117799,
+          "arrival_seconds": 5070.089551356472,
+          "departure_seconds": 5070.089551356472,
+          "moving_seconds": 5070.089551356472,
+          "eq_pace_seconds_per_km": 457.2315019354078,
+          "distance_pace_seconds_per_km": 647.6309651977324,
+          "pace_seconds_per_km": 647.6309651977324,
           "cutoff_status": "not_checked"
         },
         {
-          "arrival_seconds": 16829.034852844074,
-          "departure_seconds": 16829.034852844074,
-          "moving_seconds": 11039.094146884469,
-          "eq_pace_seconds_per_km": 542.6952241983843,
-          "distance_pace_seconds_per_km": 782.8455972508598,
-          "pace_seconds_per_km": 782.8455972508598,
+          "arrival_seconds": 16133.066913986333,
+          "departure_seconds": 16133.066913986333,
+          "moving_seconds": 11062.977362629861,
+          "eq_pace_seconds_per_km": 543.8693519801626,
+          "distance_pace_seconds_per_km": 784.5392933137518,
+          "pace_seconds_per_km": 784.5392933137518,
           "cutoff_status": "not_checked"
         },
         {
-          "arrival_seconds": 22020.196043383232,
-          "departure_seconds": 22020.196043383232,
-          "moving_seconds": 5191.161190539158,
-          "eq_pace_seconds_per_km": 562.0304139871541,
-          "distance_pace_seconds_per_km": 746.2379997988421,
-          "pace_seconds_per_km": 746.2379997988421,
+          "arrival_seconds": 21479.913598577128,
+          "departure_seconds": 21479.913598577128,
+          "moving_seconds": 5346.846684590795,
+          "eq_pace_seconds_per_km": 578.8859843426083,
+          "distance_pace_seconds_per_km": 768.6180468469905,
+          "pace_seconds_per_km": 768.6180468469905,
           "cutoff_status": "not_checked"
         },
         {
-          "arrival_seconds": 30010.673597093024,
-          "departure_seconds": 30010.673597093024,
-          "moving_seconds": 7990.477553709792,
-          "eq_pace_seconds_per_km": 577.1192506669457,
-          "distance_pace_seconds_per_km": 922.6835022890414,
-          "pace_seconds_per_km": 922.6835022890414,
+          "arrival_seconds": 29745.22125051511,
+          "departure_seconds": 29745.22125051511,
+          "moving_seconds": 8265.307651937983,
+          "eq_pace_seconds_per_km": 596.9690955959935,
+          "distance_pace_seconds_per_km": 954.4189268444732,
+          "pace_seconds_per_km": 954.4189268444732,
           "cutoff_status": "not_checked"
         },
         {
-          "arrival_seconds": 35412.86568607471,
-          "departure_seconds": 35412.86568607471,
-          "moving_seconds": 5402.192088981683,
-          "eq_pace_seconds_per_km": 592.1340980630602,
-          "distance_pace_seconds_per_km": 619.6119876838825,
-          "pace_seconds_per_km": 619.6119876838825,
+          "arrival_seconds": 35325.23649763083,
+          "departure_seconds": 35325.23649763083,
+          "moving_seconds": 5580.01524711572,
+          "eq_pace_seconds_per_km": 611.625288606096,
+          "distance_pace_seconds_per_km": 640.0076638562241,
+          "pace_seconds_per_km": 640.0076638562241,
           "cutoff_status": "not_checked"
         },
         {
-          "arrival_seconds": 42468.074747645805,
-          "departure_seconds": 42468.074747645805,
-          "moving_seconds": 7055.209061571099,
-          "eq_pace_seconds_per_km": 605.7123130002036,
-          "distance_pace_seconds_per_km": 792.9171240653459,
-          "pace_seconds_per_km": 792.9171240653459,
+          "arrival_seconds": 42578.455123992135,
+          "departure_seconds": 42578.455123992135,
+          "moving_seconds": 7253.218626361304,
+          "eq_pace_seconds_per_km": 622.7120688456428,
+          "distance_pace_seconds_per_km": 815.1709188545137,
+          "pace_seconds_per_km": 815.1709188545137,
           "cutoff_status": "not_checked"
         },
         {
-          "arrival_seconds": 48333.62899584453,
-          "departure_seconds": 48333.62899584453,
-          "moving_seconds": 5865.554248198721,
-          "eq_pace_seconds_per_km": 619.5158656829391,
-          "distance_pace_seconds_per_km": 921.1034721434114,
-          "pace_seconds_per_km": 921.1034721434114,
+          "arrival_seconds": 48567.980639571535,
+          "departure_seconds": 48567.980639571535,
+          "moving_seconds": 5989.5255155794,
+          "eq_pace_seconds_per_km": 632.6096269510643,
+          "distance_pace_seconds_per_km": 940.5714303274875,
+          "pace_seconds_per_km": 940.5714303274875,
           "cutoff_status": "not_checked"
         },
         {
-          "arrival_seconds": 58602.875525370735,
-          "departure_seconds": 58602.875525370735,
-          "moving_seconds": 10269.246529526208,
-          "eq_pace_seconds_per_km": 636.2560913927886,
-          "distance_pace_seconds_per_km": 874.7142994482023,
-          "pace_seconds_per_km": 874.7142994482023,
+          "arrival_seconds": 58947.34815533236,
+          "departure_seconds": 58947.34815533236,
+          "moving_seconds": 10379.367515760823,
+          "eq_pace_seconds_per_km": 643.0789043499519,
+          "distance_pace_seconds_per_km": 884.0941893020297,
+          "pace_seconds_per_km": 884.0941893020297,
           "cutoff_status": "not_checked"
         },
         {
-          "arrival_seconds": 64060.03815447405,
-          "departure_seconds": 64060.03815447405,
-          "moving_seconds": 5457.162629103317,
-          "eq_pace_seconds_per_km": 652.2761738827335,
-          "distance_pace_seconds_per_km": 756.2233073897497,
-          "pace_seconds_per_km": 756.2233073897497,
+          "arrival_seconds": 64402.68377577847,
+          "departure_seconds": 64402.68377577847,
+          "moving_seconds": 5455.335620446109,
+          "eq_pace_seconds_per_km": 652.0577977232584,
+          "distance_pace_seconds_per_km": 755.9701306707684,
+          "pace_seconds_per_km": 755.9701306707684,
           "cutoff_status": "not_checked"
         },
         {
-          "arrival_seconds": 72542.17390190918,
-          "departure_seconds": 72542.17390190918,
-          "moving_seconds": 8482.135747435124,
-          "eq_pace_seconds_per_km": 666.070041565477,
-          "distance_pace_seconds_per_km": 905.7659142669718,
-          "pace_seconds_per_km": 905.7659142669718,
+          "arrival_seconds": 72794.86589885756,
+          "departure_seconds": 72794.86589885756,
+          "moving_seconds": 8392.182123079096,
+          "eq_pace_seconds_per_km": 659.0063236413796,
+          "distance_pace_seconds_per_km": 896.1602053709424,
+          "pace_seconds_per_km": 896.1602053709424,
           "cutoff_status": "not_checked"
         },
         {
           "arrival_seconds": 82800.0,
           "departure_seconds": 82800.0,
-          "moving_seconds": 10257.826098090824,
-          "eq_pace_seconds_per_km": 684.1955133932257,
-          "distance_pace_seconds_per_km": 1042.1933680436648,
-          "pace_seconds_per_km": 1042.1933680436648,
-          "cutoff_status": "not_checked"
-        }
-      ]
-    },
-    {
-      "target_seconds": 84600.0,
-      "checkpoints": [
-        {
-          "arrival_seconds": 0.0,
-          "departure_seconds": 0.0,
-          "moving_seconds": 0.0,
-          "eq_pace_seconds_per_km": null,
-          "distance_pace_seconds_per_km": null,
-          "pace_seconds_per_km": null,
-          "cutoff_status": "not_checked"
-        },
-        {
-          "arrival_seconds": 5915.80898217612,
-          "departure_seconds": 5915.80898217612,
-          "moving_seconds": 5915.80898217612,
-          "eq_pace_seconds_per_km": 533.500286076739,
-          "distance_pace_seconds_per_km": 755.6594498468187,
-          "pace_seconds_per_km": 755.6594498468187,
-          "cutoff_status": "not_checked"
-        },
-        {
-          "arrival_seconds": 17194.883436601554,
-          "departure_seconds": 17194.883436601554,
-          "moving_seconds": 11279.074454425434,
-          "eq_pace_seconds_per_km": 554.4929464635665,
-          "distance_pace_seconds_per_km": 799.8639797997914,
-          "pace_seconds_per_km": 799.8639797997914,
-          "cutoff_status": "not_checked"
-        },
-        {
-          "arrival_seconds": 22498.895957369823,
-          "departure_seconds": 22498.895957369823,
-          "moving_seconds": 5304.012520768269,
-          "eq_pace_seconds_per_km": 574.2484664651355,
-          "distance_pace_seconds_per_km": 762.4605650118602,
-          "pace_seconds_per_km": 762.4605650118602,
-          "cutoff_status": "not_checked"
-        },
-        {
-          "arrival_seconds": 30663.079544855915,
-          "departure_seconds": 30663.079544855915,
-          "moving_seconds": 8164.183587486092,
-          "eq_pace_seconds_per_km": 589.6653213336184,
-          "distance_pace_seconds_per_km": 942.7418392953248,
-          "pace_seconds_per_km": 942.7418392953248,
-          "cutoff_status": "not_checked"
-        },
-        {
-          "arrival_seconds": 36182.71059229372,
-          "departure_seconds": 36182.71059229372,
-          "moving_seconds": 5519.631047437804,
-          "eq_pace_seconds_per_km": 605.006578455735,
-          "distance_pace_seconds_per_km": 633.0818135030971,
-          "pace_seconds_per_km": 633.0818135030971,
-          "cutoff_status": "not_checked"
-        },
-        {
-          "arrival_seconds": 43391.293763898975,
-          "departure_seconds": 43391.293763898975,
-          "moving_seconds": 7208.583171605256,
-          "eq_pace_seconds_per_km": 618.8799719784691,
-          "distance_pace_seconds_per_km": 810.1544528493756,
-          "pace_seconds_per_km": 810.1544528493756,
-          "cutoff_status": "not_checked"
-        },
-        {
-          "arrival_seconds": 49384.36006097159,
-          "departure_seconds": 49384.36006097159,
-          "moving_seconds": 5993.066297072612,
-          "eq_pace_seconds_per_km": 632.9836018934383,
-          "distance_pace_seconds_per_km": 941.127460668269,
-          "pace_seconds_per_km": 941.127460668269,
-          "cutoff_status": "not_checked"
-        },
-        {
-          "arrival_seconds": 59876.8510802701,
-          "departure_seconds": 59876.8510802701,
-          "moving_seconds": 10492.491019298512,
-          "eq_pace_seconds_per_km": 650.0877455535011,
-          "distance_pace_seconds_per_km": 893.7298276970757,
-          "pace_seconds_per_km": 893.7298276970757,
-          "cutoff_status": "not_checked"
-        },
-        {
-          "arrival_seconds": 65452.64767957132,
-          "departure_seconds": 65452.64767957132,
-          "moving_seconds": 5575.7965993012185,
-          "eq_pace_seconds_per_km": 666.4560907062715,
-          "distance_pace_seconds_per_km": 772.6629445069186,
-          "pace_seconds_per_km": 772.6629445069186,
-          "cutoff_status": "not_checked"
-        },
-        {
-          "arrival_seconds": 74119.17768238546,
-          "departure_seconds": 74119.17768238546,
-          "moving_seconds": 8666.530002814143,
-          "eq_pace_seconds_per_km": 680.5498250777695,
-          "distance_pace_seconds_per_km": 925.456477620601,
-          "pace_seconds_per_km": 925.456477620601,
-          "cutoff_status": "not_checked"
-        },
-        {
-          "arrival_seconds": 84600.0,
-          "departure_seconds": 84600.0,
-          "moving_seconds": 10480.82231761454,
-          "eq_pace_seconds_per_km": 699.0693289017744,
-          "distance_pace_seconds_per_km": 1064.8497456098319,
-          "pace_seconds_per_km": 1064.8497456098319,
+          "moving_seconds": 10005.134101142437,
+          "eq_pace_seconds_per_km": 667.3409938362371,
+          "distance_pace_seconds_per_km": 1016.5199045964406,
+          "pace_seconds_per_km": 1016.5199045964406,
           "cutoff_status": "not_checked"
         }
       ]
@@ -80528,328 +81883,102 @@
           "cutoff_status": "not_checked"
         },
         {
-          "arrival_seconds": 6041.677258392633,
-          "departure_seconds": 6041.677258392633,
-          "moving_seconds": 6041.677258392633,
-          "eq_pace_seconds_per_km": 544.8513559932654,
-          "distance_pace_seconds_per_km": 771.7373104818574,
-          "pace_seconds_per_km": 771.7373104818574,
+          "arrival_seconds": 5290.528227502406,
+          "departure_seconds": 5290.528227502406,
+          "moving_seconds": 5290.528227502406,
+          "eq_pace_seconds_per_km": 477.11113245433853,
+          "distance_pace_seconds_per_km": 675.7888332498077,
+          "pace_seconds_per_km": 675.7888332498077,
           "cutoff_status": "not_checked"
         },
         {
-          "arrival_seconds": 17560.732020359035,
-          "departure_seconds": 17560.732020359035,
-          "moving_seconds": 11519.054761966403,
-          "eq_pace_seconds_per_km": 566.2906687287488,
-          "distance_pace_seconds_per_km": 816.8823623487234,
-          "pace_seconds_per_km": 816.8823623487234,
+          "arrival_seconds": 16834.504605898783,
+          "departure_seconds": 16834.504605898783,
+          "moving_seconds": 11543.976378396377,
+          "eq_pace_seconds_per_km": 567.5158455445176,
+          "distance_pace_seconds_per_km": 818.6496973708715,
+          "pace_seconds_per_km": 818.6496973708715,
           "cutoff_status": "not_checked"
         },
         {
-          "arrival_seconds": 22977.595871356414,
-          "departure_seconds": 22977.595871356414,
-          "moving_seconds": 5416.863850997379,
-          "eq_pace_seconds_per_km": 586.466518943117,
-          "distance_pace_seconds_per_km": 778.6831302248783,
-          "pace_seconds_per_km": 778.6831302248783,
+          "arrival_seconds": 22413.822885471785,
+          "departure_seconds": 22413.822885471785,
+          "moving_seconds": 5579.318279573003,
+          "eq_pace_seconds_per_km": 604.0549401835912,
+          "distance_pace_seconds_per_km": 802.0362227968595,
+          "pace_seconds_per_km": 802.0362227968595,
           "cutoff_status": "not_checked"
         },
         {
-          "arrival_seconds": 31315.48549261881,
-          "departure_seconds": 31315.48549261881,
-          "moving_seconds": 8337.889621262395,
-          "eq_pace_seconds_per_km": 602.2113920002914,
-          "distance_pace_seconds_per_km": 962.8001763016088,
-          "pace_seconds_per_km": 962.8001763016088,
+          "arrival_seconds": 31038.49173966794,
+          "departure_seconds": 31038.49173966794,
+          "moving_seconds": 8624.668854196156,
+          "eq_pace_seconds_per_km": 622.9242736653846,
+          "distance_pace_seconds_per_km": 995.9154019246675,
+          "pace_seconds_per_km": 995.9154019246675,
           "cutoff_status": "not_checked"
         },
         {
-          "arrival_seconds": 36952.55549851274,
-          "departure_seconds": 36952.55549851274,
-          "moving_seconds": 5637.070005893929,
-          "eq_pace_seconds_per_km": 617.8790588484105,
-          "distance_pace_seconds_per_km": 646.5516393223121,
-          "pace_seconds_per_km": 646.5516393223121,
+          "arrival_seconds": 36861.11634535391,
+          "departure_seconds": 36861.11634535391,
+          "moving_seconds": 5822.624605685971,
+          "eq_pace_seconds_per_km": 638.2176924585352,
+          "distance_pace_seconds_per_km": 667.8340840238864,
+          "pace_seconds_per_km": 667.8340840238864,
           "cutoff_status": "not_checked"
         },
         {
-          "arrival_seconds": 44314.512780152145,
-          "departure_seconds": 44314.512780152145,
-          "moving_seconds": 7361.957281639407,
-          "eq_pace_seconds_per_km": 632.0476309567341,
-          "distance_pace_seconds_per_km": 827.3917816334044,
-          "pace_seconds_per_km": 827.3917816334044,
+          "arrival_seconds": 44429.69230329614,
+          "departure_seconds": 44429.69230329614,
+          "moving_seconds": 7568.57595794223,
+          "eq_pace_seconds_per_km": 649.7865066215403,
+          "distance_pace_seconds_per_km": 850.6131327177535,
+          "pace_seconds_per_km": 850.6131327177535,
           "cutoff_status": "not_checked"
         },
         {
-          "arrival_seconds": 50435.09112609864,
-          "departure_seconds": 50435.09112609864,
-          "moving_seconds": 6120.578345946495,
-          "eq_pace_seconds_per_km": 646.4513381039367,
-          "distance_pace_seconds_per_km": 961.1514491931255,
-          "pace_seconds_per_km": 961.1514491931255,
+          "arrival_seconds": 50679.63197172682,
+          "departure_seconds": 50679.63197172682,
+          "moving_seconds": 6249.939668430678,
+          "eq_pace_seconds_per_km": 660.114393340241,
+          "distance_pace_seconds_per_km": 981.465840341726,
+          "pace_seconds_per_km": 981.465840341726,
           "cutoff_status": "not_checked"
         },
         {
-          "arrival_seconds": 61150.82663516946,
-          "departure_seconds": 61150.82663516946,
-          "moving_seconds": 10715.735509070822,
-          "eq_pace_seconds_per_km": 663.919399714214,
-          "distance_pace_seconds_per_km": 912.7453559459499,
-          "pace_seconds_per_km": 912.7453559459499,
+          "arrival_seconds": 61510.27633599898,
+          "departure_seconds": 61510.27633599898,
+          "moving_seconds": 10830.644364272157,
+          "eq_pace_seconds_per_km": 671.0388567129928,
+          "distance_pace_seconds_per_km": 922.5330670977696,
+          "pace_seconds_per_km": 922.5330670977696,
           "cutoff_status": "not_checked"
         },
         {
-          "arrival_seconds": 66845.25720466858,
-          "departure_seconds": 66845.25720466858,
-          "moving_seconds": 5694.43056949912,
-          "eq_pace_seconds_per_km": 680.6360075298096,
-          "distance_pace_seconds_per_km": 789.1025816240875,
-          "pace_seconds_per_km": 789.1025816240875,
+          "arrival_seconds": 67202.80046168188,
+          "departure_seconds": 67202.80046168188,
+          "moving_seconds": 5692.524125682903,
+          "eq_pace_seconds_per_km": 680.4081367547053,
+          "distance_pace_seconds_per_km": 788.8383972216724,
+          "pace_seconds_per_km": 788.8383972216724,
           "cutoff_status": "not_checked"
         },
         {
-          "arrival_seconds": 75696.18146286174,
-          "departure_seconds": 75696.18146286174,
-          "moving_seconds": 8850.924258193161,
-          "eq_pace_seconds_per_km": 695.029608590062,
-          "distance_pace_seconds_per_km": 945.1470409742302,
-          "pace_seconds_per_km": 945.1470409742302,
+          "arrival_seconds": 75959.8600683731,
+          "departure_seconds": 75959.8600683731,
+          "moving_seconds": 8757.059606691226,
+          "eq_pace_seconds_per_km": 687.6587724953522,
+          "distance_pace_seconds_per_km": 935.1236925609829,
+          "pace_seconds_per_km": 935.1236925609829,
           "cutoff_status": "not_checked"
         },
         {
           "arrival_seconds": 86400.0,
           "departure_seconds": 86400.0,
-          "moving_seconds": 10703.818537138257,
-          "eq_pace_seconds_per_km": 713.9431444103229,
-          "distance_pace_seconds_per_km": 1087.5061231759987,
-          "pace_seconds_per_km": 1087.5061231759987,
-          "cutoff_status": "not_checked"
-        }
-      ]
-    },
-    {
-      "target_seconds": 88200.0,
-      "checkpoints": [
-        {
-          "arrival_seconds": 0.0,
-          "departure_seconds": 0.0,
-          "moving_seconds": 0.0,
-          "eq_pace_seconds_per_km": null,
-          "distance_pace_seconds_per_km": null,
-          "pace_seconds_per_km": null,
-          "cutoff_status": "not_checked"
-        },
-        {
-          "arrival_seconds": 6167.545534609146,
-          "departure_seconds": 6167.545534609146,
-          "moving_seconds": 6167.545534609146,
-          "eq_pace_seconds_per_km": 556.2024259097917,
-          "distance_pace_seconds_per_km": 787.815171116896,
-          "pace_seconds_per_km": 787.815171116896,
-          "cutoff_status": "not_checked"
-        },
-        {
-          "arrival_seconds": 17926.580604116512,
-          "departure_seconds": 17926.580604116512,
-          "moving_seconds": 11759.035069507367,
-          "eq_pace_seconds_per_km": 578.088390993931,
-          "distance_pace_seconds_per_km": 833.9007448976549,
-          "pace_seconds_per_km": 833.9007448976549,
-          "cutoff_status": "not_checked"
-        },
-        {
-          "arrival_seconds": 23456.295785343005,
-          "departure_seconds": 23456.295785343005,
-          "moving_seconds": 5529.715181226493,
-          "eq_pace_seconds_per_km": 598.6845714210987,
-          "distance_pace_seconds_per_km": 794.9056954378968,
-          "pace_seconds_per_km": 794.9056954378968,
-          "cutoff_status": "not_checked"
-        },
-        {
-          "arrival_seconds": 31967.8914403817,
-          "departure_seconds": 31967.8914403817,
-          "moving_seconds": 8511.595655038695,
-          "eq_pace_seconds_per_km": 614.7574626669641,
-          "distance_pace_seconds_per_km": 982.8585133078922,
-          "pace_seconds_per_km": 982.8585133078922,
-          "cutoff_status": "not_checked"
-        },
-        {
-          "arrival_seconds": 37722.40040473175,
-          "departure_seconds": 37722.40040473175,
-          "moving_seconds": 5754.5089643500505,
-          "eq_pace_seconds_per_km": 630.7515392410854,
-          "distance_pace_seconds_per_km": 660.0214651415267,
-          "pace_seconds_per_km": 660.0214651415267,
-          "cutoff_status": "not_checked"
-        },
-        {
-          "arrival_seconds": 45237.731796405315,
-          "departure_seconds": 45237.731796405315,
-          "moving_seconds": 7515.331391673564,
-          "eq_pace_seconds_per_km": 645.2152899349998,
-          "distance_pace_seconds_per_km": 844.629110417434,
-          "pace_seconds_per_km": 844.629110417434,
-          "cutoff_status": "not_checked"
-        },
-        {
-          "arrival_seconds": 51485.82219122569,
-          "departure_seconds": 51485.82219122569,
-          "moving_seconds": 6248.090394820378,
-          "eq_pace_seconds_per_km": 659.9190743144352,
-          "distance_pace_seconds_per_km": 981.1754377179818,
-          "pace_seconds_per_km": 981.1754377179818,
-          "cutoff_status": "not_checked"
-        },
-        {
-          "arrival_seconds": 62424.802190068825,
-          "departure_seconds": 62424.802190068825,
-          "moving_seconds": 10938.979998843133,
-          "eq_pace_seconds_per_km": 677.7510538749269,
-          "distance_pace_seconds_per_km": 931.7608841948239,
-          "pace_seconds_per_km": 931.7608841948239,
-          "cutoff_status": "not_checked"
-        },
-        {
-          "arrival_seconds": 68237.86672976584,
-          "departure_seconds": 68237.86672976584,
-          "moving_seconds": 5813.064539697014,
-          "eq_pace_seconds_per_km": 694.8159243533469,
-          "distance_pace_seconds_per_km": 805.5422187412555,
-          "pace_seconds_per_km": 805.5422187412555,
-          "cutoff_status": "not_checked"
-        },
-        {
-          "arrival_seconds": 77273.18524333803,
-          "departure_seconds": 77273.18524333803,
-          "moving_seconds": 9035.318513572187,
-          "eq_pace_seconds_per_km": 709.5093921023552,
-          "distance_pace_seconds_per_km": 964.8376043278602,
-          "pace_seconds_per_km": 964.8376043278602,
-          "cutoff_status": "not_checked"
-        },
-        {
-          "arrival_seconds": 88200.0,
-          "departure_seconds": 88200.0,
-          "moving_seconds": 10926.814756661974,
-          "eq_pace_seconds_per_km": 728.8169599188716,
-          "distance_pace_seconds_per_km": 1110.1625007421658,
-          "pace_seconds_per_km": 1110.1625007421658,
-          "cutoff_status": "not_checked"
-        }
-      ]
-    },
-    {
-      "target_seconds": 90000.0,
-      "checkpoints": [
-        {
-          "arrival_seconds": 0.0,
-          "departure_seconds": 0.0,
-          "moving_seconds": 0.0,
-          "eq_pace_seconds_per_km": null,
-          "distance_pace_seconds_per_km": null,
-          "pace_seconds_per_km": null,
-          "cutoff_status": "not_checked"
-        },
-        {
-          "arrival_seconds": 6293.413810825659,
-          "departure_seconds": 6293.413810825659,
-          "moving_seconds": 6293.413810825659,
-          "eq_pace_seconds_per_km": 567.5534958263181,
-          "distance_pace_seconds_per_km": 803.8930317519347,
-          "pace_seconds_per_km": 803.8930317519347,
-          "cutoff_status": "not_checked"
-        },
-        {
-          "arrival_seconds": 18292.429187873993,
-          "departure_seconds": 18292.429187873993,
-          "moving_seconds": 11999.015377048334,
-          "eq_pace_seconds_per_km": 589.8861132591132,
-          "distance_pace_seconds_per_km": 850.9191274465867,
-          "pace_seconds_per_km": 850.9191274465867,
-          "cutoff_status": "not_checked"
-        },
-        {
-          "arrival_seconds": 23934.9956993296,
-          "departure_seconds": 23934.9956993296,
-          "moving_seconds": 5642.566511455607,
-          "eq_pace_seconds_per_km": 610.9026238990805,
-          "distance_pace_seconds_per_km": 811.1282606509154,
-          "pace_seconds_per_km": 811.1282606509154,
-          "cutoff_status": "not_checked"
-        },
-        {
-          "arrival_seconds": 32620.29738814459,
-          "departure_seconds": 32620.29738814459,
-          "moving_seconds": 8685.30168881499,
-          "eq_pace_seconds_per_km": 627.3035333336367,
-          "distance_pace_seconds_per_km": 1002.9168503141752,
-          "pace_seconds_per_km": 1002.9168503141752,
-          "cutoff_status": "not_checked"
-        },
-        {
-          "arrival_seconds": 38492.24531095077,
-          "departure_seconds": 38492.24531095077,
-          "moving_seconds": 5871.947922806179,
-          "eq_pace_seconds_per_km": 643.6240196337612,
-          "distance_pace_seconds_per_km": 673.491290960742,
-          "pace_seconds_per_km": 673.491290960742,
-          "cutoff_status": "not_checked"
-        },
-        {
-          "arrival_seconds": 46160.950812658484,
-          "departure_seconds": 46160.950812658484,
-          "moving_seconds": 7668.705501707715,
-          "eq_pace_seconds_per_km": 658.3829489132646,
-          "distance_pace_seconds_per_km": 861.8664392014629,
-          "pace_seconds_per_km": 861.8664392014629,
-          "cutoff_status": "not_checked"
-        },
-        {
-          "arrival_seconds": 52536.55325635275,
-          "departure_seconds": 52536.55325635275,
-          "moving_seconds": 6375.602443694268,
-          "eq_pace_seconds_per_km": 673.3868105249344,
-          "distance_pace_seconds_per_km": 1001.1994262428394,
-          "pace_seconds_per_km": 1001.1994262428394,
-          "cutoff_status": "not_checked"
-        },
-        {
-          "arrival_seconds": 63698.77774496819,
-          "departure_seconds": 63698.77774496819,
-          "moving_seconds": 11162.224488615437,
-          "eq_pace_seconds_per_km": 691.5827080356394,
-          "distance_pace_seconds_per_km": 950.7764124436975,
-          "pace_seconds_per_km": 950.7764124436975,
-          "cutoff_status": "not_checked"
-        },
-        {
-          "arrival_seconds": 69630.4762548631,
-          "departure_seconds": 69630.4762548631,
-          "moving_seconds": 5931.698509894908,
-          "eq_pace_seconds_per_km": 708.995841176884,
-          "distance_pace_seconds_per_km": 821.9818558584234,
-          "pace_seconds_per_km": 821.9818558584234,
-          "cutoff_status": "not_checked"
-        },
-        {
-          "arrival_seconds": 78850.18902381431,
-          "departure_seconds": 78850.18902381431,
-          "moving_seconds": 9219.712768951213,
-          "eq_pace_seconds_per_km": 723.9891756146482,
-          "distance_pace_seconds_per_km": 984.5281676814901,
-          "pace_seconds_per_km": 984.5281676814901,
-          "cutoff_status": "not_checked"
-        },
-        {
-          "arrival_seconds": 90000.0,
-          "departure_seconds": 90000.0,
-          "moving_seconds": 11149.81097618569,
-          "eq_pace_seconds_per_km": 743.6907754274201,
-          "distance_pace_seconds_per_km": 1132.8188783083326,
-          "pace_seconds_per_km": 1132.8188783083326,
+          "moving_seconds": 10440.139931626894,
+          "eq_pace_seconds_per_km": 696.3558196552042,
+          "distance_pace_seconds_per_km": 1060.7164221875905,
+          "pace_seconds_per_km": 1060.7164221875905,
           "cutoff_status": "not_checked"
         }
       ]
@@ -80859,8 +81988,7 @@
     "KML altitude mode is omitted or clampToGround; explicitly using coordinate altitudes as the elevation profile. No terrain or vertical-datum correction was applied.",
     "Distance sensitivity: 5 m simplification would reduce 99694.4 to 98671.6 m. This may be drift OR real turns; distance is unchanged.",
     "部分或全部站点未提供关门时间，未校核这些站点。",
-    "路面难度仅采用显式 terrain_sections；未自动识别陡下坡负担、天气或个人肌力差异。",
-    "疲劳参数是计划假设，未自动按时长或个人数据校准；终点对齐不证明分段预测准确。",
+    "模型未计入技术路面、陡下坡额外负担、天气和个人肌力差异；请结合赛事规程判断。",
     "水量仅供比较赛段差异，并非个人饮水建议。",
     "插值不增加原始测量精度；爬升统计依赖海拔数据、过滤方法与阈值。"
   ]
