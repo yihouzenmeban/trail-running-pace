@@ -62,7 +62,9 @@ The two 100K examples explicitly select all four export formats. The 50K example
 
 The original 50K GPX lacks elevation at 59 points in two gaps spanning about 834.6 m and 34.1 m between known endpoints. Generate its pace chart using the copy with linear elevation interpolation along distance and its adjacent configuration. The original is unchanged; the [repair report](examples/大境门/DGW50K/elevation-repair.json) records the gaps and file hashes.
 
-The merged comparison SVG is for reference only. It includes times for all 16 plans, Garmin activity times against the 6h and 6.5h plans, and terrain data from all three sources. RunArt values come from the user-provided screenshot. Garmin values come from the September 12, 2026 Dajingmen activity; elapsed times include stops. Distances are cumulative. Garmin segment ascent/descent are differences between consecutive checkpoint totals estimated by interpolation within FIT laps; finish totals come from the platform.
+The 50K example also provides a single-column [6-hour-15-minute plan](examples/大境门/DGW50K/pace-chart-6h15m.svg) and its [configuration](examples/大境门/DGW50K/config-6h15m.json), using the default 06:00 start and segment pace in parentheses.
+
+The merged comparison SVG is for reference only. Its sections show times for all 16 plans, terrain data from all three sources, and Garmin activity times against the repository's 6:15 plan, in that order. RunArt values come from the user-provided screenshot. Garmin values come from the September 12, 2026 Dajingmen activity; elapsed times include stops. The activity comparison displays seconds; differences are Garmin minus plan, with negative values indicating earlier passage. Distances are cumulative. Garmin segment ascent/descent are differences between consecutive checkpoint totals estimated by interpolation within FIT laps; finish totals come from the platform.
 
 ## CLI quick start
 

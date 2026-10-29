@@ -1,0 +1,5 @@
+{
+  "name": "大境门 MGW50K · 6 小时 15 分钟",
+  "targets": ["06:15"],
+  "cp_selection": ["wpt:1", "wpt:2", "wpt:3", "wpt:4", "wpt:5", "wpt:6"]
+}
