@@ -6,7 +6,7 @@ This guide is for Skills maintainers. Normal chart generation does not require t
 
 ## Cases and inputs
 
-[cases.json](cases.json) provides five cases with Chinese and English prompts. They cover defaults, start time independent of parenthesized display, explicit arrival display, replacing an old target list, and retaining `0/false`. All cases use the synthetic [course.gpx](course.gpx) in the same directory.
+[cases.json](cases.json) provides seven cases with Chinese and English prompts. They cover defaults, start time independent of parenthesized display, explicit arrival display, disabling linear fatigue, explicit terrain adjustments, replacing an old target list, and retaining `0/false`. All cases use the synthetic [course.gpx](course.gpx) in the same directory.
 
 ## Procedure
 

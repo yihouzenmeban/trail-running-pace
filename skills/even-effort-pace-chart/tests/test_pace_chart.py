@@ -77,7 +77,7 @@ class ConfigurationDefaultTests(Fixture):
         explicit = self.plan(
             name="course", sample_m=5, smoothing_m=20, ascent_smoothing_m=0,
             ascent_method="hysteresis", ascent_threshold_m=10, elevation_spike_m=30, distance_tolerance_m=0,
-            ascent_km_per_100m=1, fatigue_rate=0.08, water_ml_per_10km=700,
+            ascent_km_per_100m=1, fatigue_model="linear", fatigue_half_slowdown=0.16, water_ml_per_10km=700,
             target_step_minutes=30, start_time="06:00", output_formats=["svg"],
             secondary_display="pace", pace_basis="distance", track_index=1,
             use_kml_altitudes=False, distance_alignment="confirm",
@@ -95,7 +95,7 @@ class ConfigurationDefaultTests(Fixture):
         expected = {
             "sample_m": 5, "smoothing_m": 20, "ascent_smoothing_m": 0,
             "ascent_threshold_m": 10, "elevation_spike_m": 30, "distance_tolerance_m": 0,
-            "ascent_km_per_100m": 1, "fatigue_rate": 0.08,
+            "ascent_km_per_100m": 1, "fatigue_half_slowdown": 0.16,
             "water_ml_per_10km": 700, "target_step_minutes": 30,
         }
         for omitted in expected:
@@ -109,14 +109,14 @@ class ConfigurationDefaultTests(Fixture):
         expected = {
             "sample_m": 5, "smoothing_m": 20, "ascent_smoothing_m": 0,
             "ascent_threshold_m": 10, "elevation_spike_m": 30, "distance_tolerance_m": 0,
-            "ascent_km_per_100m": 1, "fatigue_rate": 0.08,
+            "ascent_km_per_100m": 1, "fatigue_half_slowdown": 0.16,
             "water_ml_per_10km": 700, "target_step_minutes": 30,
             "start_time": "06:00", "output_formats": ["svg"], "secondary_display": "pace",
         }
         for key, value in (
             ("sample_m", 10), ("smoothing_m", 40), ("ascent_smoothing_m", 60),
             ("ascent_threshold_m", 5), ("elevation_spike_m", 0), ("distance_tolerance_m", 2),
-            ("ascent_km_per_100m", 0.5), ("fatigue_rate", 0.15),
+            ("ascent_km_per_100m", 0.5), ("fatigue_half_slowdown", 0.15),
             ("water_ml_per_10km", 900), ("target_step_minutes", 15),
             ("start_time", "07:30"), ("output_formats", ["json"]),
             ("secondary_display", "arrival_time"),

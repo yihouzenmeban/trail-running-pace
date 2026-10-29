@@ -8,7 +8,7 @@ Run with Python 3.10+; no packages, credentials, or online services are required
 
 All optional parameters follow the same rule: **current explicit request > user-selected configuration > script defaults**. Build a new task's configuration from the target and explicit overrides, leaving other optional fields absent. Retain route and CP selections only when confirmed by inspection of the current route. Example targets, exports, rests, cutoffs, and track indices are example choices, not defaults to inherit.
 
-Omitted fields use defaults. Valid `0` and `false` values take effect without being replaced; for example, `fatigue_rate: 0` disables fatigue progression and `smoothing_m: 0` disables that smoothing. `null`, empty strings, and empty lists are not general ways to request defaults; invalid types or values raise errors. `track_index: null` selects the only available track automatically, and station `cutoff: null` means no supplied cutoff.
+Omitted fields use defaults. Valid `0` and `false` values take effect without being replaced; for example, `fatigue_half_slowdown: 0` disables fatigue progression in the default linear model and `smoothing_m: 0` disables that smoothing. `null`, empty strings, and empty lists are not general ways to request defaults; invalid types or values raise errors. `track_index: null` selects the only available track automatically, and station `cutoff: null` means no supplied cutoff.
 
 Two compatibility precedence rules apply: a present `targets` list takes precedence over `target`, and omitted `secondary_display` honors an explicitly supplied legacy `pace_basis`. Remove the old `targets` when replacing a list with a central target. Changing one parameter does not automatically adjust other parameters. Missing finish targets, unselected multiple routes, and absent or ambiguous CPs require input rather than invented choices. If five-column expansion produces nonpositive durations, supply an explicit target list or interval instead of silently reducing the interval.
 
@@ -137,7 +137,10 @@ Default `distance_alignment` is `"confirm"`: differences over `max(100 m, 0.5% o
 | `elevation_spike_m` | 30 | Minimum residual in metres for isolated elevation spikes; 0 disables correction; distance/grade conditions also apply |
 | `distance_tolerance_m` | 0 | Horizontal simplification tolerance in metres; 0 disables it; positive values can shorten real small turns |
 | `ascent_km_per_100m` | 1 | Equivalent kilometres per 100 m ascent; nonnegative |
-| `fatigue_rate` | 0.08 | Pace multiplier minus one per doubling; range 0 to 1 |
+| `fatigue_model` | `"linear"` | Finite starting pace; `"legacy_power"` preserves the old curve. Supplying only legacy `fatigue_rate` selects it with a warning |
+| `fatigue_half_slowdown` | 0.16 (linear only) | Extra moving time for the second half of adjusted work versus the first; range 0 to 1; zero disables progression |
+| `fatigue_rate` | 0.08 (legacy_power only) | Legacy average-pace doubling parameter, range 0 to 1; 0.08 gives 16% more time for the second half; cannot mix with linear parameters |
+| `terrain_sections` | `[]` | Explicit terrain difficulty ranges; no automatic route-based inference |
 | `water_ml_per_10km` | 700 | Comparative water per 10 equivalent km; nonnegative |
 | `target_step_minutes` | 30 | Positive interval for five-column expansion |
 
@@ -159,6 +162,36 @@ To select the previous 100 m window approach, add to an existing target configur
 Inspect with `--ascent-method window --ascent-smoothing-m 100`. Boundary and integration fixes also apply, so results need not exactly match older versions. An old configuration specifying only `ascent_smoothing_m: 100` now applies the default reversal threshold after that window; explicitly choose `window` for window statistics alone.
 
 Horizontal simplification requires an explicit value such as `"distance_tolerance_m": 2`; inspect with `--distance-tolerance-m 2`. Do not enable it automatically because trial distance decreases. Elevation spike correction is enabled by default and reported; use `"elevation_spike_m": 0` when all source elevations must be retained. Also set `ascent_threshold_m` and `ascent_smoothing_m` to 0 to sum elevation changes directly at source vertices. Input files are never rewritten.
+
+## Fatigue models and terrain adjustments
+
+Omitting fatigue fields selects linear pacing with `fatigue_half_slowdown: 0.16`. This preserves the old half-time ratio while fixing the starting boundary. It is not individually calibrated and does not adapt automatically to race duration. Disable progression in the default model with:
+
+```json
+{"fatigue_half_slowdown": 0}
+```
+
+Reproduce the old allocation with:
+
+```json
+{"fatigue_model": "legacy_power", "fatigue_rate": 0.08}
+```
+
+An old configuration supplying only `fatigue_rate` also retains its behavior. Remove that field before migrating to linear pacing. Explicit `linear` plus `fatigue_rate`, or `legacy_power` plus `fatigue_half_slowdown`, is an error. The parameters are not interchangeable.
+
+For a known difficult surface, explicitly increase its allocation weight:
+
+```json
+{
+  "terrain_sections": [
+    {"start_km": 12, "end_km": 18, "factor": 1.2}
+  ]
+}
+```
+
+This multiplies base equivalent work over processed-route kilometres 12–18 by 1.2 before normalizing to the finish target. It does not guarantee 20% more time for that section or increase the target duration. Ranges must lie within the route and use `[start_km, end_km)` semantics; they are sorted automatically and may touch but not overlap. Factors must be finite and at least 1; `[]` disables adjustments. Ranges use processed-route kilometres and are not mapped from official distances by `distance_alignment: "scale"`. Recheck them after changing horizontal processing.
+
+Base equivalent distance, water, and chart layout retain their conventions. JSON/CSV add `effort_distance_km`; JSON also includes `cumulative_effort_distance_km`. Without adjustments, these equal the corresponding base equivalent distances. See the [model reference](model.en.md#fatigue-and-finish-targets) for equations, limitations, and split validation.
 
 ## Parenthesized display
 
@@ -220,7 +253,7 @@ Available exports are listed below. Only SVG is generated by default; other file
 - `pace-chart.html`: reference-style race table with white background, gray rules, black graphics, yellow/red/green/blue terrain/supply columns, repeated print headers, and horizontal scrolling on small screens.
 - `pace-chart.svg`: native SVG table with text and vector segment graphics; no HTML `foreignObject` or external assets.
 - `pace-chart.csv`: UTF-8 BOM, long form with one row per CP and target. Includes raw seconds and formatted cumulative durations, incoming `segment_water_ml`, and next-leg `water_ml`. Potential formula-leading CP names are escaped for spreadsheets.
-- `pace-chart.json`: full-precision source of truth with parameters, configuration, input SHA-256, station statistics, schedule values, slope fractions, profiles, warnings, and article attribution. Schema version 2; geometry in metres, times in seconds, equivalent distances in kilometres. In version 2, `water_ml` describes the outgoing leg; `segment_water_ml` describes the incoming leg.
+- `pace-chart.json`: full-precision source of truth with parameters, configuration, input SHA-256, station statistics, schedule values, slope fractions, profiles, warnings, and article attribution. Schema version 3; geometry in metres, times in seconds, equivalent distance and adjusted work in kilometres. Adds model identity and adjusted-work fields; `water_ml` still describes the outgoing leg and `segment_water_ml` the incoming leg. Inactive model parameters are `null` in output; this does not permit `null` in input configurations.
 
 Primary cumulative times are departures, shown as `HH:MM` by truncating seconds, including durations over 24 hours. In pace modes, resting CPs also show elapsed arrival on an extra line. Arrival clock mode puts arrival in parentheses and omits that extra line. JSON/CSV include `distance_pace_seconds_per_km`, `eq_pace_seconds_per_km`, and the selected `pace_seconds_per_km`; arrival and departure remain elapsed seconds since the start, with clock times used only for chart presentation. HTML/SVG headers use `Target` and hours. CSV formatted arrival/departure retain seconds, and raw JSON/CSV values retain calculation precision. Station cells display cutoff information only when supplied; missing cutoffs remain in CLI warnings and JSON. Actual cutoff violations appear in their target cells. JSON/CSV include the status of every CP.
 

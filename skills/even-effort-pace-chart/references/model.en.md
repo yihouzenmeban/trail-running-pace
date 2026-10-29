@@ -77,16 +77,30 @@ For a segment:
 E = horizontal_distance_km + ascent_m / 100 * ascent_km_per_100m
 ```
 
-The coefficient defaults to 1 km per 100 m of ascent, following the article's common baseline. Downhill does not subtract equivalent distance. Steep descents and technical terrain can demand extra effort that this scalar model does not capture.
+The coefficient defaults to 1 km per 100 m of ascent, consistent with the article and [ITRA's km-effort convention](https://itra.run/Files/News/PressReleases/DP_ITRA_2018_EN.pdf). A course difficulty measure does not validate split-time predictions. Downhill does not subtract equivalent distance; different profiles with identical distance and ascent receive the same base weight.
+
+Explicit `terrain_sections` apply difficulty factors `f >= 1` over processed-route kilometre ranges. Uncovered ranges use 1. Integration respects range boundaries and elevation vertices:
+
+```text
+dW = f * (horizontal_distance_km + positive_elevation_change_m / 100 * ascent_km_per_100m)
+```
+
+`W` is the adjusted work used for timing, exported as `effort_distance_km` and `cumulative_effort_distance_km`. Base `eq_distance_km`, the equivalent-pace denominator, and water continue to use `E`. Factors do not add ascent twice and are never inferred automatically from GPX or grade. They redistribute a fixed finish target: increasing one section's factor leaves less time for other sections. They do not predict an extension of the target. A uniform factor over the entire route cancels during normalization.
+
+Ranges are independent of CPs, may touch, and must not overlap. Adding a CP preserves existing stations' cumulative work and planned times. Official-distance alignment does not scale these ranges; use processed-route kilometres.
+
+[Minetti et al.'s grade-cost experiment](https://pubmed.ncbi.nlm.nih.gov/12183501/) shows that downhill cost is not constant, but laboratory energy cost does not directly predict technical-trail speed. [Trail-race split research](https://pmc.ncbi.nlm.nih.gov/articles/PMC9680470/) also finds descent slowdown depends on race stage. This model therefore applies neither automatic downhill speed credits nor a universal descent penalty. Explicit terrain factors do not replace a full grade and individual descent-skill model.
 
 ## Fatigue and finish targets
 
-Let `r` be `fatigue_rate` (default 0.08), `E_total` the total equivalent distance, and `E_i` the cumulative equivalent distance through station i.
+The default is `fatigue_model: "linear"`. Let `h = fatigue_half_slowdown`, default 0.16: **the second half of adjusted work takes 16% more moving time than the first half**. This does not mean half the horizontal distance, total-race slowdown, or a 16% speed reduction. Rests are excluded from this ratio.
 
 ```text
-b = 1 + log2(1 + r)
+a = 4 * h / (2 - h)
+x_i = W_i / W_total
+F(x) = (x + a*x*x/2) / (1 + a/2)
 T_move = T_finish - sum(station_rest_seconds)
-M_i = T_move * (E_i / E_total)^b
+M_i = T_move * F(x_i)
 segment_moving_i = M_i - M_(i-1)
 segment_eq_pace_i = segment_moving_i / segment_equivalent_km
 segment_distance_pace_i = segment_moving_i / segment_horizontal_km
@@ -94,7 +108,21 @@ arrival_i = M_i + sum(rest before station i)
 departure_i = arrival_i + rest_i
 ```
 
-`r = 0` gives constant equivalent pace. With the default, average pace over a doubled equivalent distance changes by the factor `2^(b-1) = 1.08`. This is a power-curve parameterization, not a claim that the article's illustrated interval examples or the proprietary tool use these exact equations. The curve is normalized separately for each target, so every final departure is exactly that target before presentation rounding.
+Pace per unit of adjusted work is proportional to `1 + a*x`, finite and positive at the start. `h = 0` allocates time linearly in `W`: equivalent pace is constant without terrain adjustments, but varies with terrain factors when they are supplied. The valid range `0 <= h <= 1` is a computational bound, not a recommended personal range.
+
+The default 0.16 preserves the old default curve's half-time ratio while redistributing time within each half. This is an engineering compatibility choice, not a fit to personal training samples. For 100 flat kilometres in 10 hours without stops, the first kilometre is about 5:07/km, versus 3:36/km with the old curve. The default linear curve's terminal/initial pace-per-work ratio is about 1.348, not 1.16.
+
+`h` does not automatically change with target duration, course length, or athlete ability; different targets share the same relative curve. A route alone cannot determine an individual's fatigue parameter. Rests reduce the movement budget without modeling recovery. The model does not simulate finishing sprints, darkness, or descent-specific fatigue. Tools such as [ultraPacer](https://www.ultrapacer.com/docs/models) separate grade, terrain, and pacing strategy; their design does not validate this project's coefficients.
+
+### Legacy power curve and migration
+
+Explicit `fatigue_model: "legacy_power"` uses `b = 1 + log2(1 + fatigue_rate)` and `F(x) = x^b`, with legacy default rate 0.08. An old configuration supplying only `fatigue_rate` automatically selects this model and warns, preserving its meaning. Rate 0.08 makes the second half take 16% longer. Starting pace tends to zero, making short opening splits potentially too fast. To migrate, remove `fatigue_rate` and choose `fatigue_half_slowdown`. Model-specific parameters cannot be mixed. Legacy `fatigue_rate: 0` still disables fatigue progression.
+
+Riegel's performance relationship describes sustainable performances across distances; it does not establish `x^b` as a within-race cumulative-time curve. See [research on power laws and endurance performance](https://link.springer.com/article/10.1007/s00421-023-05274-5). The legacy curve also does not promise to reproduce the source article's interval examples.
+
+### Calibration and validation
+
+Every target is normalized separately to finish exactly on target. This is an arithmetic constraint, not prediction accuracy. Use the [split-model evaluation](../evals/pacing-validation.en.md) to compare internal CP and segment errors, separating whole activities into training and validation sets and distinguishing moving from unseparated elapsed time. Fitting and evaluating on the same activities is not independent validation; a better fit for one athlete must not automatically replace the global default.
 
 Rest is explicit and included once; no automatic extra delay or stop is inferred. Every target must exceed total rest. Time calculations retain floating-point precision; segment totals calculated from rounded display values may differ slightly.
 
@@ -110,4 +138,4 @@ These columns are pre-race reference schedules. Switching to an adjacent column 
 
 Comparative segment water is `E / 10 * water_ml_per_10km`, defaulting to 700 mL per 10 equivalent kilometres as an article-inspired baseline. `segment_water_ml` belongs to the incoming leg. The displayed `water_ml` belongs to the next leg, so it is shifted up one station and becomes zero at the finish. It communicates relative segment demand. It is not an individual hydration, medical, or race-safety recommendation.
 
-The input route alone cannot establish an achievable finish target. Terrain surface, steep descent load, weather, congestion, altitude response, runner fitness, nutrition, and recovery are not modeled. Missing race cutoffs remain unchecked. Route-derived totals can differ from organizer statistics because of geometry, elevation source, smoothing, and distance mapping.
+The input route alone cannot establish an achievable finish target. Terrain uses explicit factors only; steep descent load, weather, congestion, altitude response, runner fitness, nutrition, and recovery are not modeled automatically. Missing race cutoffs remain unchecked. Route-derived totals can differ from organizer statistics because of geometry, elevation source, smoothing, and distance mapping.

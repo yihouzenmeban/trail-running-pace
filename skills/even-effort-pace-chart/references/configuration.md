@@ -8,7 +8,7 @@
 
 所有可选参数都遵循同一规则：**当前明确要求 > 用户指定使用的配置 > 脚本默认值**。新任务应从目标时间和明确覆盖项构建配置，其余可选字段省略；仅保留当前轨迹检查后确认需要的路线与 CP 选择。示例中的目标、导出格式、停留、关门时间和轨迹序号都是示例选择，不能自动继承为默认值。
 
-省略字段才会使用默认值。合法的 `0` 或 `false` 按配置生效，不会被默认值替换；例如 `fatigue_rate: 0` 关闭疲劳递增，`smoothing_m: 0` 关闭对应平滑。`null`、空字符串或空列表不能通用地表示“使用默认值”，无效类型或值会报错；`track_index: null` 表示自动选择唯一轨迹，站点 `cutoff: null` 表示未提供关门时间。
+省略字段才会使用默认值。合法的 `0` 或 `false` 按配置生效，不会被默认值替换；例如 `fatigue_half_slowdown: 0` 关闭默认线性模型的疲劳递增，`smoothing_m: 0` 关闭对应平滑。`null`、空字符串或空列表不能通用地表示“使用默认值”，无效类型或值会报错；`track_index: null` 表示自动选择唯一轨迹，站点 `cutoff: null` 表示未提供关门时间。
 
 有两项兼容优先级：`targets` 存在时优先于 `target`，`secondary_display` 未设置时会沿用显式提供的旧 `pace_basis`。把原目标列表改成单个中心目标时，应删除原 `targets`；调整一个参数不会自动调整其他参数。没有目标时间、多条轨迹未选定、CP 缺失或有歧义等情况需要补充信息，不会凭空指定目标、轨迹或站点。五组目标展开后若出现非正时长，应明确提供目标列表或间隔，不自动缩小间隔。
 
@@ -137,7 +137,10 @@ KML 中命名的 Point 地标提供 CP 候选，地标自身可以没有海拔�
 | `elevation_spike_m` | 30 | 孤立海拔尖峰的最小预测偏差，单位米；0 关闭，还需满足模型中的距离与坡度条件 |
 | `distance_tolerance_m` | 0 | 水平几何简化容差，单位米；0 不简化，正值显式启用并可能缩短真实小弯道 |
 | `ascent_km_per_100m` | 1 | 每爬升 100 米增加的等效公里数，非负 |
-| `fatigue_rate` | 0.08 | 等效距离翻倍时的平均配速倍率减一，范围 0–1 |
+| `fatigue_model` | `"linear"` | 起点配速有限的线性模型；`"legacy_power"` 为兼容幂曲线。只提供旧 `fatigue_rate` 时自动选择后者并告警 |
+| `fatigue_half_slowdown` | 0.16（仅 linear） | 后半程修正工作量比前半程多用的移动时间比例，范围 0–1；0 关闭疲劳递增 |
+| `fatigue_rate` | 0.08（仅 legacy_power） | 旧平均配速翻倍参数，范围 0–1；0.08 对应后半程多用 16% 时间，不能与线性参数混用 |
+| `terrain_sections` | `[]` | 显式路面难度区间，默认不修正；不根据轨迹自动推断 |
 | `water_ml_per_10km` | 700 | 每 10 等效公里的比较用水量，非负，单位毫升 |
 | `target_step_minutes` | 30 | 自动展开五组时的相邻间隔，必须大于零，单位分钟 |
 
@@ -159,6 +162,36 @@ KML 中命名的 Point 地标提供 CP 候选，地标自身可以没有海拔�
 对应检查参数为 `--ascent-method window --ascent-smoothing-m 100`。边界和积分问题也已修复，数值不保证与旧版完全相同。只有 `ascent_smoothing_m: 100` 的旧配置会在窗口后继续应用新的默认峰谷阈值；明确选择 `window` 才是不加峰谷阈值的窗口法。
 
 水平简化需明确配置，例如 `"distance_tolerance_m": 2`，检查时使用 `--distance-tolerance-m 2`；不能因试算出现距离下降就自动开启。海拔尖峰修正默认开启并报告改动，明确要求保留所有源海拔时用 `"elevation_spike_m": 0`。同时将 `ascent_threshold_m` 和 `ascent_smoothing_m` 设为 0，可直接在原始顶点上累计升降。原始轨迹文件始终不改写。
+
+## 疲劳模型与路面修正
+
+省略疲劳字段使用线性模型和 `fatigue_half_slowdown: 0.16`。这个默认值保留旧方案的前后半程比例，修正起点边界，不代表已经过个人数据校准；不会按比赛时长自动调参。关闭默认模型的疲劳递增：
+
+```json
+{"fatigue_half_slowdown": 0}
+```
+
+复现旧时间分配：
+
+```json
+{"fatigue_model": "legacy_power", "fatigue_rate": 0.08}
+```
+
+旧配置只包含 `fatigue_rate` 也保持旧行为；迁移需移除它，再配置线性模型。显式 `linear` 与 `fatigue_rate`、或 `legacy_power` 与 `fatigue_half_slowdown` 的组合都会报错。新旧参数不能直接互换。
+
+已知某段路面较难时，可以显式提高其时间权重：
+
+```json
+{
+  "terrain_sections": [
+    {"start_km": 12, "end_km": 18, "factor": 1.2}
+  ]
+}
+```
+
+以上表示处理后轨迹第 12–18 公里的基础等效工作量乘 1.2，再归一化分配全程目标。它不是保证该段用时增加 20%，也不增加总目标时间。区间必须在轨迹内，按 `[start_km, end_km)` 解释，自动排序，允许相邻但不重叠；系数必须有限且不小于 1。`[]` 表示无修正。范围使用处理后轨迹公里数，不随 `distance_alignment: "scale"` 映射官方里程，变更水平处理后应重新核对。
+
+基础等效距离、水量及图表布局保持原口径。JSON/CSV 的 `effort_distance_km` 记录修正工作量；JSON 还记录 `cumulative_effort_distance_km`。默认无修正时它们等于对应基础等效距离。模型公式、限制和分段验证入口见[模型文档](model.md#疲劳与目标时间)。
 
 ## 括号内显示内容
 
@@ -220,7 +253,7 @@ python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate race.gpx \
 - `pace-chart.html`：白底灰线、黑色图示及黄/红/绿/蓝色地形补给列，打印重复表头，小屏可横向滚动。
 - `pace-chart.svg`：包含文字及分段矢量图的独立 SVG，不使用 HTML foreignObject 或外部资源。
 - `pace-chart.csv`：UTF-8 BOM，按 CP 和目标展开为长表，包含原始秒数、累计时长、上一段的 `segment_water_ml` 和下一段的 `water_ml`；可能被表格软件识别为公式的站名会转义。
-- `pace-chart.json`：完整精度数据，包括参数、配置、输入 SHA-256、站点统计、配速计划、坡度比例、肖像、告警和文章来源。结构版本为 2，几何单位为米，时间为秒，等效距离为公里；版本 2 的 `water_ml` 对应下一段，`segment_water_ml` 对应上一段。
+- `pace-chart.json`：完整精度数据，包括参数、配置、输入 SHA-256、站点统计、配速计划、坡度比例、肖像、告警和文章来源。结构版本为 3，几何单位为米，时间为秒，等效距离与修正工作量为公里；新增疲劳模型标识和修正工作量，`water_ml` 仍对应下一段，`segment_water_ml` 对应上一段。参数中未使用的另一模型字段为 `null`，不代表输入配置接受 `null`。
 
 累计主时间为出站时长，显示 `HH:MM`，秒数向下截断，可超过 24 小时；配速模式下，有停留的站点额外显示到站时长。到达钟点模式将本站到达信息直接放入括号，不再增加该行。JSON/CSV 同时保留 `distance_pace_seconds_per_km`、`eq_pace_seconds_per_km` 和所选的 `pace_seconds_per_km`，到站、出站仍为发枪后的累计秒数，钟点仅用于图表展示。HTML/SVG 使用 Target 与小时数作列标题；CSV 格式化累计时间保留秒，原始 JSON/CSV 保留计算精度。位置列仅展示实际提供的关门时间；缺失时仍在 CLI 和 JSON 告警，实际超时在目标单元格标示。JSON/CSV 保留每个站点的校核状态。
 
