@@ -2,7 +2,7 @@
   "default_parameters": {
     "sample_m": 5,
     "smoothing_m": 20,
-    "ascent_smoothing_m": 0,
+    "ascent_smoothing_m": 40,
     "ascent_method": "hysteresis",
     "ascent_threshold_m": 10,
     "elevation_spike_m": 30,
@@ -45,11 +45,11 @@
     },
     {
       "id": "preserve_zero_false",
-      "prompt_zh": "复用提供的配置和 course.gpx，目标仍为 5 小时。将 smoothing_m、fatigue_rate、water_ml_per_10km 设为 0，use_kml_altitudes 设为 false，其他设置不变。",
-      "prompt_en": "Reuse the supplied configuration and course.gpx with the same 5-hour target. Set smoothing_m, fatigue_rate, and water_ml_per_10km to 0 and use_kml_altitudes to false. Keep the other settings.",
-      "selected_config": {"target": "05:00", "smoothing_m": 20, "fatigue_rate": 0.08, "water_ml_per_10km": 700, "use_kml_altitudes": true},
-      "expected_parameters": {"smoothing_m": 0, "fatigue_rate": 0, "water_ml_per_10km": 0},
-      "required_config": {"smoothing_m": 0, "fatigue_rate": 0, "water_ml_per_10km": 0, "use_kml_altitudes": false}
+      "prompt_zh": "复用提供的配置和 course.gpx，目标仍为 5 小时。将 smoothing_m、ascent_smoothing_m、fatigue_rate、water_ml_per_10km 设为 0，use_kml_altitudes 设为 false，其他设置不变。",
+      "prompt_en": "Reuse the supplied configuration and course.gpx with the same 5-hour target. Set smoothing_m, ascent_smoothing_m, fatigue_rate, and water_ml_per_10km to 0 and use_kml_altitudes to false. Keep the other settings.",
+      "selected_config": {"target": "05:00", "smoothing_m": 20, "ascent_smoothing_m": 40, "fatigue_rate": 0.08, "water_ml_per_10km": 700, "use_kml_altitudes": true},
+      "expected_parameters": {"smoothing_m": 0, "ascent_smoothing_m": 0, "fatigue_rate": 0, "water_ml_per_10km": 0},
+      "required_config": {"smoothing_m": 0, "ascent_smoothing_m": 0, "fatigue_rate": 0, "water_ml_per_10km": 0, "use_kml_altitudes": false}
     }
   ]
 }

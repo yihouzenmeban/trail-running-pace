@@ -18,7 +18,7 @@
 python3 skills/even-effort-pace-chart/scripts/pace_chart.py inspect race.gpx
 ```
 
-可选参数：`--track-index 1`、`--sample-m 5`、`--smoothing-m 20`、`--ascent-method hysteresis`、`--ascent-threshold-m 10`、`--ascent-smoothing-m 0`、`--elevation-spike-m 30`、`--distance-tolerance-m 0`。20 米窗口用于细节图示和坡度分布；爬升默认在清理后的原始海拔上使用 10 米峰谷反转阈值，不做额外窗口平均。输出包括水平距离、爬升下降、处理参数、`diagnostics`、告警和 `cp_candidates`；候选点包含 ID、名称、识别标记及可能的轨迹投影位置，距离单位为米。存在多条轨迹时，错误信息会列出序号，请选择后重新执行。
+可选参数：`--track-index 1`、`--sample-m 5`、`--smoothing-m 20`、`--ascent-method hysteresis`、`--ascent-threshold-m 10`、`--ascent-smoothing-m 40`、`--elevation-spike-m 30`、`--distance-tolerance-m 0`。20 米窗口用于细节图示和坡度分布；爬升默认先在清理后的海拔上做 40 米完整居中窗口平均（前后各 20 米），再使用 10 米峰谷反转阈值。输出包括水平距离、爬升下降、处理参数、`diagnostics`、告警和 `cp_candidates`；候选点包含 ID、名称、识别标记及可能的轨迹投影位置，距离单位为米。存在多条轨迹时，错误信息会列出序号，请选择后重新执行。
 
 检查与生成必须使用同一组处理参数。`diagnostics` 包含原始及处理后距离、原始与清理后直接累计爬升、点距最小/中位/最大值、质量标记数量、尖峰修正数量与索引，以及距离简化试算结果。最终过滤后的爬升在顶层 `ascent_m`。距离试算仅诊断，不能证明 GPS 漂移；默认不会修改水平路径。
 
@@ -129,11 +129,11 @@ KML 中命名的 Point 地标提供 CP 候选，地标自身可以没有海拔�
 | `checkpoint_overrides` | `{}` | 覆盖选定站点的名称、停留、关门或定位等字段 |
 | `distance_alignment` | `"confirm"` | 官方距离不匹配时要求确认；明确设置 `"scale"` 才按比例映射 |
 | `use_kml_altitudes` | `false` | 布尔值；显式采用未声明模式或 clampToGround 的 KML 坐标高度，对 GPX 无影响 |
-| `sample_m` | 5 | 显示及启用窗口平滑时的沿距离插值间隔，单位米，必须大于零；默认爬升保留原始顶点 |
+| `sample_m` | 5 | 显示及启用窗口平滑时的沿距离插值间隔，单位米，必须大于零；关闭爬升平滑时保留原始海拔顶点 |
 | `smoothing_m` | 20 | 图示与坡度分布的完整居中平均窗口，单位米；0 关闭 |
 | `ascent_method` | `"hysteresis"` | 峰谷反转阈值法；`"window"` 选择窗口法，不使用峰谷阈值 |
 | `ascent_threshold_m` | 10 | 峰谷反转阈值，单位米，非负；0 关闭峰谷过滤，不是相邻点最小高差 |
-| `ascent_smoothing_m` | 0 | 爬升统计前的独立完整居中窗口，单位米；0 关闭，大窗口仍会削弱短坡 |
+| `ascent_smoothing_m` | 40 | 爬升统计前的独立完整居中平均窗口，单位米；默认前后各 20 米，0 关闭，大窗口仍会削弱短坡 |
 | `elevation_spike_m` | 30 | 孤立海拔尖峰的最小预测偏差，单位米；0 关闭，还需满足模型中的距离与坡度条件 |
 | `distance_tolerance_m` | 0 | 水平几何简化容差，单位米；0 不简化，正值显式启用并可能缩短真实小弯道 |
 | `ascent_km_per_100m` | 1 | 每爬升 100 米增加的等效公里数，非负 |

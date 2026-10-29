@@ -75,7 +75,7 @@ class ConfigurationDefaultTests(Fixture):
     def test_omitted_options_match_explicit_documented_defaults(self):
         minimal = self.plan()
         explicit = self.plan(
-            name="course", sample_m=5, smoothing_m=20, ascent_smoothing_m=0,
+            name="course", sample_m=5, smoothing_m=20, ascent_smoothing_m=40,
             ascent_method="hysteresis", ascent_threshold_m=10, elevation_spike_m=30, distance_tolerance_m=0,
             ascent_km_per_100m=1, fatigue_rate=0.08, water_ml_per_10km=700,
             target_step_minutes=30, start_time="06:00", output_formats=["svg"],
@@ -93,7 +93,7 @@ class ConfigurationDefaultTests(Fixture):
 
     def test_each_omitted_numeric_option_keeps_its_default(self):
         expected = {
-            "sample_m": 5, "smoothing_m": 20, "ascent_smoothing_m": 0,
+            "sample_m": 5, "smoothing_m": 20, "ascent_smoothing_m": 40,
             "ascent_threshold_m": 10, "elevation_spike_m": 30, "distance_tolerance_m": 0,
             "ascent_km_per_100m": 1, "fatigue_rate": 0.08,
             "water_ml_per_10km": 700, "target_step_minutes": 30,
@@ -107,7 +107,7 @@ class ConfigurationDefaultTests(Fixture):
 
     def test_explicit_override_preserves_other_parameter_defaults(self):
         expected = {
-            "sample_m": 5, "smoothing_m": 20, "ascent_smoothing_m": 0,
+            "sample_m": 5, "smoothing_m": 20, "ascent_smoothing_m": 40,
             "ascent_threshold_m": 10, "elevation_spike_m": 30, "distance_tolerance_m": 0,
             "ascent_km_per_100m": 1, "fatigue_rate": 0.08,
             "water_ml_per_10km": 700, "target_step_minutes": 30,
@@ -172,7 +172,7 @@ class ConfigurationDefaultTests(Fixture):
     def test_inspection_defaults_match_generation(self):
         inspected = pace.inspect_route(self.path)
         plan = self.plan()
-        for key, expected in (("sample_m", 5), ("smoothing_m", 20), ("ascent_smoothing_m", 0),
+        for key, expected in (("sample_m", 5), ("smoothing_m", 20), ("ascent_smoothing_m", 40),
                               ("ascent_method", "hysteresis"), ("ascent_threshold_m", 10),
                               ("elevation_spike_m", 30), ("distance_tolerance_m", 0)):
             self.assertEqual(inspected[key], expected)
@@ -226,18 +226,37 @@ class GeometryTests(Fixture):
                                filtered["route"]["descent_m"])
         self.assertEqual(filtered["parameters"]["ascent_smoothing_m"], 100)
 
-    def test_gain_filter_preserves_long_climbs_and_visible_small_hill(self):
+    def test_default_gain_filter_preserves_long_climbs_and_short_hill_with_plateau(self):
         points = [(0, i * 0.000045, i * 0.2) for i in range(401)]
         self.write(points=points, waypoints=[(0, 0.009, None, "CP1")])
         plan = self.plan()
         self.assertAlmostEqual(plan["route"]["ascent_m"], 80)
         self.assertAlmostEqual(plan["route"]["descent_m"], 0)
-        self.write(points=[(0, i * 0.000045, 20 if i == 40 else 0) for i in range(81)],
+        self.write(points=[(0, i * 0.000045, max(0, min(20, (i - 30) * 4, (50 - i) * 4)))
+                           for i in range(81)],
                    waypoints=[(0, 0.0018, None, "CP1")])
         plan = self.plan()
         elevations = [p[1] for cp in plan["checkpoints"] for p in cp["profile"]]
         self.assertGreater(max(elevations), 1)
         self.assertAlmostEqual(plan["route"]["ascent_m"], 20)
+        self.assertAlmostEqual(plan["route"]["descent_m"], 20)
+
+    def test_default_gain_smoothing_filters_narrow_oscillations_and_can_be_disabled(self):
+        self.write(points=[(0, i * 0.000045, 20 if i == 40 else 0) for i in range(81)],
+                   waypoints=[(0, 0.0018, None, "CP1")])
+        filtered = self.plan()
+        unblurred = self.plan(ascent_smoothing_m=0)
+        self.assertAlmostEqual(filtered["route"]["ascent_m"], 0)
+        self.assertAlmostEqual(filtered["route"]["descent_m"], 0)
+        self.assertAlmostEqual(unblurred["route"]["ascent_m"], 20)
+        self.assertAlmostEqual(unblurred["route"]["descent_m"], 20)
+        self.assertEqual(unblurred["parameters"]["ascent_smoothing_m"], 0)
+        self.assertEqual(filtered["route"]["distance_m"], unblurred["route"]["distance_m"])
+        self.assertEqual(filtered["route"]["grade_fractions"], unblurred["route"]["grade_fractions"])
+        for filtered_cp, unblurred_cp in zip(filtered["checkpoints"], unblurred["checkpoints"]):
+            self.assertEqual(filtered_cp["profile"], unblurred_cp["profile"])
+        inspected = pace.inspect_route(self.path, ascent_smoothing_m=0)
+        self.assertAlmostEqual(inspected["ascent_m"], unblurred["route"]["ascent_m"])
 
     def test_distance_namespace_and_duplicate_coordinates(self):
         for ns in ("", "http://www.topografix.com/GPX/1/0", "http://www.topografix.com/GPX/1/1"):
@@ -532,7 +551,7 @@ class RealRouteTests(unittest.TestCase):
         plan = pace.build_plan(REAL_GPX, config)
         self.assertEqual(plan["targets_seconds"], [hours * 3600 for hours in (12, 13, 14, 15, 16)])
         self.assertAlmostEqual(plan["route"]["distance_m"], 101248.68, delta=1)
-        self.assertAlmostEqual(plan["route"]["ascent_m"], 5965.47, delta=0.01)
+        self.assertAlmostEqual(plan["route"]["ascent_m"], 5521.05, delta=0.01)
         self.assertEqual(plan["route"]["diagnostics"]["elevation_spikes_corrected"], 0)
         self.assertEqual(len(plan["checkpoints"]), 12)
         self.assertEqual(plan["checkpoints"][0]["name"], "起终点-徽州古城（起点）")
@@ -573,7 +592,7 @@ class RealKmlRouteTests(unittest.TestCase):
         config = json.loads((KML_EXAMPLE_DIR / "config.json").read_text(encoding="utf-8"))
         plan = pace.build_plan(REAL_KML, config)
         self.assertAlmostEqual(plan["route"]["distance_m"], 99694.41, delta=1)
-        self.assertAlmostEqual(plan["route"]["ascent_m"], 3729, delta=0.01)
+        self.assertAlmostEqual(plan["route"]["ascent_m"], 3574.96, delta=0.01)
         names = [cp["name"] for cp in plan["checkpoints"]]
         self.assertEqual(names, ["起终点-大境门（起点）", "D1四岔村7.9", "D2啕北营村21.3",
                                  "D3察汗陀螺村28.1", "D4窑子沟36.7", "D5五十家45.5",

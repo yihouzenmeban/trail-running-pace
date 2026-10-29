@@ -21,7 +21,7 @@ class BehaviorCheckerTests(unittest.TestCase):
             "explicit_arrival": {"target": "05:00", "secondary_display": "arrival_time"},
             "replace_target_list": {"target": "05:00", "start_time": "07:30", "fatigue_rate": 0.1},
             "preserve_zero_false": {
-                "target": "05:00", "smoothing_m": 0, "fatigue_rate": 0,
+                "target": "05:00", "smoothing_m": 0, "ascent_smoothing_m": 0, "fatigue_rate": 0,
                 "water_ml_per_10km": 0, "use_kml_altitudes": False,
             },
         }
@@ -35,7 +35,7 @@ class BehaviorCheckerTests(unittest.TestCase):
         for override in (
             {"secondary_display": "arrival_time"}, {"output_formats": ["svg", "json"]},
             {"sample_m": 25}, {"fatigue_rate": 0},
-            {"ascent_method": "window"}, {"ascent_threshold_m": 3},
+            {"ascent_method": "window"}, {"ascent_smoothing_m": 0}, {"ascent_threshold_m": 3},
             {"elevation_spike_m": 0}, {"distance_tolerance_m": 5},
             {"checkpoint_overrides": {"wpt:1": {"rest_minutes": 10}}},
             {"checkpoint_overrides": {"wpt:1": {"cutoff": "04:00"}}},
