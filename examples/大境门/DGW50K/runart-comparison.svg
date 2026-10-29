@@ -1,27 +1,24 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="2720" height="1410" viewBox="0 0 2720 1410" role="img" aria-labelledby="title">
-<title id="title">大境门 MGW50K：耐力学社与仓库方案及佳明地形数据对比</title>
+<svg xmlns="http://www.w3.org/2000/svg" width="2720" height="2055" viewBox="0 0 2720 2055" role="img" aria-labelledby="title">
+<title id="title">大境门 MGW50K：耐力学社、仓库方案与佳明实际活动对比</title>
 <metadata>{&quot;MGW50K-elevation-filled.gpx&quot;: &quot;bc2c65f40f9de9a68f378641454db541640cbad660befee3e96e0e8ea49a613e&quot;, &quot;config.json&quot;: &quot;724ed57ff2b7d928032e7cb3c2bab1d4ebeff5883ea7fad6553f04609b8b2807&quot;, &quot;runart-reference.json&quot;: &quot;12480aa5840df2ee555d397515c2d18f9182875b1fcb0a445f8a6bb103e42f9b&quot;, &quot;garmin-activity.json&quot;: &quot;be2daa8900a39b1e9b4877b7c198bf449366f8227f1dbb9ab5f1cfc2830c0b9b&quot;}</metadata>
 <style>text{font-family:"PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif;font-variant-numeric:tabular-nums}</style>
-<rect x="0" y="0" width="2720" height="1410" rx="0" fill="#f5f4ef"/>
+<rect x="0" y="0" width="2720" height="2055" rx="0" fill="#f5f4ef"/>
 <rect x="0" y="0" width="2720" height="10" rx="0" fill="#126b70"/>
 <text x="64" y="78" font-size="45" fill="#203c46" font-weight="700" text-anchor="start">大境门 MGW50K</text>
-<text x="2656" y="76" font-size="30" fill="#203c46" font-weight="400" text-anchor="end">耐力学社 × 仓库方案</text>
+<text x="2656" y="76" font-size="30" fill="#203c46" font-weight="400" text-anchor="end">耐力学社 × 仓库方案 × 佳明实际</text>
 <text x="64" y="125" font-size="24" fill="#627780" font-weight="400" text-anchor="start">5–12.5 小时 · 每隔 30 分钟 · 16 组方案</text>
 <rect x="64" y="157" width="848" height="126" rx="13" fill="#ffffff"/>
 <text x="88" y="191" font-size="21" fill="#627780" font-weight="400" text-anchor="start">全程距离</text>
-<text x="88" y="242" font-size="36" fill="#203c46" font-weight="650" text-anchor="start">52.1 → 52.20 km</text>
-<text x="88" y="269" font-size="18" fill="#627780" font-weight="400" text-anchor="start">耐力学社 → 仓库；佳明：52.57 km</text>
-<text x="888" y="269" font-size="23" fill="#aa472e" font-weight="400" text-anchor="end">+0.10 km</text>
+<text x="88" y="242" font-size="36" fill="#203c46" font-weight="650" text-anchor="start">52.1 / 52.20 / 52.57 km</text>
+<text x="88" y="269" font-size="18" fill="#627780" font-weight="400" text-anchor="start">耐力学社 / 仓库 / 佳明</text>
 <rect x="936" y="157" width="848" height="126" rx="13" fill="#ffffff"/>
 <text x="960" y="191" font-size="21" fill="#627780" font-weight="400" text-anchor="start">累计爬升</text>
-<text x="960" y="242" font-size="36" fill="#203c46" font-weight="650" text-anchor="start">1883 → 1960 m</text>
-<text x="960" y="269" font-size="18" fill="#627780" font-weight="400" text-anchor="start">耐力学社 → 仓库；佳明：2205 m</text>
-<text x="1760" y="269" font-size="23" fill="#aa472e" font-weight="400" text-anchor="end">+77 m</text>
+<text x="960" y="242" font-size="36" fill="#203c46" font-weight="650" text-anchor="start">1883 / 1960 / 2205 m</text>
+<text x="960" y="269" font-size="18" fill="#627780" font-weight="400" text-anchor="start">耐力学社 / 仓库 / 佳明</text>
 <rect x="1808" y="157" width="848" height="126" rx="13" fill="#ffffff"/>
 <text x="1832" y="191" font-size="21" fill="#627780" font-weight="400" text-anchor="start">累计下降</text>
-<text x="1832" y="242" font-size="36" fill="#203c46" font-weight="650" text-anchor="start">1909 → 1996 m</text>
-<text x="1832" y="269" font-size="18" fill="#627780" font-weight="400" text-anchor="start">耐力学社 → 仓库；佳明：2216 m</text>
-<text x="2632" y="269" font-size="23" fill="#aa472e" font-weight="400" text-anchor="end">+87 m</text>
+<text x="1832" y="242" font-size="36" fill="#203c46" font-weight="650" text-anchor="start">1909 / 1996 / 2216 m</text>
+<text x="1832" y="269" font-size="18" fill="#627780" font-weight="400" text-anchor="start">耐力学社 / 仓库 / 佳明</text>
 <text x="64" y="331" font-size="28" fill="#203c46" font-weight="700" text-anchor="start">01  各站累计经过时间</text>
 <text x="64" y="371" font-size="22" fill="#627780" font-weight="400" text-anchor="start">上行：耐力学社 → 仓库（HH:MM）；下行：仓库 − 耐力学社（分钟）</text>
 <text x="2656" y="371" font-size="22" fill="#627780" font-weight="400" text-anchor="end">绿色：仓库更早    橙色：仓库更晚</text>
@@ -342,7 +339,133 @@
 <rect x="2509.75" y="790" width="145.25" height="70" rx="4" fill="#f5eee8"/>
 <text x="2582.38" y="817" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">12:28 → 12:30</text>
 <text x="2582.38" y="848" font-size="25" fill="#aa472e" font-weight="650" text-anchor="middle">+2</text>
-<text x="64" y="920" font-size="28" fill="#203c46" font-weight="700" text-anchor="start">02  地形数据</text>
+<text x="64" y="920" font-size="28" fill="#203c46" font-weight="700" text-anchor="start">02  佳明实际活动时间对照</text>
+<text x="64" y="962" font-size="22" fill="#627780" font-weight="400" text-anchor="start">2026-09-12「张家口市 越野跑」· 全程 06:14:15，包含停留</text>
+<g transform="translate(520 628)">
+<path d="M1270 324 L1315 324" fill="none" stroke="#406da4" stroke-width="3" stroke-dasharray="9 6"/>
+<text x="1328" y="332" font-size="22" fill="#406da4" font-weight="400" text-anchor="start">耐力学社</text>
+<path d="M1550 324 L1595 324" fill="none" stroke="#126b70" stroke-width="3"/>
+<text x="1608" y="332" font-size="22" fill="#126b70" font-weight="400" text-anchor="start">仓库方案</text>
+<path d="M1830 324 L1875 324" fill="none" stroke="#aa472e" stroke-width="3"/>
+<text x="1888" y="332" font-size="22" fill="#aa472e" font-weight="400" text-anchor="start">佳明实际</text>
+</g>
+<g transform="translate(260 680)">
+<text x="64" y="368" font-size="26" fill="#203c46" font-weight="650" text-anchor="start">6 小时方案</text>
+<path d="M122 675 L1053 675" fill="none" stroke="#dde5e6" stroke-width="3"/>
+<text x="108" y="682" font-size="18" fill="#627780" font-weight="400" text-anchor="end">0h</text>
+<path d="M122 636.143 L1053 636.143" fill="none" stroke="#dde5e6" stroke-width="3"/>
+<text x="108" y="643.143" font-size="18" fill="#627780" font-weight="400" text-anchor="end">1h</text>
+<path d="M122 597.286 L1053 597.286" fill="none" stroke="#dde5e6" stroke-width="3"/>
+<text x="108" y="604.286" font-size="18" fill="#627780" font-weight="400" text-anchor="end">2h</text>
+<path d="M122 558.429 L1053 558.429" fill="none" stroke="#dde5e6" stroke-width="3"/>
+<text x="108" y="565.429" font-size="18" fill="#627780" font-weight="400" text-anchor="end">3h</text>
+<path d="M122 519.571 L1053 519.571" fill="none" stroke="#dde5e6" stroke-width="3"/>
+<text x="108" y="526.571" font-size="18" fill="#627780" font-weight="400" text-anchor="end">4h</text>
+<path d="M122 480.714 L1053 480.714" fill="none" stroke="#dde5e6" stroke-width="3"/>
+<text x="108" y="487.714" font-size="18" fill="#627780" font-weight="400" text-anchor="end">5h</text>
+<path d="M122 441.857 L1053 441.857" fill="none" stroke="#dde5e6" stroke-width="3"/>
+<text x="108" y="448.857" font-size="18" fill="#627780" font-weight="400" text-anchor="end">6h</text>
+<path d="M122 403 L1053 403" fill="none" stroke="#dde5e6" stroke-width="3"/>
+<text x="108" y="410" font-size="18" fill="#627780" font-weight="400" text-anchor="end">7h</text>
+<text x="122" y="704" font-size="19" fill="#627780" font-weight="400" text-anchor="middle">起点</text>
+<text x="277.167" y="704" font-size="19" fill="#627780" font-weight="400" text-anchor="middle">M1</text>
+<text x="432.333" y="704" font-size="19" fill="#627780" font-weight="400" text-anchor="middle">M2</text>
+<text x="587.5" y="704" font-size="19" fill="#627780" font-weight="400" text-anchor="middle">M3</text>
+<text x="742.667" y="704" font-size="19" fill="#627780" font-weight="400" text-anchor="middle">M4</text>
+<text x="897.833" y="704" font-size="19" fill="#627780" font-weight="400" text-anchor="middle">M5</text>
+<text x="1053" y="704" font-size="19" fill="#627780" font-weight="400" text-anchor="middle">终点</text>
+<path d="M122 675 L277.167 641.971 L432.333 616.714 L587.5 565.552 L742.667 537.057 L897.833 494.314 L1053 443.152" fill="none" stroke="#406da4" stroke-width="3" stroke-dasharray="9 6"/>
+<rect x="118" y="671" width="8" height="8" rx="4" fill="#406da4"/>
+<rect x="273.167" y="637.971" width="8" height="8" rx="4" fill="#406da4"/>
+<rect x="428.333" y="612.714" width="8" height="8" rx="4" fill="#406da4"/>
+<rect x="583.5" y="561.552" width="8" height="8" rx="4" fill="#406da4"/>
+<rect x="738.667" y="533.057" width="8" height="8" rx="4" fill="#406da4"/>
+<rect x="893.833" y="490.314" width="8" height="8" rx="4" fill="#406da4"/>
+<rect x="1049" y="439.152" width="8" height="8" rx="4" fill="#406da4"/>
+<path d="M122 675 L277.167 645.857 L432.333 620.6 L587.5 568.143 L742.667 539.648 L897.833 495.61 L1053 441.857" fill="none" stroke="#126b70" stroke-width="3"/>
+<rect x="118" y="671" width="8" height="8" rx="4" fill="#126b70"/>
+<rect x="273.167" y="641.857" width="8" height="8" rx="4" fill="#126b70"/>
+<rect x="428.333" y="616.6" width="8" height="8" rx="4" fill="#126b70"/>
+<rect x="583.5" y="564.143" width="8" height="8" rx="4" fill="#126b70"/>
+<rect x="738.667" y="535.648" width="8" height="8" rx="4" fill="#126b70"/>
+<rect x="893.833" y="491.61" width="8" height="8" rx="4" fill="#126b70"/>
+<rect x="1049" y="437.857" width="8" height="8" rx="4" fill="#126b70"/>
+<path d="M122 675 L277.167 644.21 L432.333 619.519 L587.5 570.354 L742.667 544.893 L897.833 499.927 L1053 432.633" fill="none" stroke="#aa472e" stroke-width="3"/>
+<rect x="118" y="671" width="8" height="8" rx="4" fill="#aa472e"/>
+<rect x="273.167" y="640.21" width="8" height="8" rx="4" fill="#aa472e"/>
+<rect x="428.333" y="615.519" width="8" height="8" rx="4" fill="#aa472e"/>
+<rect x="583.5" y="566.354" width="8" height="8" rx="4" fill="#aa472e"/>
+<rect x="738.667" y="540.893" width="8" height="8" rx="4" fill="#aa472e"/>
+<rect x="893.833" y="495.927" width="8" height="8" rx="4" fill="#aa472e"/>
+<rect x="1049" y="428.633" width="8" height="8" rx="4" fill="#aa472e"/>
+<text x="1120" y="368" font-size="26" fill="#203c46" font-weight="650" text-anchor="start">6.5 小时方案</text>
+<path d="M1178 675 L2109 675" fill="none" stroke="#dde5e6" stroke-width="3"/>
+<text x="1164" y="682" font-size="18" fill="#627780" font-weight="400" text-anchor="end">0h</text>
+<path d="M1178 636.143 L2109 636.143" fill="none" stroke="#dde5e6" stroke-width="3"/>
+<text x="1164" y="643.143" font-size="18" fill="#627780" font-weight="400" text-anchor="end">1h</text>
+<path d="M1178 597.286 L2109 597.286" fill="none" stroke="#dde5e6" stroke-width="3"/>
+<text x="1164" y="604.286" font-size="18" fill="#627780" font-weight="400" text-anchor="end">2h</text>
+<path d="M1178 558.429 L2109 558.429" fill="none" stroke="#dde5e6" stroke-width="3"/>
+<text x="1164" y="565.429" font-size="18" fill="#627780" font-weight="400" text-anchor="end">3h</text>
+<path d="M1178 519.571 L2109 519.571" fill="none" stroke="#dde5e6" stroke-width="3"/>
+<text x="1164" y="526.571" font-size="18" fill="#627780" font-weight="400" text-anchor="end">4h</text>
+<path d="M1178 480.714 L2109 480.714" fill="none" stroke="#dde5e6" stroke-width="3"/>
+<text x="1164" y="487.714" font-size="18" fill="#627780" font-weight="400" text-anchor="end">5h</text>
+<path d="M1178 441.857 L2109 441.857" fill="none" stroke="#dde5e6" stroke-width="3"/>
+<text x="1164" y="448.857" font-size="18" fill="#627780" font-weight="400" text-anchor="end">6h</text>
+<path d="M1178 403 L2109 403" fill="none" stroke="#dde5e6" stroke-width="3"/>
+<text x="1164" y="410" font-size="18" fill="#627780" font-weight="400" text-anchor="end">7h</text>
+<text x="1178" y="704" font-size="19" fill="#627780" font-weight="400" text-anchor="middle">起点</text>
+<text x="1333.17" y="704" font-size="19" fill="#627780" font-weight="400" text-anchor="middle">M1</text>
+<text x="1488.33" y="704" font-size="19" fill="#627780" font-weight="400" text-anchor="middle">M2</text>
+<text x="1643.5" y="704" font-size="19" fill="#627780" font-weight="400" text-anchor="middle">M3</text>
+<text x="1798.67" y="704" font-size="19" fill="#627780" font-weight="400" text-anchor="middle">M4</text>
+<text x="1953.83" y="704" font-size="19" fill="#627780" font-weight="400" text-anchor="middle">M5</text>
+<text x="2109" y="704" font-size="19" fill="#627780" font-weight="400" text-anchor="middle">终点</text>
+<path d="M1178 675 L1333.17 639.381 L1488.33 611.533 L1643.5 556.486 L1798.67 525.4 L1953.83 479.419 L2109 423.724" fill="none" stroke="#406da4" stroke-width="3" stroke-dasharray="9 6"/>
+<rect x="1174" y="671" width="8" height="8" rx="4" fill="#406da4"/>
+<rect x="1329.17" y="635.381" width="8" height="8" rx="4" fill="#406da4"/>
+<rect x="1484.33" y="607.533" width="8" height="8" rx="4" fill="#406da4"/>
+<rect x="1639.5" y="552.486" width="8" height="8" rx="4" fill="#406da4"/>
+<rect x="1794.67" y="521.4" width="8" height="8" rx="4" fill="#406da4"/>
+<rect x="1949.83" y="475.419" width="8" height="8" rx="4" fill="#406da4"/>
+<rect x="2105" y="419.724" width="8" height="8" rx="4" fill="#406da4"/>
+<path d="M1178 675 L1333.17 643.914 L1488.33 616.067 L1643.5 559.076 L1798.67 528.638 L1953.83 480.714 L2109 422.429" fill="none" stroke="#126b70" stroke-width="3"/>
+<rect x="1174" y="671" width="8" height="8" rx="4" fill="#126b70"/>
+<rect x="1329.17" y="639.914" width="8" height="8" rx="4" fill="#126b70"/>
+<rect x="1484.33" y="612.067" width="8" height="8" rx="4" fill="#126b70"/>
+<rect x="1639.5" y="555.076" width="8" height="8" rx="4" fill="#126b70"/>
+<rect x="1794.67" y="524.638" width="8" height="8" rx="4" fill="#126b70"/>
+<rect x="1949.83" y="476.714" width="8" height="8" rx="4" fill="#126b70"/>
+<rect x="2105" y="418.429" width="8" height="8" rx="4" fill="#126b70"/>
+<path d="M1178 675 L1333.17 644.21 L1488.33 619.519 L1643.5 570.354 L1798.67 544.893 L1953.83 499.927 L2109 432.633" fill="none" stroke="#aa472e" stroke-width="3"/>
+<rect x="1174" y="671" width="8" height="8" rx="4" fill="#aa472e"/>
+<rect x="1329.17" y="640.21" width="8" height="8" rx="4" fill="#aa472e"/>
+<rect x="1484.33" y="615.519" width="8" height="8" rx="4" fill="#aa472e"/>
+<rect x="1639.5" y="566.354" width="8" height="8" rx="4" fill="#aa472e"/>
+<rect x="1794.67" y="540.893" width="8" height="8" rx="4" fill="#aa472e"/>
+<rect x="1949.83" y="495.927" width="8" height="8" rx="4" fill="#aa472e"/>
+<rect x="2105" y="428.633" width="8" height="8" rx="4" fill="#aa472e"/>
+</g>
+<g id="garmin-elapsed">
+<rect x="64" y="1410" width="2592" height="87" rx="6" fill="#ffffff"/>
+<text x="78" y="1443" font-size="23" fill="#203c46" font-weight="600" text-anchor="start">佳明实际</text>
+<text x="78" y="1477" font-size="18" fill="#627780" font-weight="400" text-anchor="start">累计经过时间</text>
+<text x="496.333" y="1443" font-size="22" fill="#627780" font-weight="400" text-anchor="middle">M1 四岔村</text>
+<text x="496.333" y="1480" font-size="27" fill="#aa472e" font-weight="600" text-anchor="middle">00:47</text>
+<text x="889.000" y="1443" font-size="22" fill="#627780" font-weight="400" text-anchor="middle">M2 黄土窑</text>
+<text x="889.000" y="1480" font-size="27" fill="#aa472e" font-weight="600" text-anchor="middle">01:25</text>
+<text x="1281.667" y="1443" font-size="22" fill="#627780" font-weight="400" text-anchor="middle">M3 土井子</text>
+<text x="1281.667" y="1480" font-size="27" fill="#aa472e" font-weight="600" text-anchor="middle">02:41</text>
+<text x="1674.333" y="1443" font-size="22" fill="#627780" font-weight="400" text-anchor="middle">M4 清河村</text>
+<text x="1674.333" y="1480" font-size="27" fill="#aa472e" font-weight="600" text-anchor="middle">03:20</text>
+<text x="2067.000" y="1443" font-size="22" fill="#627780" font-weight="400" text-anchor="middle">M5 翠屏庵</text>
+<text x="2067.000" y="1480" font-size="27" fill="#aa472e" font-weight="600" text-anchor="middle">04:30</text>
+<text x="2459.667" y="1443" font-size="22" fill="#627780" font-weight="400" text-anchor="middle">终点</text>
+<text x="2459.667" y="1480" font-size="27" fill="#aa472e" font-weight="600" text-anchor="middle">06:14</text>
+</g>
+<g transform="translate(0 640)">
+<text x="64" y="920" font-size="28" fill="#203c46" font-weight="700" text-anchor="start">03  地形数据</text>
 <text x="2656" y="920" font-size="22" fill="#627780" font-weight="400" text-anchor="end">每组：耐力学社 / 仓库 / 差值（仓库 − 耐力学社）/ 佳明</text>
 <text x="692.667" y="962" font-size="24" fill="#203c46" font-weight="600" text-anchor="middle">累计距离 / km</text>
 <text x="398.167" y="990" font-size="20" fill="#627780" font-weight="400" text-anchor="middle">耐力学社</text>
@@ -444,8 +567,11 @@
 <text x="2165.17" y="1226" font-size="22" fill="#203c46" font-weight="400" text-anchor="middle">690</text>
 <text x="2361.5" y="1226" font-size="22" fill="#aa472e" font-weight="600" text-anchor="middle">+50</text>
 <text x="2557.83" y="1226" font-size="22" fill="#aa472e" font-weight="600" text-anchor="middle">763</text>
-<text x="64" y="1280" font-size="20" fill="#627780" font-weight="400" text-anchor="start">来源：耐力学社 / RunArt.Net 截图、本仓库配速表及佳明 2026-09-12 大境门活动。起点均为 0，省略。</text>
+</g>
+<g transform="translate(0 640)">
+<text x="64" y="1280" font-size="20" fill="#627780" font-weight="400" text-anchor="start">来源：耐力学社 / RunArt.Net 截图、本仓库配速表及佳明 2026-09-12 大境门活动。时间为轨迹经过时间，非官方打卡；表内按整分钟显示。</text>
 <text x="64" y="1314" font-size="20" fill="#627780" font-weight="400" text-anchor="start">时间差按两表显示的整分钟相减，原图终点照录，未归一化；原图地形列按数值含义转录（表头疑似错位）。</text>
 <text x="64" y="1348" font-size="20" fill="#627780" font-weight="400" text-anchor="start">佳明本段爬升、下降 = 本站累计值 − 上站累计值；分站累计值为 FIT 逐圈插值估算，终点使用平台汇总。</text>
 <text x="64" y="1382" font-size="20" fill="#627780" font-weight="400" text-anchor="start">佳明分段差值使用未取整的原值计算，显示时取整，分段显示值之和可能与全程相差 1 m。距离为累计距离。</text>
+</g>
 </svg>

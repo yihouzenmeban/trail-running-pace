@@ -56,13 +56,13 @@ You can also name `even-effort-pace-chart` in a natural-language request. The as
 | --- | --- | --- | --- | --- |
 | Tiandi Liubai 100K | [GPX](examples/tiandi-liubai-100k/天地留白100K.gpx) | [12–16 hour schedules](examples/tiandi-liubai-100k/config.json) | [SVG](examples/tiandi-liubai-100k/pace-chart.svg) | — |
 | Dajingmen DGW100K | [KML](examples/大境门/DGW100K/2026京东大境门古长城越野赛by%20UTMB®DGW100K.kml) | [10–24 hours, 1-hour intervals](examples/大境门/DGW100K/config.json) | [SVG](examples/大境门/DGW100K/pace-chart.svg) | — |
-| Dajingmen MGW50K | [Original GPX](examples/大境门/DGW50K/2026京东大境门古长城越野赛by%20UTMB®MGW50K.gpx) / [Elevation-filled copy](examples/大境门/DGW50K/MGW50K-elevation-filled.gpx) | [5–12.5 hours, 30-minute intervals](examples/大境门/DGW50K/config.json) | [SVG](examples/大境门/DGW50K/pace-chart.svg) | [RunArt](examples/大境门/DGW50K/runart-comparison.svg) / [Recorded Garmin activity](examples/大境门/DGW50K/garmin-comparison.svg) |
+| Dajingmen MGW50K | [Original GPX](examples/大境门/DGW50K/2026京东大境门古长城越野赛by%20UTMB®MGW50K.gpx) / [Elevation-filled copy](examples/大境门/DGW50K/MGW50K-elevation-filled.gpx) | [5–12.5 hours, 30-minute intervals](examples/大境门/DGW50K/config.json) | [SVG](examples/大境门/DGW50K/pace-chart.svg) | [RunArt / repository / Garmin comparison](examples/大境门/DGW50K/runart-comparison.svg) |
 
 The two 100K examples explicitly select all four export formats. The 50K example uses the defaults: SVG, a 06:00 start, and segment pace in parentheses. Example targets are not individual fitness assessments. The 50K directory is named `DGW50K`; chart titles retain the race category name `MGW50K`.
 
 The original 50K GPX lacks elevation at 59 points in two gaps spanning about 834.6 m and 34.1 m between known endpoints. Generate its pace chart using the copy with linear elevation interpolation along distance and its adjacent configuration. The original is unchanged; the [repair report](examples/大境门/DGW50K/elevation-repair.json) records the gaps and file hashes.
 
-The two comparison SVGs are for reference only. RunArt values come from the user-provided screenshot. The Garmin chart uses the September 12, 2026 Dajingmen activity and compares each station against the 6h and 6.5h plans. Elapsed times include stops. Station ascent/descent are estimates interpolated within FIT laps; finish totals come from the platform.
+The merged comparison SVG is for reference only. It includes times for all 16 plans, Garmin activity times against the 6h and 6.5h plans, and terrain data from all three sources. RunArt values come from the user-provided screenshot. Garmin values come from the September 12, 2026 Dajingmen activity; elapsed times include stops. Distances are cumulative. Garmin segment ascent/descent are differences between consecutive checkpoint totals estimated by interpolation within FIT laps; finish totals come from the platform.
 
 ## CLI quick start
 

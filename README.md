@@ -56,13 +56,13 @@ $even-effort-pace-chart
 | --- | --- | --- | --- | --- |
 | 天地留白 100K | [GPX](examples/tiandi-liubai-100k/天地留白100K.gpx) | [12–16 小时方案](examples/tiandi-liubai-100k/config.json) | [SVG](examples/tiandi-liubai-100k/pace-chart.svg) | — |
 | 大境门 DGW100K | [KML](examples/大境门/DGW100K/2026京东大境门古长城越野赛by%20UTMB®DGW100K.kml) | [10–24 小时，每隔 1 小时](examples/大境门/DGW100K/config.json) | [SVG](examples/大境门/DGW100K/pace-chart.svg) | — |
-| 大境门 MGW50K | [原始 GPX](examples/大境门/DGW50K/2026京东大境门古长城越野赛by%20UTMB®MGW50K.gpx) / [海拔补全副本](examples/大境门/DGW50K/MGW50K-elevation-filled.gpx) | [5–12.5 小时，每隔 30 分钟](examples/大境门/DGW50K/config.json) | [SVG](examples/大境门/DGW50K/pace-chart.svg) | [耐力学社](examples/大境门/DGW50K/runart-comparison.svg) / [佳明实际活动](examples/大境门/DGW50K/garmin-comparison.svg) |
+| 大境门 MGW50K | [原始 GPX](examples/大境门/DGW50K/2026京东大境门古长城越野赛by%20UTMB®MGW50K.gpx) / [海拔补全副本](examples/大境门/DGW50K/MGW50K-elevation-filled.gpx) | [5–12.5 小时，每隔 30 分钟](examples/大境门/DGW50K/config.json) | [SVG](examples/大境门/DGW50K/pace-chart.svg) | [耐力学社 / 仓库 / 佳明对比](examples/大境门/DGW50K/runart-comparison.svg) |
 
 两个 100K 示例显式选择四种导出格式；50K 示例使用默认的 SVG、06:00 出发及括号内区间配速。示例目标不代表个人能力评估。50K 目录按 `DGW50K` 命名，图表保留赛事组别名称 `MGW50K`。
 
 50K 原始 GPX 缺失 59 点海拔，分两段，已知端点之间分别约 834.6 m、34.1 m。生成配速表时使用沿距离线性插值的副本和同目录配置；原文件不变，[补全记录](examples/大境门/DGW50K/elevation-repair.json)保留缺失范围和校验值。
 
-两张对比 SVG 仅作参考。耐力学社数据来自用户提供的截图；佳明图使用 2026-09-12 的大境门活动，按站对照 6h、6.5h 两档。时间包含停留，分站爬升、下降为 FIT 逐圈数据插值估算，全程使用平台原值。
+合并对比 SVG 仅作参考，包含 16 档方案时间、佳明实际活动与 6h / 6.5h 方案的时间对照，以及三方地形数据。耐力学社数据来自用户提供的截图；佳明使用 2026-09-12 的大境门活动，时间包含停留。距离为累计距离；佳明分段爬升、下降由 FIT 逐圈插值估算的相邻站累计值相减得到，终点累计值使用平台原值。
 
 ## 命令行快速开始
 
