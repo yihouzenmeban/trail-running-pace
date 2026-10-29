@@ -132,4 +132,6 @@ python3 -m unittest discover -s skills/even-effort-pace-chart/tests -v
 
 ## 模型与限制
 
-计算公式、海拔平滑及假设见[模型文档](skills/even-effort-pace-chart/references/model.md)。结果依赖轨迹海拔和平滑参数，不保证复现赛事或其他平台的统计。参考水量用于比较赛段差异，不能据此评估个人补水需求或完赛能力。
+默认采用 10 米峰谷反转阈值统计爬升，独立保留 5 米采样、20 米平滑的显示曲线；孤立海拔尖峰修正会报告改动，水平简化需显式开启。`inspect` 和生成摘要均提供输入质量与处理前后对比。旧的 100 米窗口统计可显式选择，迁移方式见[配置文档](skills/even-effort-pace-chart/references/configuration.md#旧窗口口径与显式过滤)。
+
+计算公式、过滤规则及假设见[模型文档](skills/even-effort-pace-chart/references/model.md)。结果依赖轨迹海拔、算法和阈值，不保证复现赛事或其他平台的统计。参考水量用于比较赛段差异，不能据此评估个人补水需求或完赛能力。

@@ -18,17 +18,52 @@ Both GPX and KML become the same ordered `(latitude, longitude, elevation)` prof
 
 ## Distance and elevation
 
-Compute horizontal cumulative distance with the haversine formula on a sphere of radius 6,371,008.8 m. Elevation does not lengthen the geometric distance.
+Compute horizontal cumulative distance with the haversine formula on a sphere of radius 6,371,008.8 m. Elevation does not lengthen geometric distance. Processing order: validate and deduplicate source points, handle isolated elevation spikes, optionally simplify horizontal geometry, build separate display and ascent curves, then split at CPs.
 
-1. Interpolate elevation linearly along cumulative distance, every **5 m**, plus the exact endpoint.
-2. At each sample, average the resampled piecewise-linear elevation over a **20 m full-width centered window** (10 m each side).
-3. Clip windows at the course boundaries and divide by their actual width. Integration uses exact trapezoid areas; this is a distance-weighted average, not a point-count average.
-4. Independently average the same resampled elevations over a **100 m full-width centered window** for cumulative ascent/descent. This is controlled by `ascent_smoothing_m`, not by the display setting `smoothing_m`.
-5. Insert CP boundary elevations into each curve. Sum positive/negative changes on the statistical curve for ascent/descent; use the detailed curve for thumbnails and slope bins. Both curves are filtered over the whole route before any station split, so splitting at CPs cannot reset the filter or change route totals.
+### Input quality and horizontal distance
 
-Settings are adjustable; 0 disables the corresponding smoothing. Interpolation cannot recover missing terrain detail; sparse points over 100 m apart produce a warning. The 5 m grid and 20 m display retain short features, while the independent statistical scale avoids counting every small oscillation toward total ascent. The integral of positive changes on the displayed curve therefore need not equal reported ascent. Statistical filtering can also suppress real short undulations; neither its scale nor matching another platform establishes ground truth. No external DEM, road classifier, or elevation correction is applied.
+The original horizontal path is retained by default. Only `distance_tolerance_m > 0` enables RDP simplification bounded by lateral deviation. Block anchors are retained approximately every 250 m, together with endpoints, closed loops, and points that reverse progress along a chord. Real turns smaller than the tolerance can still be simplified; removed distance is not proof of GPS drift.
 
-The supplied reference table for `examples/tiandi-liubai-100k/天地留白100K.gpx` contains eleven incoming-leg gains of 397, 394, 439, 666, 893, 583, 531, 403, 567, 233, and 220 m, summing to 5,326 m. With 5 m sampling, summing the 20 m curve gave 6,653 m; the independent 100 m statistical curve gives approximately 5,332 m with a mean absolute per-leg difference of 9.4 m. This is a comparison against one supplied reference, not a reproduction of COROS or RunArt.Net's internal algorithm. No gain is multiplied by a fitted correction factor.
+Simplification changes horizontal geometry without discarding intermediate elevation observations. Each observation is located by its spatial projection onto the retained chord. Backward or coincident projections introduce extra anchors, keeping distances strictly increasing and preventing elevation from being moved across a CP. Elevation order is retained, and CPs are projected onto the processed geometry. Explicit cumulative distances use this processed distance basis too; recheck CPs after enabling simplification instead of reusing old projections.
+
+With simplification disabled, a 5 m tolerance trial still diagnoses sensitivity. A reduction exceeding `max(10 m, 1% of original distance)` produces a warning without changing distance. GPX `hdop > 10`, `vdop > 20`, `fix=none/unknown`, and invalid quality values are diagnostic only; they do not automatically delete points. Missing quality fields do not establish accuracy. Timestamps may come from route-planning software, so they do not trigger automatic speed filtering.
+
+### Elevation spikes
+
+`elevation_spike_m` defaults to 30 m; 0 disables correction. An isolated interior point is corrected only when all of these conditions hold:
+
+- Its residual from linear prediction between its neighbors reaches the configured threshold.
+- The neighbors are at most 50 m apart, and both absolute adjacent grades exceed 200%.
+- It is above both or below both neighbors, whose elevations differ by less than half the threshold.
+- Neither adjacent point is also flagged as a potential spike.
+
+Replace that elevation with the neighbors' linear prediction, recording indices, count, and a warning. This is conservative anomaly detection, not surveyed correction: endpoints, sustained steps, multi-point corruption, and low-amplitude noise are not automatically corrected. Very narrow real terrain may also satisfy the rule. Indices are zero-based within the sequence after consecutive duplicate coordinates are removed. Source files remain unchanged and their SHA is retained.
+
+### Display curve and boundaries
+
+Emit samples every **5 m** plus the exact endpoint. The default **20 m full-width centered window** computes a distance-weighted elevation average. Integration uses all vertices of the input polyline directly, avoiding the loss of between-grid peaks before averaging. Near either endpoint, shrink the window symmetrically and retain the endpoint height itself. Noise-free linear slopes consequently retain their full elevation change. A zero window performs linear interpolation only.
+
+### Ascent and descent
+
+Defaults are `ascent_method: "hysteresis"`, `ascent_threshold_m: 10`, and `ascent_smoothing_m: 0`:
+
+1. Track running peaks and valleys on cleaned source elevations, independently of the display grid.
+2. Confirm a reversal only after a cumulative opposite change of at least 10 m. This is not a minimum adjacent-point difference, so gradual continuous climbs accumulate correctly.
+3. Between confirmed extrema, build a monotone envelope at the original distance positions. This suppresses minor reversals while retaining plateaus and the location of major climbs.
+4. Retain both endpoint heights and the initial/terminal extrema participating in a confirmed threshold span. Boundary fragments may therefore include subthreshold ascent/descent, but confirmed terrain is not erased and net elevation change is preserved. If the whole profile varies by less than the threshold, only its net start-to-end change remains.
+5. Insert CP boundary heights into this curve and accumulate positive/negative changes. Filter globally before splitting; adding CPs does not reset the algorithm or change total ascent/descent.
+
+10 m is a conservative default for unknown elevation provenance, not an accuracy guarantee. Real subthreshold round-trip undulations can be lost. Reliable elevations can use an explicitly lower threshold; 0 disables peak/valley filtering. Positive `ascent_smoothing_m` first creates an independent window-smoothed curve, then applies the threshold. Explicitly large windows still suppress short hills. Positive changes in the display curve need not sum to reported ascent.
+
+Select the window method explicitly with `"ascent_method": "window", "ascent_smoothing_m": 100`; it ignores the peak/valley threshold. It retains the previous statistical approach while applying the new integration and boundary fixes, so it is not bit-for-bit legacy output. An old configuration containing only `ascent_smoothing_m: 100` now applies the default peak/valley filter after that window; add `ascent_method: "window"` to select the previous method.
+
+### Examples and limitations
+
+Current defaults produce approximately **101.249 km / 5,965 m ascent** for Tiandi Liubai and **99.694 km / 3,729 m ascent** for Dajingmen. Neither example triggers isolated spike correction or enables horizontal simplification. The previous 100 m window method gave about 5,332 m for Tiandi Liubai, close to the supplied reference table's 5,326 m, but that agreement is neither ground truth nor general calibration. The new default retains short hills while suppressing small reversals; it is not fitted to a platform total.
+
+For methodological comparisons, see [GPS Visualizer's elevation thresholds](https://www.gpsvisualizer.com/tutorials/elevation_gain.php), [GPSBabel's quality filters](https://www.gpsbabel.org/htmldoc-1.10.0/filter_discard.html), and [Strava's elevation FAQ](https://support.strava.com/en-us/articles/15402093-elevation-on-strava-faqs). This implementation's peak/valley envelope and defaults are independent choices, not reproductions of those tools.
+
+Interpolation cannot recover missing terrain detail; original point gaps over 100 m produce a warning. No external DEM, road matching, or surveyed elevation correction is used. Filtering cannot establish true distance or ascent from the track alone; retain input provenance and parameters with the results.
 
 Each segment's seven slope bins are weighted by horizontal distance. Boundaries, in percent, are `(-inf, -15]`, `(-15, -10]`, `(-10, -5]`, `(-5, 5)`, `[5, 10)`, `[10, 15)`, `[15, inf)`. The center bar is white; descent is on the left and ascent on the right. Segment profile thumbnails use independent horizontal and vertical scales and must not be compared as equal-scale maps.
 

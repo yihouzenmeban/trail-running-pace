@@ -75,7 +75,8 @@ class ConfigurationDefaultTests(Fixture):
     def test_omitted_options_match_explicit_documented_defaults(self):
         minimal = self.plan()
         explicit = self.plan(
-            name="course", sample_m=5, smoothing_m=20, ascent_smoothing_m=100,
+            name="course", sample_m=5, smoothing_m=20, ascent_smoothing_m=0,
+            ascent_method="hysteresis", ascent_threshold_m=10, elevation_spike_m=30, distance_tolerance_m=0,
             ascent_km_per_100m=1, fatigue_rate=0.08, water_ml_per_10km=700,
             target_step_minutes=30, start_time="06:00", output_formats=["svg"],
             secondary_display="pace", pace_basis="distance", track_index=1,
@@ -92,7 +93,8 @@ class ConfigurationDefaultTests(Fixture):
 
     def test_each_omitted_numeric_option_keeps_its_default(self):
         expected = {
-            "sample_m": 5, "smoothing_m": 20, "ascent_smoothing_m": 100,
+            "sample_m": 5, "smoothing_m": 20, "ascent_smoothing_m": 0,
+            "ascent_threshold_m": 10, "elevation_spike_m": 30, "distance_tolerance_m": 0,
             "ascent_km_per_100m": 1, "fatigue_rate": 0.08,
             "water_ml_per_10km": 700, "target_step_minutes": 30,
         }
@@ -105,13 +107,15 @@ class ConfigurationDefaultTests(Fixture):
 
     def test_explicit_override_preserves_other_parameter_defaults(self):
         expected = {
-            "sample_m": 5, "smoothing_m": 20, "ascent_smoothing_m": 100,
+            "sample_m": 5, "smoothing_m": 20, "ascent_smoothing_m": 0,
+            "ascent_threshold_m": 10, "elevation_spike_m": 30, "distance_tolerance_m": 0,
             "ascent_km_per_100m": 1, "fatigue_rate": 0.08,
             "water_ml_per_10km": 700, "target_step_minutes": 30,
             "start_time": "06:00", "output_formats": ["svg"], "secondary_display": "pace",
         }
         for key, value in (
             ("sample_m", 10), ("smoothing_m", 40), ("ascent_smoothing_m", 60),
+            ("ascent_threshold_m", 5), ("elevation_spike_m", 0), ("distance_tolerance_m", 2),
             ("ascent_km_per_100m", 0.5), ("fatigue_rate", 0.15),
             ("water_ml_per_10km", 900), ("target_step_minutes", 15),
             ("start_time", "07:30"), ("output_formats", ["json"]),
@@ -125,6 +129,7 @@ class ConfigurationDefaultTests(Fixture):
     def test_explicit_zero_is_preserved_instead_of_replaced_by_default(self):
         config = {key: 0 for key in (
             "smoothing_m", "ascent_smoothing_m", "ascent_km_per_100m",
+            "ascent_threshold_m", "elevation_spike_m", "distance_tolerance_m",
             "fatigue_rate", "water_ml_per_10km",
         )}
         plan = self.plan(**config, checkpoint_overrides={"wpt:1": {"rest_minutes": 0}})
@@ -138,6 +143,7 @@ class ConfigurationDefaultTests(Fixture):
     def test_invalid_empty_values_do_not_silently_fall_back_to_defaults(self):
         for key in (
             "sample_m", "smoothing_m", "ascent_smoothing_m", "ascent_km_per_100m",
+            "ascent_method", "ascent_threshold_m", "elevation_spike_m", "distance_tolerance_m",
             "fatigue_rate", "water_ml_per_10km", "target_step_minutes", "name",
             "start_time", "secondary_display", "pace_basis", "output_formats",
             "use_kml_altitudes", "distance_alignment", "checkpoint_overrides", "cp_selection",
@@ -166,7 +172,9 @@ class ConfigurationDefaultTests(Fixture):
     def test_inspection_defaults_match_generation(self):
         inspected = pace.inspect_route(self.path)
         plan = self.plan()
-        for key, expected in (("sample_m", 5), ("smoothing_m", 20), ("ascent_smoothing_m", 100)):
+        for key, expected in (("sample_m", 5), ("smoothing_m", 20), ("ascent_smoothing_m", 0),
+                              ("ascent_method", "hysteresis"), ("ascent_threshold_m", 10),
+                              ("elevation_spike_m", 30), ("distance_tolerance_m", 0)):
             self.assertEqual(inspected[key], expected)
             self.assertEqual(inspected[key], plan["parameters"][key])
         for key in ("distance_m", "ascent_m", "descent_m"):
@@ -176,14 +184,40 @@ class ConfigurationDefaultTests(Fixture):
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(json.loads(result.stdout), inspected)
 
+    def test_inspect_and_generate_share_processing_overrides_and_diagnostics(self):
+        config = {"ascent_method": "window", "ascent_smoothing_m": 50,
+                  "ascent_threshold_m": 4, "elevation_spike_m": 0, "distance_tolerance_m": 2}
+        inspected = pace.inspect_route(self.path, **config)
+        plan = self.plan(**config)
+        self.assertEqual(inspected["diagnostics"], plan["route"]["diagnostics"])
+        for key in ("distance_m", "ascent_m", "descent_m"):
+            self.assertAlmostEqual(inspected[key], plan["route"][key])
+        command = [sys.executable, str(SCRIPT), "inspect", str(self.path)]
+        for key, value in config.items():
+            command.extend(["--" + key.replace("_", "-"), str(value)])
+        result = subprocess.run(command, text=True, capture_output=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(json.loads(result.stdout), inspected)
+
+    def test_quality_metadata_is_reported_without_automatic_point_deletion(self):
+        xml = self.path.read_text().replace(
+            "<ele>100</ele>", "<ele>100</ele><hdop>25</hdop><vdop>bad</vdop><fix>none</fix>"
+        )
+        self.path.write_text(xml)
+        inspected = pace.inspect_route(self.path)
+        self.assertEqual(inspected["diagnostics"]["quality_flagged_points"], 1)
+        self.assertEqual(inspected["diagnostics"]["quality_metadata_points"], 1)
+        self.assertEqual(inspected["diagnostics"]["invalid_quality_fields"], 1)
+        self.assertEqual(self.plan()["route"]["original_points"], 3)
+
 
 class GeometryTests(Fixture):
     def test_gain_smoothing_is_independent_from_detailed_profile_and_carries_across_cps(self):
         points = [(0, i * 0.000045, 100 + (2 if i % 2 else -2)) for i in range(81)]
         self.write(points=points, waypoints=[(0, 0.0018, None, "CP1")])
-        detailed = self.plan(ascent_smoothing_m=20)
-        filtered = self.plan(ascent_smoothing_m=100)
-        self.assertLess(filtered["route"]["ascent_m"], detailed["route"]["ascent_m"] / 2)
+        detailed = self.plan(ascent_method="window", ascent_smoothing_m=20)
+        filtered = self.plan(ascent_method="window", ascent_smoothing_m=100)
+        self.assertLess(filtered["route"]["ascent_m"], detailed["route"]["ascent_m"])
         self.assertEqual(filtered["checkpoints"][1]["profile"], detailed["checkpoints"][1]["profile"])
         self.assertEqual(filtered["route"]["grade_fractions"], detailed["route"]["grade_fractions"])
         self.assertAlmostEqual(sum(cp["ascent_m"] for cp in filtered["checkpoints"]),
@@ -196,14 +230,14 @@ class GeometryTests(Fixture):
         points = [(0, i * 0.000045, i * 0.2) for i in range(401)]
         self.write(points=points, waypoints=[(0, 0.009, None, "CP1")])
         plan = self.plan()
-        self.assertGreater(plan["route"]["ascent_m"], 77)
+        self.assertAlmostEqual(plan["route"]["ascent_m"], 80)
         self.assertAlmostEqual(plan["route"]["descent_m"], 0)
-        self.write(points=[(0, i * 0.000045, 8 if i == 40 else 0) for i in range(81)],
+        self.write(points=[(0, i * 0.000045, 20 if i == 40 else 0) for i in range(81)],
                    waypoints=[(0, 0.0018, None, "CP1")])
         plan = self.plan()
         elevations = [p[1] for cp in plan["checkpoints"] for p in cp["profile"]]
         self.assertGreater(max(elevations), 1)
-        self.assertGreater(plan["route"]["ascent_m"], 0)
+        self.assertAlmostEqual(plan["route"]["ascent_m"], 20)
 
     def test_distance_namespace_and_duplicate_coordinates(self):
         for ns in ("", "http://www.topografix.com/GPX/1/0", "http://www.topografix.com/GPX/1/1"):
@@ -259,7 +293,7 @@ class GeometryTests(Fixture):
         profile = pace.smooth_profile(route, 5, 20)
         self.assertEqual([p.distance_m for p in profile], list(range(0, 41, 5)))
         self.assertAlmostEqual(profile[2].elevation_m, 5)
-        self.assertAlmostEqual(profile[0].elevation_m, 5)
+        self.assertAlmostEqual(profile[0].elevation_m, 0)
         self.assertAlmostEqual(profile[-1].elevation_m, 0)
         self.assertGreater(profile[2].elevation_m, profile[4].elevation_m)
 
@@ -498,11 +532,8 @@ class RealRouteTests(unittest.TestCase):
         plan = pace.build_plan(REAL_GPX, config)
         self.assertEqual(plan["targets_seconds"], [hours * 3600 for hours in (12, 13, 14, 15, 16)])
         self.assertAlmostEqual(plan["route"]["distance_m"], 101248.68, delta=1)
-        reference_gains = [397, 394, 439, 666, 893, 583, 531, 403, 567, 233, 220]
-        self.assertAlmostEqual(plan["route"]["ascent_m"], sum(reference_gains), delta=100)
-        error = sum(abs(cp["ascent_m"] - expected)
-                    for cp, expected in zip(plan["checkpoints"][1:], reference_gains))
-        self.assertLess(error / len(reference_gains), 20)
+        self.assertAlmostEqual(plan["route"]["ascent_m"], 5965.47, delta=0.01)
+        self.assertEqual(plan["route"]["diagnostics"]["elevation_spikes_corrected"], 0)
         self.assertEqual(len(plan["checkpoints"]), 12)
         self.assertEqual(plan["checkpoints"][0]["name"], "起终点-徽州古城（起点）")
         self.assertEqual(plan["checkpoints"][-1]["name"], "起终点-徽州古城（终点）")
@@ -525,6 +556,16 @@ class RealRouteTests(unittest.TestCase):
             with (Path(output) / "pace-chart.csv").open(encoding="utf-8-sig", newline="") as stream:
                 self.assertEqual(len(list(csv.DictReader(stream))), 60)
 
+    def test_window_method_remains_available_for_reference_comparison(self):
+        plan = pace.build_plan(REAL_GPX, {
+            "target": "14:00", "ascent_method": "window", "ascent_smoothing_m": 100,
+        })
+        reference_gains = [397, 394, 439, 666, 893, 583, 531, 403, 567, 233, 220]
+        self.assertAlmostEqual(plan["route"]["ascent_m"], sum(reference_gains), delta=100)
+        error = sum(abs(cp["ascent_m"] - expected)
+                    for cp, expected in zip(plan["checkpoints"][1:], reference_gains))
+        self.assertLess(error / len(reference_gains), 20)
+
 
 @unittest.skipUnless(REAL_KML.is_file(), "Repository KML example is not present")
 class RealKmlRouteTests(unittest.TestCase):
@@ -532,7 +573,7 @@ class RealKmlRouteTests(unittest.TestCase):
         config = json.loads((KML_EXAMPLE_DIR / "config.json").read_text(encoding="utf-8"))
         plan = pace.build_plan(REAL_KML, config)
         self.assertAlmostEqual(plan["route"]["distance_m"], 99694.41, delta=1)
-        self.assertAlmostEqual(plan["route"]["ascent_m"], 3635, delta=1)
+        self.assertAlmostEqual(plan["route"]["ascent_m"], 3729, delta=0.01)
         names = [cp["name"] for cp in plan["checkpoints"]]
         self.assertEqual(names, ["起终点-大境门（起点）", "D1四岔村7.9", "D2啕北营村21.3",
                                  "D3察汗陀螺村28.1", "D4窑子沟36.7", "D5五十家45.5",

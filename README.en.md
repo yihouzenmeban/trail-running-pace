@@ -132,4 +132,6 @@ Tests cover synthetic GPX/KML and both real courses. Real-route tests are skippe
 
 ## Model and limitations
 
-See the [model reference](skills/even-effort-pace-chart/references/model.en.md) for equations, elevation filtering, and assumptions. Results depend on source elevations and smoothing; they may differ from event or other platform statistics. Water values compare relative segment demand and cannot establish individual hydration needs or finish capability.
+Default ascent uses a 10 m peak/valley reversal threshold, separately from the display curve's 5 m sampling and 20 m smoothing. Isolated elevation corrections are reported; horizontal simplification requires an explicit setting. Both inspection and generation summaries include input quality and before/after metrics. The previous 100 m window approach remains selectable; see the [migration configuration](skills/even-effort-pace-chart/references/configuration.en.md#previous-window-method-and-explicit-filtering).
+
+See the [model reference](skills/even-effort-pace-chart/references/model.en.md) for equations, filtering rules, and assumptions. Results depend on source elevations, methods, and thresholds; they may differ from event or other platform statistics. Water values compare relative segment demand and cannot establish individual hydration needs or finish capability.

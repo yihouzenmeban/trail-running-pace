@@ -21,11 +21,13 @@ python3 <skill-dir>/scripts/pace_chart.py inspect <race.gpx-or-kml>
 
 Read the inspection JSON. Prefer embedded CPs, preserve their names and numbering, and use the returned candidate IDs. Start/finish rows are added automatically. Ask for manual names and cumulative distances only when embedded CPs are absent or unusable.
 
+Review `diagnostics` and warnings for elevation corrections, poor positioning metadata, and distance sensitivity. Trial simplification does not prove drift; never enable `distance_tolerance_m` without an explicit request or selected configuration. Pass the selected processing options to inspection as well as generation, and recheck CP positions after changing distance processing.
+
 Resolve ambiguous inputs before generation:
 
 - Multiple routes: obtain the intended 1-based `track_index`; separate lines are not joined.
 - Unrecognized station names: confirm `cp_selection`, rather than treating every landmark as a CP.
-- Loops/crossings or offsets over 100 m: confirm the route occurrence with an input-route `distance_km` override, or confirm `allow_off_route`; do not silently choose the nearest projection.
+- Loops/crossings or offsets over 100 m: confirm the route occurrence with a processed-route `distance_km` override, or confirm `allow_off_route`; do not silently choose the nearest projection.
 - KML missing/ground-clamped altitude mode: verify supplied heights before `inspect --use-kml-altitudes` and `use_kml_altitudes: true`. Never fill missing heights with zero. See configuration for supported KML modes and geometry.
 
 ## Set targets and assumptions
@@ -44,7 +46,7 @@ For example, “生成体感一致配速表，目标完赛时间 5 小时，相�
 }
 ```
 
-This keeps the default pace display and SVG export. Display smoothing and ascent smoothing are independent; consult the model when adjusting them or explaining calculations. Interpolation adds no measurement accuracy; never rescale climbs to force a desired total or claim equivalence to RunArt.Net.
+This keeps the default pace display and SVG export. Ascent defaults to the peak/valley threshold method; display smoothing is independent. Consult the model for filtering choices and the explicit `window` alternative. Do not inherit the old 100 m ascent window from examples. Interpolation adds no measurement accuracy; never tune filters or rescale climbs solely to force a platform's total or claim equivalence to RunArt.Net.
 
 ## Generate and verify
 

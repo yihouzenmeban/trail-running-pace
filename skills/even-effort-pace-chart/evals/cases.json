@@ -2,7 +2,11 @@
   "default_parameters": {
     "sample_m": 5,
     "smoothing_m": 20,
-    "ascent_smoothing_m": 100,
+    "ascent_smoothing_m": 0,
+    "ascent_method": "hysteresis",
+    "ascent_threshold_m": 10,
+    "elevation_spike_m": 30,
+    "distance_tolerance_m": 0,
     "ascent_km_per_100m": 1,
     "fatigue_rate": 0.08,
     "water_ml_per_10km": 700,

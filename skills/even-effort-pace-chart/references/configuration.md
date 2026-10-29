@@ -18,7 +18,9 @@
 python3 skills/even-effort-pace-chart/scripts/pace_chart.py inspect race.gpx
 ```
 
-可选参数：`--track-index 1`、`--sample-m 5`、`--smoothing-m 20`、`--ascent-smoothing-m 100`。20 米窗口用于细节图示和坡度分布，独立的 100 米窗口用于累计爬升、下降。输出包括水平距离、平滑后的爬升下降、处理参数、告警和 `cp_candidates`；候选点包含 ID、名称、识别标记及可能的轨迹投影位置，距离单位为米。存在多条轨迹时，错误信息会列出序号，请选择后重新执行。
+可选参数：`--track-index 1`、`--sample-m 5`、`--smoothing-m 20`、`--ascent-method hysteresis`、`--ascent-threshold-m 10`、`--ascent-smoothing-m 0`、`--elevation-spike-m 30`、`--distance-tolerance-m 0`。20 米窗口用于细节图示和坡度分布；爬升默认在清理后的原始海拔上使用 10 米峰谷反转阈值，不做额外窗口平均。输出包括水平距离、爬升下降、处理参数、`diagnostics`、告警和 `cp_candidates`；候选点包含 ID、名称、识别标记及可能的轨迹投影位置，距离单位为米。存在多条轨迹时，错误信息会列出序号，请选择后重新执行。
+
+检查与生成必须使用同一组处理参数。`diagnostics` 包含原始及处理后距离、原始与清理后直接累计爬升、点距最小/中位/最大值、质量标记数量、尖峰修正数量与索引，以及距离简化试算结果。最终过滤后的爬升在顶层 `ascent_m`。距离试算仅诊断，不能证明 GPS 漂移；默认不会修改水平路径。
 
 GPX 优先使用 track 作为路线几何；独立的 route 点和 waypoint 仍可提供 CP。只有 route 时，所选 route 同时提供轨迹和命名候选点。支持 GPX 1.0、1.1 和无命名空间文件。轨迹点必须有有效坐标及海拔；连续重复位置会被去除，不连续的轨迹段会报错，不会通过虚构直线连接。
 
@@ -82,7 +84,7 @@ KML 中命名的 Point 地标提供 CP 候选，地标自身可以没有海拔�
 
 不设置 `cp_selection` 时，自动选择名称或类型中识别到的 CP/SP、checkpoint、aid station、water station、start/finish 及对应中文站点。最终顺序按轨迹累计距离排列。任意名称的点需要明确选择 ID，普通地标不会自动升级为 CP。轨迹投影存在多解或偏离超过 100 米时，会返回可操作的 JSON 错误。
 
-覆盖字段包括 `name`、`distance_km`、`rest_minutes`、`cutoff`、`allow_off_route`。其中 `distance_km` 明确指定**输入轨迹的累计公里数**，同时确认该点在环线或折返中的出现位置，跳过坐标投影；位置必须在轨迹范围内。
+覆盖字段包括 `name`、`distance_km`、`rest_minutes`、`cutoff`、`allow_off_route`。其中 `distance_km` 明确指定**处理后轨迹的累计公里数**（默认等于原始水平路径口径），同时确认该点在环线或折返中的出现位置，跳过坐标投影；位置必须在轨迹范围内。启用水平简化后应重新检查这些位置。
 
 站点默认保留轨迹内名称，`rest_minutes` 为 `0`，`cutoff` 未提供时不校核，`allow_off_route` 为 `false`。未提供 `distance_km` 覆盖时按坐标与端点规则定位；手工 CP 列表中的名称与累计距离则是必填项。不能根据目标时间、站名或示例推断停留、关门、里程覆盖或偏离许可。
 
@@ -109,7 +111,7 @@ KML 中命名的 Point 地标提供 CP 候选，地标自身可以没有海拔�
 
 距离必须严格递增；`checkpoints` 不能与 GPX/KML 候选点选择或覆盖混用。起终点停留必须为零。
 
-`distance_alignment` 默认为 `"confirm"`：官方总里程与轨迹差异超过 `max(100 米, 轨迹总长的 0.5%)` 时停止。确认后设置 `"scale"`，可将官方各站里程按比例映射到轨迹总长。容差内使用 `"confirm"` 时保留中间站公里位置，仅将终点吸附至轨迹末端。输出保留官方里程和映射比例，路线统计始终使用输入轨迹几何。
+`distance_alignment` 默认为 `"confirm"`：官方总里程与轨迹差异超过 `max(100 米, 轨迹总长的 0.5%)` 时停止。确认后设置 `"scale"`，可将官方各站里程按比例映射到轨迹总长。容差内使用 `"confirm"` 时保留中间站公里位置，仅将终点吸附至轨迹末端。输出保留官方里程和映射比例，路线统计使用处理后的输入轨迹几何。
 
 ## 参数
 
@@ -127,9 +129,13 @@ KML 中命名的 Point 地标提供 CP 候选，地标自身可以没有海拔�
 | `checkpoint_overrides` | `{}` | 覆盖选定站点的名称、停留、关门或定位等字段 |
 | `distance_alignment` | `"confirm"` | 官方距离不匹配时要求确认；明确设置 `"scale"` 才按比例映射 |
 | `use_kml_altitudes` | `false` | 布尔值；显式采用未声明模式或 clampToGround 的 KML 坐标高度，对 GPX 无影响 |
-| `sample_m` | 5 | 沿距离插值间隔，单位米，必须大于零 |
+| `sample_m` | 5 | 显示及启用窗口平滑时的沿距离插值间隔，单位米，必须大于零；默认爬升保留原始顶点 |
 | `smoothing_m` | 20 | 图示与坡度分布的完整居中平均窗口，单位米；0 关闭 |
-| `ascent_smoothing_m` | 100 | 同一细网格上用于累计爬升下降的独立完整居中窗口，单位米；0 关闭 |
+| `ascent_method` | `"hysteresis"` | 峰谷反转阈值法；`"window"` 选择窗口法，不使用峰谷阈值 |
+| `ascent_threshold_m` | 10 | 峰谷反转阈值，单位米，非负；0 关闭峰谷过滤，不是相邻点最小高差 |
+| `ascent_smoothing_m` | 0 | 爬升统计前的独立完整居中窗口，单位米；0 关闭，大窗口仍会削弱短坡 |
+| `elevation_spike_m` | 30 | 孤立海拔尖峰的最小预测偏差，单位米；0 关闭，还需满足模型中的距离与坡度条件 |
+| `distance_tolerance_m` | 0 | 水平几何简化容差，单位米；0 不简化，正值显式启用并可能缩短真实小弯道 |
 | `ascent_km_per_100m` | 1 | 每爬升 100 米增加的等效公里数，非负 |
 | `fatigue_rate` | 0.08 | 等效距离翻倍时的平均配速倍率减一，范围 0–1 |
 | `water_ml_per_10km` | 700 | 每 10 等效公里的比较用水量，非负，单位毫升 |
@@ -138,6 +144,21 @@ KML 中命名的 Point 地标提供 CP 候选，地标自身可以没有海拔�
 未知的配置或站点字段会报错，数值必须有限。不会获取或编造实测海拔；源数据缺失时应先补全。采样最多允许 2,000,000 个区间，另含精确终点；过小的 `sample_m` 会返回输入错误。小到不足以可靠计算窗口边界的正平滑窗口也会报错，请增大对应窗口或设为 `0` 关闭平滑。
 
 海拔处理和时间分配公式见[模型与限制](model.md)。
+
+### 旧窗口口径与显式过滤
+
+要选择原先的 100 米窗口统计思路，在已有目标配置中加入：
+
+```json
+{
+  "ascent_method": "window",
+  "ascent_smoothing_m": 100
+}
+```
+
+对应检查参数为 `--ascent-method window --ascent-smoothing-m 100`。边界和积分问题也已修复，数值不保证与旧版完全相同。只有 `ascent_smoothing_m: 100` 的旧配置会在窗口后继续应用新的默认峰谷阈值；明确选择 `window` 才是不加峰谷阈值的窗口法。
+
+水平简化需明确配置，例如 `"distance_tolerance_m": 2`，检查时使用 `--distance-tolerance-m 2`；不能因试算出现距离下降就自动开启。海拔尖峰修正默认开启并报告改动，明确要求保留所有源海拔时用 `"elevation_spike_m": 0`。同时将 `ascent_threshold_m` 和 `ascent_smoothing_m` 设为 0，可直接在原始顶点上累计升降。原始轨迹文件始终不改写。
 
 ## 括号内显示内容
 
@@ -189,7 +210,7 @@ python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate race.gpx \
 | `warnings` | 模型限制、未提供关门时间、配置冲突等告警 |
 | `summary.parameters` | 实际生效的数值参数、输出格式、括号内容、发枪时间、总停留秒数 |
 | `summary.target_source` / `summary.targets_seconds` | 生效目标来自 `target` 还是 `targets`，以及排序后的目标秒数 |
-| `summary.route` / `summary.checkpoints` | 路线统计，以及按路线排序的 CP ID、名称、累计米数、停留和关门秒数 |
+| `summary.route` / `summary.checkpoints` | 路线统计及 `diagnostics` 输入质量/处理前后对比，以及按路线排序的 CP ID、名称、累计米数、停留和关门秒数 |
 | `summary.verification` | `finish_targets_match` 检查终点是否等于目标；`rests_match` 检查各站出入时间差是否等于停留；`cutoff_checked_stations` / `cutoff_unchecked_stations` 统计除起点外的站点；`cutoff_failures` 列出目标秒数、站点 ID 和超时状态 |
 
 摘要不包含完整剖面或逐站逐目标时间表；需要这些数据时显式导出 JSON。摘要核对的是计算一致性，不代表已核实赛事规程。预期的输入或文件错误通过 stderr 输出 JSON，退出状态为 2。

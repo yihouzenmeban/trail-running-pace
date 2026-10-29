@@ -18,7 +18,9 @@ Two compatibility precedence rules apply: a present `targets` list takes precede
 python3 skills/even-effort-pace-chart/scripts/pace_chart.py inspect race.gpx
 ```
 
-Optional flags: `--track-index 1`, `--sample-m 5`, `--smoothing-m 20`, `--ascent-smoothing-m 100`. The 20 m window controls detailed graphics/slope bins; the independent 100 m window controls ascent/descent statistics. Output includes horizontal distance, filtered ascent/descent, parameters, warnings, and `cp_candidates` with stable IDs, names, recognition flags, and possible route projections in metres. A multiple-track error lists available track indices; repeat with the selected index.
+Optional flags: `--track-index 1`, `--sample-m 5`, `--smoothing-m 20`, `--ascent-method hysteresis`, `--ascent-threshold-m 10`, `--ascent-smoothing-m 0`, `--elevation-spike-m 30`, and `--distance-tolerance-m 0`. The 20 m window controls graphics/slope bins. Default ascent uses a 10 m peak/valley reversal threshold on cleaned source elevations without additional window averaging. Output includes horizontal distance, ascent/descent, parameters, `diagnostics`, warnings, and `cp_candidates` with IDs, names, recognition flags, and possible route projections in metres. A multiple-track error lists available track indices; repeat with the selected index.
+
+Use the same processing parameters for inspection and generation. `diagnostics` includes original/processed distance, raw/cleaned sums of positive elevation changes, minimum/median/maximum point spacing, quality flags, spike correction counts/indices, and trial distance simplification. Final filtered ascent is the top-level `ascent_m`. Trial simplification is diagnostic, not proof of GPS drift; the horizontal path is unchanged by default.
 
 Tracks take precedence over routes for course geometry. Separate route points and waypoints can still supply CPs. When only routes exist, the chosen route supplies both geometry and named CP candidates. GPX 1.0, 1.1, and unnamespaced files are accepted. Every track point needs valid coordinates and elevation. Duplicated positions are removed; disconnected track segments are rejected rather than connected by a fabricated line.
 
@@ -82,7 +84,7 @@ The IDs below are illustrative; use the actual IDs returned by `inspect`.
 
 Without `cp_selection`, recognized CP/SP, checkpoint, aid station, water station, start/finish, and corresponding Chinese names/types are selected. Selection order is normalized to cumulative route distance. Arbitrarily named waypoints require explicit IDs; ordinary landmarks are not promoted automatically. Ambiguous route occurrences and offsets over 100 m stop generation with actionable JSON errors.
 
-Overrides may contain `name`, `distance_km`, `rest_minutes`, `cutoff`, and `allow_off_route`. A distance override is a confirmed cumulative **input-route kilometre** position, and explicitly chooses both the occurrence and location; it bypasses coordinate projection. It must lie on the route's distance interval.
+Overrides may contain `name`, `distance_km`, `rest_minutes`, `cutoff`, and `allow_off_route`. A distance override is a confirmed cumulative **processed-route kilometre** position (the original horizontal path by default), and explicitly chooses both the occurrence and location; it bypasses coordinate projection. It must lie on the route's distance interval. Recheck these positions after enabling horizontal simplification.
 
 Stations retain their embedded names by default, with `rest_minutes` set to `0`, no cutoff check when `cutoff` is absent, and `allow_off_route` set to `false`. Without a `distance_km` override, coordinate projection and endpoint rules determine the position; manual CP names and cumulative distances are required. Do not infer rests, cutoffs, distance overrides, or off-route permission from finish targets, station names, or examples.
 
@@ -109,7 +111,7 @@ Use only when embedded CPs are absent or unsuitable. Include a final finish with
 
 Distances must increase strictly. `checkpoints` cannot be mixed with GPX selections or overrides. Start/finish rests must be zero.
 
-Default `distance_alignment` is `"confirm"`: differences over `max(100 m, 0.5% of route total)` stop generation. After the user confirms scaling, `"scale"` maps every official distance proportionally onto the route total. Within the tolerance, `"confirm"` preserves intermediate kilometre positions and snaps only the finish to the route endpoint. The output retains official distances and records the scale; course statistics always use input-route geometry.
+Default `distance_alignment` is `"confirm"`: differences over `max(100 m, 0.5% of route total)` stop generation. After the user confirms scaling, `"scale"` maps every official distance proportionally onto the route total. Within the tolerance, `"confirm"` preserves intermediate kilometre positions and snaps only the finish to the route endpoint. The output retains official distances and records the scale; course statistics use the processed input geometry.
 
 ## Parameters
 
@@ -127,9 +129,13 @@ Default `distance_alignment` is `"confirm"`: differences over `max(100 m, 0.5% o
 | `checkpoint_overrides` | `{}` | Override selected station names, rests, cutoffs, positions, and related fields |
 | `distance_alignment` | `"confirm"` | Require confirmation for a distance mismatch; only explicit `"scale"` enables proportional mapping |
 | `use_kml_altitudes` | `false` | Boolean opt-in to supplied KML heights when mode is omitted or clampToGround; no effect on GPX |
-| `sample_m` | 5 | Positive distance resampling step in metres |
+| `sample_m` | 5 | Positive step in metres for display and enabled window averaging; default ascent retains source vertices |
 | `smoothing_m` | 20 | Full centered averaging window for graphics and slope bins; 0 disables this smoothing |
-| `ascent_smoothing_m` | 100 | Independent full centered window for cumulative ascent/descent on the same fine grid; 0 disables this filtering |
+| `ascent_method` | `"hysteresis"` | Peak/valley reversal threshold method; `"window"` selects window statistics without the reversal threshold |
+| `ascent_threshold_m` | 10 | Nonnegative reversal threshold in metres; 0 disables peak/valley filtering; not a minimum adjacent-point difference |
+| `ascent_smoothing_m` | 0 | Independent full centered window before ascent calculation; 0 disables it; large windows still suppress short hills |
+| `elevation_spike_m` | 30 | Minimum residual in metres for isolated elevation spikes; 0 disables correction; distance/grade conditions also apply |
+| `distance_tolerance_m` | 0 | Horizontal simplification tolerance in metres; 0 disables it; positive values can shorten real small turns |
 | `ascent_km_per_100m` | 1 | Equivalent kilometres per 100 m ascent; nonnegative |
 | `fatigue_rate` | 0.08 | Pace multiplier minus one per doubling; range 0 to 1 |
 | `water_ml_per_10km` | 700 | Comparative water per 10 equivalent km; nonnegative |
@@ -138,6 +144,21 @@ Default `distance_alignment` is `"confirm"`: differences over `max(100 m, 0.5% o
 Unknown configuration and station fields are errors. Numbers must be finite. No measured elevation is fetched or invented; fix missing elevations in the source before generation. Sampling allows at most 2,000,000 intervals plus the exact endpoint; excessively small `sample_m` values return an input error. Positive smoothing windows too small to compute their boundaries reliably also return an error; increase the corresponding window or set it to `0` to disable smoothing.
 
 See the [model and limitations](model.en.md) for elevation filtering and timing equations.
+
+### Previous window method and explicit filtering
+
+To select the previous 100 m window approach, add to an existing target configuration:
+
+```json
+{
+  "ascent_method": "window",
+  "ascent_smoothing_m": 100
+}
+```
+
+Inspect with `--ascent-method window --ascent-smoothing-m 100`. Boundary and integration fixes also apply, so results need not exactly match older versions. An old configuration specifying only `ascent_smoothing_m: 100` now applies the default reversal threshold after that window; explicitly choose `window` for window statistics alone.
+
+Horizontal simplification requires an explicit value such as `"distance_tolerance_m": 2`; inspect with `--distance-tolerance-m 2`. Do not enable it automatically because trial distance decreases. Elevation spike correction is enabled by default and reported; use `"elevation_spike_m": 0` when all source elevations must be retained. Also set `ascent_threshold_m` and `ascent_smoothing_m` to 0 to sum elevation changes directly at source vertices. Input files are never rewritten.
 
 ## Parenthesized display
 
@@ -189,7 +210,7 @@ Successful stdout is JSON with these fields, without requiring a JSON file expor
 | `warnings` | Model limitations, missing cutoffs, configuration conflicts, and other warnings |
 | `summary.parameters` | Effective numeric parameters, output formats, parenthesized display, start time, and total rest seconds |
 | `summary.target_source` / `summary.targets_seconds` | Whether `target` or `targets` supplied the effective targets, and their sorted seconds |
-| `summary.route` / `summary.checkpoints` | Route statistics and ordered CP IDs, names, cumulative metres, rest seconds, and cutoff seconds |
+| `summary.route` / `summary.checkpoints` | Route statistics with input-quality and before/after `diagnostics`, plus ordered CP IDs, names, cumulative metres, rest seconds, and cutoff seconds |
 | `summary.verification` | `finish_targets_match` checks finish times against targets; `rests_match` checks departure minus arrival against station rest; `cutoff_checked_stations` / `cutoff_unchecked_stations` count stations excluding the start; `cutoff_failures` lists target seconds, CP IDs, and late statuses |
 
 The summary omits full profiles and complete schedules; explicitly export JSON for those. Verification checks calculation consistency, not event rules. Expected input/file errors print a JSON object to stderr and exit with status 2.

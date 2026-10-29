@@ -16,6 +16,7 @@ import math
 from pathlib import Path
 import re
 import shutil
+from statistics import median
 import sys
 import tempfile
 import xml.etree.ElementTree as ET
@@ -26,7 +27,10 @@ ARTICLE_TITLE = "耐力科学|体感一致配速表全面指南"
 DEFAULTS = {
     "sample_m": 5.0,
     "smoothing_m": 20.0,
-    "ascent_smoothing_m": 100.0,
+    "ascent_smoothing_m": 0.0,
+    "ascent_threshold_m": 10.0,
+    "elevation_spike_m": 30.0,
+    "distance_tolerance_m": 0.0,
     "ascent_km_per_100m": 1.0,
     "fatigue_rate": 0.08,
     "water_ml_per_10km": 700.0,
@@ -35,7 +39,7 @@ DEFAULTS = {
 CONFIG_KEYS = set(DEFAULTS) | {
     "name", "target", "targets", "track_index", "checkpoints", "cp_selection",
     "checkpoint_overrides", "distance_alignment", "start_time", "pace_basis", "secondary_display",
-    "use_kml_altitudes", "output_formats",
+    "use_kml_altitudes", "output_formats", "ascent_method",
 }
 CP_KEYS = {"name", "distance_km", "rest_minutes", "cutoff"}
 OVERRIDE_KEYS = CP_KEYS | {"allow_off_route"}
@@ -65,6 +69,7 @@ class Route:
     samples: list[Sample]
     candidates: list[dict]
     warnings: list[str] | None = None
+    diagnostics: dict | None = None
 
     @property
     def total_m(self) -> float:
@@ -236,7 +241,7 @@ def load_kml_route(root, track_index: int | None, use_kml_altitudes: bool) -> Ro
     max_gap = max(b.distance_m - a.distance_m for a, b in zip(samples, samples[1:]))
     if max_gap > 100:
         warnings.append(f"Sparse KML: maximum original point spacing is {max_gap:.1f} m; interpolation adds no measurement detail.")
-    return Route(points, samples, candidates, warnings)
+    return Route(points, samples, candidates, warnings, {"source_points": len(positions)})
 
 
 def load_route(path: Path, track_index: int | None = None, use_kml_altitudes=False) -> Route:
@@ -310,7 +315,143 @@ def load_route(path: Path, track_index: int | None = None, use_kml_altitudes=Fal
         warnings.append(f"Sparse GPX: maximum original point spacing is {max_gap:.1f} m; interpolation adds no measurement detail.")
     if tracks and len(routes) > 1:
         warnings.append("Multiple auxiliary GPX routes supplied CP candidates; confirm their relevance in inspect output.")
-    return Route(points, samples, candidates, warnings)
+    nodes = [point for segment in segments for point in segment]
+    quality = {"source_points": len(nodes), "quality_flagged_points": 0,
+               "quality_metadata_points": 0, "invalid_quality_fields": 0}
+    for node in nodes:
+        flagged, present = False, False
+        for field, limit in (("hdop", 10), ("vdop", 20)):
+            text = child_text(node, field)
+            if text:
+                present = True
+                try:
+                    value = float(text)
+                    if not math.isfinite(value) or value < 0:
+                        raise ValueError
+                    flagged |= value > limit
+                except ValueError:
+                    quality["invalid_quality_fields"] += 1
+        fix = child_text(node, "fix").lower()
+        present |= bool(fix)
+        flagged |= fix in ("none", "unknown")
+        quality["quality_metadata_points"] += int(present)
+        quality["quality_flagged_points"] += int(flagged)
+    return Route(points, samples, candidates, warnings, quality)
+
+
+def geometry_anchors(route: Route, tolerance: float) -> list[int]:
+    """Bounded RDP simplification; retain loops, endpoints and large reversals."""
+    boundaries = [0]
+    for index, sample in enumerate(route.samples[1:-1], 1):
+        if sample.distance_m - route.samples[boundaries[-1]].distance_m >= 250:
+            boundaries.append(index)
+    boundaries.append(len(route.points) - 1)
+    keep = set(boundaries)
+    stack = list(zip(boundaries, boundaries[1:]))
+    while stack:
+        left, right = stack.pop()
+        if right <= left + 1:
+            continue
+        a, b = route.points[left], route.points[right]
+        cosine = math.cos(math.radians(a[0]))
+        scale = math.pi / 180 * 6371008.8
+        bx, by = longitude_delta(a[1], b[1]) * cosine * scale, (b[0] - a[0]) * scale
+        length_sq = bx * bx + by * by
+        farthest, error, reversal, previous_ratio = left, -1.0, None, 0.0
+        for index in range(left + 1, right + 1):
+            p = route.points[index]
+            px, py = longitude_delta(a[1], p[1]) * cosine * scale, (p[0] - a[0]) * scale
+            projection = (px * bx + py * by) / length_sq if length_sq else 0
+            if length_sq and reversal is None and projection <= previous_ratio:
+                reversal = max(left + 1, index - 1)
+            previous_ratio = projection
+            ratio = max(0.0, min(1.0, projection))
+            deviation = math.hypot(px - ratio * bx, py - ratio * by)
+            if index < right and deviation > error:
+                farthest, error = index, deviation
+        # A zero-length chord must never collapse a closed loop.
+        if reversal is not None:
+            farthest = reversal
+        if reversal is not None or error > tolerance or length_sq < 1e-6:
+            keep.add(farthest)
+            stack.extend(((left, farthest), (farthest, right)))
+    return sorted(keep)
+
+
+def prepare_route(route: Route, distance_tolerance_m=DEFAULTS["distance_tolerance_m"],
+                  elevation_spike_m=DEFAULTS["elevation_spike_m"]) -> Route:
+    tolerance = number(distance_tolerance_m, "distance_tolerance_m")
+    spike = number(elevation_spike_m, "elevation_spike_m")
+    warnings = list(route.warnings or [])
+    samples = list(route.samples)
+    corrected = []
+    if spike:
+        for index in range(1, len(samples) - 1):
+            a, p, b = route.samples[index - 1:index + 2]
+            left, right = p.distance_m - a.distance_m, b.distance_m - p.distance_m
+            estimate = a.elevation_m + (b.elevation_m - a.elevation_m) * left / (left + right)
+            up, down = p.elevation_m - a.elevation_m, p.elevation_m - b.elevation_m
+            if (left + right <= 50 and up * down > 0
+                    and abs(p.elevation_m - estimate) >= spike
+                    and abs(up) / left > 2 and abs(down) / right > 2
+                    and abs(a.elevation_m - b.elevation_m) < spike / 2):
+                corrected.append((index, estimate))
+        # Adjacent flagged points are ambiguous terrain or multi-point corruption.
+        indices = {index for index, _ in corrected}
+        corrected = [(i, z) for i, z in corrected if i - 1 not in indices and i + 1 not in indices]
+        for index, elevation in corrected:
+            samples[index] = Sample(samples[index].distance_m, elevation)
+    gaps = [b.distance_m - a.distance_m for a, b in zip(route.samples, route.samples[1:])]
+    trial_tolerance = tolerance or 5.0
+    anchors = geometry_anchors(route, trial_tolerance)
+    trial_distance = sum(haversine(route.points[a], route.points[b]) for a, b in zip(anchors, anchors[1:]))
+    points = [(p[0], p[1], s.elevation_m) for p, s in zip(route.points, samples)]
+    if tolerance:
+        distances = [0.0] * len(samples)
+        for left, right in zip(anchors, anchors[1:]):
+            a, b = points[left], points[right]
+            length = haversine(a, b)
+            cosine = math.cos(math.radians(a[0]))
+            bx, by = longitude_delta(a[1], b[1]) * cosine, b[0] - a[0]
+            length_sq = bx * bx + by * by
+            for index in range(left + 1, right + 1):
+                p = route.points[index]
+                px, py = longitude_delta(a[1], p[1]) * cosine, p[0] - a[0]
+                ratio = 1.0 if index == right else (px * bx + py * by) / length_sq
+                distances[index] = distances[left] + length * ratio
+                if index != right:
+                    points[index] = (
+                        a[0] + (b[0] - a[0]) * ratio,
+                        (a[1] + longitude_delta(a[1], b[1]) * ratio + 180) % 360 - 180,
+                        samples[index].elevation_m,
+                    )
+        samples = [Sample(x, s.elevation_m) for x, s in zip(distances, samples)]
+        warnings.append(f"Distance simplification applied ({tolerance:g} m tolerance): "
+                        f"{route.total_m:.1f} -> {samples[-1].distance_m:.1f} m; review small switchbacks and CP positions.")
+    elif route.total_m - trial_distance > max(10, route.total_m * 0.01):
+        warnings.append(f"Distance sensitivity: 5 m simplification would reduce {route.total_m:.1f} "
+                        f"to {trial_distance:.1f} m. This may be drift OR real turns; distance is unchanged.")
+    if corrected:
+        warnings.append(f"Corrected {len(corrected)} isolated elevation spike(s); inspect diagnostics before use.")
+    diagnostics = {
+        "quality_flagged_points": 0, "quality_metadata_points": 0, "invalid_quality_fields": 0,
+        **(route.diagnostics or {}),
+        "original_distance_m": route.total_m,
+        "processed_distance_m": samples[-1].distance_m,
+        "distance_removed_m": route.total_m - samples[-1].distance_m,
+        "spacing_min_m": min(gaps), "spacing_median_m": median(gaps), "spacing_max_m": max(gaps),
+        "distance_trial_tolerance_m": trial_tolerance, "distance_trial_m": trial_distance,
+        "geometry_vertices": len(anchors) if tolerance else len(points),
+        "elevation_spikes_corrected": len(corrected),
+        "elevation_spike_indices": [index for index, _ in corrected],
+        "original_ascent_m": sum(max(0, b.elevation_m - a.elevation_m)
+                                 for a, b in zip(route.samples, route.samples[1:])),
+        "cleaned_ascent_m": sum(max(0, b.elevation_m - a.elevation_m)
+                                for a, b in zip(samples, samples[1:])),
+    }
+    if diagnostics.get("quality_flagged_points") or diagnostics.get("invalid_quality_fields"):
+        warnings.append("GPX contains low-quality or invalid positioning metadata; points were not automatically removed.")
+    return Route(points, samples, route.candidates, warnings, diagnostics)
 
 
 def interpolate(samples: list[Sample], distance: float) -> float:
@@ -336,18 +477,80 @@ def smooth_profile(route: Route, sample_m=DEFAULTS["sample_m"],
     if window == 0:
         return resampled
     areas = [0.0]
-    for a, b in zip(resampled, resampled[1:]):
+    source = route.samples
+    for a, b in zip(source, source[1:]):
         areas.append(areas[-1] + (b.distance_m - a.distance_m) * (a.elevation_m + b.elevation_m) / 2)
 
-    def integral(x):
-        index = max(0, min(bisect_right(distances, x) - 1, len(distances) - 2))
-        a = resampled[index]
-        return areas[index] + (x - a.distance_m) * (a.elevation_m + interpolate(resampled, x)) / 2
+    def average(left, right):
+        first = max(0, min(bisect_right(source, left, key=lambda p: p.distance_m) - 1, len(source) - 2))
+        last = max(0, min(bisect_right(source, right, key=lambda p: p.distance_m) - 1, len(source) - 2))
+        start, end = interpolate(source, left), interpolate(source, right)
+        if first == last:
+            return (start + end) / 2
+        # Integrate boundary pieces locally to avoid cancellation in tiny final windows.
+        a, b = source[first + 1], source[last]
+        area = math.fsum(((a.distance_m - left) * (start + a.elevation_m) / 2,
+                          areas[last] - areas[first + 1],
+                          (right - b.distance_m) * (b.elevation_m + end) / 2))
+        return area / (right - left)
 
     result = []
     for x in distances:
-        left, right = max(0, x - window / 2), min(route.total_m, x + window / 2)
-        result.append(Sample(x, (integral(right) - integral(left)) / (right - left)))
+        radius = min(window / 2, x, route.total_m - x)
+        left, right = x - radius, x + radius
+        elevation = interpolate(source, x) if radius <= 16 * math.ulp(route.total_m) else average(left, right)
+        result.append(Sample(x, elevation))
+    return result
+
+
+def ascent_profile(route: Route, sample_m=DEFAULTS["sample_m"],
+                   smoothing_m=DEFAULTS["ascent_smoothing_m"], method="hysteresis",
+                   threshold_m=DEFAULTS["ascent_threshold_m"]) -> list[Sample]:
+    if method not in ("hysteresis", "window"):
+        raise InputError("ascent_method must be hysteresis or window")
+    threshold = number(threshold_m, "ascent_threshold_m")
+    window = number(smoothing_m, "ascent_smoothing_m")
+    smoothed = smooth_profile(route, sample_m, window)
+    if method == "window":
+        return smoothed
+    # Keep source vertices when unblurred: the display grid must not erase short hills.
+    source = smoothed if window else route.samples
+    if threshold == 0:
+        return list(source)
+    anchors = [0]
+    low = high = extreme = 0
+    direction = 0
+    for index, sample in enumerate(source[1:], 1):
+        z = sample.elevation_m
+        if not direction:
+            if z < source[low].elevation_m:
+                low = index
+            if z > source[high].elevation_m:
+                high = index
+            if source[high].elevation_m - source[low].elevation_m >= threshold:
+                direction = 1 if high > low else -1
+                first = low if direction == 1 else high
+                if first:
+                    anchors.append(first)
+                extreme = high if direction == 1 else low
+        elif direction * (z - source[extreme].elevation_m) >= 0:
+            extreme = index
+        elif direction * (source[extreme].elevation_m - z) >= threshold:
+            anchors.append(extreme)
+            direction = -direction
+            extreme = index
+    if direction and extreme > anchors[-1]:
+        anchors.append(extreme)
+    if anchors[-1] != len(source) - 1:
+        anchors.append(len(source) - 1)
+    result = [source[0]]
+    for left, right in zip(anchors, anchors[1:]):
+        start, end = source[left].elevation_m, source[right].elevation_m
+        previous = start
+        for index in range(left + 1, right + 1):
+            z = source[index].elevation_m
+            previous = min(end, max(previous, z)) if end >= start else max(end, min(previous, z))
+            result.append(Sample(source[index].distance_m, previous))
     return result
 
 
@@ -586,6 +789,9 @@ def build_plan(path: Path, config: dict) -> dict:
         for key, value in DEFAULTS.items()
     }
     parameters["output_formats"] = list(output_formats)
+    parameters["ascent_method"] = config.get("ascent_method", "hysteresis")
+    if parameters["ascent_method"] not in ("hysteresis", "window"):
+        raise InputError("ascent_method must be hysteresis or window")
     if parameters["fatigue_rate"] > 1:
         raise InputError("fatigue_rate must be between 0 and 1")
     pace_basis = config.get("pace_basis", "distance")
@@ -615,8 +821,10 @@ def build_plan(path: Path, config: dict) -> dict:
         raise InputError("Invalid start_time date or time") from error
     parameters["start_time"] = start_time
     route = load_route(path, config.get("track_index"), config.get("use_kml_altitudes", False))
+    route = prepare_route(route, parameters["distance_tolerance_m"], parameters["elevation_spike_m"])
     profile = smooth_profile(route, parameters["sample_m"], parameters["smoothing_m"])
-    gain_profile = smooth_profile(route, parameters["sample_m"], parameters["ascent_smoothing_m"])
+    gain_profile = ascent_profile(route, parameters["sample_m"], parameters["ascent_smoothing_m"],
+                                  parameters["ascent_method"], parameters["ascent_threshold_m"])
     cps, scale, cp_warnings = resolve_checkpoints(route, config)
     cumulative_eq = 0.0
     for index, cp in enumerate(cps):
@@ -672,7 +880,7 @@ def build_plan(path: Path, config: dict) -> dict:
     warnings.extend([
         "模型未计入技术路面、陡下坡额外负担、天气和个人肌力差异；请结合赛事规程判断。",
         "水量仅供比较赛段差异，并非个人饮水建议。",
-        "插值不增加原始测量精度；爬升统计依赖海拔数据与平滑参数。",
+        "插值不增加原始测量精度；爬升统计依赖海拔数据、过滤方法与阈值。",
     ])
     return {
         "schema_version": 2,
@@ -685,6 +893,7 @@ def build_plan(path: Path, config: dict) -> dict:
                   "ascent_m": route_stats["ascent_m"], "descent_m": route_stats["descent_m"],
                   "eq_distance_km": cumulative_eq,
                   "original_points": len(route.points), "sampled_points": len(profile),
+                  "diagnostics": route.diagnostics,
                   "grade_fractions": route_stats["grade_fractions"]},
         "checkpoints": cps, "targets_seconds": targets, "schedules": schedules, "warnings": warnings,
     }
@@ -692,10 +901,14 @@ def build_plan(path: Path, config: dict) -> dict:
 
 def inspect_route(path: Path, track_index=None, sample_m=DEFAULTS["sample_m"],
                   smoothing_m=DEFAULTS["smoothing_m"], ascent_smoothing_m=DEFAULTS["ascent_smoothing_m"],
-                  use_kml_altitudes=False) -> dict:
+                  use_kml_altitudes=False, ascent_method="hysteresis",
+                  ascent_threshold_m=DEFAULTS["ascent_threshold_m"],
+                  elevation_spike_m=DEFAULTS["elevation_spike_m"],
+                  distance_tolerance_m=DEFAULTS["distance_tolerance_m"]) -> dict:
     route = load_route(path, track_index, use_kml_altitudes)
+    route = prepare_route(route, distance_tolerance_m, elevation_spike_m)
     profile = smooth_profile(route, sample_m, smoothing_m)
-    gain_profile = smooth_profile(route, sample_m, ascent_smoothing_m)
+    gain_profile = ascent_profile(route, sample_m, ascent_smoothing_m, ascent_method, ascent_threshold_m)
     stats = section_stats(profile, 0, route.total_m, DEFAULTS["ascent_km_per_100m"],
                           DEFAULTS["water_ml_per_10km"], gain_profile)
     candidates = []
@@ -704,6 +917,9 @@ def inspect_route(path: Path, track_index=None, sample_m=DEFAULTS["sample_m"],
     return {
         "distance_m": route.total_m, "ascent_m": stats["ascent_m"], "descent_m": stats["descent_m"],
         "sample_m": sample_m, "smoothing_m": smoothing_m, "ascent_smoothing_m": ascent_smoothing_m,
+        "ascent_method": ascent_method, "ascent_threshold_m": ascent_threshold_m,
+        "elevation_spike_m": elevation_spike_m, "distance_tolerance_m": distance_tolerance_m,
+        "diagnostics": route.diagnostics,
         "cp_candidates": candidates, "warnings": route.warnings or [],
     }
 
@@ -1152,6 +1368,9 @@ def main(argv=None) -> int:
     inspect.add_argument("--sample-m", type=float, default=DEFAULTS["sample_m"])
     inspect.add_argument("--smoothing-m", type=float, default=DEFAULTS["smoothing_m"])
     inspect.add_argument("--ascent-smoothing-m", type=float, default=DEFAULTS["ascent_smoothing_m"])
+    inspect.add_argument("--ascent-method", choices=("hysteresis", "window"), default="hysteresis")
+    for name in ("ascent_threshold_m", "elevation_spike_m", "distance_tolerance_m"):
+        inspect.add_argument("--" + name.replace("_", "-"), type=float, default=DEFAULTS[name])
     inspect.add_argument("--use-kml-altitudes", action="store_true",
                          help="Use supplied KML coordinate heights when altitudeMode is omitted or clampToGround")
     generate = commands.add_parser("generate", help="Generate SVG by default; select exports with output_formats")
@@ -1163,7 +1382,8 @@ def main(argv=None) -> int:
     try:
         if args.command == "inspect":
             result = inspect_route(args.route, args.track_index, args.sample_m, args.smoothing_m,
-                                   args.ascent_smoothing_m, args.use_kml_altitudes)
+                                   args.ascent_smoothing_m, args.use_kml_altitudes, args.ascent_method,
+                                   args.ascent_threshold_m, args.elevation_spike_m, args.distance_tolerance_m)
         else:
             config = json.loads(args.config.read_text(encoding="utf-8"))
             plan = build_plan(args.route, config)
