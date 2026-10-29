@@ -52,12 +52,25 @@ $even-effort-pace-chart
 
 ![天地留白100K 配速表示例](examples/tiandi-liubai-100k/pace-chart.svg)
 
-| 示例 | 轨迹 | 配置 | 配速表 |
-| --- | --- | --- | --- |
-| 天地留白 100K | [GPX](examples/tiandi-liubai-100k/天地留白100K.gpx) | [12–16 小时方案](examples/tiandi-liubai-100k/config.json) | [SVG](examples/tiandi-liubai-100k/pace-chart.svg) |
-| 大境门 DGW100K | [KML](examples/大境门/2026京东大境门古长城越野赛by%20UTMB®DGW100K.kml) | [10–24 小时，每隔 1 小时](examples/大境门/config.json) | [SVG](examples/大境门/pace-chart.svg) |
+| 示例 | 轨迹 | 配置 | 配速表 | 对比图 |
+| --- | --- | --- | --- | --- |
+| 天地留白 100K | [GPX](examples/tiandi-liubai-100k/天地留白100K.gpx) | [12–16 小时方案](examples/tiandi-liubai-100k/config.json) | [SVG](examples/tiandi-liubai-100k/pace-chart.svg) | — |
+| 大境门 DGW100K | [KML](examples/大境门/DGW100K/2026京东大境门古长城越野赛by%20UTMB®DGW100K.kml) | [10–24 小时，每隔 1 小时](examples/大境门/DGW100K/config.json) | [SVG](examples/大境门/DGW100K/pace-chart.svg) | — |
+| 大境门 MGW50K | [原始 GPX](examples/大境门/DGW50K/2026京东大境门古长城越野赛by%20UTMB®MGW50K.gpx) / [海拔补全副本](examples/大境门/DGW50K/MGW50K-elevation-filled.gpx) | [5–12.5 小时，每隔 30 分钟](examples/大境门/DGW50K/config.json) | [SVG](examples/大境门/DGW50K/pace-chart.svg) | [耐力学社](examples/大境门/DGW50K/runart-comparison.svg) / [佳明实际活动](examples/大境门/DGW50K/garmin-comparison.svg) |
 
-两个示例目录均保留原始轨迹、配置和四种导出结果。示例配置显式选择全部四种格式，不代表默认输出；其中的目标时间也不代表个人能力评估。
+两个 100K 示例显式选择四种导出格式；50K 示例使用默认的 SVG、06:00 出发及括号内区间配速。示例目标不代表个人能力评估。50K 目录按 `DGW50K` 命名，图表保留赛事组别名称 `MGW50K`。
+
+50K 原始 GPX 缺失 59 点海拔，分两段，已知端点之间分别约 834.6 m、34.1 m。配速表使用沿距离线性插值的副本；原文件不变，[补全记录](examples/大境门/DGW50K/elevation-repair.json)保留缺失范围和校验值。
+
+两张对比图均提供 SVG、PNG。[截图转录](examples/大境门/DGW50K/runart-reference.json)保留耐力学社的整分钟时间及地形值，疑似错位的表头映射已注明。佳明图使用 2026-09-12 的大境门活动，按站对照 6h、6.5h 两档；时间包含停留，分站爬升、下降为 FIT 逐圈数据插值估算，全程使用平台原值。仅保存[必要活动指标](examples/大境门/DGW50K/garmin-activity.json)，原始佳明记录不入库。
+
+在仓库根目录重建对比 SVG 和[对比数据](examples/大境门/DGW50K/comparison-data.json)，仅需 Python 标准库：
+
+```bash
+python3 examples/大境门/DGW50K/comparison.py generate
+```
+
+生成 50K 配速表时使用海拔补全副本和同目录配置。`comparison.py prepare-route <原始GPX>` 可重建补全副本；`prepare-activity --fit <ZIP> --details <JSON>` 可重新提取本地佳明指标，该步骤单独需要 `garmin-fit-sdk==21.218.0`。PNG 可由 SVG 渲染导出。
 
 ## 命令行快速开始
 
@@ -126,9 +139,10 @@ python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate \
 
 ```bash
 python3 -m unittest discover -s skills/even-effort-pace-chart/tests -v
+python3 -m unittest discover -s examples/大境门/DGW50K -p 'test_*.py' -v
 ```
 
-测试覆盖合成 GPX/KML 和两个真实赛道；独立复制 Skills、未携带 `examples/` 时，真实赛道测试会跳过。自然语言用例、检查器使用方式和人工复核步骤见[行为评测指南](skills/even-effort-pace-chart/evals/guide.md)。
+测试覆盖合成 GPX/KML、真实赛道和 50K 对比数据处理；独立复制 Skills、未携带 `examples/` 时，包内真实赛道测试会跳过。自然语言用例、检查器使用方式和人工复核步骤见[行为评测指南](skills/even-effort-pace-chart/evals/guide.md)。
 
 ## 模型与限制
 

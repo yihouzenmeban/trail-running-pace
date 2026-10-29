@@ -1,0 +1,32 @@
+{
+  "method": "Linear elevation interpolation along horizontal distance between known endpoints",
+  "point_index_basis": "zero-based",
+  "source_points": 4548,
+  "missing_points": 59,
+  "gaps": [
+    {
+      "first_point_index": 2142,
+      "last_point_index": 2193,
+      "missing_points": 52,
+      "start_distance_m": 25060.69050426677,
+      "end_distance_m": 25895.325463485453,
+      "span_m": 834.6349592186816,
+      "start_elevation_m": 1197.0,
+      "end_elevation_m": 1185.0
+    },
+    {
+      "first_point_index": 3252,
+      "last_point_index": 3258,
+      "missing_points": 7,
+      "start_distance_m": 37638.65515120596,
+      "end_distance_m": 37672.793472034464,
+      "span_m": 34.13832082850422,
+      "start_elevation_m": 1097.0,
+      "end_elevation_m": 1087.0
+    }
+  ],
+  "source_file": "2026京东大境门古长城越野赛by UTMB®MGW50K.gpx",
+  "source_sha256": "f49f2602e626c32eb730edbcfebd4be49f13d3d98277dab920088ef8e228d236",
+  "filled_file": "MGW50K-elevation-filled.gpx",
+  "filled_sha256": "bc2c65f40f9de9a68f378641454db541640cbad660befee3e96e0e8ea49a613e"
+}

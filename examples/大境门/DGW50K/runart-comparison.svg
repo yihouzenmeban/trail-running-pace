@@ -1,0 +1,428 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2720" height="1370" viewBox="0 0 2720 1370" role="img" aria-labelledby="title">
+<title id="title">大境门 MGW50K：耐力学社与仓库方案对比</title>
+<metadata>{&quot;MGW50K-elevation-filled.gpx&quot;: &quot;bc2c65f40f9de9a68f378641454db541640cbad660befee3e96e0e8ea49a613e&quot;, &quot;config.json&quot;: &quot;724ed57ff2b7d928032e7cb3c2bab1d4ebeff5883ea7fad6553f04609b8b2807&quot;, &quot;runart-reference.json&quot;: &quot;12480aa5840df2ee555d397515c2d18f9182875b1fcb0a445f8a6bb103e42f9b&quot;, &quot;garmin-activity.json&quot;: &quot;be2daa8900a39b1e9b4877b7c198bf449366f8227f1dbb9ab5f1cfc2830c0b9b&quot;}</metadata>
+<style>text{font-family:"PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif;font-variant-numeric:tabular-nums}</style>
+<rect x="0" y="0" width="2720" height="1370" rx="0" fill="#f5f4ef"/>
+<rect x="0" y="0" width="2720" height="10" rx="0" fill="#126b70"/>
+<text x="64" y="78" font-size="45" fill="#203c46" font-weight="700" text-anchor="start">大境门 MGW50K</text>
+<text x="2656" y="76" font-size="30" fill="#203c46" font-weight="400" text-anchor="end">耐力学社 × 仓库方案</text>
+<text x="64" y="125" font-size="24" fill="#627780" font-weight="400" text-anchor="start">5–12.5 小时 · 每隔 30 分钟 · 16 组方案</text>
+<rect x="64" y="157" width="848" height="126" rx="13" fill="#ffffff"/>
+<text x="88" y="191" font-size="21" fill="#627780" font-weight="400" text-anchor="start">全程距离</text>
+<text x="88" y="242" font-size="36" fill="#203c46" font-weight="650" text-anchor="start">52.1 → 52.20 km</text>
+<text x="88" y="269" font-size="18" fill="#627780" font-weight="400" text-anchor="start">耐力学社 → 仓库</text>
+<text x="888" y="269" font-size="23" fill="#aa472e" font-weight="400" text-anchor="end">+0.10 km</text>
+<rect x="936" y="157" width="848" height="126" rx="13" fill="#ffffff"/>
+<text x="960" y="191" font-size="21" fill="#627780" font-weight="400" text-anchor="start">累计爬升</text>
+<text x="960" y="242" font-size="36" fill="#203c46" font-weight="650" text-anchor="start">1883 → 1960 m</text>
+<text x="960" y="269" font-size="18" fill="#627780" font-weight="400" text-anchor="start">耐力学社 → 仓库</text>
+<text x="1760" y="269" font-size="23" fill="#aa472e" font-weight="400" text-anchor="end">+77 m</text>
+<rect x="1808" y="157" width="848" height="126" rx="13" fill="#ffffff"/>
+<text x="1832" y="191" font-size="21" fill="#627780" font-weight="400" text-anchor="start">累计下降</text>
+<text x="1832" y="242" font-size="36" fill="#203c46" font-weight="650" text-anchor="start">1909 → 1996 m</text>
+<text x="1832" y="269" font-size="18" fill="#627780" font-weight="400" text-anchor="start">耐力学社 → 仓库</text>
+<text x="2632" y="269" font-size="23" fill="#aa472e" font-weight="400" text-anchor="end">+87 m</text>
+<text x="64" y="331" font-size="28" fill="#203c46" font-weight="700" text-anchor="start">01  各站累计经过时间</text>
+<text x="64" y="371" font-size="22" fill="#627780" font-weight="400" text-anchor="start">上行：耐力学社 → 仓库（HH:MM）；下行：仓库 − 耐力学社（分钟）</text>
+<text x="2656" y="371" font-size="22" fill="#627780" font-weight="400" text-anchor="end">绿色：仓库更早    橙色：仓库更晚</text>
+<text x="78" y="412" font-size="22" fill="#627780" font-weight="600" text-anchor="start">站点</text>
+<text x="373.625" y="412" font-size="23" fill="#203c46" font-weight="650" text-anchor="middle">5 h</text>
+<text x="520.875" y="412" font-size="23" fill="#203c46" font-weight="650" text-anchor="middle">5.5 h</text>
+<text x="668.125" y="412" font-size="23" fill="#203c46" font-weight="650" text-anchor="middle">6 h</text>
+<text x="815.375" y="412" font-size="23" fill="#203c46" font-weight="650" text-anchor="middle">6.5 h</text>
+<text x="962.625" y="412" font-size="23" fill="#203c46" font-weight="650" text-anchor="middle">7 h</text>
+<text x="1109.88" y="412" font-size="23" fill="#203c46" font-weight="650" text-anchor="middle">7.5 h</text>
+<text x="1257.12" y="412" font-size="23" fill="#203c46" font-weight="650" text-anchor="middle">8 h</text>
+<text x="1404.38" y="412" font-size="23" fill="#203c46" font-weight="650" text-anchor="middle">8.5 h</text>
+<text x="1551.62" y="412" font-size="23" fill="#203c46" font-weight="650" text-anchor="middle">9 h</text>
+<text x="1698.88" y="412" font-size="23" fill="#203c46" font-weight="650" text-anchor="middle">9.5 h</text>
+<text x="1846.12" y="412" font-size="23" fill="#203c46" font-weight="650" text-anchor="middle">10 h</text>
+<text x="1993.38" y="412" font-size="23" fill="#203c46" font-weight="650" text-anchor="middle">10.5 h</text>
+<text x="2140.62" y="412" font-size="23" fill="#203c46" font-weight="650" text-anchor="middle">11 h</text>
+<text x="2287.88" y="412" font-size="23" fill="#203c46" font-weight="650" text-anchor="middle">11.5 h</text>
+<text x="2435.12" y="412" font-size="23" fill="#203c46" font-weight="650" text-anchor="middle">12 h</text>
+<text x="2582.38" y="412" font-size="23" fill="#203c46" font-weight="650" text-anchor="middle">12.5 h</text>
+<rect x="64" y="430" width="236" height="70" rx="4" fill="#ffffff"/>
+<text x="78" y="469" font-size="23" fill="#203c46" font-weight="600" text-anchor="start">M1 四岔村</text>
+<rect x="301" y="430" width="145.25" height="70" rx="4" fill="#d5eae8"/>
+<text x="373.625" y="457" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">00:42 → 00:37</text>
+<text x="373.625" y="488" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-5</text>
+<rect x="448.25" y="430" width="145.25" height="70" rx="4" fill="#d5eae8"/>
+<text x="520.875" y="457" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">00:46 → 00:41</text>
+<text x="520.875" y="488" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-5</text>
+<rect x="595.5" y="430" width="145.25" height="70" rx="4" fill="#cee8e5"/>
+<text x="668.125" y="457" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">00:51 → 00:45</text>
+<text x="668.125" y="488" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-6</text>
+<rect x="742.75" y="430" width="145.25" height="70" rx="4" fill="#c8e5e2"/>
+<text x="815.375" y="457" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">00:55 → 00:48</text>
+<text x="815.375" y="488" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-7</text>
+<rect x="890" y="430" width="145.25" height="70" rx="4" fill="#c8e5e2"/>
+<text x="962.625" y="457" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">00:59 → 00:52</text>
+<text x="962.625" y="488" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-7</text>
+<rect x="1037.25" y="430" width="145.25" height="70" rx="4" fill="#c8e5e2"/>
+<text x="1109.88" y="457" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">01:03 → 00:56</text>
+<text x="1109.88" y="488" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-7</text>
+<rect x="1184.5" y="430" width="145.25" height="70" rx="4" fill="#c1e2e0"/>
+<text x="1257.12" y="457" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">01:08 → 01:00</text>
+<text x="1257.12" y="488" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-8</text>
+<rect x="1331.75" y="430" width="145.25" height="70" rx="4" fill="#c1e2e0"/>
+<text x="1404.38" y="457" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">01:12 → 01:04</text>
+<text x="1404.38" y="488" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-8</text>
+<rect x="1479" y="430" width="145.25" height="70" rx="4" fill="#bbdfdd"/>
+<text x="1551.62" y="457" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">01:16 → 01:07</text>
+<text x="1551.62" y="488" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-9</text>
+<rect x="1626.25" y="430" width="145.25" height="70" rx="4" fill="#b4ddda"/>
+<text x="1698.88" y="457" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">01:21 → 01:11</text>
+<text x="1698.88" y="488" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-10</text>
+<rect x="1773.5" y="430" width="145.25" height="70" rx="4" fill="#b4ddda"/>
+<text x="1846.12" y="457" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">01:25 → 01:15</text>
+<text x="1846.12" y="488" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-10</text>
+<rect x="1920.75" y="430" width="145.25" height="70" rx="4" fill="#b4ddda"/>
+<text x="1993.38" y="457" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">01:29 → 01:19</text>
+<text x="1993.38" y="488" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-10</text>
+<rect x="2068" y="430" width="145.25" height="70" rx="4" fill="#addad7"/>
+<text x="2140.62" y="457" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">01:33 → 01:22</text>
+<text x="2140.62" y="488" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-11</text>
+<rect x="2215.25" y="430" width="145.25" height="70" rx="4" fill="#a7d7d4"/>
+<text x="2287.88" y="457" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">01:38 → 01:26</text>
+<text x="2287.88" y="488" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-12</text>
+<rect x="2362.5" y="430" width="145.25" height="70" rx="4" fill="#a7d7d4"/>
+<text x="2435.12" y="457" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">01:42 → 01:30</text>
+<text x="2435.12" y="488" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-12</text>
+<rect x="2509.75" y="430" width="145.25" height="70" rx="4" fill="#a7d7d4"/>
+<text x="2582.38" y="457" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">01:46 → 01:34</text>
+<text x="2582.38" y="488" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-12</text>
+<rect x="64" y="502" width="236" height="70" rx="4" fill="#ffffff"/>
+<text x="78" y="541" font-size="23" fill="#203c46" font-weight="600" text-anchor="start">M2 黄土窑</text>
+<rect x="301" y="502" width="145.25" height="70" rx="4" fill="#d5eae8"/>
+<text x="373.625" y="529" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">01:15 → 01:10</text>
+<text x="373.625" y="560" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-5</text>
+<rect x="448.25" y="502" width="145.25" height="70" rx="4" fill="#d5eae8"/>
+<text x="520.875" y="529" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">01:22 → 01:17</text>
+<text x="520.875" y="560" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-5</text>
+<rect x="595.5" y="502" width="145.25" height="70" rx="4" fill="#cee8e5"/>
+<text x="668.125" y="529" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">01:30 → 01:24</text>
+<text x="668.125" y="560" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-6</text>
+<rect x="742.75" y="502" width="145.25" height="70" rx="4" fill="#c8e5e2"/>
+<text x="815.375" y="529" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">01:38 → 01:31</text>
+<text x="815.375" y="560" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-7</text>
+<rect x="890" y="502" width="145.25" height="70" rx="4" fill="#c8e5e2"/>
+<text x="962.625" y="529" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">01:45 → 01:38</text>
+<text x="962.625" y="560" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-7</text>
+<rect x="1037.25" y="502" width="145.25" height="70" rx="4" fill="#c1e2e0"/>
+<text x="1109.88" y="529" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">01:53 → 01:45</text>
+<text x="1109.88" y="560" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-8</text>
+<rect x="1184.5" y="502" width="145.25" height="70" rx="4" fill="#bbdfdd"/>
+<text x="1257.12" y="529" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">02:01 → 01:52</text>
+<text x="1257.12" y="560" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-9</text>
+<rect x="1331.75" y="502" width="145.25" height="70" rx="4" fill="#bbdfdd"/>
+<text x="1404.38" y="529" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">02:08 → 01:59</text>
+<text x="1404.38" y="560" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-9</text>
+<rect x="1479" y="502" width="145.25" height="70" rx="4" fill="#b4ddda"/>
+<text x="1551.62" y="529" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">02:16 → 02:06</text>
+<text x="1551.62" y="560" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-10</text>
+<rect x="1626.25" y="502" width="145.25" height="70" rx="4" fill="#b4ddda"/>
+<text x="1698.88" y="529" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">02:23 → 02:13</text>
+<text x="1698.88" y="560" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-10</text>
+<rect x="1773.5" y="502" width="145.25" height="70" rx="4" fill="#addad7"/>
+<text x="1846.12" y="529" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">02:31 → 02:20</text>
+<text x="1846.12" y="560" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-11</text>
+<rect x="1920.75" y="502" width="145.25" height="70" rx="4" fill="#addad7"/>
+<text x="1993.38" y="529" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">02:38 → 02:27</text>
+<text x="1993.38" y="560" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-11</text>
+<rect x="2068" y="502" width="145.25" height="70" rx="4" fill="#a7d7d4"/>
+<text x="2140.62" y="529" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">02:46 → 02:34</text>
+<text x="2140.62" y="560" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-12</text>
+<rect x="2215.25" y="502" width="145.25" height="70" rx="4" fill="#a7d7d4"/>
+<text x="2287.88" y="529" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">02:53 → 02:41</text>
+<text x="2287.88" y="560" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-12</text>
+<rect x="2362.5" y="502" width="145.25" height="70" rx="4" fill="#a0d4d2"/>
+<text x="2435.12" y="529" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">03:01 → 02:48</text>
+<text x="2435.12" y="560" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-13</text>
+<rect x="2509.75" y="502" width="145.25" height="70" rx="4" fill="#9ad2cf"/>
+<text x="2582.38" y="529" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">03:09 → 02:55</text>
+<text x="2582.38" y="560" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-14</text>
+<rect x="64" y="574" width="236" height="70" rx="4" fill="#ffffff"/>
+<text x="78" y="613" font-size="23" fill="#203c46" font-weight="600" text-anchor="start">M3 土井子</text>
+<rect x="301" y="574" width="145.25" height="70" rx="4" fill="#dcedeb"/>
+<text x="373.625" y="601" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">02:21 → 02:17</text>
+<text x="373.625" y="632" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-4</text>
+<rect x="448.25" y="574" width="145.25" height="70" rx="4" fill="#e2f0ee"/>
+<text x="520.875" y="601" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">02:34 → 02:31</text>
+<text x="520.875" y="632" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-3</text>
+<rect x="595.5" y="574" width="145.25" height="70" rx="4" fill="#dcedeb"/>
+<text x="668.125" y="601" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">02:49 → 02:45</text>
+<text x="668.125" y="632" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-4</text>
+<rect x="742.75" y="574" width="145.25" height="70" rx="4" fill="#dcedeb"/>
+<text x="815.375" y="601" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">03:03 → 02:59</text>
+<text x="815.375" y="632" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-4</text>
+<rect x="890" y="574" width="145.25" height="70" rx="4" fill="#d5eae8"/>
+<text x="962.625" y="601" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">03:17 → 03:12</text>
+<text x="962.625" y="632" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-5</text>
+<rect x="1037.25" y="574" width="145.25" height="70" rx="4" fill="#d5eae8"/>
+<text x="1109.88" y="601" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">03:31 → 03:26</text>
+<text x="1109.88" y="632" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-5</text>
+<rect x="1184.5" y="574" width="145.25" height="70" rx="4" fill="#d5eae8"/>
+<text x="1257.12" y="601" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">03:45 → 03:40</text>
+<text x="1257.12" y="632" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-5</text>
+<rect x="1331.75" y="574" width="145.25" height="70" rx="4" fill="#d5eae8"/>
+<text x="1404.38" y="601" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">03:59 → 03:54</text>
+<text x="1404.38" y="632" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-5</text>
+<rect x="1479" y="574" width="145.25" height="70" rx="4" fill="#cee8e5"/>
+<text x="1551.62" y="601" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">04:14 → 04:08</text>
+<text x="1551.62" y="632" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-6</text>
+<rect x="1626.25" y="574" width="145.25" height="70" rx="4" fill="#c8e5e2"/>
+<text x="1698.88" y="601" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">04:28 → 04:21</text>
+<text x="1698.88" y="632" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-7</text>
+<rect x="1773.5" y="574" width="145.25" height="70" rx="4" fill="#c8e5e2"/>
+<text x="1846.12" y="601" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">04:42 → 04:35</text>
+<text x="1846.12" y="632" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-7</text>
+<rect x="1920.75" y="574" width="145.25" height="70" rx="4" fill="#c8e5e2"/>
+<text x="1993.38" y="601" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">04:56 → 04:49</text>
+<text x="1993.38" y="632" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-7</text>
+<rect x="2068" y="574" width="145.25" height="70" rx="4" fill="#c8e5e2"/>
+<text x="2140.62" y="601" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">05:10 → 05:03</text>
+<text x="2140.62" y="632" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-7</text>
+<rect x="2215.25" y="574" width="145.25" height="70" rx="4" fill="#c8e5e2"/>
+<text x="2287.88" y="601" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">05:24 → 05:17</text>
+<text x="2287.88" y="632" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-7</text>
+<rect x="2362.5" y="574" width="145.25" height="70" rx="4" fill="#c1e2e0"/>
+<text x="2435.12" y="601" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">05:38 → 05:30</text>
+<text x="2435.12" y="632" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-8</text>
+<rect x="2509.75" y="574" width="145.25" height="70" rx="4" fill="#bbdfdd"/>
+<text x="2582.38" y="601" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">05:53 → 05:44</text>
+<text x="2582.38" y="632" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-9</text>
+<rect x="64" y="646" width="236" height="70" rx="4" fill="#ffffff"/>
+<text x="78" y="685" font-size="23" fill="#203c46" font-weight="600" text-anchor="start">M4 清河村</text>
+<rect x="301" y="646" width="145.25" height="70" rx="4" fill="#dcedeb"/>
+<text x="373.625" y="673" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">02:58 → 02:54</text>
+<text x="373.625" y="704" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-4</text>
+<rect x="448.25" y="646" width="145.25" height="70" rx="4" fill="#dcedeb"/>
+<text x="520.875" y="673" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">03:15 → 03:11</text>
+<text x="520.875" y="704" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-4</text>
+<rect x="595.5" y="646" width="145.25" height="70" rx="4" fill="#dcedeb"/>
+<text x="668.125" y="673" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">03:33 → 03:29</text>
+<text x="668.125" y="704" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-4</text>
+<rect x="742.75" y="646" width="145.25" height="70" rx="4" fill="#d5eae8"/>
+<text x="815.375" y="673" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">03:51 → 03:46</text>
+<text x="815.375" y="704" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-5</text>
+<rect x="890" y="646" width="145.25" height="70" rx="4" fill="#d5eae8"/>
+<text x="962.625" y="673" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">04:09 → 04:04</text>
+<text x="962.625" y="704" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-5</text>
+<rect x="1037.25" y="646" width="145.25" height="70" rx="4" fill="#cee8e5"/>
+<text x="1109.88" y="673" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">04:27 → 04:21</text>
+<text x="1109.88" y="704" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-6</text>
+<rect x="1184.5" y="646" width="145.25" height="70" rx="4" fill="#c8e5e2"/>
+<text x="1257.12" y="673" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">04:45 → 04:38</text>
+<text x="1257.12" y="704" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-7</text>
+<rect x="1331.75" y="646" width="145.25" height="70" rx="4" fill="#cee8e5"/>
+<text x="1404.38" y="673" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">05:02 → 04:56</text>
+<text x="1404.38" y="704" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-6</text>
+<rect x="1479" y="646" width="145.25" height="70" rx="4" fill="#c1e2e0"/>
+<text x="1551.62" y="673" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">05:21 → 05:13</text>
+<text x="1551.62" y="704" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-8</text>
+<rect x="1626.25" y="646" width="145.25" height="70" rx="4" fill="#c8e5e2"/>
+<text x="1698.88" y="673" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">05:38 → 05:31</text>
+<text x="1698.88" y="704" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-7</text>
+<rect x="1773.5" y="646" width="145.25" height="70" rx="4" fill="#bbdfdd"/>
+<text x="1846.12" y="673" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">05:57 → 05:48</text>
+<text x="1846.12" y="704" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-9</text>
+<rect x="1920.75" y="646" width="145.25" height="70" rx="4" fill="#c1e2e0"/>
+<text x="1993.38" y="673" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">06:14 → 06:06</text>
+<text x="1993.38" y="704" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-8</text>
+<rect x="2068" y="646" width="145.25" height="70" rx="4" fill="#bbdfdd"/>
+<text x="2140.62" y="673" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">06:32 → 06:23</text>
+<text x="2140.62" y="704" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-9</text>
+<rect x="2215.25" y="646" width="145.25" height="70" rx="4" fill="#b4ddda"/>
+<text x="2287.88" y="673" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">06:50 → 06:40</text>
+<text x="2287.88" y="704" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-10</text>
+<rect x="2362.5" y="646" width="145.25" height="70" rx="4" fill="#bbdfdd"/>
+<text x="2435.12" y="673" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">07:07 → 06:58</text>
+<text x="2435.12" y="704" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-9</text>
+<rect x="2509.75" y="646" width="145.25" height="70" rx="4" fill="#addad7"/>
+<text x="2582.38" y="673" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">07:26 → 07:15</text>
+<text x="2582.38" y="704" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-11</text>
+<rect x="64" y="718" width="236" height="70" rx="4" fill="#ffffff"/>
+<text x="78" y="757" font-size="23" fill="#203c46" font-weight="600" text-anchor="start">M5 翠屏庵</text>
+<rect x="301" y="718" width="145.25" height="70" rx="4" fill="#eff5f3"/>
+<text x="373.625" y="745" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">03:52 → 03:51</text>
+<text x="373.625" y="776" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-1</text>
+<rect x="448.25" y="718" width="145.25" height="70" rx="4" fill="#eff5f3"/>
+<text x="520.875" y="745" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">04:15 → 04:14</text>
+<text x="520.875" y="776" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-1</text>
+<rect x="595.5" y="718" width="145.25" height="70" rx="4" fill="#e9f3f0"/>
+<text x="668.125" y="745" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">04:39 → 04:37</text>
+<text x="668.125" y="776" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-2</text>
+<rect x="742.75" y="718" width="145.25" height="70" rx="4" fill="#e9f3f0"/>
+<text x="815.375" y="745" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">05:02 → 05:00</text>
+<text x="815.375" y="776" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-2</text>
+<rect x="890" y="718" width="145.25" height="70" rx="4" fill="#e2f0ee"/>
+<text x="962.625" y="745" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">05:26 → 05:23</text>
+<text x="962.625" y="776" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-3</text>
+<rect x="1037.25" y="718" width="145.25" height="70" rx="4" fill="#e2f0ee"/>
+<text x="1109.88" y="745" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">05:49 → 05:46</text>
+<text x="1109.88" y="776" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-3</text>
+<rect x="1184.5" y="718" width="145.25" height="70" rx="4" fill="#e2f0ee"/>
+<text x="1257.12" y="745" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">06:13 → 06:10</text>
+<text x="1257.12" y="776" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-3</text>
+<rect x="1331.75" y="718" width="145.25" height="70" rx="4" fill="#e2f0ee"/>
+<text x="1404.38" y="745" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">06:36 → 06:33</text>
+<text x="1404.38" y="776" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-3</text>
+<rect x="1479" y="718" width="145.25" height="70" rx="4" fill="#dcedeb"/>
+<text x="1551.62" y="745" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">07:00 → 06:56</text>
+<text x="1551.62" y="776" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-4</text>
+<rect x="1626.25" y="718" width="145.25" height="70" rx="4" fill="#dcedeb"/>
+<text x="1698.88" y="745" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">07:23 → 07:19</text>
+<text x="1698.88" y="776" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-4</text>
+<rect x="1773.5" y="718" width="145.25" height="70" rx="4" fill="#dcedeb"/>
+<text x="1846.12" y="745" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">07:46 → 07:42</text>
+<text x="1846.12" y="776" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-4</text>
+<rect x="1920.75" y="718" width="145.25" height="70" rx="4" fill="#dcedeb"/>
+<text x="1993.38" y="745" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">08:09 → 08:05</text>
+<text x="1993.38" y="776" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-4</text>
+<rect x="2068" y="718" width="145.25" height="70" rx="4" fill="#dcedeb"/>
+<text x="2140.62" y="745" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">08:32 → 08:28</text>
+<text x="2140.62" y="776" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-4</text>
+<rect x="2215.25" y="718" width="145.25" height="70" rx="4" fill="#d5eae8"/>
+<text x="2287.88" y="745" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">08:56 → 08:51</text>
+<text x="2287.88" y="776" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-5</text>
+<rect x="2362.5" y="718" width="145.25" height="70" rx="4" fill="#dcedeb"/>
+<text x="2435.12" y="745" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">09:19 → 09:15</text>
+<text x="2435.12" y="776" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-4</text>
+<rect x="2509.75" y="718" width="145.25" height="70" rx="4" fill="#d5eae8"/>
+<text x="2582.38" y="745" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">09:43 → 09:38</text>
+<text x="2582.38" y="776" font-size="25" fill="#126b70" font-weight="650" text-anchor="middle">-5</text>
+<rect x="64" y="790" width="236" height="70" rx="4" fill="#ffffff"/>
+<text x="78" y="829" font-size="23" fill="#203c46" font-weight="600" text-anchor="start">终点</text>
+<rect x="301" y="790" width="145.25" height="70" rx="4" fill="#f5eee8"/>
+<text x="373.625" y="817" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">04:58 → 05:00</text>
+<text x="373.625" y="848" font-size="25" fill="#aa472e" font-weight="650" text-anchor="middle">+2</text>
+<rect x="448.25" y="790" width="145.25" height="70" rx="4" fill="#f5eee8"/>
+<text x="520.875" y="817" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">05:28 → 05:30</text>
+<text x="520.875" y="848" font-size="25" fill="#aa472e" font-weight="650" text-anchor="middle">+2</text>
+<rect x="595.5" y="790" width="145.25" height="70" rx="4" fill="#f5eee8"/>
+<text x="668.125" y="817" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">05:58 → 06:00</text>
+<text x="668.125" y="848" font-size="25" fill="#aa472e" font-weight="650" text-anchor="middle">+2</text>
+<rect x="742.75" y="790" width="145.25" height="70" rx="4" fill="#f5eee8"/>
+<text x="815.375" y="817" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">06:28 → 06:30</text>
+<text x="815.375" y="848" font-size="25" fill="#aa472e" font-weight="650" text-anchor="middle">+2</text>
+<rect x="890" y="790" width="145.25" height="70" rx="4" fill="#f5f3ef"/>
+<text x="962.625" y="817" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">06:59 → 07:00</text>
+<text x="962.625" y="848" font-size="25" fill="#aa472e" font-weight="650" text-anchor="middle">+1</text>
+<rect x="1037.25" y="790" width="145.25" height="70" rx="4" fill="#f5eee8"/>
+<text x="1109.88" y="817" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">07:28 → 07:30</text>
+<text x="1109.88" y="848" font-size="25" fill="#aa472e" font-weight="650" text-anchor="middle">+2</text>
+<rect x="1184.5" y="790" width="145.25" height="70" rx="4" fill="#f5f3ef"/>
+<text x="1257.12" y="817" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">07:59 → 08:00</text>
+<text x="1257.12" y="848" font-size="25" fill="#aa472e" font-weight="650" text-anchor="middle">+1</text>
+<rect x="1331.75" y="790" width="145.25" height="70" rx="4" fill="#f5eee8"/>
+<text x="1404.38" y="817" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">08:28 → 08:30</text>
+<text x="1404.38" y="848" font-size="25" fill="#aa472e" font-weight="650" text-anchor="middle">+2</text>
+<rect x="1479" y="790" width="145.25" height="70" rx="4" fill="#f5f3ef"/>
+<text x="1551.62" y="817" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">08:59 → 09:00</text>
+<text x="1551.62" y="848" font-size="25" fill="#aa472e" font-weight="650" text-anchor="middle">+1</text>
+<rect x="1626.25" y="790" width="145.25" height="70" rx="4" fill="#f5eee8"/>
+<text x="1698.88" y="817" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">09:28 → 09:30</text>
+<text x="1698.88" y="848" font-size="25" fill="#aa472e" font-weight="650" text-anchor="middle">+2</text>
+<rect x="1773.5" y="790" width="145.25" height="70" rx="4" fill="#f5f3ef"/>
+<text x="1846.12" y="817" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">09:59 → 10:00</text>
+<text x="1846.12" y="848" font-size="25" fill="#aa472e" font-weight="650" text-anchor="middle">+1</text>
+<rect x="1920.75" y="790" width="145.25" height="70" rx="4" fill="#f5eee8"/>
+<text x="1993.38" y="817" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">10:28 → 10:30</text>
+<text x="1993.38" y="848" font-size="25" fill="#aa472e" font-weight="650" text-anchor="middle">+2</text>
+<rect x="2068" y="790" width="145.25" height="70" rx="4" fill="#f4e9e1"/>
+<text x="2140.62" y="817" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">10:57 → 11:00</text>
+<text x="2140.62" y="848" font-size="25" fill="#aa472e" font-weight="650" text-anchor="middle">+3</text>
+<rect x="2215.25" y="790" width="145.25" height="70" rx="4" fill="#f5eee8"/>
+<text x="2287.88" y="817" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">11:28 → 11:30</text>
+<text x="2287.88" y="848" font-size="25" fill="#aa472e" font-weight="650" text-anchor="middle">+2</text>
+<rect x="2362.5" y="790" width="145.25" height="70" rx="4" fill="#f4e9e1"/>
+<text x="2435.12" y="817" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">11:57 → 12:00</text>
+<text x="2435.12" y="848" font-size="25" fill="#aa472e" font-weight="650" text-anchor="middle">+3</text>
+<rect x="2509.75" y="790" width="145.25" height="70" rx="4" fill="#f5eee8"/>
+<text x="2582.38" y="817" font-size="18" fill="#203c46" font-weight="400" text-anchor="middle">12:28 → 12:30</text>
+<text x="2582.38" y="848" font-size="25" fill="#aa472e" font-weight="650" text-anchor="middle">+2</text>
+<text x="64" y="920" font-size="28" fill="#203c46" font-weight="700" text-anchor="start">02  地形数据</text>
+<text x="2656" y="920" font-size="22" fill="#627780" font-weight="400" text-anchor="end">每组依次为：耐力学社 / 仓库 / 差值</text>
+<text x="692.667" y="962" font-size="24" fill="#203c46" font-weight="600" text-anchor="middle">累计距离 / km</text>
+<text x="430.889" y="990" font-size="20" fill="#627780" font-weight="400" text-anchor="middle">耐力学社</text>
+<text x="692.667" y="990" font-size="20" fill="#627780" font-weight="400" text-anchor="middle">仓库</text>
+<text x="954.444" y="990" font-size="20" fill="#627780" font-weight="400" text-anchor="middle">差值</text>
+<text x="1478" y="962" font-size="24" fill="#203c46" font-weight="600" text-anchor="middle">本段爬升 / m</text>
+<text x="1216.22" y="990" font-size="20" fill="#627780" font-weight="400" text-anchor="middle">耐力学社</text>
+<text x="1478" y="990" font-size="20" fill="#627780" font-weight="400" text-anchor="middle">仓库</text>
+<text x="1739.78" y="990" font-size="20" fill="#627780" font-weight="400" text-anchor="middle">差值</text>
+<text x="2263.33" y="962" font-size="24" fill="#203c46" font-weight="600" text-anchor="middle">本段下降 / m</text>
+<text x="2001.56" y="990" font-size="20" fill="#627780" font-weight="400" text-anchor="middle">耐力学社</text>
+<text x="2263.33" y="990" font-size="20" fill="#627780" font-weight="400" text-anchor="middle">仓库</text>
+<text x="2525.11" y="990" font-size="20" fill="#627780" font-weight="400" text-anchor="middle">差值</text>
+<text x="78" y="990" font-size="21" fill="#627780" font-weight="400" text-anchor="start">站点</text>
+<rect x="64" y="1009" width="2592" height="38" rx="0" fill="#ffffff"/>
+<text x="78" y="1036" font-size="22" fill="#203c46" font-weight="400" text-anchor="start">M1 四岔村</text>
+<text x="430.889" y="1036" font-size="22" fill="#203c46" font-weight="400" text-anchor="middle">7.8</text>
+<text x="692.667" y="1036" font-size="22" fill="#203c46" font-weight="400" text-anchor="middle">7.83</text>
+<text x="954.444" y="1036" font-size="22" fill="#aa472e" font-weight="600" text-anchor="middle">+0.03</text>
+<text x="1216.22" y="1036" font-size="22" fill="#203c46" font-weight="400" text-anchor="middle">312</text>
+<text x="1478" y="1036" font-size="22" fill="#203c46" font-weight="400" text-anchor="middle">326</text>
+<text x="1739.78" y="1036" font-size="22" fill="#aa472e" font-weight="600" text-anchor="middle">+14</text>
+<text x="2001.56" y="1036" font-size="22" fill="#203c46" font-weight="400" text-anchor="middle">155</text>
+<text x="2263.33" y="1036" font-size="22" fill="#203c46" font-weight="400" text-anchor="middle">164</text>
+<text x="2525.11" y="1036" font-size="22" fill="#aa472e" font-weight="600" text-anchor="middle">+9</text>
+<rect x="64" y="1047" width="2592" height="38" rx="0" fill="#eaf0ed"/>
+<text x="78" y="1074" font-size="22" fill="#203c46" font-weight="400" text-anchor="start">M2 黄土窑</text>
+<text x="430.889" y="1074" font-size="22" fill="#203c46" font-weight="400" text-anchor="middle">14.1</text>
+<text x="692.667" y="1074" font-size="22" fill="#203c46" font-weight="400" text-anchor="middle">14.02</text>
+<text x="954.444" y="1074" font-size="22" fill="#126b70" font-weight="600" text-anchor="middle">-0.08</text>
+<text x="1216.22" y="1074" font-size="22" fill="#203c46" font-weight="400" text-anchor="middle">220</text>
+<text x="1478" y="1074" font-size="22" fill="#203c46" font-weight="400" text-anchor="middle">213</text>
+<text x="1739.78" y="1074" font-size="22" fill="#126b70" font-weight="600" text-anchor="middle">-7</text>
+<text x="2001.56" y="1074" font-size="22" fill="#203c46" font-weight="400" text-anchor="middle">259</text>
+<text x="2263.33" y="1074" font-size="22" fill="#203c46" font-weight="400" text-anchor="middle">256</text>
+<text x="2525.11" y="1074" font-size="22" fill="#126b70" font-weight="600" text-anchor="middle">-3</text>
+<rect x="64" y="1085" width="2592" height="38" rx="0" fill="#ffffff"/>
+<text x="78" y="1112" font-size="22" fill="#203c46" font-weight="400" text-anchor="start">M3 土井子</text>
+<text x="430.889" y="1112" font-size="22" fill="#203c46" font-weight="400" text-anchor="middle">25.7</text>
+<text x="692.667" y="1112" font-size="22" fill="#203c46" font-weight="400" text-anchor="middle">25.76</text>
+<text x="954.444" y="1112" font-size="22" fill="#aa472e" font-weight="600" text-anchor="middle">+0.06</text>
+<text x="1216.22" y="1112" font-size="22" fill="#203c46" font-weight="400" text-anchor="middle">448</text>
+<text x="1478" y="1112" font-size="22" fill="#203c46" font-weight="400" text-anchor="middle">451</text>
+<text x="1739.78" y="1112" font-size="22" fill="#aa472e" font-weight="600" text-anchor="middle">+3</text>
+<text x="2001.56" y="1112" font-size="22" fill="#203c46" font-weight="400" text-anchor="middle">220</text>
+<text x="2263.33" y="1112" font-size="22" fill="#203c46" font-weight="400" text-anchor="middle">216</text>
+<text x="2525.11" y="1112" font-size="22" fill="#126b70" font-weight="600" text-anchor="middle">-4</text>
+<rect x="64" y="1123" width="2592" height="38" rx="0" fill="#eaf0ed"/>
+<text x="78" y="1150" font-size="22" fill="#203c46" font-weight="400" text-anchor="start">M4 清河村</text>
+<text x="430.889" y="1150" font-size="22" fill="#203c46" font-weight="400" text-anchor="middle">33.0</text>
+<text x="692.667" y="1150" font-size="22" fill="#203c46" font-weight="400" text-anchor="middle">32.99</text>
+<text x="954.444" y="1150" font-size="22" fill="#126b70" font-weight="600" text-anchor="middle">-0.01</text>
+<text x="1216.22" y="1150" font-size="22" fill="#203c46" font-weight="400" text-anchor="middle">133</text>
+<text x="1478" y="1150" font-size="22" fill="#203c46" font-weight="400" text-anchor="middle">115</text>
+<text x="1739.78" y="1150" font-size="22" fill="#126b70" font-weight="600" text-anchor="middle">-18</text>
+<text x="2001.56" y="1150" font-size="22" fill="#203c46" font-weight="400" text-anchor="middle">234</text>
+<text x="2263.33" y="1150" font-size="22" fill="#203c46" font-weight="400" text-anchor="middle">222</text>
+<text x="2525.11" y="1150" font-size="22" fill="#126b70" font-weight="600" text-anchor="middle">-12</text>
+<rect x="64" y="1161" width="2592" height="38" rx="0" fill="#ffffff"/>
+<text x="78" y="1188" font-size="22" fill="#203c46" font-weight="400" text-anchor="start">M5 翠屏庵</text>
+<text x="430.889" y="1188" font-size="22" fill="#203c46" font-weight="400" text-anchor="middle">42.3</text>
+<text x="692.667" y="1188" font-size="22" fill="#203c46" font-weight="400" text-anchor="middle">42.36</text>
+<text x="954.444" y="1188" font-size="22" fill="#aa472e" font-weight="600" text-anchor="middle">+0.06</text>
+<text x="1216.22" y="1188" font-size="22" fill="#203c46" font-weight="400" text-anchor="middle">302</text>
+<text x="1478" y="1188" font-size="22" fill="#203c46" font-weight="400" text-anchor="middle">340</text>
+<text x="1739.78" y="1188" font-size="22" fill="#aa472e" font-weight="600" text-anchor="middle">+38</text>
+<text x="2001.56" y="1188" font-size="22" fill="#203c46" font-weight="400" text-anchor="middle">401</text>
+<text x="2263.33" y="1188" font-size="22" fill="#203c46" font-weight="400" text-anchor="middle">448</text>
+<text x="2525.11" y="1188" font-size="22" fill="#aa472e" font-weight="600" text-anchor="middle">+47</text>
+<rect x="64" y="1199" width="2592" height="38" rx="0" fill="#eaf0ed"/>
+<text x="78" y="1226" font-size="22" fill="#203c46" font-weight="400" text-anchor="start">终点</text>
+<text x="430.889" y="1226" font-size="22" fill="#203c46" font-weight="400" text-anchor="middle">52.1</text>
+<text x="692.667" y="1226" font-size="22" fill="#203c46" font-weight="400" text-anchor="middle">52.20</text>
+<text x="954.444" y="1226" font-size="22" fill="#aa472e" font-weight="600" text-anchor="middle">+0.10</text>
+<text x="1216.22" y="1226" font-size="22" fill="#203c46" font-weight="400" text-anchor="middle">468</text>
+<text x="1478" y="1226" font-size="22" fill="#203c46" font-weight="400" text-anchor="middle">515</text>
+<text x="1739.78" y="1226" font-size="22" fill="#aa472e" font-weight="600" text-anchor="middle">+47</text>
+<text x="2001.56" y="1226" font-size="22" fill="#203c46" font-weight="400" text-anchor="middle">640</text>
+<text x="2263.33" y="1226" font-size="22" fill="#203c46" font-weight="400" text-anchor="middle">690</text>
+<text x="2525.11" y="1226" font-size="22" fill="#aa472e" font-weight="600" text-anchor="middle">+50</text>
+<text x="64" y="1294" font-size="20" fill="#627780" font-weight="400" text-anchor="start">来源：用户提供的耐力学社 / RunArt.Net 截图及本仓库 50K 配速表。时间差按两表显示的整分钟相减；起点均为 00:00，省略。</text>
+<text x="64" y="1331" font-size="20" fill="#627780" font-weight="400" text-anchor="start">原图终点时间照录，未归一化；地形列按数值含义转录（原图表头疑似错位）。括号内配速不参与对比。</text>
+</svg>
