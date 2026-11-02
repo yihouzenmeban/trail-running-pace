@@ -265,27 +265,36 @@ class ComparisonTests(unittest.TestCase):
         self.assertIn("—", svg)
         self.assertEqual(len(root.findall(".//{*}g[@class='target-panel']")), 2)
 
-    def test_comparison_groups_both_times_at_each_checkpoint(self):
+    def test_segment_rows_combine_exact_times_and_difference_bars(self):
         import xml.etree.ElementTree as ET
         from comparison_svg import render_svg, time_status
         result = self.build()
         root = ET.fromstring(render_svg(result))
-        for i, segment in enumerate(result["segments"], 1):
-            group = root.find(f".//{{*}}g[@id='checkpoint-{i}']")
-            self.assertIsNotNone(group)
-            self.assertEqual(group.get("tabindex"), "0")
-            self.assertIn(segment["to_name"], group.find("{*}title").text)
-            for row_id, actual, predicted in (
-                ("time-cp", result["checkpoints"][i]["elapsed_seconds"],
-                 [s["checkpoints"][i]["arrival_seconds"] for s in self.plan["schedules"]]),
-                ("segment", segment["actual_seconds"], [p["seconds"] for p in segment["plans"]]),
-            ):
-                row = group.find(f".//{{*}}g[@id='{row_id}-{i}']")
-                text = [e.text for e in row.findall("{*}text")]
-                expected = [compare.clock(actual)]
-                for value in predicted:
-                    expected.extend([compare.clock(value), time_status(value - actual, row_id == "segment")[0]])
-                self.assertEqual(text[1:], expected)
+        rows = root.findall(".//{*}g[@class='segment-row inspectable']")
+        self.assertEqual(len(rows), len(result["segments"]))
+        scales = set()
+        for row, segment in zip(rows, result["segments"]):
+            self.assertEqual(row.get("tabindex"), "0")
+            self.assertIn(segment["from_name"], row.find("{*}title").text)
+            self.assertIn(segment["to_name"], row.find("{*}title").text)
+            self.assertEqual(row.find("{*}text[@data-role='actual-time']").text,
+                             compare.clock(segment["actual_seconds"]))
+            cells = row.findall("{*}g[@class='segment-plan inspectable']")
+            self.assertEqual(len(cells), len(segment["plans"]))
+            for cell, predicted in zip(cells, segment["plans"]):
+                self.assertEqual(float(cell.get("data-target-seconds")), predicted["target_seconds"])
+                self.assertEqual(cell.find("{*}text[@data-role='planned-time']").text,
+                                 compare.clock(predicted["seconds"]))
+                self.assertEqual(cell.find("{*}text[@data-role='segment-status']").text,
+                                 time_status(predicted["delta_seconds"], True)[0])
+                scale, zero = float(cell.get("data-pixels-per-second")), float(cell.get("data-zero-x"))
+                scales.add(scale)
+                bar = cell.find("{*}rect[@data-delta-seconds]")
+                delta = predicted["delta_seconds"]
+                self.assertAlmostEqual(float(bar.get("data-delta-seconds")), delta)
+                self.assertAlmostEqual(float(bar.get("width")), abs(delta) * scale, places=2)
+                self.assertAlmostEqual(float(bar.get("x")), zero + min(0, delta) * scale, places=2)
+        self.assertEqual(len(scales), 1)
 
     def test_difference_plots_preserve_values_and_shared_scales(self):
         import xml.etree.ElementTree as ET
@@ -295,7 +304,7 @@ class ComparisonTests(unittest.TestCase):
         result = self.build()
         root = ET.fromstring(render_svg(result))
         panels = root.findall(".//{*}g[@class='target-panel']")
-        ranges = {kind: set() for kind in ("cumulative", "segment")}
+        ranges = set()
         for panel, schedule in zip(panels, self.plan["schedules"]):
             self.assertEqual(float(panel.get("data-target-seconds")), schedule["target_seconds"])
             plot = panel.find(".//{*}g[@data-kind='cumulative']")
@@ -310,22 +319,12 @@ class ComparisonTests(unittest.TestCase):
                 self.assertAlmostEqual(float(point.get("cx")), x0 + cp["distance_m"] /
                                        self.plan["route"]["distance_m"] * (x1 - x0), places=2)
                 self.assertAlmostEqual(float(point.get("cy")), zero - delta * scale, places=2)
-            bars = panel.findall(".//{*}rect[@data-delta-seconds]")
-            self.assertEqual(len(bars), len(result["segments"]))
-            for bar, segment in zip(bars, result["segments"]):
-                expected = next(p["delta_seconds"] for p in segment["plans"]
-                                if p["target_seconds"] == schedule["target_seconds"])
-                self.assertAlmostEqual(float(bar.get("data-delta-seconds")), expected)
-                bar_plot = panel.find(".//{*}g[@data-kind='segment']")
-                bar_zero = float(bar_plot.get("data-zero-y"))
-                bar_scale = float(bar_plot.get("data-pixels-per-second"))
-                self.assertAlmostEqual(float(bar.get("height")), abs(expected) * bar_scale, places=2)
-                self.assertAlmostEqual(float(bar.get("y")), bar_zero - max(0, expected) * bar_scale, places=2)
-            for kind in ranges:
-                plot = panel.find(f".//{{*}}g[@data-kind='{kind}']")
-                ranges[kind].add(plot.get("data-limit-seconds"))
-                self.assertIsNotNone(plot.find("{*}path[@data-role='zero-line']"))
-        self.assertTrue(all(len(values) == 1 for values in ranges.values()))
+                tip = point.find("{*}title").text
+                self.assertIn(compare.clock(actual["elapsed_seconds"]), tip)
+                self.assertIn(compare.clock(predicted["arrival_seconds"]), tip)
+            ranges.add(plot.get("data-limit-seconds"))
+            self.assertIsNotNone(plot.find("{*}path[@data-role='zero-line']"))
+        self.assertEqual(len(ranges), 1)
 
     def test_svg_details_preserve_warnings_and_escape_labels(self):
         import xml.etree.ElementTree as ET
@@ -353,10 +352,63 @@ class ComparisonTests(unittest.TestCase):
         self.assertIn(time_status(100)[1], colors)
         self.assertIn(time_status(-100)[1], colors)
         for text in root.findall(".//{*}g[@id='terrain']/.//{*}text"):
-            self.assertIn(text.get("fill"), {"#202A35", "#626D79"})
-        for row_id in ("time-cp", "segment"):
-            row = root.find(f".//{{*}}g[@id='{row_id}-1']")
-            self.assertEqual(len(row.findall("{*}rect[@class='status-bg']")), len(self.plan["schedules"]))
+            self.assertIn(text.get("fill"), {"#202A35", "#626D79", "#475569", "#3274AC"})
+
+    def test_terrain_charts_preserve_values_differences_and_shared_scales(self):
+        import xml.etree.ElementTree as ET
+        from comparison_svg import render_svg, numeric, metric_delta_label
+        result = self.build()
+        result["terrain"][0]["actual_distance_m"] = result["terrain"][0]["planned_distance_m"] + 125.4
+        result["terrain"][1]["actual_distance_m"] = result["terrain"][1]["planned_distance_m"] - 256.7
+        root = ET.fromstring(render_svg(result))
+        elevation_scales, distance_scales = set(), set()
+        for i, metrics in enumerate(result["terrain"], 1):
+            row = root.find(f".//{{*}}g[@id='terrain-cp-{i}']")
+            for key in ("distance_m", "ascent_m", "descent_m"):
+                cell = row.find(f"{{*}}g[@data-metric='{key}']")
+                self.assertEqual(cell.get("tabindex"), "0")
+                a, p = metrics["actual_" + key], metrics["planned_" + key]
+                delta = p - a
+                self.assertEqual(cell.find("{*}text[@data-role='metric-delta']").text, metric_delta_label(delta))
+                scale, zero = float(cell.get("data-pixels-per-meter")), float(cell.get("data-zero-x"))
+                for series, value in (("actual", a), ("planned", p)):
+                    label = cell.find(f"{{*}}text[@data-role='{series}-value']")
+                    self.assertEqual(label.text, numeric(value / 1000, 2) + " km" if key == "distance_m"
+                                     else numeric(value) + " m")
+                if key == "distance_m":
+                    distance_scales.add(scale)
+                    bar = cell.find("{*}rect[@data-delta-m]")
+                    self.assertAlmostEqual(float(bar.get("data-delta-m")), delta)
+                    self.assertAlmostEqual(float(bar.get("x")), zero + min(0, delta) * scale, places=2)
+                    self.assertAlmostEqual(float(bar.get("width")), abs(delta) * scale, places=2)
+                else:
+                    elevation_scales.add(scale)
+                    for series, value in (("actual", a), ("planned", p)):
+                        bar = cell.find(f"{{*}}rect[@data-series='{series}']")
+                        self.assertAlmostEqual(float(bar.get("data-value-m")), value)
+                        self.assertAlmostEqual(float(bar.get("x")), zero, places=2)
+                        self.assertAlmostEqual(float(bar.get("width")), value * scale, places=2)
+        self.assertEqual(len(distance_scales), 1)
+        self.assertEqual(len(elevation_scales), 1)
+
+    def test_unknown_terrain_has_explicit_unavailable_state_not_zero_bar(self):
+        import xml.etree.ElementTree as ET
+        from comparison_svg import render_svg
+        result = self.build()
+        for key in ("distance_m", "ascent_m", "descent_m"):
+            result["terrain"][0]["actual_" + key] = None
+            result["terrain"][1]["actual_" + key] = result["terrain"][1]["planned_" + key]
+        root = ET.fromstring(render_svg(result))
+        for key in ("distance_m", "ascent_m", "descent_m"):
+            cell = root.find(f".//{{*}}g[@id='terrain-cp-1']/{{*}}g[@data-metric='{key}']")
+            self.assertEqual(cell.get("data-actual-available"), "false")
+            self.assertEqual(cell.find("{*}text[@data-role='actual-value']").text, "—")
+            self.assertEqual(cell.find("{*}text[@data-role='metric-delta']").text, "差值 —")
+            self.assertIsNone(cell.find("{*}rect[@data-series='actual']"))
+            self.assertIsNone(cell.find("{*}rect[@data-delta-m]"))
+            equal = root.find(f".//{{*}}g[@id='terrain-cp-2']/{{*}}g[@data-metric='{key}']")
+            self.assertEqual(equal.get("data-actual-available"), "true")
+            self.assertEqual(equal.find("{*}text[@data-role='metric-delta']").text, "差值 0 m")
 
     def test_time_status_uses_actual_perspective_and_rounded_ties(self):
         from comparison_svg import time_status
@@ -381,16 +433,18 @@ class ComparisonTests(unittest.TestCase):
         self.assertEqual(split_at_zero([(0, 0), (1, 0)]), [((0, 0), (1, 0))])
         self.assertEqual(split_at_zero([(0, 0)]), [])
 
-    def test_chart_labels_keep_small_gains_and_scales_readable(self):
-        from comparison_svg import axis_limit, minute_delta_label
-        self.assertEqual(minute_delta_label(-2), "慢2秒")
-        self.assertEqual(minute_delta_label(2), "快2秒")
-        self.assertEqual(minute_delta_label(-.49), "持平")
-        self.assertEqual(minute_delta_label(90), "+1.5")
-        self.assertEqual(minute_delta_label(-90), "-1.5")
+    def test_metric_labels_round_after_subtraction_and_scales_cover_data(self):
+        from comparison_svg import axis_limit, metric_delta_label, metric_limit
+        self.assertEqual(metric_delta_label(-.5), "仓库少 1 m")
+        self.assertEqual(metric_delta_label(.49), "差值 0 m")
+        self.assertEqual(metric_delta_label(125.5), "仓库多 126 m")
+        self.assertEqual(metric_delta_label(None), "差值 —")
         self.assertEqual(axis_limit([106 * 60, -20 * 60]), 120 * 60)
         self.assertEqual(axis_limit([-43 * 60, 26 * 60]), 50 * 60)
-        self.assertGreater(axis_limit([0, 0]), 0)
+        for values in ([0], [None], [-.4, .9], [-125.4, 256.7], [1105.2, 0]):
+            limit = metric_limit(values)
+            self.assertGreater(limit, 0)
+            self.assertGreaterEqual(limit, max((abs(v) for v in values if v is not None), default=0))
 
     def test_finish_badges_match_exact_targets_including_tie(self):
         import xml.etree.ElementTree as ET
