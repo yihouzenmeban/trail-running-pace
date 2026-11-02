@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="2720" height="3094" viewBox="0 0 2720 3094" role="img" aria-labelledby="title description">
 <title id="title">天地留白100K：佳明实际与仓库方案对比</title>
-<desc id="description">每个目标上方为累计领先或落后曲线，下方为各区间快慢正负柱图；耗时表以 CP 为行，实际和各方案为列，按累计 / 本段展示耗时，保留到秒。预计本段耗时红色表示佳明实际更慢，绿色表示实际不慢于预计，累计时间保持中性色。赛道数据包括全程汇总及分段爬升、下降分组柱图。绿色表示实际领先或本段更快，红色表示实际落后或本段更慢；累计曲线零线上方领先、下方落后。分段柱图零线上方快、下方慢；赛道图用深灰表示佳明、蓝色表示仓库。时间含停留，差值先计算再取整。</desc>
+<desc id="description">每个目标上方为累计领先或落后曲线，下方为各区间快慢正负柱图；耗时表以 CP 为行，站名与累计里程合并为首列。实际列展示本段耗时，各预计列展示本段耗时和实际减预计的差额，均加粗并保留到秒；累计经过时间保留在提示中。预计本段耗时及差额红色表示佳明实际更慢，绿色表示实际更快或持平。赛道数据包括全程汇总及分段爬升、下降分组柱图。绿色表示实际领先或本段更快，红色表示实际落后或本段更慢；累计曲线零线上方领先、下方落后。分段柱图零线上方快、下方慢；赛道图用深灰表示佳明、蓝色表示仓库。时间含停留，差值先计算再取整。</desc>
 <metadata>{&quot;route_sha256&quot;: &quot;ee367c29a29ed1903f4cc2e368d7bc049a026ba532d8eb77b9b6e06be1f0e0fa&quot;, &quot;config_sha256&quot;: &quot;0e3667787a4845a02a38b5adf921c967d34e534dd38e37c988b3f1d92adbe7be&quot;, &quot;activity_id&quot;: 24918367466, &quot;activity_date&quot;: &quot;2026-10-31T06:00:23.0&quot;, &quot;targets_seconds&quot;: [54000.0, 57600.0, 61200.0], &quot;fit_sha256&quot;: &quot;cea001592bb78684714b993c248a5c53ad8aedd63211ca2dc55579353285e639&quot;, &quot;summary_sha256&quot;: &quot;6dfd37ba67e3bc96649c89c586834d2a2db1ca80d3432035072a0b84f73bb3cb&quot;, &quot;time_basis&quot;: &quot;Elapsed including stops; projected passage, not official timing&quot;, &quot;delta&quot;: &quot;repository minus recorded activity&quot;, &quot;terrain&quot;: &quot;Cumulative distance; per-segment ascent/descent from adjacent lap estimates&quot;, &quot;warnings&quot;: [&quot;Skipped 2 records without GPS/time/distance; gaps use linear interpolation.&quot;, &quot;ascent_m: FIT laps 5018.0, finish 5019.0; no rescaling.&quot;, &quot;descent_m: FIT laps 5024.0, finish 5023.0; no rescaling.&quot;, &quot;wpt:10: explicit passage override, offset 2.0 m.&quot;], &quot;passage_overrides&quot;: {&quot;wpt:10&quot;: 56267.677039998074}, &quot;data_notes&quot;: [&quot;来源：路线与现有配速模型；实际活动 2026-10-31「2026 徽州古城秋季赛」。汇总来源：Garmin platform + FIT session fallback。&quot;, &quot;CP 经过时间由原始 FIT 轨迹投影或明确指定的实际耗时得到，包含停留，非官方打卡；无法可靠拆分站内停留。&quot;, &quot;佳明分站累计爬升、下降按 FIT 逐圈距离插值；本段值为相邻站累计值之差。终点使用活动汇总，未按比例调整。&quot;, &quot;FIT 逐圈爬升 / 下降：5018 / 5024 m；汇总：5019 / 5023 m。差值使用未取整原值；分段显示值之和可能有取整误差；缺失值为 —。&quot;, &quot;数据提示：Skipped 2 records without GPS/time/distance; gaps use linear interpolation.&quot;, &quot;数据提示：ascent_m: FIT laps 5018.0, finish 5019.0; no rescaling.&quot;, &quot;数据提示：descent_m: FIT laps 5024.0, finish 5023.0; no rescaling.&quot;, &quot;数据提示：wpt:10: explicit passage override, offset 2.0 m.&quot;], &quot;time_display&quot;: &quot;actual ahead/faster when plan minus actual is positive; behind/slower when negative&quot;, &quot;checkpoint_matches&quot;: [{&quot;id&quot;: &quot;wpt:11:start&quot;, &quot;offset_m&quot;: 12.964957989585011, &quot;method&quot;: &quot;session endpoint&quot;}, {&quot;id&quot;: &quot;wpt:1&quot;, &quot;offset_m&quot;: 2.31814014546448, &quot;method&quot;: &quot;track projection&quot;}, {&quot;id&quot;: &quot;wpt:2&quot;, &quot;offset_m&quot;: 9.230749929622252, &quot;method&quot;: &quot;track projection&quot;}, {&quot;id&quot;: &quot;wpt:3&quot;, &quot;offset_m&quot;: 2.725762723097807, &quot;method&quot;: &quot;track projection&quot;}, {&quot;id&quot;: &quot;wpt:4&quot;, &quot;offset_m&quot;: 8.263480340553453, &quot;method&quot;: &quot;track projection&quot;}, {&quot;id&quot;: &quot;wpt:5&quot;, &quot;offset_m&quot;: 2.0526183385708525, &quot;method&quot;: &quot;track projection&quot;}, {&quot;id&quot;: &quot;wpt:6&quot;, &quot;offset_m&quot;: 2.359384398367951, &quot;method&quot;: &quot;track projection&quot;}, {&quot;id&quot;: &quot;wpt:7&quot;, &quot;offset_m&quot;: 2.700968808228777, &quot;method&quot;: &quot;track projection&quot;}, {&quot;id&quot;: &quot;wpt:8&quot;, &quot;offset_m&quot;: 3.902494573897764, &quot;method&quot;: &quot;track projection&quot;}, {&quot;id&quot;: &quot;wpt:9&quot;, &quot;offset_m&quot;: 7.719709467036301, &quot;method&quot;: &quot;track projection&quot;}, {&quot;id&quot;: &quot;wpt:10&quot;, &quot;offset_m&quot;: 1.9993483347545806, &quot;method&quot;: &quot;elapsed override&quot;}, {&quot;id&quot;: &quot;wpt:11:finish&quot;, &quot;offset_m&quot;: 12.443704885853712, &quot;method&quot;: &quot;session endpoint&quot;}]}</metadata>
 <style>text{font-family:"PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif;font-variant-numeric:tabular-nums}.inspectable,.delta-point{outline:none}.delta-point:hover,.delta-point:focus{r:8;stroke:#202A35}.inspectable:hover rect[data-delta-seconds],.inspectable:focus rect[data-delta-seconds]{stroke:#202A35;stroke-width:2}.inspectable:hover > rect[data-series],.inspectable:focus > rect[data-series]{stroke:#202A35;stroke-width:2}.inspectable:focus > text{text-decoration:underline}#data-notes:focus text{text-decoration:underline}</style>
 <rect x="0" y="0" width="2720" height="3094" rx="0" fill="#F7F8FA"/>
@@ -519,39 +519,37 @@
 </g>
 <g id="checkpoint-times">
 <text x="64" y="1260" font-size="28" fill="#202A35" font-weight="700" text-anchor="start">各站耗时</text>
-<text x="2656" y="1260" font-size="22" fill="#626D79" font-weight="400" text-anchor="end">每格：累计 / 本段 · HH:MM:SS · 含停留</text>
-<text x="64" y="1298" font-size="21" fill="#626D79" font-weight="400" text-anchor="start">预计本段耗时：红色 = 佳明实际更慢；绿色 = 佳明实际不慢于预计（含持平）</text>
+<text x="2656" y="1260" font-size="22" fill="#626D79" font-weight="400" text-anchor="end">本段耗时（实际 − 预计）· HH:MM:SS · 含停留</text>
+<text x="64" y="1298" font-size="21" fill="#626D79" font-weight="400" text-anchor="start">红色 = 佳明实际更慢；绿色 = 更快或持平 · 差额 + 表示慢，− 表示快</text>
 <rect x="64" y="1330" width="2592" height="864" rx="12" fill="#FFFFFF"/>
 <rect x="64" y="1330" width="2592" height="72" rx="8" fill="#EDF0F4"/>
-<text x="88" y="1375" font-size="24" fill="#626D79" font-weight="600" text-anchor="start">到达站点</text>
-<text x="494" y="1375" font-size="23" fill="#626D79" font-weight="600" text-anchor="middle">累计里程</text>
-<text x="825.5" y="1375" font-size="26" fill="#202A35" font-weight="650" text-anchor="middle">佳明实际</text>
-<text x="1348.5" y="1375" font-size="26" fill="#202A35" font-weight="500" text-anchor="middle">15:00 预计</text>
-<text x="1871.5" y="1375" font-size="26" fill="#202A35" font-weight="500" text-anchor="middle">16:00 预计</text>
-<text x="2394.5" y="1375" font-size="26" fill="#202A35" font-weight="500" text-anchor="middle">17:00 预计</text>
+<text x="88" y="1375" font-size="24" fill="#626D79" font-weight="600" text-anchor="start">到达站点 · 累计里程</text>
+<text x="913.0" y="1375" font-size="26" fill="#202A35" font-weight="650" text-anchor="middle">佳明实际</text>
+<text x="1411.0" y="1375" font-size="26" fill="#202A35" font-weight="500" text-anchor="middle">15:00 预计</text>
+<text x="1909.0" y="1375" font-size="26" fill="#202A35" font-weight="500" text-anchor="middle">16:00 预计</text>
+<text x="2407.0" y="1375" font-size="26" fill="#202A35" font-weight="500" text-anchor="middle">17:00 预计</text>
 <g class="time-row" data-cp-id="wpt:1">
 <rect x="64" y="1402" width="2592" height="72" rx="0" fill="#FFFFFF"/>
 <path d="M64.000 1474.000 L2656.000 1474.000" fill="none" stroke="#E4E8ED" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <g id="time-header-1" class="checkpoint-header inspectable" data-cp-id="wpt:1" data-distance-m="10200.850054201113" tabindex="0" aria-label="CP1-雄村镇：赛道累计 10.201 km；佳明累计 10.355 km">
 <title>CP1-雄村镇：赛道累计 10.201 km；佳明累计 10.355 km</title>
-<text x="88" y="1447.0" font-size="23" fill="#202A35" font-weight="400" text-anchor="start">CP1-雄村镇</text>
-<text x="494" y="1447.0" font-size="22" fill="#626D79" font-weight="400" text-anchor="middle">10.2 km</text>
+<text x="88" y="1447.0" font-size="23" fill="#202A35" font-weight="400" text-anchor="start">CP1-雄村镇 · 10.2 km</text>
 </g>
 <g id="time-cell-0-1" class="time-cell inspectable" data-cp-id="wpt:1" data-series="actual" data-elapsed-seconds="4084.0" data-segment-seconds="4084.0" tabindex="0" aria-label="佳明实际 · CP1-雄村镇：累计 01:08:04；起终点-徽州古城（起点） → CP1-雄村镇 本段 01:08:04，含停留">
 <title>佳明实际 · CP1-雄村镇：累计 01:08:04；起终点-徽州古城（起点） → CP1-雄村镇 本段 01:08:04，含停留</title>
-<text x="825.5" y="1447.0" font-size="26" fill="#202A35" font-weight="650" text-anchor="middle" data-role="time-values"><tspan data-role="cumulative-time" fill="#202A35">01:08:04</tspan><tspan> / </tspan><tspan data-role="segment-time" fill="#202A35">01:08:04</tspan></text>
+<text x="913.0" y="1447.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#202A35">01:08:04</tspan></text>
 </g>
-<g id="time-cell-1-1" class="time-cell inspectable" data-cp-id="wpt:1" data-series="planned" data-target-seconds="54000.0" data-elapsed-seconds="3601.893906347431" data-segment-seconds="3601.893906347431" tabindex="0" aria-label="15:00 预计 · CP1-雄村镇：累计 01:00:02；起终点-徽州古城（起点） → CP1-雄村镇 本段 01:00:02，含停留；佳明本段更慢">
-<title>15:00 预计 · CP1-雄村镇：累计 01:00:02；起终点-徽州古城（起点） → CP1-雄村镇 本段 01:00:02，含停留；佳明本段更慢</title>
-<text x="1348.5" y="1447.0" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle" data-role="time-values"><tspan data-role="cumulative-time" fill="#202A35">01:00:02</tspan><tspan> / </tspan><tspan data-role="segment-time" fill="#C23B38">01:00:02</tspan></text>
+<g id="time-cell-1-1" class="time-cell inspectable" data-cp-id="wpt:1" data-series="planned" data-target-seconds="54000.0" data-elapsed-seconds="3601.893906347431" data-segment-seconds="3601.893906347431" data-actual-minus-plan-seconds="482.10609365256914" tabindex="0" aria-label="15:00 预计 · CP1-雄村镇：累计 01:00:02；起终点-徽州古城（起点） → CP1-雄村镇 本段 01:00:02，含停留；实际 − 预计 +00:08:02；佳明本段更慢">
+<title>15:00 预计 · CP1-雄村镇：累计 01:00:02；起终点-徽州古城（起点） → CP1-雄村镇 本段 01:00:02，含停留；实际 − 预计 +00:08:02；佳明本段更慢</title>
+<text x="1411.0" y="1447.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#C23B38">01:00:02</tspan><tspan data-role="segment-difference" fill="#C23B38">（+00:08:02）</tspan></text>
 </g>
-<g id="time-cell-2-1" class="time-cell inspectable" data-cp-id="wpt:1" data-series="planned" data-target-seconds="57600.0" data-elapsed-seconds="3842.020166770593" data-segment-seconds="3842.020166770593" tabindex="0" aria-label="16:00 预计 · CP1-雄村镇：累计 01:04:02；起终点-徽州古城（起点） → CP1-雄村镇 本段 01:04:02，含停留；佳明本段更慢">
-<title>16:00 预计 · CP1-雄村镇：累计 01:04:02；起终点-徽州古城（起点） → CP1-雄村镇 本段 01:04:02，含停留；佳明本段更慢</title>
-<text x="1871.5" y="1447.0" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle" data-role="time-values"><tspan data-role="cumulative-time" fill="#202A35">01:04:02</tspan><tspan> / </tspan><tspan data-role="segment-time" fill="#C23B38">01:04:02</tspan></text>
+<g id="time-cell-2-1" class="time-cell inspectable" data-cp-id="wpt:1" data-series="planned" data-target-seconds="57600.0" data-elapsed-seconds="3842.020166770593" data-segment-seconds="3842.020166770593" data-actual-minus-plan-seconds="241.97983322940718" tabindex="0" aria-label="16:00 预计 · CP1-雄村镇：累计 01:04:02；起终点-徽州古城（起点） → CP1-雄村镇 本段 01:04:02，含停留；实际 − 预计 +00:04:02；佳明本段更慢">
+<title>16:00 预计 · CP1-雄村镇：累计 01:04:02；起终点-徽州古城（起点） → CP1-雄村镇 本段 01:04:02，含停留；实际 − 预计 +00:04:02；佳明本段更慢</title>
+<text x="1909.0" y="1447.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#C23B38">01:04:02</tspan><tspan data-role="segment-difference" fill="#C23B38">（+00:04:02）</tspan></text>
 </g>
-<g id="time-cell-3-1" class="time-cell inspectable" data-cp-id="wpt:1" data-series="planned" data-target-seconds="61200.0" data-elapsed-seconds="4082.146427193755" data-segment-seconds="4082.146427193755" tabindex="0" aria-label="17:00 预计 · CP1-雄村镇：累计 01:08:02；起终点-徽州古城（起点） → CP1-雄村镇 本段 01:08:02，含停留；佳明本段更慢">
-<title>17:00 预计 · CP1-雄村镇：累计 01:08:02；起终点-徽州古城（起点） → CP1-雄村镇 本段 01:08:02，含停留；佳明本段更慢</title>
-<text x="2394.5" y="1447.0" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle" data-role="time-values"><tspan data-role="cumulative-time" fill="#202A35">01:08:02</tspan><tspan> / </tspan><tspan data-role="segment-time" fill="#C23B38">01:08:02</tspan></text>
+<g id="time-cell-3-1" class="time-cell inspectable" data-cp-id="wpt:1" data-series="planned" data-target-seconds="61200.0" data-elapsed-seconds="4082.146427193755" data-segment-seconds="4082.146427193755" data-actual-minus-plan-seconds="1.8535728062452108" tabindex="0" aria-label="17:00 预计 · CP1-雄村镇：累计 01:08:02；起终点-徽州古城（起点） → CP1-雄村镇 本段 01:08:02，含停留；实际 − 预计 +00:00:02；佳明本段更慢">
+<title>17:00 预计 · CP1-雄村镇：累计 01:08:02；起终点-徽州古城（起点） → CP1-雄村镇 本段 01:08:02，含停留；实际 − 预计 +00:00:02；佳明本段更慢</title>
+<text x="2407.0" y="1447.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#C23B38">01:08:02</tspan><tspan data-role="segment-difference" fill="#C23B38">（+00:00:02）</tspan></text>
 </g>
 </g>
 <g class="time-row" data-cp-id="wpt:2">
@@ -559,24 +557,23 @@
 <path d="M64.000 1546.000 L2656.000 1546.000" fill="none" stroke="#E4E8ED" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <g id="time-header-2" class="checkpoint-header inspectable" data-cp-id="wpt:2" data-distance-m="18156.21949117822" tabindex="0" aria-label="CP2-庄源村：赛道累计 18.156 km；佳明累计 18.281 km">
 <title>CP2-庄源村：赛道累计 18.156 km；佳明累计 18.281 km</title>
-<text x="88" y="1519.0" font-size="23" fill="#202A35" font-weight="400" text-anchor="start">CP2-庄源村</text>
-<text x="494" y="1519.0" font-size="22" fill="#626D79" font-weight="400" text-anchor="middle">18.2 km</text>
+<text x="88" y="1519.0" font-size="23" fill="#202A35" font-weight="400" text-anchor="start">CP2-庄源村 · 18.2 km</text>
 </g>
 <g id="time-cell-0-2" class="time-cell inspectable" data-cp-id="wpt:2" data-series="actual" data-elapsed-seconds="7462.358641960988" data-segment-seconds="3378.3586419609883" tabindex="0" aria-label="佳明实际 · CP2-庄源村：累计 02:04:22；CP1-雄村镇 → CP2-庄源村 本段 00:56:18，含停留">
 <title>佳明实际 · CP2-庄源村：累计 02:04:22；CP1-雄村镇 → CP2-庄源村 本段 00:56:18，含停留</title>
-<text x="825.5" y="1519.0" font-size="26" fill="#202A35" font-weight="650" text-anchor="middle" data-role="time-values"><tspan data-role="cumulative-time" fill="#202A35">02:04:22</tspan><tspan> / </tspan><tspan data-role="segment-time" fill="#202A35">00:56:18</tspan></text>
+<text x="913.0" y="1519.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#202A35">00:56:18</tspan></text>
 </g>
-<g id="time-cell-1-2" class="time-cell inspectable" data-cp-id="wpt:2" data-series="planned" data-target-seconds="54000.0" data-elapsed-seconds="7310.37924955589" data-segment-seconds="3708.485343208459" tabindex="0" aria-label="15:00 预计 · CP2-庄源村：累计 02:01:50；CP1-雄村镇 → CP2-庄源村 本段 01:01:48，含停留；佳明本段不慢于预计">
-<title>15:00 预计 · CP2-庄源村：累计 02:01:50；CP1-雄村镇 → CP2-庄源村 本段 01:01:48，含停留；佳明本段不慢于预计</title>
-<text x="1348.5" y="1519.0" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle" data-role="time-values"><tspan data-role="cumulative-time" fill="#202A35">02:01:50</tspan><tspan> / </tspan><tspan data-role="segment-time" fill="#087F5B">01:01:48</tspan></text>
+<g id="time-cell-1-2" class="time-cell inspectable" data-cp-id="wpt:2" data-series="planned" data-target-seconds="54000.0" data-elapsed-seconds="7310.37924955589" data-segment-seconds="3708.485343208459" data-actual-minus-plan-seconds="-330.1267012474709" tabindex="0" aria-label="15:00 预计 · CP2-庄源村：累计 02:01:50；CP1-雄村镇 → CP2-庄源村 本段 01:01:48，含停留；实际 − 预计 -00:05:30；佳明本段不慢于预计">
+<title>15:00 预计 · CP2-庄源村：累计 02:01:50；CP1-雄村镇 → CP2-庄源村 本段 01:01:48，含停留；实际 − 预计 -00:05:30；佳明本段不慢于预计</title>
+<text x="1411.0" y="1519.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#087F5B">01:01:48</tspan><tspan data-role="segment-difference" fill="#087F5B">（-00:05:30）</tspan></text>
 </g>
-<g id="time-cell-2-2" class="time-cell inspectable" data-cp-id="wpt:2" data-series="planned" data-target-seconds="57600.0" data-elapsed-seconds="7797.73786619295" data-segment-seconds="3955.717699422357" tabindex="0" aria-label="16:00 预计 · CP2-庄源村：累计 02:09:58；CP1-雄村镇 → CP2-庄源村 本段 01:05:56，含停留；佳明本段不慢于预计">
-<title>16:00 预计 · CP2-庄源村：累计 02:09:58；CP1-雄村镇 → CP2-庄源村 本段 01:05:56，含停留；佳明本段不慢于预计</title>
-<text x="1871.5" y="1519.0" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle" data-role="time-values"><tspan data-role="cumulative-time" fill="#202A35">02:09:58</tspan><tspan> / </tspan><tspan data-role="segment-time" fill="#087F5B">01:05:56</tspan></text>
+<g id="time-cell-2-2" class="time-cell inspectable" data-cp-id="wpt:2" data-series="planned" data-target-seconds="57600.0" data-elapsed-seconds="7797.73786619295" data-segment-seconds="3955.717699422357" data-actual-minus-plan-seconds="-577.3590574613686" tabindex="0" aria-label="16:00 预计 · CP2-庄源村：累计 02:09:58；CP1-雄村镇 → CP2-庄源村 本段 01:05:56，含停留；实际 − 预计 -00:09:37；佳明本段不慢于预计">
+<title>16:00 预计 · CP2-庄源村：累计 02:09:58；CP1-雄村镇 → CP2-庄源村 本段 01:05:56，含停留；实际 − 预计 -00:09:37；佳明本段不慢于预计</title>
+<text x="1909.0" y="1519.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#087F5B">01:05:56</tspan><tspan data-role="segment-difference" fill="#087F5B">（-00:09:37）</tspan></text>
 </g>
-<g id="time-cell-3-2" class="time-cell inspectable" data-cp-id="wpt:2" data-series="planned" data-target-seconds="61200.0" data-elapsed-seconds="8285.09648283001" data-segment-seconds="4202.950055636255" tabindex="0" aria-label="17:00 预计 · CP2-庄源村：累计 02:18:05；CP1-雄村镇 → CP2-庄源村 本段 01:10:03，含停留；佳明本段不慢于预计">
-<title>17:00 预计 · CP2-庄源村：累计 02:18:05；CP1-雄村镇 → CP2-庄源村 本段 01:10:03，含停留；佳明本段不慢于预计</title>
-<text x="2394.5" y="1519.0" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle" data-role="time-values"><tspan data-role="cumulative-time" fill="#202A35">02:18:05</tspan><tspan> / </tspan><tspan data-role="segment-time" fill="#087F5B">01:10:03</tspan></text>
+<g id="time-cell-3-2" class="time-cell inspectable" data-cp-id="wpt:2" data-series="planned" data-target-seconds="61200.0" data-elapsed-seconds="8285.09648283001" data-segment-seconds="4202.950055636255" data-actual-minus-plan-seconds="-824.5914136752663" tabindex="0" aria-label="17:00 预计 · CP2-庄源村：累计 02:18:05；CP1-雄村镇 → CP2-庄源村 本段 01:10:03，含停留；实际 − 预计 -00:13:45；佳明本段不慢于预计">
+<title>17:00 预计 · CP2-庄源村：累计 02:18:05；CP1-雄村镇 → CP2-庄源村 本段 01:10:03，含停留；实际 − 预计 -00:13:45；佳明本段不慢于预计</title>
+<text x="2407.0" y="1519.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#087F5B">01:10:03</tspan><tspan data-role="segment-difference" fill="#087F5B">（-00:13:45）</tspan></text>
 </g>
 </g>
 <g class="time-row" data-cp-id="wpt:3">
@@ -584,24 +581,23 @@
 <path d="M64.000 1618.000 L2656.000 1618.000" fill="none" stroke="#E4E8ED" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <g id="time-header-3" class="checkpoint-header inspectable" data-cp-id="wpt:3" data-distance-m="26145.795317121374" tabindex="0" aria-label="CP3-长源村：赛道累计 26.146 km；佳明累计 26.300 km">
 <title>CP3-长源村：赛道累计 26.146 km；佳明累计 26.300 km</title>
-<text x="88" y="1591.0" font-size="23" fill="#202A35" font-weight="400" text-anchor="start">CP3-长源村</text>
-<text x="494" y="1591.0" font-size="22" fill="#626D79" font-weight="400" text-anchor="middle">26.1 km</text>
+<text x="88" y="1591.0" font-size="23" fill="#202A35" font-weight="400" text-anchor="start">CP3-长源村 · 26.1 km</text>
 </g>
 <g id="time-cell-0-3" class="time-cell inspectable" data-cp-id="wpt:3" data-series="actual" data-elapsed-seconds="11314.75523192621" data-segment-seconds="3852.396589965222" tabindex="0" aria-label="佳明实际 · CP3-长源村：累计 03:08:35；CP2-庄源村 → CP3-长源村 本段 01:04:12，含停留">
 <title>佳明实际 · CP3-长源村：累计 03:08:35；CP2-庄源村 → CP3-长源村 本段 01:04:12，含停留</title>
-<text x="825.5" y="1591.0" font-size="26" fill="#202A35" font-weight="650" text-anchor="middle" data-role="time-values"><tspan data-role="cumulative-time" fill="#202A35">03:08:35</tspan><tspan> / </tspan><tspan data-role="segment-time" fill="#202A35">01:04:12</tspan></text>
+<text x="913.0" y="1591.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#202A35">01:04:12</tspan></text>
 </g>
-<g id="time-cell-1-3" class="time-cell inspectable" data-cp-id="wpt:3" data-series="planned" data-target-seconds="54000.0" data-elapsed-seconds="11172.823165297212" data-segment-seconds="3862.4439157413217" tabindex="0" aria-label="15:00 预计 · CP3-长源村：累计 03:06:13；CP2-庄源村 → CP3-长源村 本段 01:04:22，含停留；佳明本段不慢于预计">
-<title>15:00 预计 · CP3-长源村：累计 03:06:13；CP2-庄源村 → CP3-长源村 本段 01:04:22，含停留；佳明本段不慢于预计</title>
-<text x="1348.5" y="1591.0" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle" data-role="time-values"><tspan data-role="cumulative-time" fill="#202A35">03:06:13</tspan><tspan> / </tspan><tspan data-role="segment-time" fill="#087F5B">01:04:22</tspan></text>
+<g id="time-cell-1-3" class="time-cell inspectable" data-cp-id="wpt:3" data-series="planned" data-target-seconds="54000.0" data-elapsed-seconds="11172.823165297212" data-segment-seconds="3862.4439157413217" data-actual-minus-plan-seconds="-10.04732577609957" tabindex="0" aria-label="15:00 预计 · CP3-长源村：累计 03:06:13；CP2-庄源村 → CP3-长源村 本段 01:04:22，含停留；实际 − 预计 -00:00:10；佳明本段不慢于预计">
+<title>15:00 预计 · CP3-长源村：累计 03:06:13；CP2-庄源村 → CP3-长源村 本段 01:04:22，含停留；实际 − 预计 -00:00:10；佳明本段不慢于预计</title>
+<text x="1411.0" y="1591.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#087F5B">01:04:22</tspan><tspan data-role="segment-difference" fill="#087F5B">（-00:00:10）</tspan></text>
 </g>
-<g id="time-cell-2-3" class="time-cell inspectable" data-cp-id="wpt:3" data-series="planned" data-target-seconds="57600.0" data-elapsed-seconds="11917.678042983693" data-segment-seconds="4119.940176790743" tabindex="0" aria-label="16:00 预计 · CP3-长源村：累计 03:18:38；CP2-庄源村 → CP3-长源村 本段 01:08:40，含停留；佳明本段不慢于预计">
-<title>16:00 预计 · CP3-长源村：累计 03:18:38；CP2-庄源村 → CP3-长源村 本段 01:08:40，含停留；佳明本段不慢于预计</title>
-<text x="1871.5" y="1591.0" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle" data-role="time-values"><tspan data-role="cumulative-time" fill="#202A35">03:18:38</tspan><tspan> / </tspan><tspan data-role="segment-time" fill="#087F5B">01:08:40</tspan></text>
+<g id="time-cell-2-3" class="time-cell inspectable" data-cp-id="wpt:3" data-series="planned" data-target-seconds="57600.0" data-elapsed-seconds="11917.678042983693" data-segment-seconds="4119.940176790743" data-actual-minus-plan-seconds="-267.54358682552083" tabindex="0" aria-label="16:00 预计 · CP3-长源村：累计 03:18:38；CP2-庄源村 → CP3-长源村 本段 01:08:40，含停留；实际 − 预计 -00:04:28；佳明本段不慢于预计">
+<title>16:00 预计 · CP3-长源村：累计 03:18:38；CP2-庄源村 → CP3-长源村 本段 01:08:40，含停留；实际 − 预计 -00:04:28；佳明本段不慢于预计</title>
+<text x="1909.0" y="1591.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#087F5B">01:08:40</tspan><tspan data-role="segment-difference" fill="#087F5B">（-00:04:28）</tspan></text>
 </g>
-<g id="time-cell-3-3" class="time-cell inspectable" data-cp-id="wpt:3" data-series="planned" data-target-seconds="61200.0" data-elapsed-seconds="12662.532920670174" data-segment-seconds="4377.436437840164" tabindex="0" aria-label="17:00 预计 · CP3-长源村：累计 03:31:03；CP2-庄源村 → CP3-长源村 本段 01:12:57，含停留；佳明本段不慢于预计">
-<title>17:00 预计 · CP3-长源村：累计 03:31:03；CP2-庄源村 → CP3-长源村 本段 01:12:57，含停留；佳明本段不慢于预计</title>
-<text x="2394.5" y="1591.0" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle" data-role="time-values"><tspan data-role="cumulative-time" fill="#202A35">03:31:03</tspan><tspan> / </tspan><tspan data-role="segment-time" fill="#087F5B">01:12:57</tspan></text>
+<g id="time-cell-3-3" class="time-cell inspectable" data-cp-id="wpt:3" data-series="planned" data-target-seconds="61200.0" data-elapsed-seconds="12662.532920670174" data-segment-seconds="4377.436437840164" data-actual-minus-plan-seconds="-525.0398478749421" tabindex="0" aria-label="17:00 预计 · CP3-长源村：累计 03:31:03；CP2-庄源村 → CP3-长源村 本段 01:12:57，含停留；实际 − 预计 -00:08:45；佳明本段不慢于预计">
+<title>17:00 预计 · CP3-长源村：累计 03:31:03；CP2-庄源村 → CP3-长源村 本段 01:12:57，含停留；实际 − 预计 -00:08:45；佳明本段不慢于预计</title>
+<text x="2407.0" y="1591.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#087F5B">01:12:57</tspan><tspan data-role="segment-difference" fill="#087F5B">（-00:08:45）</tspan></text>
 </g>
 </g>
 <g class="time-row" data-cp-id="wpt:4">
@@ -609,24 +605,23 @@
 <path d="M64.000 1690.000 L2656.000 1690.000" fill="none" stroke="#E4E8ED" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <g id="time-header-4" class="checkpoint-header inspectable" data-cp-id="wpt:4" data-distance-m="35993.59195857614" tabindex="0" aria-label="CP4-大源村：赛道累计 35.994 km；佳明累计 36.073 km">
 <title>CP4-大源村：赛道累计 35.994 km；佳明累计 36.073 km</title>
-<text x="88" y="1663.0" font-size="23" fill="#202A35" font-weight="400" text-anchor="start">CP4-大源村</text>
-<text x="494" y="1663.0" font-size="22" fill="#626D79" font-weight="400" text-anchor="middle">36.0 km</text>
+<text x="88" y="1663.0" font-size="23" fill="#202A35" font-weight="400" text-anchor="start">CP4-大源村 · 36.0 km</text>
 </g>
 <g id="time-cell-0-4" class="time-cell inspectable" data-cp-id="wpt:4" data-series="actual" data-elapsed-seconds="16638.98768529365" data-segment-seconds="5324.23245336744" tabindex="0" aria-label="佳明实际 · CP4-大源村：累计 04:37:19；CP3-长源村 → CP4-大源村 本段 01:28:44，含停留">
 <title>佳明实际 · CP4-大源村：累计 04:37:19；CP3-长源村 → CP4-大源村 本段 01:28:44，含停留</title>
-<text x="825.5" y="1663.0" font-size="26" fill="#202A35" font-weight="650" text-anchor="middle" data-role="time-values"><tspan data-role="cumulative-time" fill="#202A35">04:37:19</tspan><tspan> / </tspan><tspan data-role="segment-time" fill="#202A35">01:28:44</tspan></text>
+<text x="913.0" y="1663.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#202A35">01:28:44</tspan></text>
 </g>
-<g id="time-cell-1-4" class="time-cell inspectable" data-cp-id="wpt:4" data-series="planned" data-target-seconds="54000.0" data-elapsed-seconds="17135.281960661217" data-segment-seconds="5962.458795364006" tabindex="0" aria-label="15:00 预计 · CP4-大源村：累计 04:45:35；CP3-长源村 → CP4-大源村 本段 01:39:22，含停留；佳明本段不慢于预计">
-<title>15:00 预计 · CP4-大源村：累计 04:45:35；CP3-长源村 → CP4-大源村 本段 01:39:22，含停留；佳明本段不慢于预计</title>
-<text x="1348.5" y="1663.0" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle" data-role="time-values"><tspan data-role="cumulative-time" fill="#202A35">04:45:35</tspan><tspan> / </tspan><tspan data-role="segment-time" fill="#087F5B">01:39:22</tspan></text>
+<g id="time-cell-1-4" class="time-cell inspectable" data-cp-id="wpt:4" data-series="planned" data-target-seconds="54000.0" data-elapsed-seconds="17135.281960661217" data-segment-seconds="5962.458795364006" data-actual-minus-plan-seconds="-638.2263419965657" tabindex="0" aria-label="15:00 预计 · CP4-大源村：累计 04:45:35；CP3-长源村 → CP4-大源村 本段 01:39:22，含停留；实际 − 预计 -00:10:38；佳明本段不慢于预计">
+<title>15:00 预计 · CP4-大源村：累计 04:45:35；CP3-长源村 → CP4-大源村 本段 01:39:22，含停留；实际 − 预计 -00:10:38；佳明本段不慢于预计</title>
+<text x="1411.0" y="1663.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#087F5B">01:39:22</tspan><tspan data-role="segment-difference" fill="#087F5B">（-00:10:38）</tspan></text>
 </g>
-<g id="time-cell-2-4" class="time-cell inspectable" data-cp-id="wpt:4" data-series="planned" data-target-seconds="57600.0" data-elapsed-seconds="18277.634091371965" data-segment-seconds="6359.956048388272" tabindex="0" aria-label="16:00 预计 · CP4-大源村：累计 05:04:38；CP3-长源村 → CP4-大源村 本段 01:46:00，含停留；佳明本段不慢于预计">
-<title>16:00 预计 · CP4-大源村：累计 05:04:38；CP3-长源村 → CP4-大源村 本段 01:46:00，含停留；佳明本段不慢于预计</title>
-<text x="1871.5" y="1663.0" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle" data-role="time-values"><tspan data-role="cumulative-time" fill="#202A35">05:04:38</tspan><tspan> / </tspan><tspan data-role="segment-time" fill="#087F5B">01:46:00</tspan></text>
+<g id="time-cell-2-4" class="time-cell inspectable" data-cp-id="wpt:4" data-series="planned" data-target-seconds="57600.0" data-elapsed-seconds="18277.634091371965" data-segment-seconds="6359.956048388272" data-actual-minus-plan-seconds="-1035.7235950208324" tabindex="0" aria-label="16:00 预计 · CP4-大源村：累计 05:04:38；CP3-长源村 → CP4-大源村 本段 01:46:00，含停留；实际 − 预计 -00:17:16；佳明本段不慢于预计">
+<title>16:00 预计 · CP4-大源村：累计 05:04:38；CP3-长源村 → CP4-大源村 本段 01:46:00，含停留；实际 − 预计 -00:17:16；佳明本段不慢于预计</title>
+<text x="1909.0" y="1663.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#087F5B">01:46:00</tspan><tspan data-role="segment-difference" fill="#087F5B">（-00:17:16）</tspan></text>
 </g>
-<g id="time-cell-3-4" class="time-cell inspectable" data-cp-id="wpt:4" data-series="planned" data-target-seconds="61200.0" data-elapsed-seconds="19419.986222082713" data-segment-seconds="6757.453301412539" tabindex="0" aria-label="17:00 预计 · CP4-大源村：累计 05:23:40；CP3-长源村 → CP4-大源村 本段 01:52:37，含停留；佳明本段不慢于预计">
-<title>17:00 预计 · CP4-大源村：累计 05:23:40；CP3-长源村 → CP4-大源村 本段 01:52:37，含停留；佳明本段不慢于预计</title>
-<text x="2394.5" y="1663.0" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle" data-role="time-values"><tspan data-role="cumulative-time" fill="#202A35">05:23:40</tspan><tspan> / </tspan><tspan data-role="segment-time" fill="#087F5B">01:52:37</tspan></text>
+<g id="time-cell-3-4" class="time-cell inspectable" data-cp-id="wpt:4" data-series="planned" data-target-seconds="61200.0" data-elapsed-seconds="19419.986222082713" data-segment-seconds="6757.453301412539" data-actual-minus-plan-seconds="-1433.220848045099" tabindex="0" aria-label="17:00 预计 · CP4-大源村：累计 05:23:40；CP3-长源村 → CP4-大源村 本段 01:52:37，含停留；实际 − 预计 -00:23:53；佳明本段不慢于预计">
+<title>17:00 预计 · CP4-大源村：累计 05:23:40；CP3-长源村 → CP4-大源村 本段 01:52:37，含停留；实际 − 预计 -00:23:53；佳明本段不慢于预计</title>
+<text x="2407.0" y="1663.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#087F5B">01:52:37</tspan><tspan data-role="segment-difference" fill="#087F5B">（-00:23:53）</tspan></text>
 </g>
 </g>
 <g class="time-row" data-cp-id="wpt:5">
@@ -634,24 +629,23 @@
 <path d="M64.000 1762.000 L2656.000 1762.000" fill="none" stroke="#E4E8ED" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <g id="time-header-5" class="checkpoint-header inspectable" data-cp-id="wpt:5" data-distance-m="47578.774667468795" tabindex="0" aria-label="CP5-洲头梁村：赛道累计 47.579 km；佳明累计 47.793 km">
 <title>CP5-洲头梁村：赛道累计 47.579 km；佳明累计 47.793 km</title>
-<text x="88" y="1735.0" font-size="23" fill="#202A35" font-weight="400" text-anchor="start">CP5-洲头梁村</text>
-<text x="494" y="1735.0" font-size="22" fill="#626D79" font-weight="400" text-anchor="middle">47.6 km</text>
+<text x="88" y="1735.0" font-size="23" fill="#202A35" font-weight="400" text-anchor="start">CP5-洲头梁村 · 47.6 km</text>
 </g>
 <g id="time-cell-0-5" class="time-cell inspectable" data-cp-id="wpt:5" data-series="actual" data-elapsed-seconds="26779.294245193563" data-segment-seconds="10140.306559899913" tabindex="0" aria-label="佳明实际 · CP5-洲头梁村：累计 07:26:19；CP4-大源村 → CP5-洲头梁村 本段 02:49:00，含停留">
 <title>佳明实际 · CP5-洲头梁村：累计 07:26:19；CP4-大源村 → CP5-洲头梁村 本段 02:49:00，含停留</title>
-<text x="825.5" y="1735.0" font-size="26" fill="#202A35" font-weight="650" text-anchor="middle" data-role="time-values"><tspan data-role="cumulative-time" fill="#202A35">07:26:19</tspan><tspan> / </tspan><tspan data-role="segment-time" fill="#202A35">02:49:00</tspan></text>
+<text x="913.0" y="1735.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#202A35">02:49:00</tspan></text>
 </g>
-<g id="time-cell-1-5" class="time-cell inspectable" data-cp-id="wpt:5" data-series="planned" data-target-seconds="54000.0" data-elapsed-seconds="24710.021031132383" data-segment-seconds="7574.739070471165" tabindex="0" aria-label="15:00 预计 · CP5-洲头梁村：累计 06:51:50；CP4-大源村 → CP5-洲头梁村 本段 02:06:15，含停留；佳明本段更慢">
-<title>15:00 预计 · CP5-洲头梁村：累计 06:51:50；CP4-大源村 → CP5-洲头梁村 本段 02:06:15，含停留；佳明本段更慢</title>
-<text x="1348.5" y="1735.0" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle" data-role="time-values"><tspan data-role="cumulative-time" fill="#202A35">06:51:50</tspan><tspan> / </tspan><tspan data-role="segment-time" fill="#C23B38">02:06:15</tspan></text>
+<g id="time-cell-1-5" class="time-cell inspectable" data-cp-id="wpt:5" data-series="planned" data-target-seconds="54000.0" data-elapsed-seconds="24710.021031132383" data-segment-seconds="7574.739070471165" data-actual-minus-plan-seconds="2565.5674894287476" tabindex="0" aria-label="15:00 预计 · CP5-洲头梁村：累计 06:51:50；CP4-大源村 → CP5-洲头梁村 本段 02:06:15，含停留；实际 − 预计 +00:42:46；佳明本段更慢">
+<title>15:00 预计 · CP5-洲头梁村：累计 06:51:50；CP4-大源村 → CP5-洲头梁村 本段 02:06:15，含停留；实际 − 预计 +00:42:46；佳明本段更慢</title>
+<text x="1411.0" y="1735.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#C23B38">02:06:15</tspan><tspan data-role="segment-difference" fill="#C23B38">（+00:42:46）</tspan></text>
 </g>
-<g id="time-cell-2-5" class="time-cell inspectable" data-cp-id="wpt:5" data-series="planned" data-target-seconds="57600.0" data-elapsed-seconds="26357.355766541208" data-segment-seconds="8079.721675169243" tabindex="0" aria-label="16:00 预计 · CP5-洲头梁村：累计 07:19:17；CP4-大源村 → CP5-洲头梁村 本段 02:14:40，含停留；佳明本段更慢">
-<title>16:00 预计 · CP5-洲头梁村：累计 07:19:17；CP4-大源村 → CP5-洲头梁村 本段 02:14:40，含停留；佳明本段更慢</title>
-<text x="1871.5" y="1735.0" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle" data-role="time-values"><tspan data-role="cumulative-time" fill="#202A35">07:19:17</tspan><tspan> / </tspan><tspan data-role="segment-time" fill="#C23B38">02:14:40</tspan></text>
+<g id="time-cell-2-5" class="time-cell inspectable" data-cp-id="wpt:5" data-series="planned" data-target-seconds="57600.0" data-elapsed-seconds="26357.355766541208" data-segment-seconds="8079.721675169243" data-actual-minus-plan-seconds="2060.5848847306697" tabindex="0" aria-label="16:00 预计 · CP5-洲头梁村：累计 07:19:17；CP4-大源村 → CP5-洲头梁村 本段 02:14:40，含停留；实际 − 预计 +00:34:21；佳明本段更慢">
+<title>16:00 预计 · CP5-洲头梁村：累计 07:19:17；CP4-大源村 → CP5-洲头梁村 本段 02:14:40，含停留；实际 − 预计 +00:34:21；佳明本段更慢</title>
+<text x="1909.0" y="1735.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#C23B38">02:14:40</tspan><tspan data-role="segment-difference" fill="#C23B38">（+00:34:21）</tspan></text>
 </g>
-<g id="time-cell-3-5" class="time-cell inspectable" data-cp-id="wpt:5" data-series="planned" data-target-seconds="61200.0" data-elapsed-seconds="28004.690501950034" data-segment-seconds="8584.704279867321" tabindex="0" aria-label="17:00 预计 · CP5-洲头梁村：累计 07:46:45；CP4-大源村 → CP5-洲头梁村 本段 02:23:05，含停留；佳明本段更慢">
-<title>17:00 预计 · CP5-洲头梁村：累计 07:46:45；CP4-大源村 → CP5-洲头梁村 本段 02:23:05，含停留；佳明本段更慢</title>
-<text x="2394.5" y="1735.0" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle" data-role="time-values"><tspan data-role="cumulative-time" fill="#202A35">07:46:45</tspan><tspan> / </tspan><tspan data-role="segment-time" fill="#C23B38">02:23:05</tspan></text>
+<g id="time-cell-3-5" class="time-cell inspectable" data-cp-id="wpt:5" data-series="planned" data-target-seconds="61200.0" data-elapsed-seconds="28004.690501950034" data-segment-seconds="8584.704279867321" data-actual-minus-plan-seconds="1555.6022800325918" tabindex="0" aria-label="17:00 预计 · CP5-洲头梁村：累计 07:46:45；CP4-大源村 → CP5-洲头梁村 本段 02:23:05，含停留；实际 − 预计 +00:25:56；佳明本段更慢">
+<title>17:00 预计 · CP5-洲头梁村：累计 07:46:45；CP4-大源村 → CP5-洲头梁村 本段 02:23:05，含停留；实际 − 预计 +00:25:56；佳明本段更慢</title>
+<text x="2407.0" y="1735.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#C23B38">02:23:05</tspan><tspan data-role="segment-difference" fill="#C23B38">（+00:25:56）</tspan></text>
 </g>
 </g>
 <g class="time-row" data-cp-id="wpt:6">
@@ -659,24 +653,23 @@
 <path d="M64.000 1834.000 L2656.000 1834.000" fill="none" stroke="#E4E8ED" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <g id="time-header-6" class="checkpoint-header inspectable" data-cp-id="wpt:6" data-distance-m="59802.76882183129" tabindex="0" aria-label="CP6-武阳驿站：赛道累计 59.803 km；佳明累计 59.920 km">
 <title>CP6-武阳驿站：赛道累计 59.803 km；佳明累计 59.920 km</title>
-<text x="88" y="1807.0" font-size="23" fill="#202A35" font-weight="400" text-anchor="start">CP6-武阳驿站</text>
-<text x="494" y="1807.0" font-size="22" fill="#626D79" font-weight="400" text-anchor="middle">59.8 km</text>
+<text x="88" y="1807.0" font-size="23" fill="#202A35" font-weight="400" text-anchor="start">CP6-武阳驿站 · 59.8 km</text>
 </g>
 <g id="time-cell-0-6" class="time-cell inspectable" data-cp-id="wpt:6" data-series="actual" data-elapsed-seconds="32864.11671776855" data-segment-seconds="6084.822472574986" tabindex="0" aria-label="佳明实际 · CP6-武阳驿站：累计 09:07:44；CP5-洲头梁村 → CP6-武阳驿站 本段 01:41:25，含停留">
 <title>佳明实际 · CP6-武阳驿站：累计 09:07:44；CP5-洲头梁村 → CP6-武阳驿站 本段 01:41:25，含停留</title>
-<text x="825.5" y="1807.0" font-size="26" fill="#202A35" font-weight="650" text-anchor="middle" data-role="time-values"><tspan data-role="cumulative-time" fill="#202A35">09:07:44</tspan><tspan> / </tspan><tspan data-role="segment-time" fill="#202A35">01:41:25</tspan></text>
+<text x="913.0" y="1807.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#202A35">01:41:25</tspan></text>
 </g>
-<g id="time-cell-1-6" class="time-cell inspectable" data-cp-id="wpt:6" data-series="planned" data-target-seconds="54000.0" data-elapsed-seconds="31502.276521564545" data-segment-seconds="6792.255490432162" tabindex="0" aria-label="15:00 预计 · CP6-武阳驿站：累计 08:45:02；CP5-洲头梁村 → CP6-武阳驿站 本段 01:53:12，含停留；佳明本段不慢于预计">
-<title>15:00 预计 · CP6-武阳驿站：累计 08:45:02；CP5-洲头梁村 → CP6-武阳驿站 本段 01:53:12，含停留；佳明本段不慢于预计</title>
-<text x="1348.5" y="1807.0" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle" data-role="time-values"><tspan data-role="cumulative-time" fill="#202A35">08:45:02</tspan><tspan> / </tspan><tspan data-role="segment-time" fill="#087F5B">01:53:12</tspan></text>
+<g id="time-cell-1-6" class="time-cell inspectable" data-cp-id="wpt:6" data-series="planned" data-target-seconds="54000.0" data-elapsed-seconds="31502.276521564545" data-segment-seconds="6792.255490432162" data-actual-minus-plan-seconds="-707.4330178571763" tabindex="0" aria-label="15:00 预计 · CP6-武阳驿站：累计 08:45:02；CP5-洲头梁村 → CP6-武阳驿站 本段 01:53:12，含停留；实际 − 预计 -00:11:47；佳明本段不慢于预计">
+<title>15:00 预计 · CP6-武阳驿站：累计 08:45:02；CP5-洲头梁村 → CP6-武阳驿站 本段 01:53:12，含停留；实际 − 预计 -00:11:47；佳明本段不慢于预计</title>
+<text x="1411.0" y="1807.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#087F5B">01:53:12</tspan><tspan data-role="segment-difference" fill="#087F5B">（-00:11:47）</tspan></text>
 </g>
-<g id="time-cell-2-6" class="time-cell inspectable" data-cp-id="wpt:6" data-series="planned" data-target-seconds="57600.0" data-elapsed-seconds="33602.428289668846" data-segment-seconds="7245.072523127637" tabindex="0" aria-label="16:00 预计 · CP6-武阳驿站：累计 09:20:02；CP5-洲头梁村 → CP6-武阳驿站 本段 02:00:45，含停留；佳明本段不慢于预计">
-<title>16:00 预计 · CP6-武阳驿站：累计 09:20:02；CP5-洲头梁村 → CP6-武阳驿站 本段 02:00:45，含停留；佳明本段不慢于预计</title>
-<text x="1871.5" y="1807.0" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle" data-role="time-values"><tspan data-role="cumulative-time" fill="#202A35">09:20:02</tspan><tspan> / </tspan><tspan data-role="segment-time" fill="#087F5B">02:00:45</tspan></text>
+<g id="time-cell-2-6" class="time-cell inspectable" data-cp-id="wpt:6" data-series="planned" data-target-seconds="57600.0" data-elapsed-seconds="33602.428289668846" data-segment-seconds="7245.072523127637" data-actual-minus-plan-seconds="-1160.2500505526514" tabindex="0" aria-label="16:00 预计 · CP6-武阳驿站：累计 09:20:02；CP5-洲头梁村 → CP6-武阳驿站 本段 02:00:45，含停留；实际 − 预计 -00:19:20；佳明本段不慢于预计">
+<title>16:00 预计 · CP6-武阳驿站：累计 09:20:02；CP5-洲头梁村 → CP6-武阳驿站 本段 02:00:45，含停留；实际 − 预计 -00:19:20；佳明本段不慢于预计</title>
+<text x="1909.0" y="1807.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#087F5B">02:00:45</tspan><tspan data-role="segment-difference" fill="#087F5B">（-00:19:20）</tspan></text>
 </g>
-<g id="time-cell-3-6" class="time-cell inspectable" data-cp-id="wpt:6" data-series="planned" data-target-seconds="61200.0" data-elapsed-seconds="35702.58005777315" data-segment-seconds="7697.889555823116" tabindex="0" aria-label="17:00 预计 · CP6-武阳驿站：累计 09:55:03；CP5-洲头梁村 → CP6-武阳驿站 本段 02:08:18，含停留；佳明本段不慢于预计">
-<title>17:00 预计 · CP6-武阳驿站：累计 09:55:03；CP5-洲头梁村 → CP6-武阳驿站 本段 02:08:18，含停留；佳明本段不慢于预计</title>
-<text x="2394.5" y="1807.0" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle" data-role="time-values"><tspan data-role="cumulative-time" fill="#202A35">09:55:03</tspan><tspan> / </tspan><tspan data-role="segment-time" fill="#087F5B">02:08:18</tspan></text>
+<g id="time-cell-3-6" class="time-cell inspectable" data-cp-id="wpt:6" data-series="planned" data-target-seconds="61200.0" data-elapsed-seconds="35702.58005777315" data-segment-seconds="7697.889555823116" data-actual-minus-plan-seconds="-1613.06708324813" tabindex="0" aria-label="17:00 预计 · CP6-武阳驿站：累计 09:55:03；CP5-洲头梁村 → CP6-武阳驿站 本段 02:08:18，含停留；实际 − 预计 -00:26:53；佳明本段不慢于预计">
+<title>17:00 预计 · CP6-武阳驿站：累计 09:55:03；CP5-洲头梁村 → CP6-武阳驿站 本段 02:08:18，含停留；实际 − 预计 -00:26:53；佳明本段不慢于预计</title>
+<text x="2407.0" y="1807.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#087F5B">02:08:18</tspan><tspan data-role="segment-difference" fill="#087F5B">（-00:26:53）</tspan></text>
 </g>
 </g>
 <g class="time-row" data-cp-id="wpt:7">
@@ -684,24 +677,23 @@
 <path d="M64.000 1906.000 L2656.000 1906.000" fill="none" stroke="#E4E8ED" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <g id="time-header-7" class="checkpoint-header inspectable" data-cp-id="wpt:7" data-distance-m="67725.73523129134" tabindex="0" aria-label="CP7-约源村委会：赛道累计 67.726 km；佳明累计 67.859 km">
 <title>CP7-约源村委会：赛道累计 67.726 km；佳明累计 67.859 km</title>
-<text x="88" y="1879.0" font-size="23" fill="#202A35" font-weight="400" text-anchor="start">CP7-约源村委会</text>
-<text x="494" y="1879.0" font-size="22" fill="#626D79" font-weight="400" text-anchor="middle">67.7 km</text>
+<text x="88" y="1879.0" font-size="23" fill="#202A35" font-weight="400" text-anchor="start">CP7-约源村委会 · 67.7 km</text>
 </g>
 <g id="time-cell-0-7" class="time-cell inspectable" data-cp-id="wpt:7" data-series="actual" data-elapsed-seconds="39608.633271426916" data-segment-seconds="6744.516553658366" tabindex="0" aria-label="佳明实际 · CP7-约源村委会：累计 11:00:09；CP6-武阳驿站 → CP7-约源村委会 本段 01:52:25，含停留">
 <title>佳明实际 · CP7-约源村委会：累计 11:00:09；CP6-武阳驿站 → CP7-约源村委会 本段 01:52:25，含停留</title>
-<text x="825.5" y="1879.0" font-size="26" fill="#202A35" font-weight="650" text-anchor="middle" data-role="time-values"><tspan data-role="cumulative-time" fill="#202A35">11:00:09</tspan><tspan> / </tspan><tspan data-role="segment-time" fill="#202A35">01:52:25</tspan></text>
+<text x="913.0" y="1879.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#202A35">01:52:25</tspan></text>
 </g>
-<g id="time-cell-1-7" class="time-cell inspectable" data-cp-id="wpt:7" data-series="planned" data-target-seconds="54000.0" data-elapsed-seconds="36425.996672750916" data-segment-seconds="4923.720151186371" tabindex="0" aria-label="15:00 预计 · CP7-约源村委会：累计 10:07:06；CP6-武阳驿站 → CP7-约源村委会 本段 01:22:04，含停留；佳明本段更慢">
-<title>15:00 预计 · CP7-约源村委会：累计 10:07:06；CP6-武阳驿站 → CP7-约源村委会 本段 01:22:04，含停留；佳明本段更慢</title>
-<text x="1348.5" y="1879.0" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle" data-role="time-values"><tspan data-role="cumulative-time" fill="#202A35">10:07:06</tspan><tspan> / </tspan><tspan data-role="segment-time" fill="#C23B38">01:22:04</tspan></text>
+<g id="time-cell-1-7" class="time-cell inspectable" data-cp-id="wpt:7" data-series="planned" data-target-seconds="54000.0" data-elapsed-seconds="36425.996672750916" data-segment-seconds="4923.720151186371" data-actual-minus-plan-seconds="1820.796402471995" tabindex="0" aria-label="15:00 预计 · CP7-约源村委会：累计 10:07:06；CP6-武阳驿站 → CP7-约源村委会 本段 01:22:04，含停留；实际 − 预计 +00:30:21；佳明本段更慢">
+<title>15:00 预计 · CP7-约源村委会：累计 10:07:06；CP6-武阳驿站 → CP7-约源村委会 本段 01:22:04，含停留；实际 − 预计 +00:30:21；佳明本段更慢</title>
+<text x="1411.0" y="1879.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#C23B38">01:22:04</tspan><tspan data-role="segment-difference" fill="#C23B38">（+00:30:21）</tspan></text>
 </g>
-<g id="time-cell-2-7" class="time-cell inspectable" data-cp-id="wpt:7" data-series="planned" data-target-seconds="57600.0" data-elapsed-seconds="38854.39645093431" data-segment-seconds="5251.968161265468" tabindex="0" aria-label="16:00 预计 · CP7-约源村委会：累计 10:47:34；CP6-武阳驿站 → CP7-约源村委会 本段 01:27:32，含停留；佳明本段更慢">
-<title>16:00 预计 · CP7-约源村委会：累计 10:47:34；CP6-武阳驿站 → CP7-约源村委会 本段 01:27:32，含停留；佳明本段更慢</title>
-<text x="1871.5" y="1879.0" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle" data-role="time-values"><tspan data-role="cumulative-time" fill="#202A35">10:47:34</tspan><tspan> / </tspan><tspan data-role="segment-time" fill="#C23B38">01:27:32</tspan></text>
+<g id="time-cell-2-7" class="time-cell inspectable" data-cp-id="wpt:7" data-series="planned" data-target-seconds="57600.0" data-elapsed-seconds="38854.39645093431" data-segment-seconds="5251.968161265468" data-actual-minus-plan-seconds="1492.5483923928987" tabindex="0" aria-label="16:00 预计 · CP7-约源村委会：累计 10:47:34；CP6-武阳驿站 → CP7-约源村委会 本段 01:27:32，含停留；实际 − 预计 +00:24:53；佳明本段更慢">
+<title>16:00 预计 · CP7-约源村委会：累计 10:47:34；CP6-武阳驿站 → CP7-约源村委会 本段 01:27:32，含停留；实际 − 预计 +00:24:53；佳明本段更慢</title>
+<text x="1909.0" y="1879.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#C23B38">01:27:32</tspan><tspan data-role="segment-difference" fill="#C23B38">（+00:24:53）</tspan></text>
 </g>
-<g id="time-cell-3-7" class="time-cell inspectable" data-cp-id="wpt:7" data-series="planned" data-target-seconds="61200.0" data-elapsed-seconds="41282.79622911771" data-segment-seconds="5580.21617134456" tabindex="0" aria-label="17:00 预计 · CP7-约源村委会：累计 11:28:03；CP6-武阳驿站 → CP7-约源村委会 本段 01:33:00，含停留；佳明本段更慢">
-<title>17:00 预计 · CP7-约源村委会：累计 11:28:03；CP6-武阳驿站 → CP7-约源村委会 本段 01:33:00，含停留；佳明本段更慢</title>
-<text x="2394.5" y="1879.0" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle" data-role="time-values"><tspan data-role="cumulative-time" fill="#202A35">11:28:03</tspan><tspan> / </tspan><tspan data-role="segment-time" fill="#C23B38">01:33:00</tspan></text>
+<g id="time-cell-3-7" class="time-cell inspectable" data-cp-id="wpt:7" data-series="planned" data-target-seconds="61200.0" data-elapsed-seconds="41282.79622911771" data-segment-seconds="5580.21617134456" data-actual-minus-plan-seconds="1164.300382313806" tabindex="0" aria-label="17:00 预计 · CP7-约源村委会：累计 11:28:03；CP6-武阳驿站 → CP7-约源村委会 本段 01:33:00，含停留；实际 − 预计 +00:19:24；佳明本段更慢">
+<title>17:00 预计 · CP7-约源村委会：累计 11:28:03；CP6-武阳驿站 → CP7-约源村委会 本段 01:33:00，含停留；实际 − 预计 +00:19:24；佳明本段更慢</title>
+<text x="2407.0" y="1879.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#C23B38">01:33:00</tspan><tspan data-role="segment-difference" fill="#C23B38">（+00:19:24）</tspan></text>
 </g>
 </g>
 <g class="time-row" data-cp-id="wpt:8">
@@ -709,24 +701,23 @@
 <path d="M64.000 1978.000 L2656.000 1978.000" fill="none" stroke="#E4E8ED" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <g id="time-header-8" class="checkpoint-header inspectable" data-cp-id="wpt:8" data-distance-m="77315.34424303679" tabindex="0" aria-label="CP8-洪济小学旧址：赛道累计 77.315 km；佳明累计 77.491 km">
 <title>CP8-洪济小学旧址：赛道累计 77.315 km；佳明累计 77.491 km</title>
-<text x="88" y="1951.0" font-size="23" fill="#202A35" font-weight="400" text-anchor="start">CP8-洪济小学旧址</text>
-<text x="494" y="1951.0" font-size="22" fill="#626D79" font-weight="400" text-anchor="middle">77.3 km</text>
+<text x="88" y="1951.0" font-size="23" fill="#202A35" font-weight="400" text-anchor="start">CP8-洪济小学旧址 · 77.3 km</text>
 </g>
 <g id="time-cell-0-8" class="time-cell inspectable" data-cp-id="wpt:8" data-series="actual" data-elapsed-seconds="45554.440255657115" data-segment-seconds="5945.806984230199" tabindex="0" aria-label="佳明实际 · CP8-洪济小学旧址：累计 12:39:14；CP7-约源村委会 → CP8-洪济小学旧址 本段 01:39:06，含停留">
 <title>佳明实际 · CP8-洪济小学旧址：累计 12:39:14；CP7-约源村委会 → CP8-洪济小学旧址 本段 01:39:06，含停留</title>
-<text x="825.5" y="1951.0" font-size="26" fill="#202A35" font-weight="650" text-anchor="middle" data-role="time-values"><tspan data-role="cumulative-time" fill="#202A35">12:39:14</tspan><tspan> / </tspan><tspan data-role="segment-time" fill="#202A35">01:39:06</tspan></text>
+<text x="913.0" y="1951.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#202A35">01:39:06</tspan></text>
 </g>
-<g id="time-cell-1-8" class="time-cell inspectable" data-cp-id="wpt:8" data-series="planned" data-target-seconds="54000.0" data-elapsed-seconds="41433.60848752548" data-segment-seconds="5007.611814774566" tabindex="0" aria-label="15:00 预计 · CP8-洪济小学旧址：累计 11:30:34；CP7-约源村委会 → CP8-洪济小学旧址 本段 01:23:28，含停留；佳明本段更慢">
-<title>15:00 预计 · CP8-洪济小学旧址：累计 11:30:34；CP7-约源村委会 → CP8-洪济小学旧址 本段 01:23:28，含停留；佳明本段更慢</title>
-<text x="1348.5" y="1951.0" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle" data-role="time-values"><tspan data-role="cumulative-time" fill="#202A35">11:30:34</tspan><tspan> / </tspan><tspan data-role="segment-time" fill="#C23B38">01:23:28</tspan></text>
+<g id="time-cell-1-8" class="time-cell inspectable" data-cp-id="wpt:8" data-series="planned" data-target-seconds="54000.0" data-elapsed-seconds="41433.60848752548" data-segment-seconds="5007.611814774566" data-actual-minus-plan-seconds="938.1951694556337" tabindex="0" aria-label="15:00 预计 · CP8-洪济小学旧址：累计 11:30:34；CP7-约源村委会 → CP8-洪济小学旧址 本段 01:23:28，含停留；实际 − 预计 +00:15:38；佳明本段更慢">
+<title>15:00 预计 · CP8-洪济小学旧址：累计 11:30:34；CP7-约源村委会 → CP8-洪济小学旧址 本段 01:23:28，含停留；实际 − 预计 +00:15:38；佳明本段更慢</title>
+<text x="1411.0" y="1951.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#C23B38">01:23:28</tspan><tspan data-role="segment-difference" fill="#C23B38">（+00:15:38）</tspan></text>
 </g>
-<g id="time-cell-2-8" class="time-cell inspectable" data-cp-id="wpt:8" data-series="planned" data-target-seconds="57600.0" data-elapsed-seconds="44195.849053360515" data-segment-seconds="5341.452602426201" tabindex="0" aria-label="16:00 预计 · CP8-洪济小学旧址：累计 12:16:36；CP7-约源村委会 → CP8-洪济小学旧址 本段 01:29:01，含停留；佳明本段更慢">
-<title>16:00 预计 · CP8-洪济小学旧址：累计 12:16:36；CP7-约源村委会 → CP8-洪济小学旧址 本段 01:29:01，含停留；佳明本段更慢</title>
-<text x="1871.5" y="1951.0" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle" data-role="time-values"><tspan data-role="cumulative-time" fill="#202A35">12:16:36</tspan><tspan> / </tspan><tspan data-role="segment-time" fill="#C23B38">01:29:01</tspan></text>
+<g id="time-cell-2-8" class="time-cell inspectable" data-cp-id="wpt:8" data-series="planned" data-target-seconds="57600.0" data-elapsed-seconds="44195.849053360515" data-segment-seconds="5341.452602426201" data-actual-minus-plan-seconds="604.354381803998" tabindex="0" aria-label="16:00 预计 · CP8-洪济小学旧址：累计 12:16:36；CP7-约源村委会 → CP8-洪济小学旧址 本段 01:29:01，含停留；实际 − 预计 +00:10:04；佳明本段更慢">
+<title>16:00 预计 · CP8-洪济小学旧址：累计 12:16:36；CP7-约源村委会 → CP8-洪济小学旧址 本段 01:29:01，含停留；实际 − 预计 +00:10:04；佳明本段更慢</title>
+<text x="1909.0" y="1951.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#C23B38">01:29:01</tspan><tspan data-role="segment-difference" fill="#C23B38">（+00:10:04）</tspan></text>
 </g>
-<g id="time-cell-3-8" class="time-cell inspectable" data-cp-id="wpt:8" data-series="planned" data-target-seconds="61200.0" data-elapsed-seconds="46958.08961919555" data-segment-seconds="5675.293390077837" tabindex="0" aria-label="17:00 预计 · CP8-洪济小学旧址：累计 13:02:38；CP7-约源村委会 → CP8-洪济小学旧址 本段 01:34:35，含停留；佳明本段更慢">
-<title>17:00 预计 · CP8-洪济小学旧址：累计 13:02:38；CP7-约源村委会 → CP8-洪济小学旧址 本段 01:34:35，含停留；佳明本段更慢</title>
-<text x="2394.5" y="1951.0" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle" data-role="time-values"><tspan data-role="cumulative-time" fill="#202A35">13:02:38</tspan><tspan> / </tspan><tspan data-role="segment-time" fill="#C23B38">01:34:35</tspan></text>
+<g id="time-cell-3-8" class="time-cell inspectable" data-cp-id="wpt:8" data-series="planned" data-target-seconds="61200.0" data-elapsed-seconds="46958.08961919555" data-segment-seconds="5675.293390077837" data-actual-minus-plan-seconds="270.5135941523622" tabindex="0" aria-label="17:00 预计 · CP8-洪济小学旧址：累计 13:02:38；CP7-约源村委会 → CP8-洪济小学旧址 本段 01:34:35，含停留；实际 − 预计 +00:04:31；佳明本段更慢">
+<title>17:00 预计 · CP8-洪济小学旧址：累计 13:02:38；CP7-约源村委会 → CP8-洪济小学旧址 本段 01:34:35，含停留；实际 − 预计 +00:04:31；佳明本段更慢</title>
+<text x="2407.0" y="1951.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#C23B38">01:34:35</tspan><tspan data-role="segment-difference" fill="#C23B38">（+00:04:31）</tspan></text>
 </g>
 </g>
 <g class="time-row" data-cp-id="wpt:9">
@@ -734,24 +725,23 @@
 <path d="M64.000 2050.000 L2656.000 2050.000" fill="none" stroke="#E4E8ED" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <g id="time-header-9" class="checkpoint-header inspectable" data-cp-id="wpt:9" data-distance-m="87646.6599217784" tabindex="0" aria-label="CP12-瞻淇村：赛道累计 87.647 km；佳明累计 88.116 km">
 <title>CP12-瞻淇村：赛道累计 87.647 km；佳明累计 88.116 km</title>
-<text x="88" y="2023.0" font-size="23" fill="#202A35" font-weight="400" text-anchor="start">CP12-瞻淇村</text>
-<text x="494" y="2023.0" font-size="22" fill="#626D79" font-weight="400" text-anchor="middle">87.6 km</text>
+<text x="88" y="2023.0" font-size="23" fill="#202A35" font-weight="400" text-anchor="start">CP12-瞻淇村 · 87.6 km</text>
 </g>
 <g id="time-cell-0-9" class="time-cell inspectable" data-cp-id="wpt:9" data-series="actual" data-elapsed-seconds="52536.142998108204" data-segment-seconds="6981.702742451089" tabindex="0" aria-label="佳明实际 · CP12-瞻淇村：累计 14:35:36；CP8-洪济小学旧址 → CP12-瞻淇村 本段 01:56:22，含停留">
 <title>佳明实际 · CP12-瞻淇村：累计 14:35:36；CP8-洪济小学旧址 → CP12-瞻淇村 本段 01:56:22，含停留</title>
-<text x="825.5" y="2023.0" font-size="26" fill="#202A35" font-weight="650" text-anchor="middle" data-role="time-values"><tspan data-role="cumulative-time" fill="#202A35">14:35:36</tspan><tspan> / </tspan><tspan data-role="segment-time" fill="#202A35">01:56:22</tspan></text>
+<text x="913.0" y="2023.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#202A35">01:56:22</tspan></text>
 </g>
-<g id="time-cell-1-9" class="time-cell inspectable" data-cp-id="wpt:9" data-series="planned" data-target-seconds="54000.0" data-elapsed-seconds="47380.50258754843" data-segment-seconds="5946.894100022946" tabindex="0" aria-label="15:00 预计 · CP12-瞻淇村：累计 13:09:41；CP8-洪济小学旧址 → CP12-瞻淇村 本段 01:39:07，含停留；佳明本段更慢">
-<title>15:00 预计 · CP12-瞻淇村：累计 13:09:41；CP8-洪济小学旧址 → CP12-瞻淇村 本段 01:39:07，含停留；佳明本段更慢</title>
-<text x="1348.5" y="2023.0" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle" data-role="time-values"><tspan data-role="cumulative-time" fill="#202A35">13:09:41</tspan><tspan> / </tspan><tspan data-role="segment-time" fill="#C23B38">01:39:07</tspan></text>
+<g id="time-cell-1-9" class="time-cell inspectable" data-cp-id="wpt:9" data-series="planned" data-target-seconds="54000.0" data-elapsed-seconds="47380.50258754843" data-segment-seconds="5946.894100022946" data-actual-minus-plan-seconds="1034.8086424281428" tabindex="0" aria-label="15:00 预计 · CP12-瞻淇村：累计 13:09:41；CP8-洪济小学旧址 → CP12-瞻淇村 本段 01:39:07，含停留；实际 − 预计 +00:17:15；佳明本段更慢">
+<title>15:00 预计 · CP12-瞻淇村：累计 13:09:41；CP8-洪济小学旧址 → CP12-瞻淇村 本段 01:39:07，含停留；实际 − 预计 +00:17:15；佳明本段更慢</title>
+<text x="1411.0" y="2023.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#C23B38">01:39:07</tspan><tspan data-role="segment-difference" fill="#C23B38">（+00:17:15）</tspan></text>
 </g>
-<g id="time-cell-2-9" class="time-cell inspectable" data-cp-id="wpt:9" data-series="planned" data-target-seconds="57600.0" data-elapsed-seconds="50539.20276005166" data-segment-seconds="6343.353706691145" tabindex="0" aria-label="16:00 预计 · CP12-瞻淇村：累计 14:02:19；CP8-洪济小学旧址 → CP12-瞻淇村 本段 01:45:43，含停留；佳明本段更慢">
-<title>16:00 预计 · CP12-瞻淇村：累计 14:02:19；CP8-洪济小学旧址 → CP12-瞻淇村 本段 01:45:43，含停留；佳明本段更慢</title>
-<text x="1871.5" y="2023.0" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle" data-role="time-values"><tspan data-role="cumulative-time" fill="#202A35">14:02:19</tspan><tspan> / </tspan><tspan data-role="segment-time" fill="#C23B38">01:45:43</tspan></text>
+<g id="time-cell-2-9" class="time-cell inspectable" data-cp-id="wpt:9" data-series="planned" data-target-seconds="57600.0" data-elapsed-seconds="50539.20276005166" data-segment-seconds="6343.353706691145" data-actual-minus-plan-seconds="638.349035759944" tabindex="0" aria-label="16:00 预计 · CP12-瞻淇村：累计 14:02:19；CP8-洪济小学旧址 → CP12-瞻淇村 本段 01:45:43，含停留；实际 − 预计 +00:10:38；佳明本段更慢">
+<title>16:00 预计 · CP12-瞻淇村：累计 14:02:19；CP8-洪济小学旧址 → CP12-瞻淇村 本段 01:45:43，含停留；实际 − 预计 +00:10:38；佳明本段更慢</title>
+<text x="1909.0" y="2023.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#C23B38">01:45:43</tspan><tspan data-role="segment-difference" fill="#C23B38">（+00:10:38）</tspan></text>
 </g>
-<g id="time-cell-3-9" class="time-cell inspectable" data-cp-id="wpt:9" data-series="planned" data-target-seconds="61200.0" data-elapsed-seconds="53697.90293255489" data-segment-seconds="6739.813313359344" tabindex="0" aria-label="17:00 预计 · CP12-瞻淇村：累计 14:54:58；CP8-洪济小学旧址 → CP12-瞻淇村 本段 01:52:20，含停留；佳明本段更慢">
-<title>17:00 预计 · CP12-瞻淇村：累计 14:54:58；CP8-洪济小学旧址 → CP12-瞻淇村 本段 01:52:20，含停留；佳明本段更慢</title>
-<text x="2394.5" y="2023.0" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle" data-role="time-values"><tspan data-role="cumulative-time" fill="#202A35">14:54:58</tspan><tspan> / </tspan><tspan data-role="segment-time" fill="#C23B38">01:52:20</tspan></text>
+<g id="time-cell-3-9" class="time-cell inspectable" data-cp-id="wpt:9" data-series="planned" data-target-seconds="61200.0" data-elapsed-seconds="53697.90293255489" data-segment-seconds="6739.813313359344" data-actual-minus-plan-seconds="241.88942909174511" tabindex="0" aria-label="17:00 预计 · CP12-瞻淇村：累计 14:54:58；CP8-洪济小学旧址 → CP12-瞻淇村 本段 01:52:20，含停留；实际 − 预计 +00:04:02；佳明本段更慢">
+<title>17:00 预计 · CP12-瞻淇村：累计 14:54:58；CP8-洪济小学旧址 → CP12-瞻淇村 本段 01:52:20，含停留；实际 − 预计 +00:04:02；佳明本段更慢</title>
+<text x="2407.0" y="2023.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#C23B38">01:52:20</tspan><tspan data-role="segment-difference" fill="#C23B38">（+00:04:02）</tspan></text>
 </g>
 </g>
 <g class="time-row" data-cp-id="wpt:10">
@@ -759,24 +749,23 @@
 <path d="M64.000 2122.000 L2656.000 2122.000" fill="none" stroke="#E4E8ED" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <g id="time-header-10" class="checkpoint-header inspectable" data-cp-id="wpt:10" data-distance-m="93565.29291778912" tabindex="0" aria-label="CP13-画家村：赛道累计 93.565 km；佳明累计 94.248 km">
 <title>CP13-画家村：赛道累计 93.565 km；佳明累计 94.248 km</title>
-<text x="88" y="2095.0" font-size="23" fill="#202A35" font-weight="400" text-anchor="start">CP13-画家村</text>
-<text x="494" y="2095.0" font-size="22" fill="#626D79" font-weight="400" text-anchor="middle">93.6 km</text>
+<text x="88" y="2095.0" font-size="23" fill="#202A35" font-weight="400" text-anchor="start">CP13-画家村 · 93.6 km</text>
 </g>
 <g id="time-cell-0-10" class="time-cell inspectable" data-cp-id="wpt:10" data-series="actual" data-elapsed-seconds="56267.677039998074" data-segment-seconds="3731.5340418898704" tabindex="0" aria-label="佳明实际 · CP13-画家村：累计 15:37:48；CP12-瞻淇村 → CP13-画家村 本段 01:02:12，含停留">
 <title>佳明实际 · CP13-画家村：累计 15:37:48；CP12-瞻淇村 → CP13-画家村 本段 01:02:12，含停留</title>
-<text x="825.5" y="2095.0" font-size="26" fill="#202A35" font-weight="650" text-anchor="middle" data-role="time-values"><tspan data-role="cumulative-time" fill="#202A35">15:37:48</tspan><tspan> / </tspan><tspan data-role="segment-time" fill="#202A35">01:02:12</tspan></text>
+<text x="913.0" y="2095.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#202A35">01:02:12</tspan></text>
 </g>
-<g id="time-cell-1-10" class="time-cell inspectable" data-cp-id="wpt:10" data-series="planned" data-target-seconds="54000.0" data-elapsed-seconds="50380.760933217476" data-segment-seconds="3000.258345669048" tabindex="0" aria-label="15:00 预计 · CP13-画家村：累计 13:59:41；CP12-瞻淇村 → CP13-画家村 本段 00:50:00，含停留；佳明本段更慢">
-<title>15:00 预计 · CP13-画家村：累计 13:59:41；CP12-瞻淇村 → CP13-画家村 本段 00:50:00，含停留；佳明本段更慢</title>
-<text x="1348.5" y="2095.0" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle" data-role="time-values"><tspan data-role="cumulative-time" fill="#202A35">13:59:41</tspan><tspan> / </tspan><tspan data-role="segment-time" fill="#C23B38">00:50:00</tspan></text>
+<g id="time-cell-1-10" class="time-cell inspectable" data-cp-id="wpt:10" data-series="planned" data-target-seconds="54000.0" data-elapsed-seconds="50380.760933217476" data-segment-seconds="3000.258345669048" data-actual-minus-plan-seconds="731.2756962208223" tabindex="0" aria-label="15:00 预计 · CP13-画家村：累计 13:59:41；CP12-瞻淇村 → CP13-画家村 本段 00:50:00，含停留；实际 − 预计 +00:12:11；佳明本段更慢">
+<title>15:00 预计 · CP13-画家村：累计 13:59:41；CP12-瞻淇村 → CP13-画家村 本段 00:50:00，含停留；实际 − 预计 +00:12:11；佳明本段更慢</title>
+<text x="1411.0" y="2095.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#C23B38">00:50:00</tspan><tspan data-role="segment-difference" fill="#C23B38">（+00:12:11）</tspan></text>
 </g>
-<g id="time-cell-2-10" class="time-cell inspectable" data-cp-id="wpt:10" data-series="planned" data-target-seconds="57600.0" data-elapsed-seconds="53739.478328765304" data-segment-seconds="3200.275568713645" tabindex="0" aria-label="16:00 预计 · CP13-画家村：累计 14:55:39；CP12-瞻淇村 → CP13-画家村 本段 00:53:20，含停留；佳明本段更慢">
-<title>16:00 预计 · CP13-画家村：累计 14:55:39；CP12-瞻淇村 → CP13-画家村 本段 00:53:20，含停留；佳明本段更慢</title>
-<text x="1871.5" y="2095.0" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle" data-role="time-values"><tspan data-role="cumulative-time" fill="#202A35">14:55:39</tspan><tspan> / </tspan><tspan data-role="segment-time" fill="#C23B38">00:53:20</tspan></text>
+<g id="time-cell-2-10" class="time-cell inspectable" data-cp-id="wpt:10" data-series="planned" data-target-seconds="57600.0" data-elapsed-seconds="53739.478328765304" data-segment-seconds="3200.275568713645" data-actual-minus-plan-seconds="531.2584731762254" tabindex="0" aria-label="16:00 预计 · CP13-画家村：累计 14:55:39；CP12-瞻淇村 → CP13-画家村 本段 00:53:20，含停留；实际 − 预计 +00:08:51；佳明本段更慢">
+<title>16:00 预计 · CP13-画家村：累计 14:55:39；CP12-瞻淇村 → CP13-画家村 本段 00:53:20，含停留；实际 − 预计 +00:08:51；佳明本段更慢</title>
+<text x="1909.0" y="2095.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#C23B38">00:53:20</tspan><tspan data-role="segment-difference" fill="#C23B38">（+00:08:51）</tspan></text>
 </g>
-<g id="time-cell-3-10" class="time-cell inspectable" data-cp-id="wpt:10" data-series="planned" data-target-seconds="61200.0" data-elapsed-seconds="57098.19572431314" data-segment-seconds="3400.292791758249" tabindex="0" aria-label="17:00 预计 · CP13-画家村：累计 15:51:38；CP12-瞻淇村 → CP13-画家村 本段 00:56:40，含停留；佳明本段更慢">
-<title>17:00 预计 · CP13-画家村：累计 15:51:38；CP12-瞻淇村 → CP13-画家村 本段 00:56:40，含停留；佳明本段更慢</title>
-<text x="2394.5" y="2095.0" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle" data-role="time-values"><tspan data-role="cumulative-time" fill="#202A35">15:51:38</tspan><tspan> / </tspan><tspan data-role="segment-time" fill="#C23B38">00:56:40</tspan></text>
+<g id="time-cell-3-10" class="time-cell inspectable" data-cp-id="wpt:10" data-series="planned" data-target-seconds="61200.0" data-elapsed-seconds="57098.19572431314" data-segment-seconds="3400.292791758249" data-actual-minus-plan-seconds="331.2412501316212" tabindex="0" aria-label="17:00 预计 · CP13-画家村：累计 15:51:38；CP12-瞻淇村 → CP13-画家村 本段 00:56:40，含停留；实际 − 预计 +00:05:31；佳明本段更慢">
+<title>17:00 预计 · CP13-画家村：累计 15:51:38；CP12-瞻淇村 → CP13-画家村 本段 00:56:40，含停留；实际 − 预计 +00:05:31；佳明本段更慢</title>
+<text x="2407.0" y="2095.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#C23B38">00:56:40</tspan><tspan data-role="segment-difference" fill="#C23B38">（+00:05:31）</tspan></text>
 </g>
 </g>
 <g class="time-row" data-cp-id="wpt:11:finish">
@@ -784,31 +773,29 @@
 <path d="M64.000 2194.000 L2656.000 2194.000" fill="none" stroke="#E4E8ED" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <g id="time-header-11" class="checkpoint-header inspectable" data-cp-id="wpt:11:finish" data-distance-m="101248.68178986096" tabindex="0" aria-label="起终点-徽州古城（终点）：赛道累计 101.249 km；佳明累计 101.877 km">
 <title>起终点-徽州古城（终点）：赛道累计 101.249 km；佳明累计 101.877 km</title>
-<text x="88" y="2167.0" font-size="23" fill="#202A35" font-weight="400" text-anchor="start">起终点-徽州古城（终点）</text>
-<text x="494" y="2167.0" font-size="22" fill="#626D79" font-weight="400" text-anchor="middle">101.2 km</text>
+<text x="88" y="2167.0" font-size="23" fill="#202A35" font-weight="400" text-anchor="start">起终点-徽州古城（终点） · 101.2 km</text>
 </g>
 <g id="time-cell-0-11" class="time-cell inspectable" data-cp-id="wpt:11:finish" data-series="actual" data-elapsed-seconds="60363.578" data-segment-seconds="4095.900960001927" tabindex="0" aria-label="佳明实际 · 起终点-徽州古城（终点）：累计 16:46:04；CP13-画家村 → 起终点-徽州古城（终点） 本段 01:08:16，含停留">
 <title>佳明实际 · 起终点-徽州古城（终点）：累计 16:46:04；CP13-画家村 → 起终点-徽州古城（终点） 本段 01:08:16，含停留</title>
-<text x="825.5" y="2167.0" font-size="26" fill="#202A35" font-weight="650" text-anchor="middle" data-role="time-values"><tspan data-role="cumulative-time" fill="#202A35">16:46:04</tspan><tspan> / </tspan><tspan data-role="segment-time" fill="#202A35">01:08:16</tspan></text>
+<text x="913.0" y="2167.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#202A35">01:08:16</tspan></text>
 </g>
-<g id="time-cell-1-11" class="time-cell inspectable" data-cp-id="wpt:11:finish" data-series="planned" data-target-seconds="54000.0" data-elapsed-seconds="54000.0" data-segment-seconds="3619.239066782524" tabindex="0" aria-label="15:00 预计 · 起终点-徽州古城（终点）：累计 15:00:00；CP13-画家村 → 起终点-徽州古城（终点） 本段 01:00:19，含停留；佳明本段更慢">
-<title>15:00 预计 · 起终点-徽州古城（终点）：累计 15:00:00；CP13-画家村 → 起终点-徽州古城（终点） 本段 01:00:19，含停留；佳明本段更慢</title>
-<text x="1348.5" y="2167.0" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle" data-role="time-values"><tspan data-role="cumulative-time" fill="#202A35">15:00:00</tspan><tspan> / </tspan><tspan data-role="segment-time" fill="#C23B38">01:00:19</tspan></text>
+<g id="time-cell-1-11" class="time-cell inspectable" data-cp-id="wpt:11:finish" data-series="planned" data-target-seconds="54000.0" data-elapsed-seconds="54000.0" data-segment-seconds="3619.239066782524" data-actual-minus-plan-seconds="476.6618932194033" tabindex="0" aria-label="15:00 预计 · 起终点-徽州古城（终点）：累计 15:00:00；CP13-画家村 → 起终点-徽州古城（终点） 本段 01:00:19，含停留；实际 − 预计 +00:07:57；佳明本段更慢">
+<title>15:00 预计 · 起终点-徽州古城（终点）：累计 15:00:00；CP13-画家村 → 起终点-徽州古城（终点） 本段 01:00:19，含停留；实际 − 预计 +00:07:57；佳明本段更慢</title>
+<text x="1411.0" y="2167.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#C23B38">01:00:19</tspan><tspan data-role="segment-difference" fill="#C23B38">（+00:07:57）</tspan></text>
 </g>
-<g id="time-cell-2-11" class="time-cell inspectable" data-cp-id="wpt:11:finish" data-series="planned" data-target-seconds="57600.0" data-elapsed-seconds="57600.0" data-segment-seconds="3860.5216712346955" tabindex="0" aria-label="16:00 预计 · 起终点-徽州古城（终点）：累计 16:00:00；CP13-画家村 → 起终点-徽州古城（终点） 本段 01:04:21，含停留；佳明本段更慢">
-<title>16:00 预计 · 起终点-徽州古城（终点）：累计 16:00:00；CP13-画家村 → 起终点-徽州古城（终点） 本段 01:04:21，含停留；佳明本段更慢</title>
-<text x="1871.5" y="2167.0" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle" data-role="time-values"><tspan data-role="cumulative-time" fill="#202A35">16:00:00</tspan><tspan> / </tspan><tspan data-role="segment-time" fill="#C23B38">01:04:21</tspan></text>
+<g id="time-cell-2-11" class="time-cell inspectable" data-cp-id="wpt:11:finish" data-series="planned" data-target-seconds="57600.0" data-elapsed-seconds="57600.0" data-segment-seconds="3860.5216712346955" data-actual-minus-plan-seconds="235.37928876723163" tabindex="0" aria-label="16:00 预计 · 起终点-徽州古城（终点）：累计 16:00:00；CP13-画家村 → 起终点-徽州古城（终点） 本段 01:04:21，含停留；实际 − 预计 +00:03:55；佳明本段更慢">
+<title>16:00 预计 · 起终点-徽州古城（终点）：累计 16:00:00；CP13-画家村 → 起终点-徽州古城（终点） 本段 01:04:21，含停留；实际 − 预计 +00:03:55；佳明本段更慢</title>
+<text x="1909.0" y="2167.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#C23B38">01:04:21</tspan><tspan data-role="segment-difference" fill="#C23B38">（+00:03:55）</tspan></text>
 </g>
-<g id="time-cell-3-11" class="time-cell inspectable" data-cp-id="wpt:11:finish" data-series="planned" data-target-seconds="61200.0" data-elapsed-seconds="61200.0" data-segment-seconds="4101.80427568686" tabindex="0" aria-label="17:00 预计 · 起终点-徽州古城（终点）：累计 17:00:00；CP13-画家村 → 起终点-徽州古城（终点） 本段 01:08:22，含停留；佳明本段不慢于预计">
-<title>17:00 预计 · 起终点-徽州古城（终点）：累计 17:00:00；CP13-画家村 → 起终点-徽州古城（终点） 本段 01:08:22，含停留；佳明本段不慢于预计</title>
-<text x="2394.5" y="2167.0" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle" data-role="time-values"><tspan data-role="cumulative-time" fill="#202A35">17:00:00</tspan><tspan> / </tspan><tspan data-role="segment-time" fill="#087F5B">01:08:22</tspan></text>
+<g id="time-cell-3-11" class="time-cell inspectable" data-cp-id="wpt:11:finish" data-series="planned" data-target-seconds="61200.0" data-elapsed-seconds="61200.0" data-segment-seconds="4101.80427568686" data-actual-minus-plan-seconds="-5.90331568493275" tabindex="0" aria-label="17:00 预计 · 起终点-徽州古城（终点）：累计 17:00:00；CP13-画家村 → 起终点-徽州古城（终点） 本段 01:08:22，含停留；实际 − 预计 -00:00:06；佳明本段不慢于预计">
+<title>17:00 预计 · 起终点-徽州古城（终点）：累计 17:00:00；CP13-画家村 → 起终点-徽州古城（终点） 本段 01:08:22，含停留；实际 − 预计 -00:00:06；佳明本段不慢于预计</title>
+<text x="2407.0" y="2167.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#087F5B">01:08:22</tspan><tspan data-role="segment-difference" fill="#087F5B">（-00:00:06）</tspan></text>
 </g>
 </g>
-<path d="M424.000 1330.000 L424.000 2194.000" fill="none" stroke="#E4E8ED" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M564.000 1330.000 L564.000 2194.000" fill="none" stroke="#E4E8ED" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M1087.000 1330.000 L1087.000 2194.000" fill="none" stroke="#E4E8ED" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M1610.000 1330.000 L1610.000 2194.000" fill="none" stroke="#E4E8ED" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M2133.000 1330.000 L2133.000 2194.000" fill="none" stroke="#E4E8ED" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M664.000 1330.000 L664.000 2194.000" fill="none" stroke="#E4E8ED" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1162.000 1330.000 L1162.000 2194.000" fill="none" stroke="#E4E8ED" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1660.000 1330.000 L1660.000 2194.000" fill="none" stroke="#E4E8ED" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M2158.000 1330.000 L2158.000 2194.000" fill="none" stroke="#E4E8ED" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 </g>
 <g id="terrain">
 <text x="64" y="2242" font-size="30" fill="#202A35" font-weight="700" text-anchor="start">02  赛道数据对比</text>

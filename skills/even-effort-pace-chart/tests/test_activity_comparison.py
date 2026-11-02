@@ -298,7 +298,7 @@ class ComparisonTests(unittest.TestCase):
                 self.assertIn(compare.clock(predicted["seconds"]), bar.find("{*}title").text)
         self.assertTrue(all(len(values) == 1 for values in scales.values()))
 
-    def test_time_readout_shows_actual_and_each_plan_with_cumulative_and_segment_times(self):
+    def test_time_readout_shows_segment_times_and_actual_minus_plan_differences(self):
         import xml.etree.ElementTree as ET
         from comparison_svg import render_svg
         self.config["targets"] = ["15:00", "26:00"]
@@ -313,12 +313,12 @@ class ComparisonTests(unittest.TestCase):
         for header, cp, terrain in zip(headers, self.plan["checkpoints"][1:], result["terrain"]):
             self.assertEqual(header.get("data-cp-id"), cp["id"])
             self.assertAlmostEqual(float(header.get("data-distance-m")), cp["distance_m"])
-            self.assertIn(cp["name"], "".join(header.findall("{*}text")[0].itertext()))
-            self.assertIn(f'{cp["distance_m"] / 1000:.1f} km', "".join(header.itertext()))
+            station = "".join(t.text or "" for t in header.findall("{*}text"))
+            self.assertEqual(station, f'{cp["name"]} · {cp["distance_m"] / 1000:.1f} km')
             self.assertIn(f'{terrain["actual_distance_m"] / 1000:.3f}', header.find("{*}title").text)
         rows = readout.findall(".//{*}g[@class='time-row']")
         self.assertEqual([row.get("data-cp-id") for row in rows], [cp["id"] for cp in result["checkpoints"][1:]])
-        self.assertIn("累计 / 本段", "".join(readout.itertext()))
+        self.assertIn("实际 − 预计", "".join(readout.itertext()))
         for i, row in enumerate(rows, 1):
             cells = row.findall("{*}g[@class='time-cell inspectable']")
             self.assertEqual([cell.get("data-series") for cell in cells], ["actual", "planned", "planned"])
@@ -335,9 +335,16 @@ class ComparisonTests(unittest.TestCase):
                 self.assertAlmostEqual(float(cell.get("data-elapsed-seconds")), elapsed)
                 self.assertAlmostEqual(float(cell.get("data-segment-seconds")), segment)
                 value = cell.find("{*}text[@data-role='time-values']")
-                self.assertEqual("".join(value.itertext()), f"{compare.clock(elapsed)} / {compare.clock(segment)}")
+                expected = compare.clock(segment)
+                if j:
+                    delta = result["segments"][i - 1]["actual_seconds"] - segment
+                    expected += f"（{compare.time_delta(delta)}）"
+                    self.assertAlmostEqual(float(cell.get("data-actual-minus-plan-seconds")), delta)
+                self.assertEqual("".join(value.itertext()), expected)
+                self.assertGreaterEqual(int(value.get("font-weight")), 650)
                 self.assertEqual(cell.get("tabindex"), "0")
                 self.assertIn(result["segments"][i - 1]["from_name"], cell.find("{*}title").text)
+                self.assertIn(compare.clock(elapsed), cell.find("{*}title").text)
 
     def test_many_checkpoints_extend_readout_vertically_with_aligned_source_columns(self):
         import xml.etree.ElementTree as ET
@@ -365,7 +372,7 @@ class ComparisonTests(unittest.TestCase):
             self.assertGreater(float(values[0].get("y")), previous_y)
             previous_y = float(values[0].get("y"))
 
-    def test_segment_readout_colors_compare_actual_to_each_plan_without_coloring_cumulative_times(self):
+    def test_segment_readout_and_delta_share_colors_using_unrounded_actual_minus_plan(self):
         import xml.etree.ElementTree as ET
         from comparison_svg import render_svg, time_status
         self.config["targets"] = ["01:00", "01:30", "02:00"]
@@ -383,12 +390,32 @@ class ComparisonTests(unittest.TestCase):
             self.assertEqual(actual_segment.get("fill"), "#202A35")
             for cell, predicted in zip(cells[1:], segment["plans"]):
                 value = cell.find("{*}text[@data-role='time-values']")
-                cumulative = value.find("{*}tspan[@data-role='cumulative-time']")
                 leg = value.find("{*}tspan[@data-role='segment-time']")
-                self.assertEqual(cumulative.get("fill"), "#202A35")
+                difference = value.find("{*}tspan[@data-role='segment-difference']")
                 self.assertEqual(leg.text, compare.clock(predicted["seconds"]))
                 slower = segment["actual_seconds"] > predicted["seconds"]
                 self.assertEqual(leg.get("fill"), time_status(-1 if slower else 1)[1])
+                self.assertEqual(difference.get("fill"), leg.get("fill"))
+                delta = segment["actual_seconds"] - predicted["seconds"]
+                self.assertEqual(difference.text, f"（{compare.time_delta(delta)}）")
+                self.assertIn("实际 − 预计", cell.find("{*}title").text)
+
+    def test_long_station_labels_fit_merged_column_and_keep_full_name_and_distance(self):
+        import xml.etree.ElementTree as ET
+        from comparison_svg import render_svg
+        result = self.build()
+        result["checkpoints"][1]["name"] = "CP1–这是一个需要换行展示的很长的站点名字 <A> & B"
+        root = ET.fromstring(render_svg(result))
+        headers = root.findall(".//{*}g[@class='checkpoint-header inspectable']")
+        texts = headers[0].findall("{*}text")
+        expected = result["checkpoints"][1]["name"] + f' · {result["terrain"][0]["planned_distance_m"] / 1000:.1f} km'
+        self.assertEqual("".join(t.text or "" for t in texts), expected)
+        self.assertGreater(len(texts), 1)
+        rows = root.findall(".//{*}g[@class='time-row']")
+        background = rows[0].find("{*}rect")
+        for text in texts:
+            self.assertGreater(float(text.get("y")), float(background.get("y")))
+            self.assertLess(float(text.get("y")), float(background.get("y")) + float(background.get("height")))
 
     def test_terrain_summary_and_grouped_elevation_charts_preserve_values(self):
         import xml.etree.ElementTree as ET
