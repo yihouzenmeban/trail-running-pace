@@ -4,6 +4,11 @@ __pycache__/
 .venv/
 venv/
 
+# Local credentials
+.env
+.env.*
+!.env.example
+
 # macOS
 .DS_Store
 ._*
