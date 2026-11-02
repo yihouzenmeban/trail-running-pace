@@ -11,10 +11,11 @@ An independent community implementation inspired by 耐力学社's even-effort p
 - Show segment distance, ascent, descent, slope distribution, elevation profiles, and reference water for the next leg.
 - Include station rests and supplied cutoffs; omit cutoff details from station cells when none are supplied.
 - Export SVG with segment pace in parentheses by default; optionally select equivalent pace, arrival clock times, and other export formats.
+- Compare recorded FIT activities against plans, including checkpoint times, adjacent-station elapsed times, and terrain metrics.
 
 ## Requirements
 
-- **Runtime:** Python 3.10 or newer, using only the standard library. No extra Python packages or online services are required.
+- **Runtime:** Python 3.10 or newer. Pace charts use only the standard library; activity comparisons require an optional FIT dependency.
 - **Quick installation:** The installer below requires Node.js, npm, and Git. Manual copying is also supported.
 - **Route:** A local GPX or KML file with coordinates and elevations at every route point.
 
@@ -64,7 +65,7 @@ The original 50K GPX lacks elevation at 59 points in two gaps spanning about 834
 
 The 50K example also provides a single-column [6-hour-15-minute plan](examples/大境门/DGW50K/pace-chart-6h15m.svg) and its [configuration](examples/大境门/DGW50K/config-6h15m.json), using the default 06:00 start and segment pace in parentheses.
 
-The Tiandi Liubai comparison includes only Garmin activity data and repository plans. Its sections show checkpoint elapsed times, terrain data from both sources, and time curves for the 15h, 16h, and 17h plans. Garmin values come from the October 31, 2026 activity “2026 徽州古城秋季赛”, with an elapsed time of 16:46:04 including stops. Parentheses in repository cells show repository minus Garmin; time differences include seconds. The original 12–16 hour configuration and pace chart remain unchanged.
+The Tiandi Liubai comparison includes only Garmin activity data and repository plans. Its sections show checkpoint elapsed times, terrain data from both sources, adjacent-station elapsed times, and time curves for the 15h, 16h, and 17h plans. Garmin values come from the October 31, 2026 activity “2026 徽州古城秋季赛”, with an elapsed time of 16:46:04 including stops. Parentheses in repository cells show repository minus Garmin; time differences include seconds. The original 12–16 hour configuration and pace chart remain unchanged.
 
 The Dajingmen merged comparison shows times for all 16 plans, terrain data from all three sources, and Garmin activity times against the repository's 6:15 plan, in that order. RunArt values come from the user-provided screenshot. Garmin values come from the September 12, 2026 Dajingmen activity; elapsed times include stops. The activity comparison displays seconds; differences are Garmin minus plan, with negative values indicating earlier passage.
 
@@ -87,6 +88,32 @@ python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate \
 Results go into the Git-ignored `output/` directory. Add `--overwrite` when you intend to replace existing outputs.
 
 See the table above for the KML example. For files with an omitted altitude mode or `clampToGround`, first verify that the coordinate heights are suitable, then explicitly enable `use_kml_altitudes`. Full rules and inspection commands are in the [KML input reference](skills/even-effort-pace-chart/references/configuration.en.md#kml-input).
+
+## Post-race activity comparisons
+
+Ask your assistant to compare a FIT activity against a race configuration with exact targets and elapsed times between adjacent stations. Install the optional dependency, then generate offline:
+
+```bash
+python3 -m pip install -r skills/even-effort-pace-chart/scripts/requirements-comparison.txt
+
+python3 skills/even-effort-pace-chart/scripts/compare_activity.py generate race.gpx \
+  --config race.json --fit activity-original.zip --summary activity-details.json \
+  --targets 15:00 16:00 17:00 --output-dir output/comparison
+```
+
+Original FIT and FIT ZIP are supported. Omit `--summary` to use FIT session totals. The default is a four-section SVG; add `--export-json` for structured output. `--targets` overrides the exact target list without changing the configuration. Segment times include stops; parentheses mean repository minus Garmin.
+
+To retrieve Garmin activities, set `GARMIN_PERSONAL_API_KEY` in the environment or a local Git-ignored `.env.local`, then run:
+
+```bash
+python3 skills/even-effort-pace-chart/scripts/compare_activity.py list \
+  --start-date 2026-10-01 --end-date 2026-11-02 --env-file .env.local
+
+python3 skills/even-effort-pace-chart/scripts/compare_activity.py fetch <activity-id> \
+  --env-file .env.local
+```
+
+Downloads default to `output/activities/<activity-id>/`. Offline `inspect`/`generate` make no network calls. See the [activity comparison reference](skills/even-effort-pace-chart/references/comparison.en.md) for parameters, ambiguous passage handling, and metric limitations.
 
 ## Configuration and exports
 

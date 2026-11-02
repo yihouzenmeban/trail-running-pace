@@ -1,6 +1,6 @@
 ---
 name: even-effort-pace-chart
-description: Convert a GPX or KML race route into an even-effort trail running pace chart with checkpoint splits, elevation profiles, and multiple finish targets. Use when planning race pacing from GPX/KML or generating SVG pace tables, with optional HTML, CSV, and JSON exports.
+description: Convert GPX/KML race routes into even-effort trail running pace charts, or compare recorded FIT activities with checkpoint plans and segment elapsed times. Use for race pacing, SVG pace tables, or post-race actual-versus-plan comparisons.
 ---
 
 # 耐力学社 Even-Effort Pace Chart Skills
@@ -8,6 +8,8 @@ description: Convert a GPX or KML race route into an even-effort trail running p
 Use `scripts/pace_chart.py` for deterministic, offline calculations and exports. It requires Python 3.10+ and the standard library only. Resolve script paths relative to this file's directory, regardless of the user's working directory.
 
 Read references only as needed, in the user's language: Chinese [configuration](references/configuration.md) / [model](references/model.md), or English [configuration](references/configuration.en.md) / [model](references/model.en.md). Configuration defines fields and CLI contracts; model explains equations and limitations.
+
+For post-race comparisons, use `scripts/compare_activity.py` and read Chinese [activity comparison](references/comparison.md) or English [activity comparison](references/comparison.en.md). Its `inspect`/`generate` commands work offline with FIT/FIT ZIP and require the optional FIT SDK; `list`/`fetch` explicitly access Garmin using environment credentials. Reuse the supplied pace configuration and exact requested targets. Resolve ambiguous activity passages using confirmed CP ID → elapsed overrides. Compare elapsed times including stops and adjacent-station differences; missing activity terrain stays unknown. Export only SVG unless JSON is requested. This mode does not import RunArt screenshots.
 
 Apply **current explicit request > selected configuration > script defaults**. Use a minimal configuration with the requested target, explicit overrides, and confirmed route selections. Omit unspecified fields; preserve valid zeros and `false`. Do not inherit settings from unrelated charts or examples, fill defaults with `null`/empty strings, or ask about optional fields with usable defaults.
 

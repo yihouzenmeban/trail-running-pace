@@ -11,10 +11,11 @@
 - 展示分段距离、爬升、下降、坡度分布、海拔剖面和下一段参考水量。
 - 支持站点停留和关门时间；未提供关门时间时，位置列不显示关门信息。
 - 默认仅导出 SVG，括号内显示区间配速；可选等强配速、到达钟点及其他导出格式。
+- 可将实际 FIT 活动与目标方案对照，比较各站经过时间、相邻站耗时和地形数据。
 
 ## 环境要求
 
-- **运行**：Python 3.10 或更高版本，仅使用标准库，无需额外 Python 依赖或在线服务。
+- **运行**：Python 3.10 或更高版本，配速表仅使用标准库；实际活动对比需安装可选 FIT 依赖。
 - **快捷安装**：使用下方安装器时，需要 Node.js、npm 和 Git；也可手动复制安装。
 - **轨迹**：本地 GPX 或 KML 文件，轨迹点需要包含坐标和海拔。
 
@@ -64,7 +65,7 @@ $even-effort-pace-chart
 
 50K 另提供单列 [6 小时 15 分钟方案](examples/大境门/DGW50K/pace-chart-6h15m.svg)及其[配置](examples/大境门/DGW50K/config-6h15m.json)，沿用默认的 06:00 出发和括号内区间配速。
 
-天地留白对比图仅包含佳明实际与仓库方案，依次展示各站经过时间、双方地形数据，以及 15、16、17 小时三档时间曲线。佳明使用 2026-10-31「2026 徽州古城秋季赛」活动，经过时间包含停留，全程为 16:46:04。仓库单元格括号内显示「仓库−佳明」，时间差按秒显示；原有 12–16 小时配置和配速表保持不变。
+天地留白对比图仅包含佳明实际与仓库方案，依次展示各站经过时间、双方地形数据、相邻站之间耗时，以及 15、16、17 小时三档时间曲线。佳明使用 2026-10-31「2026 徽州古城秋季赛」活动，经过时间包含停留，全程为 16:46:04。仓库单元格括号内显示「仓库−佳明」，时间差按秒显示；原有 12–16 小时配置和配速表保持不变。
 
 大境门合并对比图依次展示 16 档方案时间、三方地形数据，以及佳明实际活动与仓库 6:15 方案的时间对照。耐力学社数据来自用户提供的截图；佳明使用 2026-09-12 的大境门活动，时间包含停留。实际活动对照按秒显示，差值为佳明实际减去方案，负值表示提前。
 
@@ -87,6 +88,32 @@ python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate \
 结果写入已被 Git 忽略的 `output/`。需要替换已有结果时添加 `--overwrite`。
 
 KML 示例见上表。对于未声明高度模式或采用 `clampToGround` 的文件，需要先确认坐标高度可用于计算，再显式启用 `use_kml_altitudes`；完整规则和检查命令见[配置文档的 KML 输入说明](skills/even-effort-pace-chart/references/configuration.md#kml-输入)。
+
+## 完赛活动对比
+
+可向 AI 助手说明：“用这条 FIT 活动与比赛配置对比，参照目标为 15、16、17 小时，包含每两个站之间的耗时”。安装可选依赖后，可直接离线生成：
+
+```bash
+python3 -m pip install -r skills/even-effort-pace-chart/scripts/requirements-comparison.txt
+
+python3 skills/even-effort-pace-chart/scripts/compare_activity.py generate race.gpx \
+  --config race.json --fit activity-original.zip --summary activity-details.json \
+  --targets 15:00 16:00 17:00 --output-dir output/comparison
+```
+
+支持原始 FIT 或 FIT ZIP，省略 `--summary` 时使用 FIT session 汇总。默认仅导出四节 SVG；可加 `--export-json`。`--targets` 精确覆盖目标列表，不修改比赛配置；分段时间包含途中停留，括号为「仓库−佳明」。
+
+需要从佳明读取时，将 `GARMIN_PERSONAL_API_KEY` 放在环境变量或本地被忽略的 `.env.local` 中，再执行：
+
+```bash
+python3 skills/even-effort-pace-chart/scripts/compare_activity.py list \
+  --start-date 2026-10-01 --end-date 2026-11-02 --env-file .env.local
+
+python3 skills/even-effort-pace-chart/scripts/compare_activity.py fetch <activity-id> \
+  --env-file .env.local
+```
+
+下载默认写入 `output/activities/<activity-id>/`，离线 `inspect`/`generate` 不访问网络。完整参数、CP 歧义处理及指标限制见[活动对比文档](skills/even-effort-pace-chart/references/comparison.md)。
 
 ## 配置与输出
 
