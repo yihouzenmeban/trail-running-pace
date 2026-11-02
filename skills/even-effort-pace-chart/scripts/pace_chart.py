@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Offline, reproducible GPX/KML even-effort pace charts. Python 3.10+; stdlib only."""
+"""Offline GPX/KML/FIT even-effort pace charts. Python 3.10+; optional FIT dependency."""
 
 from __future__ import annotations
 
@@ -247,6 +247,21 @@ def load_kml_route(root, track_index: int | None, use_kml_altitudes: bool) -> Ro
 def load_route(path: Path, track_index: int | None = None, use_kml_altitudes=False) -> Route:
     if not isinstance(use_kml_altitudes, bool):
         raise InputError("use_kml_altitudes must be boolean")
+    if Path(path).suffix.lower() in (".fit", ".zip"):
+        if track_index is not None and (
+                isinstance(track_index, bool) or not isinstance(track_index, int) or track_index != 1):
+            raise InputError("FIT input supports a single session; track_index must be 1 or omitted")
+        if use_kml_altitudes:
+            raise InputError("use_kml_altitudes does not apply to FIT input")
+        from activity_data import InputError as FitInputError, read_fit_route
+        try:
+            data = read_fit_route(path)
+        except FitInputError as error:
+            # The adapter imports the module's exception even when this CLI runs as __main__.
+            raise InputError(str(error), error.details) from error
+        points = [(r["lat"], r["lon"], r["elevation_m"]) for r in data["records"]]
+        samples = [Sample(r["distance_m"], r["elevation_m"]) for r in data["records"]]
+        return Route(points, samples, [], data["warnings"], data["diagnostics"])
     raw = Path(path).read_bytes()
     if re.search(br"<!\s*(?:DOCTYPE|ENTITY)", raw, flags=re.IGNORECASE):
         raise InputError("Route XML DTD/entity declarations are not supported")
@@ -381,6 +396,10 @@ def geometry_anchors(route: Route, tolerance: float) -> list[int]:
 def prepare_route(route: Route, distance_tolerance_m=DEFAULTS["distance_tolerance_m"],
                   elevation_spike_m=DEFAULTS["elevation_spike_m"]) -> Route:
     tolerance = number(distance_tolerance_m, "distance_tolerance_m")
+    fit_distance = (route.diagnostics or {}).get("distance_source") == "fit_recorded"
+    if fit_distance and tolerance:
+        raise InputError("FIT recorded distance requires distance_tolerance_m=0; "
+                         "geometry simplification would replace the device distance")
     spike = number(elevation_spike_m, "elevation_spike_m")
     warnings = list(route.warnings or [])
     samples = list(route.samples)
@@ -428,7 +447,7 @@ def prepare_route(route: Route, distance_tolerance_m=DEFAULTS["distance_toleranc
         samples = [Sample(x, s.elevation_m) for x, s in zip(distances, samples)]
         warnings.append(f"Distance simplification applied ({tolerance:g} m tolerance): "
                         f"{route.total_m:.1f} -> {samples[-1].distance_m:.1f} m; review small switchbacks and CP positions.")
-    elif route.total_m - trial_distance > max(10, route.total_m * 0.01):
+    elif not fit_distance and route.total_m - trial_distance > max(10, route.total_m * 0.01):
         warnings.append(f"Distance sensitivity: 5 m simplification would reduce {route.total_m:.1f} "
                         f"to {trial_distance:.1f} m. This may be drift OR real turns; distance is unchanged.")
     if corrected:
@@ -591,6 +610,7 @@ def station_fields(item: dict) -> dict:
 
 def resolve_checkpoints(route: Route, config: dict) -> tuple[list[dict], float, list[str]]:
     warnings = []
+    fit_distance = (route.diagnostics or {}).get("distance_source") == "fit_recorded"
     if "checkpoints" in config:
         items = config["checkpoints"]
         if not isinstance(items, list) or not items:
@@ -606,7 +626,8 @@ def resolve_checkpoints(route: Route, config: dict) -> tuple[list[dict], float, 
                 raise InputError("Checkpoint distances must be strictly increasing")
             previous = distance
             cps.append({"id": f"manual:{index + 1}", "distance_m": distance,
-                        "official_distance_km": distance / 1000, **station_fields(item)})
+                        "official_distance_km": None if fit_distance else distance / 1000,
+                        **station_fields(item)})
         official_total = cps[-1]["distance_m"]
         if official_total <= 0:
             raise InputError("Finish distance must be positive")
@@ -701,7 +722,7 @@ def resolve_checkpoints(route: Route, config: dict) -> tuple[list[dict], float, 
         cps.sort(key=lambda cp: cp["distance_m"])
     if cps[0]["distance_m"] > 0.001:
         cps.insert(0, {"id": "start", "name": "起点", "distance_m": 0.0,
-                       "official_distance_km": 0.0 if "checkpoints" in config else None,
+                       "official_distance_km": 0.0 if "checkpoints" in config and not fit_distance else None,
                        "rest_seconds": 0.0, "cutoff_seconds": None})
     if route.total_m - cps[-1]["distance_m"] > 0.001:
         cps.append({"id": "finish", "name": "终点", "distance_m": route.total_m,
@@ -1037,7 +1058,10 @@ def table_metadata(plan) -> str:
     start = plan["parameters"]["start_time"]
     prefix = f'发枪：{start.replace("T", " ")}　'
     label = {"pace": "区间配速", "equivalent_pace": "区间等强配速", "arrival_time": "到达时间"}
-    return prefix + "括号内：" + label[plan["parameters"]["secondary_display"]]
+    metadata = prefix + "括号内：" + label[plan["parameters"]["secondary_display"]]
+    if (plan["route"].get("diagnostics") or {}).get("distance_source") == "fit_recorded":
+        metadata += "　基于实际 FIT 路线"
+    return metadata
 
 
 def display_station_name(cp) -> str:
@@ -1363,7 +1387,7 @@ def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest="command", required=True)
     inspect = commands.add_parser("inspect", help="Inspect geometry and embedded CP candidates")
-    inspect.add_argument("route", type=Path, help="Local GPX or KML route")
+    inspect.add_argument("route", type=Path, help="Local GPX, KML, FIT or single-FIT ZIP route")
     inspect.add_argument("--track-index", type=int)
     inspect.add_argument("--sample-m", type=float, default=DEFAULTS["sample_m"])
     inspect.add_argument("--smoothing-m", type=float, default=DEFAULTS["smoothing_m"])
@@ -1374,7 +1398,7 @@ def main(argv=None) -> int:
     inspect.add_argument("--use-kml-altitudes", action="store_true",
                          help="Use supplied KML coordinate heights when altitudeMode is omitted or clampToGround")
     generate = commands.add_parser("generate", help="Generate SVG by default; select exports with output_formats")
-    generate.add_argument("route", type=Path, help="Local GPX or KML route")
+    generate.add_argument("route", type=Path, help="Local GPX, KML, FIT or single-FIT ZIP route")
     generate.add_argument("--config", type=Path, required=True)
     generate.add_argument("--output-dir", type=Path, required=True)
     generate.add_argument("--overwrite", action="store_true")

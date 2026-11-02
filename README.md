@@ -2,7 +2,7 @@
 
 [简体中文](README.md) | [English](README.en.md)
 
-基于耐力学社体感一致配速思路的社区独立实现，将 GPX 或 KML 比赛轨迹转换成按检查点（CP）分段的越野跑配速表，同时比较多组目标完赛时间。可通过 AI 助手调用 `even-effort-pace-chart`，也可直接使用命令行。
+基于耐力学社体感一致配速思路的社区独立实现，将 GPX、KML 比赛轨迹或实际 FIT 路线转换成按检查点（CP）分段的越野跑配速表，同时比较多组目标完赛时间。可通过 AI 助手调用 `even-effort-pace-chart`，也可直接使用命令行。
 
 > **来源与版权说明**：思路参考耐力学社 / Pili（表哥）的[《耐力科学|体感一致配速表全面指南》](https://mp.weixin.qq.com/s/spYCP-upbqAZN0kzUm-0ng)。本项目独立实现等效距离与疲劳曲线，并非 RunArt.Net 官方工具或输出。原文及配图的权利归原权利人所有；[仓库归档](docs/reference/)保留来源与版权声明，第三方资料的使用条件以原文声明为准。
 
@@ -15,9 +15,9 @@
 
 ## 环境要求
 
-- **运行**：Python 3.10 或更高版本，配速表仅使用标准库；实际活动对比需安装可选 FIT 依赖。
+- **运行**：Python 3.10 或更高版本，GPX/KML 配速表仅使用标准库；FIT 路线及实际活动对比需安装可选 FIT 依赖。
 - **快捷安装**：使用下方安装器时，需要 Node.js、npm 和 Git；也可手动复制安装。
-- **轨迹**：本地 GPX 或 KML 文件，轨迹点需要包含坐标和海拔。
+- **轨迹**：本地 GPX、KML、FIT 或单活动 FIT ZIP，轨迹点需要包含坐标和海拔；FIT 路线使用设备记录距离及人工 CP。
 
 ## 安装与使用 Skills
 
@@ -56,16 +56,19 @@ $even-effort-pace-chart
 | 示例 | 轨迹 | 配置 | 配速表 | 对比图 |
 | --- | --- | --- | --- | --- |
 | 天地留白 100K | [GPX](examples/tiandi-liubai-100k/天地留白100K.gpx) | [12–16 小时方案](examples/tiandi-liubai-100k/config.json) | [SVG](examples/tiandi-liubai-100k/pace-chart.svg) | [佳明实际 / 仓库 15、16、17 小时](examples/tiandi-liubai-100k/garmin-comparison.svg) |
+| 天地留白 100K · 实际路线 | 本地 FIT（不随仓库公开） | [15、16、17 小时方案](examples/tiandi-liubai-100k/config-fit.json) | [基于 FIT 的 SVG](examples/tiandi-liubai-100k/pace-chart-fit.svg) | [佳明实际 / FIT 路线方案](examples/tiandi-liubai-100k/garmin-comparison2.svg) |
 | 大境门 DGW100K | [KML](examples/大境门/DGW100K/2026京东大境门古长城越野赛by%20UTMB®DGW100K.kml) | [10–24 小时，每隔 1 小时](examples/大境门/DGW100K/config.json) | [SVG](examples/大境门/DGW100K/pace-chart.svg) | — |
 | 大境门 MGW50K | [原始 GPX](examples/大境门/DGW50K/2026京东大境门古长城越野赛by%20UTMB®MGW50K.gpx) / [海拔补全副本](examples/大境门/DGW50K/MGW50K-elevation-filled.gpx) | [5–12.5 小时，每隔 30 分钟](examples/大境门/DGW50K/config.json) | [SVG](examples/大境门/DGW50K/pace-chart.svg) | [耐力学社 / 仓库 / 佳明对比](examples/大境门/DGW50K/runart-comparison.svg) |
 
-两个 100K 示例显式选择四种导出格式；50K 示例使用默认的 SVG、06:00 出发及括号内区间配速。示例目标不代表个人能力评估。50K 目录按 `DGW50K` 命名，图表保留赛事组别名称 `MGW50K`。
+原有两个 GPX/KML 100K 示例显式选择四种导出格式；FIT 路线和 50K 示例使用默认的 SVG、06:00 出发及括号内区间配速。示例目标不代表个人能力评估。50K 目录按 `DGW50K` 命名，图表保留赛事组别名称 `MGW50K`。
 
 50K 原始 GPX 缺失 59 点海拔，分两段，已知端点之间分别约 834.6 m、34.1 m。生成配速表时使用沿距离线性插值的副本和同目录配置；原文件不变，[补全记录](examples/大境门/DGW50K/elevation-repair.json)保留缺失范围和校验值。
 
 50K 另提供单列 [6 小时 15 分钟方案](examples/大境门/DGW50K/pace-chart-6h15m.svg)及其[配置](examples/大境门/DGW50K/config-6h15m.json)，沿用默认的 06:00 出发和括号内区间配速。
 
 天地留白对比图仅包含佳明实际与仓库方案，分为「时间表现」和「赛道数据对比」。15、16、17 小时方案各有上方累计差距曲线、下方区间快慢柱图；绿色表示实际领先／本段快，红色表示落后／本段慢。图下耗时表以 CP 为行、实际与各方案为列，首列合并站名与累计里程。实际列只显示本段耗时，预计列加粗显示「本段耗时（实际 − 预计差额）」，保留到秒；佳明实际更慢标红，否则标绿（含持平），实际列保持中性色。地形保留全程汇总卡、分段爬升与下降分组柱图。佳明使用 2026-10-31「2026 徽州古城秋季赛」活动，经过时间包含停留，全程为 16:46:04；原有 12–16 小时配置和配速表保持不变。
+
+新增的 `garmin-comparison2.svg` 改用这次活动的 FIT 记录距离与海拔生成方案，保留同一组已核对的 CP 经过时刻。路线为 101.877 km，现有算法重算爬升 / 下降约 4783 / 4760 m；佳明实际侧仍为平台的 5019 / 5023 m。它用于按实际路线复盘配速分配，与原 GPX 版本并存，不强行对齐地形总量。原始活动保存在本地被忽略的 `output/`。
 
 大境门合并对比图依次展示 16 档方案时间、三方地形数据，以及佳明实际活动与仓库 6:15 方案的时间对照。耐力学社数据来自用户提供的截图；佳明使用 2026-09-12 的大境门活动，时间包含停留。实际活动对照按秒显示，差值为佳明实际减去方案，负值表示提前。
 
@@ -102,6 +105,8 @@ python3 skills/even-effort-pace-chart/scripts/compare_activity.py generate race.
 ```
 
 支持原始 FIT 或 FIT ZIP，省略 `--summary` 时使用 FIT session 汇总。默认仅导出包含时间表现和赛道数据对比的 SVG；可加 `--export-json`。`--targets` 精确覆盖目标列表，不修改比赛配置；分段时间包含途中停留。每个目标用累计差距曲线和下方区间快慢柱图配对展示，图下按 CP 列出实际本段耗时及「预计本段耗时（实际 − 预计差额）」，站名与累计里程合为首列。地形用全程汇总卡和爬升、下降分组柱图。独立打开 SVG 可悬停或聚焦查看累计经过时间、完整站名、双方累计距离及地形差值。
+
+若要按实际 FIT 重新生成路线方案，可将上述首个 `race.gpx` 换成 FIT／FIT ZIP，并提供以设备累计距离定位的 CP 配置；配速表生成也支持同一输入。距离保留设备记录值，爬升沿用现有算法独立重算，详见[配置文档的 FIT 输入说明](skills/even-effort-pace-chart/references/configuration.md#fit-作为路线输入)。
 
 需要从佳明读取时，将 `GARMIN_PERSONAL_API_KEY` 放在环境变量或本地被忽略的 `.env.local` 中，再执行：
 
@@ -166,7 +171,7 @@ python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate \
 python3 -m unittest discover -s skills/even-effort-pace-chart/tests -v
 ```
 
-测试覆盖合成 GPX/KML 和真实赛道；独立复制 Skills、未携带 `examples/` 时，包内真实赛道测试会跳过。自然语言用例、检查器使用方式和人工复核步骤见[行为评测指南](skills/even-effort-pace-chart/evals/guide.md)。
+测试覆盖合成 GPX/KML、FIT 记录处理及真实赛道；独立复制 Skills、未携带 `examples/` 时，包内真实赛道测试会跳过。自然语言用例、检查器使用方式和人工复核步骤见[行为评测指南](skills/even-effort-pace-chart/evals/guide.md)。
 
 ## 模型与限制
 

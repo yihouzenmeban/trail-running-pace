@@ -2,7 +2,7 @@
 
 [简体中文](configuration.md) | [English](configuration.en.md)
 
-Run with Python 3.10+; no packages, credentials, or online services are required. Paths in these examples assume the repository root. For an installed Skills package, resolve `scripts/pace_chart.py` relative to the package directory.
+Run with Python 3.10+. GPX/KML pace charts use only the standard library; FIT input needs an optional dependency. Offline generation requires no credentials or online services. Paths in these examples assume the repository root. For an installed Skills package, resolve `scripts/pace_chart.py` relative to the package directory.
 
 ## Defaults and overrides
 
@@ -41,7 +41,24 @@ python3 skills/even-effort-pace-chart/scripts/pace_chart.py inspect race.kml --u
 }
 ```
 
-Named KML Point placemarks supply CP candidates; point elevations are optional. IDs such as `placemark:3:point:1` identify the third Placemark in document order and its first Point geometry. Use the IDs returned by `inspect`; editing the source may change them. Names such as D1 or arbitrary villages require explicit `cp_selection`. If a file contains both separate start/finish points and a shared start/finish point, select one representation to avoid duplicate endpoints. KMZ, polygons as routes, and remote NetworkLink fetching are unsupported. GPX and KML inputs use the same configuration and four exporters.
+Named KML Point placemarks supply CP candidates; point elevations are optional. IDs such as `placemark:3:point:1` identify the third Placemark in document order and its first Point geometry. Use the IDs returned by `inspect`; editing the source may change them. Names such as D1 or arbitrary villages require explicit `cp_selection`. If a file contains both separate start/finish points and a shared start/finish point, select one representation to avoid duplicate endpoints. KMZ, polygons as routes, and remote NetworkLink fetching are unsupported. All input formats share the same configuration and four exporters.
+
+## FIT route input
+
+Use a `.fit` or `.zip` containing exactly one FIT to plan against the course actually recorded. Install the optional dependency, then inspect and generate:
+
+```bash
+python3 -m pip install -r skills/even-effort-pace-chart/scripts/requirements-comparison.txt
+python3 skills/even-effort-pace-chart/scripts/pace_chart.py inspect activity-original.zip
+python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate activity-original.zip \
+  --config race-fit.json --output-dir output/fit-route
+```
+
+Route distances come from recorded cumulative device distance, retaining GPS coordinates. They are neither recomputed from coordinates nor rescaled to session/platform totals. Elevation prefers `enhanced_altitude`, falling back to `altitude`; missing, nonfinite, or invalid values raise errors instead of becoming zero. Repeated distances retain the last point, avoiding zero-distance climbs from elevation changes during stops; repeated coordinates at increasing distances remain. `diagnostics.distance_source` is `fit_recorded`, with merge and skip counts.
+
+Only single-session activities are supported. Records missing GPS, time, or distance are skipped and reported. Remaining records must start at distance zero and have nondecreasing distance/time, with at least two distinct distances after merging. Distance gaps above 100 m produce warnings. A mismatch between the final recorded distance and session total is reported without inventing a final segment. Omit `track_index` or use integer 1; `use_kml_altitudes` does not apply. `distance_tolerance_m` must be zero so simplification cannot replace device distance.
+
+This input does not treat FIT laps or course points as aid stations. Supply manual `checkpoints`, including an explicit finish distance, using recorded cumulative kilometers. If an existing route and confirmed passages are available, interpolate FIT distances at those times to map its CPs while retaining names, order, and passages. Ascent/descent are recomputed with the existing elevation algorithm rather than copied from Garmin statistics. See [activity comparisons](comparison.en.md#terrain-and-input-limitations) for the actual activity's metric definitions.
 
 ## Target-only configuration
 

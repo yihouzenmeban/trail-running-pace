@@ -1,4 +1,4 @@
-"""Optional FIT input and Garmin Personal API adapter for activity comparisons."""
+"""Optional FIT route/activity input and Garmin Personal API adapter."""
 
 from datetime import date, datetime
 import json
@@ -28,7 +28,7 @@ def decode_fit(binary: bytes) -> dict:
     try:
         from garmin_fit_sdk import Decoder, Stream
     except ImportError as error:
-        raise InputError("FIT comparisons need garmin-fit-sdk==21.218.0; "
+        raise InputError("FIT input needs garmin-fit-sdk==21.218.0; "
                          "install scripts/requirements-comparison.txt") from error
     try:
         messages, errors = Decoder(Stream.from_byte_array(bytearray(binary))).read()
@@ -64,6 +64,41 @@ def read_activity(path: Path, summary_path: Path | None = None) -> dict:
     if summary_path:
         activity["source"]["summary_sha256"] = hashlib.sha256(summary_path.read_bytes()).hexdigest()
     return activity
+
+
+def read_fit_route(path: Path) -> dict:
+    activity = read_activity(path)
+    records, duplicates = [], 0
+    for record in activity["records"]:
+        elevation = number(record.get("elevation_m"), "FIT route elevation", minimum=-math.inf)
+        item = {**record, "elevation_m": elevation}
+        if records and item["distance_m"] == records[-1]["distance_m"]:
+            records[-1] = item
+            duplicates += 1
+        else:
+            records.append(item)
+    if len(records) < 2:
+        raise InputError("FIT route needs at least two distinct recorded distances")
+    if records[0]["distance_m"] != 0:
+        raise InputError("FIT route GPS coverage must begin at recorded distance zero; "
+                         "cannot reconstruct the missing start")
+    warnings = list(activity["warnings"])
+    if duplicates:
+        warnings.append(f"Merged {duplicates} duplicate recorded-distance records, keeping the last point.")
+    max_gap = max(b["distance_m"] - a["distance_m"] for a, b in zip(records, records[1:]))
+    if max_gap > 100:
+        warnings.append(f"FIT route record gap is {max_gap:.1f} m; interpolation cannot recover missing terrain.")
+    if abs(records[-1]["distance_m"] - activity["totals"]["distance_m"]) > .01:
+        warnings.append("FIT route ends at the last recorded distance; session total is not used to rescale it.")
+    return {
+        "records": records, "warnings": warnings,
+        "diagnostics": {
+            "distance_source": "fit_recorded", "elevation_source": "FIT enhanced_altitude / altitude",
+            "fit_duplicate_distance_records": duplicates,
+            "fit_skipped_records": activity["skipped_records"],
+            "fit_session_distance_m": activity["totals"]["distance_m"],
+        },
+    }
 
 
 def activity_from_messages(messages: dict, summary: dict | None = None) -> dict:
@@ -107,6 +142,8 @@ def activity_from_messages(messages: dict, summary: dict | None = None) -> dict:
             raise InputError("FIT record coordinates outside WGS84 bounds")
         item = {"lat": lat, "lon": lon, "distance_m": number(record["distance"], "record distance"),
                 "elapsed_seconds": number(elapsed, "record elapsed")}
+        item["elevation_m"] = (record["enhanced_altitude"] if record.get("enhanced_altitude") is not None
+                               else record.get("altitude"))
         if records and any(item[k] < records[-1][k] for k in ("distance_m", "elapsed_seconds")):
             raise InputError("FIT record distance/time is nonmonotonic; select an intact single session")
         records.append(item)

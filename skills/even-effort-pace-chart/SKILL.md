@@ -1,6 +1,6 @@
 ---
 name: even-effort-pace-chart
-description: Convert GPX/KML race routes into even-effort trail running pace charts, or compare recorded FIT activities with checkpoint plans and segment elapsed times. Use for race pacing, SVG pace tables, or post-race actual-versus-plan comparisons.
+description: Convert GPX/KML routes or recorded FIT tracks into even-effort trail running pace charts, or compare FIT activities with checkpoint plans and segment elapsed times. Use for race pacing, SVG pace tables, or post-race actual-versus-plan comparisons.
 ---
 
 # 耐力学社 Even-Effort Pace Chart Skills
@@ -11,7 +11,7 @@ Apply **current explicit request > selected configuration > script defaults**. U
 
 ## Choose the workflow
 
-- **Pre-race pace chart:** use `scripts/pace_chart.py` and the steps below. Python 3.10+ and the standard library suffice.
+- **Pace chart:** use `scripts/pace_chart.py` and the steps below. Python 3.10+ and the standard library suffice for GPX/KML; FIT routes need the optional dependency described in the configuration reference.
 - **Post-race actual-versus-plan comparison:** use `scripts/compare_activity.py` and follow Chinese [activity comparison](references/comparison.md) or English [activity comparison](references/comparison.en.md), instead of the pace-chart export steps below. `inspect`/`generate` are offline with an optional FIT dependency; `list`/`fetch` access Garmin only when retrieval is requested. Reuse the supplied configuration, preserve exact requested targets, and resolve ambiguous actual passages before generation. This workflow defaults to comparison SVG, not a pace chart; time labels describe the recorded activity as ahead/behind or faster/slower (positive plan-minus-actual means ahead/faster). Terrain labels show repository-more/less; JSON deltas retain plan-minus-actual values.
 
 Read configuration/model references only when needed for model or route choices: Chinese [configuration](references/configuration.md) / [model](references/model.md), English [configuration](references/configuration.en.md) / [model](references/model.en.md). Activity-only requests do not require loading the entire model reference or retrieving online data.
@@ -23,7 +23,7 @@ Default output is SVG, with segment pace in parentheses and a local 06:00 start.
 ### Inspect the route first
 
 ```bash
-python3 <skill-dir>/scripts/pace_chart.py inspect <race.gpx-or-kml>
+python3 <skill-dir>/scripts/pace_chart.py inspect <route-file>
 ```
 
 Read the inspection JSON. Prefer embedded CPs, preserve their names and numbering, and use the returned candidate IDs. Start/finish rows are added automatically. Ask for manual names and cumulative distances only when embedded CPs are absent or unusable.
@@ -36,6 +36,7 @@ Resolve ambiguous inputs before generation:
 - Unrecognized station names: confirm `cp_selection`, rather than treating every landmark as a CP.
 - Loops/crossings or offsets over 100 m: confirm the route occurrence with a processed-route `distance_km` override, or confirm `allow_off_route`; do not silently choose the nearest projection.
 - KML missing/ground-clamped altitude mode: verify supplied heights before `inspect --use-kml-altitudes` and `use_kml_altitudes: true`. Never fill missing heights with zero. See configuration for supported KML modes and geometry.
+- FIT or single-FIT ZIP as the route: preserve recorded distance and use record elevations, with `distance_tolerance_m: 0`. Supply manual CPs on that distance axis; reuse confirmed passages from an existing comparison to map its stations when available. See configuration for FIT validation and duplicate-distance handling. Keep recomputed route ascent distinct from Garmin lap/session totals.
 
 ### Set targets and assumptions
 
@@ -60,7 +61,7 @@ This keeps the default pace display and SVG export. Ascent defaults to no window
 Write the selected assumptions to a JSON file, then run:
 
 ```bash
-python3 <skill-dir>/scripts/pace_chart.py generate <race.gpx-or-kml> \
+python3 <skill-dir>/scripts/pace_chart.py generate <route-file> \
   --config <race.json> --output-dir <output-dir>
 ```
 

@@ -3,6 +3,7 @@ from datetime import datetime, timedelta, timezone
 import io
 import json
 from pathlib import Path
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -136,6 +137,150 @@ class ActivityDataTests(unittest.TestCase):
             with patch.object(data, "decode_fit", side_effect=pace.InputError("Damaged FIT")):
                 with self.assertRaisesRegex(pace.InputError, "Damaged"):
                     data.read_activity(direct)
+
+
+class FitRouteTests(unittest.TestCase):
+    def setUp(self):
+        self.folder = tempfile.TemporaryDirectory()
+        self.addCleanup(self.folder.cleanup)
+        self.path = Path(self.folder.name) / "activity.fit"
+        self.path.write_bytes(b"synthetic FIT")
+        self.raw = messages()
+        for i, record in enumerate(self.raw["record_mesgs"]):
+            record["enhanced_altitude"] = 100 + i * 20
+
+    def load(self, **kwargs):
+        with patch.object(data, "decode_fit", return_value=self.raw):
+            return pace.load_route(self.path, **kwargs)
+
+    def config(self):
+        return {"targets": ["15:00", "16:00", "17:00"], "checkpoints": [
+            {"name": "CP1", "distance_km": 2},
+            {"name": "Finish", "distance_km": 4},
+        ]}
+
+    def test_route_preserves_recorded_distance_and_source_elevation(self):
+        route = self.load()
+        self.assertEqual([s.distance_m for s in route.samples], [0, 1000, 2000, 3000, 4000])
+        self.assertEqual([s.elevation_m for s in route.samples], [100, 120, 140, 160, 180])
+        self.assertNotAlmostEqual(sum(pace.haversine(a, b)
+                                     for a, b in zip(route.points, route.points[1:])), route.total_m)
+        self.assertEqual(route.diagnostics["distance_source"], "fit_recorded")
+        self.assertEqual(route.candidates, [])
+
+    def test_enhanced_altitude_precedes_altitude_with_fallback_and_negative_heights(self):
+        for record in self.raw["record_mesgs"]:
+            record["altitude"] = 900
+        self.raw["record_mesgs"][0]["enhanced_altitude"] = None
+        self.raw["record_mesgs"][1].pop("enhanced_altitude")
+        self.raw["record_mesgs"][2]["enhanced_altitude"] = -10
+        route = self.load()
+        self.assertEqual([s.elevation_m for s in route.samples], [900, 900, -10, 160, 180])
+
+    def test_repeated_distances_keep_last_record_before_terrain_processing(self):
+        duplicate = {**self.raw["record_mesgs"][1],
+                     "timestamp": self.raw["record_mesgs"][1]["timestamp"] - timedelta(seconds=1),
+                     "enhanced_altitude": 999}
+        self.raw["record_mesgs"].insert(1, duplicate)
+        route = self.load()
+        self.assertEqual(len(route.samples), 5)
+        self.assertEqual(route.samples[1].elevation_m, 120)
+        self.assertEqual(route.diagnostics["fit_duplicate_distance_records"], 1)
+        self.assertTrue(any("duplicate" in warning for warning in route.warnings))
+        processed = pace.prepare_route(route)
+        self.assertEqual(processed.total_m, 4000)
+
+    def test_fit_zip_is_a_route_input(self):
+        self.path = Path(self.folder.name) / "activity.zip"
+        with ZipFile(self.path, "w") as archive:
+            archive.writestr("nested/activity.fit", b"synthetic FIT")
+        self.assertEqual(self.load().total_m, 4000)
+
+    def test_missing_and_nonfinite_elevations_fail_without_filling_zero(self):
+        for value in (None, float("nan"), float("inf"), True, "100"):
+            self.raw["record_mesgs"][2]["enhanced_altitude"] = value
+            with self.subTest(value=value), self.assertRaisesRegex(pace.InputError, "elevation"):
+                self.load()
+
+    def test_incomplete_start_nonmonotonic_and_degenerate_distance_fail(self):
+        for distances in ([5, 1000, 2000, 3000, 4000], [0, 1000, 999, 3000, 4000],
+                          [0, 0, 0, 0, 0]):
+            for record, distance in zip(self.raw["record_mesgs"], distances):
+                record["distance"] = distance
+            with self.subTest(distances=distances), self.assertRaises(pace.InputError):
+                self.load()
+
+    def test_incomplete_records_are_reported_and_session_totals_do_not_scale_route(self):
+        self.raw["record_mesgs"].insert(1, {"timestamp": self.raw["session_mesgs"][0]["start_time"]})
+        self.raw["session_mesgs"][0]["total_distance"] = 5000
+        route = self.load()
+        self.assertEqual(route.total_m, 4000)
+        self.assertEqual(route.diagnostics["fit_skipped_records"], 1)
+        self.assertTrue(any("distance" in warning for warning in route.warnings))
+
+    def test_geometry_simplification_cannot_replace_fit_distance(self):
+        route = self.load()
+        with self.assertRaisesRegex(pace.InputError, "FIT.*distance_tolerance_m"):
+            pace.prepare_route(route, distance_tolerance_m=2)
+
+    def test_fit_rejects_irrelevant_track_or_kml_selection(self):
+        for options in ({"track_index": 2}, {"track_index": True}, {"track_index": 1.0},
+                        {"use_kml_altitudes": True}):
+            with self.subTest(options=options), self.assertRaises(pace.InputError):
+                self.load(**options)
+        self.assertEqual(self.load(track_index=1).total_m, 4000)
+
+    def test_fit_plan_and_comparison_share_checkpoint_distance_and_locked_passages(self):
+        with patch.object(data, "decode_fit", return_value=self.raw):
+            plan, route = compare.load_plan(self.path, self.config())
+            activity = data.read_activity(self.path)
+        result = compare.build_comparison(plan, route, activity, {"manual:1": 2000.25})
+        self.assertEqual(plan["route"]["distance_m"], 4000)
+        self.assertEqual(plan["route"]["ascent_m"], 80)
+        self.assertNotEqual(plan["route"]["ascent_m"], activity["totals"]["ascent_m"])
+        self.assertEqual(plan["targets_seconds"], [54000, 57600, 61200])
+        self.assertEqual(result["checkpoints"][1]["elapsed_seconds"], 2000.25)
+        for i, target in enumerate(plan["targets_seconds"]):
+            self.assertAlmostEqual(sum(s["plans"][i]["seconds"] for s in result["segments"]), target)
+        self.assertAlmostEqual(sum(t["planned_ascent_m"] for t in result["terrain"]), 80)
+        import xml.etree.ElementTree as ET
+        from comparison_svg import render_svg
+        root = ET.fromstring(render_svg(result))
+        metadata = json.loads(root.find("{*}metadata").text)
+        self.assertEqual(metadata["route_diagnostics"]["distance_source"], "fit_recorded")
+        self.assertEqual(metadata["route_diagnostics"]["fit_duplicate_distance_records"], 0)
+        self.assertTrue(any("FIT" in note and "海拔" in note for note in metadata["data_notes"]))
+
+    def test_standalone_fit_cli_reports_optional_dependency_as_json(self):
+        script = Path(pace.__file__)
+        result = subprocess.run([sys.executable, "-S", str(script), "inspect", str(self.path)],
+                                capture_output=True, text=True)
+        self.assertEqual(result.returncode, 2)
+        self.assertIn("garmin-fit-sdk", json.loads(result.stderr)["error"])
+
+    def test_fit_checkpoint_distances_are_recorded_not_official_in_pace_exports(self):
+        with patch.object(data, "decode_fit", return_value=self.raw):
+            plan = pace.build_plan(self.path, self.config())
+        self.assertTrue(all(cp["official_distance_km"] is None for cp in plan["checkpoints"]))
+        self.assertIn("基于实际 FIT 路线", pace.table_metadata(plan))
+        for rendered in (pace.render_svg(plan), pace.render_html(plan)):
+            self.assertIn("基于实际 FIT 路线", rendered)
+
+    def test_fit_inspect_generate_and_comparison_are_offline(self):
+        config = Path(self.folder.name) / "config.json"
+        config.write_text(json.dumps(self.config()))
+        output = Path(self.folder.name) / "out"
+        with patch.object(data, "decode_fit", return_value=self.raw):
+            with patch("activity_data.urlopen", side_effect=AssertionError("Must be offline")):
+                with patch("sys.stdout", new_callable=io.StringIO) as stdout:
+                    self.assertEqual(pace.main(["inspect", str(self.path)]), 0)
+                self.assertEqual(json.loads(stdout.getvalue())["distance_m"], 4000)
+                with patch("sys.stdout", new_callable=io.StringIO):
+                    self.assertEqual(pace.main(["generate", str(self.path), "--config", str(config),
+                                                "--output-dir", str(output)]), 0)
+                    self.assertEqual(compare.main(["generate", str(self.path), "--config", str(config),
+                                                   "--fit", str(self.path), "--output-dir", str(output)]), 0)
+        self.assertEqual({p.name for p in output.iterdir()}, {"pace-chart.svg", "garmin-comparison.svg"})
 
 
 class ComparisonTests(unittest.TestCase):

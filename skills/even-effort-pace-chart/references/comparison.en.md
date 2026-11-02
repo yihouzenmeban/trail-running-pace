@@ -2,7 +2,7 @@
 
 [简体中文](comparison.md) | [English](comparison.en.md)
 
-Use `../scripts/compare_activity.py`. It reuses the route processing, checkpoint selection, distance, ascent, and pacing model in `pace_chart.py`. GPX/KML and embedded/manual checkpoints are supported without changing the race configuration. Comparisons require an optional dependency; ordinary pace charts remain standard-library-only:
+Use `../scripts/compare_activity.py`. It reuses the route processing, checkpoint selection, distance, ascent, and pacing model in `pace_chart.py`. GPX/KML/FIT routes and embedded/manual checkpoints are supported. Comparisons and FIT routes require an optional dependency; GPX/KML pace charts remain standard-library-only:
 
 ```bash
 python3 -m pip install -r <skill-dir>/scripts/requirements-comparison.txt
@@ -21,6 +21,8 @@ python3 <skill-dir>/scripts/compare_activity.py generate race.gpx \
   --config race.json --fit activity-original.zip --summary activity-details.json \
   --targets 15:00 16:00 17:00 --output-dir output/comparison
 ```
+
+The first route argument can also be the recorded FIT or FIT ZIP, allowing plans to be recomputed on the course actually covered and compared with the same activity via `--fit`. This uses recorded distance and per-record elevations with manual checkpoints on that distance axis. Preserve reviewed passages through `--passage-overrides`, remapping CP IDs to the new configuration. See [FIT route input](configuration.en.md#fit-route-input). This is a retrospective pacing-model review on the actual course. Route ascent is still independently recomputed; the activity retains lap estimates and platform totals without forcing agreement.
 
 `inspect` prints activity totals, matched checkpoints, segment times, terrain estimates, and warnings without writing files. `generate` writes only `garmin-comparison.svg` by default. The header collects actual finish time and the final advantage or deficit against each target. The body has two sections:
 

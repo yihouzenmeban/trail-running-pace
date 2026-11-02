@@ -367,10 +367,15 @@ def render_svg(comparison: dict) -> str:
         f'汇总：{numeric(activity["totals"]["ascent_m"])} / {numeric(activity["totals"]["descent_m"])} m。'
         "差值使用未取整原值；分段显示值之和可能有取整误差；缺失值为 —。",
     ]
+    route_diagnostics = plan["route"].get("diagnostics") or {}
+    if route_diagnostics.get("distance_source") == "fit_recorded":
+        notes.append("方案路线使用 FIT 记录距离与海拔，爬升 / 下降由现有路线算法重算；"
+                     "佳明实际侧保留逐圈估算及活动汇总，两侧不强行缩放一致。")
+        notes += ["路线提示：" + warning for warning in plan["warnings"]]
     if comparison["warnings"]:
         notes += ["数据提示：" + warning for warning in comparison["warnings"]]
     focus_group("data-notes", "\n".join(notes))
-    text(64, footer_y, "口径：时间包含停留，CP 非官方打卡；本段爬升 / 下降由 FIT 逐圈累计估算值相减，未知为 —。", 20, muted)
+    text(64, footer_y, "口径：时间包含停留，CP 非官方打卡；佳明本段爬升 / 下降由 FIT 逐圈累计估算值相减，未知为 —。", 20, muted)
     text(64, footer_y + 32, "差值先计算再取整；方案停留计入下一段。数据来源与匹配详情可悬停此处查看，也保存在 SVG 元数据中。", 20, muted)
     parts.append("</g>")
     height = footer_y + 70
@@ -379,6 +384,7 @@ def render_svg(comparison: dict) -> str:
         "activity_id": activity["activity_id"], "activity_date": activity["start_time"],
         "targets_seconds": targets, **activity.get("source", {}), **comparison["semantics"],
         "warnings": comparison["warnings"], "passage_overrides": comparison["passage_overrides"],
+        "route_diagnostics": route_diagnostics,
         "data_notes": notes,
         "time_display": "actual ahead/faster when plan minus actual is positive; behind/slower when negative",
         "checkpoint_matches": [

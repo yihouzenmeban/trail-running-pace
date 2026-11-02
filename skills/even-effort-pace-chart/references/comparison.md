@@ -2,7 +2,7 @@
 
 [简体中文](comparison.md) | [English](comparison.en.md)
 
-使用同目录 `../scripts/compare_activity.py`，复用 `pace_chart.py` 的路线清理、CP 选择、距离、爬升和配速模型。支持 GPX/KML、嵌入或人工 CP，无须修改已有比赛配置。对比功能需要可选依赖，常规配速表仍只用标准库：
+使用同目录 `../scripts/compare_activity.py`，复用 `pace_chart.py` 的路线清理、CP 选择、距离、爬升和配速模型。支持 GPX/KML/FIT 路线、嵌入或人工 CP。对比功能及 FIT 路线需要可选依赖，GPX/KML 配速表仍只用标准库：
 
 ```bash
 python3 -m pip install -r <skill-dir>/scripts/requirements-comparison.txt
@@ -21,6 +21,8 @@ python3 <skill-dir>/scripts/compare_activity.py generate race.gpx \
   --config race.json --fit activity-original.zip --summary activity-details.json \
   --targets 15:00 16:00 17:00 --output-dir output/comparison
 ```
+
+也可把首个路线参数换成实际 FIT／FIT ZIP，按实际跑过的路线重新计算方案，再用 `--fit` 对比同一次活动。此时使用 FIT 记录距离与逐点海拔，CP 使用该距离轴上的人工配置；已有核对结果应通过 `--passage-overrides` 保留经过时刻，CP ID 按新配置重新对应。见[配置文档](configuration.md#fit-作为路线输入)。这是基于实际路线的赛后模型复盘；方案爬升仍独立重算，实际侧保留逐圈估算与平台汇总，不会因路线来自同一 FIT 而强制相等。
 
 `inspect` 输出活动汇总、匹配后的站点、逐段时间及地形数据、告警；不写文件。`generate` 默认仅写 `garmin-comparison.svg`，依次展示：
 

@@ -2,7 +2,7 @@
 
 [简体中文](configuration.md) | [English](configuration.en.md)
 
-需要 Python 3.10+，无需额外依赖、凭据或在线服务。下列命令以仓库根目录为工作目录；独立安装 Skills 后，脚本路径应相对于安装包目录解析。
+需要 Python 3.10+。GPX/KML 配速表仅使用标准库；FIT 输入需安装可选依赖，所有离线生成均无需凭据或在线服务。下列命令以仓库根目录为工作目录；独立安装 Skills 后，脚本路径应相对于安装包目录解析。
 
 ## 默认值与覆盖规则
 
@@ -41,7 +41,24 @@ python3 skills/even-effort-pace-chart/scripts/pace_chart.py inspect race.kml --u
 }
 ```
 
-KML 中命名的 Point 地标提供 CP 候选，地标自身可以没有海拔。`placemark:3:point:1` 表示文档中第三个 Placemark 下的第一个 Point 几何。应以 `inspect` 实际返回的 ID 为准，修改源文件可能改变 ID。D1 等站名或任意村名需要通过 `cp_selection` 明确选用。同一文件同时包含独立起终点和共用起终点时，选择其中一种表示，避免端点重复。不支持 KMZ、以多边形充当路线或远程 NetworkLink 获取。两种输入格式共用配置和四种导出器。
+KML 中命名的 Point 地标提供 CP 候选，地标自身可以没有海拔。`placemark:3:point:1` 表示文档中第三个 Placemark 下的第一个 Point 几何。应以 `inspect` 实际返回的 ID 为准，修改源文件可能改变 ID。D1 等站名或任意村名需要通过 `cp_selection` 明确选用。同一文件同时包含独立起终点和共用起终点时，选择其中一种表示，避免端点重复。不支持 KMZ、以多边形充当路线或远程 NetworkLink 获取。各输入格式共用配置和四种导出器。
+
+## FIT 作为路线输入
+
+可直接提供 `.fit` 或只含一个 FIT 的 `.zip`，用于按实际跑过的路线重新规划。先安装依赖，再检查和生成：
+
+```bash
+python3 -m pip install -r skills/even-effort-pace-chart/scripts/requirements-comparison.txt
+python3 skills/even-effort-pace-chart/scripts/pace_chart.py inspect activity-original.zip
+python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate activity-original.zip \
+  --config race-fit.json --output-dir output/fit-route
+```
+
+使用 record 的设备累计距离，保留 GPS 坐标；不按坐标重新累计距离，也不按 session 或平台总量缩放。海拔优先取 `enhanced_altitude`，缺少时回退 `altitude`，缺失、非有限或非法类型会报错，不填零。同一累计距离保留最后一个点，避免停留时海拔波动形成零距离爬坡；正距离上的重复坐标保留。`diagnostics.distance_source` 为 `fit_recorded`，同时报告合并数和跳过数。
+
+只支持单 session。缺 GPS、时间或距离的 record 会跳过并报告；剩余记录必须从距离 0 开始、距离与时间不倒退，合并后至少有两个不同距离。大于 100 米的距离间隔会告警；最后记录距离与 session 不同会报告且不补造末段。`track_index` 只能省略或为整数 1，`use_kml_altitudes` 不适用；`distance_tolerance_m` 必须为 0，避免水平简化替换设备距离。
+
+此入口不把 FIT 的逐圈或 course point 当作补给站，使用人工 `checkpoints`，包含明确终点距离，单位为 FIT 累计公里。已有路线和核对过的实际经过时刻时，可按时刻插值 FIT 距离来映射原 CP，保留名称、顺序及经过时刻。爬升、下降仍按现有海拔算法重算，不直接采用佳明统计；实际活动侧的指标口径见[活动对比文档](comparison.md#地形指标与输入限制)。
 
 ## 仅配置目标时间
 

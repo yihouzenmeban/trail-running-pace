@@ -1,4 +1,4 @@
 interface:
   display_name: "耐力学社体感一致配速表 Skills"
-  short_description: "Plan GPX/KML pacing and compare recorded FIT activities"
-  default_prompt: "Use $even-effort-pace-chart to turn my GPX or KML race route into an SVG pace chart with segment pace in parentheses, using its embedded checkpoints and my finish targets."
+  short_description: "Plan GPX/KML/FIT pacing and compare recorded activities"
+  default_prompt: "Use $even-effort-pace-chart to turn my GPX, KML, or FIT route into an SVG pace chart with segment pace in parentheses, using embedded or supplied checkpoints and my finish targets."

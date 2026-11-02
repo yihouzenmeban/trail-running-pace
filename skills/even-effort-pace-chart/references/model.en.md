@@ -14,11 +14,13 @@ This is an independent implementation of the article's equivalent-distance and f
 
 ## Input normalization
 
-Both GPX and KML become the same ordered `(latitude, longitude, elevation)` profile before distance, smoothing, CP projection, and schedule calculation. Original timestamps do not determine the target schedule; distinct line geometries remain separate route selections rather than automatically concatenated segments. Supported formats, altitude modes, and explicit overrides are defined in the [configuration reference](configuration.en.md#kml-input). Permission to use coordinate heights does not establish that they are surveyed sea-level elevations.
+GPX, KML, and FIT become the same ordered `(latitude, longitude, elevation)` profile and distance axis before smoothing, CP projection, and schedule calculation. Original timestamps do not determine the target schedule; distinct line geometries remain separate route selections rather than automatically concatenated segments. Supported formats, altitude modes, and explicit overrides are defined in the [configuration reference](configuration.en.md). Permission to use coordinate heights does not establish that they are surveyed sea-level elevations.
 
 ## Distance and elevation
 
-Compute horizontal cumulative distance with the haversine formula on a sphere of radius 6,371,008.8 m. Elevation does not lengthen geometric distance. Processing order: validate and deduplicate source points, handle isolated elevation spikes, optionally simplify horizontal geometry, build separate display and ascent curves, then split at CPs.
+GPX/KML use horizontal cumulative distance from the haversine formula on a sphere of radius 6,371,008.8 m. Elevation does not lengthen geometric distance. FIT routes use recorded device distance directly and prefer `enhanced_altitude`, falling back to `altitude`; repeated distances retain the last point and horizontal simplification is disabled. All distance weighting, grades, and equivalent distances below use the selected route's distance axis. FIT device distance need not equal horizontal distance recomputed from coordinates. Processing order: validate and deduplicate source points, handle isolated elevation spikes, optionally simplify GPX/KML horizontal geometry, build separate display and ascent curves, then split at CPs.
+
+FIT route ascent/descent are also recomputed from per-record elevations with the filters below. Lap, session, and platform totals do not replace them, and no rescaling forces agreement with Garmin. Using the same FIT as route and activity supports retrospective pacing-model review; terrain comparisons show differences between the point-based algorithm and platform statistics.
 
 ### Input quality and horizontal distance
 
@@ -74,7 +76,7 @@ Each segment's seven slope bins are weighted by horizontal distance. Boundaries,
 For a segment:
 
 ```text
-E = horizontal_distance_km + ascent_m / 100 * ascent_km_per_100m
+E = route_distance_km + ascent_m / 100 * ascent_km_per_100m
 ```
 
 The coefficient defaults to 1 km per 100 m of ascent, following the article's common baseline. Downhill does not subtract equivalent distance. Steep descents and technical terrain can demand extra effort that this scalar model does not capture.
