@@ -83,13 +83,11 @@ def render_svg(comparison: dict) -> str:
     panel_rows = math.ceil(len(targets) / panel_columns)
     panel_height, panel_gap, panel_top = 790, 24, overview_heading + 75
     readout_heading = panel_top + panel_rows * (panel_height + panel_gap) + 36
-    readout_columns = max(1, int((table_width - 240) / 200))
-    readout_blocks = math.ceil(count / readout_columns)
-    readout_column_width = (table_width - 240) / min(count, readout_columns)
-    name_units = max(1, int((readout_column_width - 24) / 12))
-    readout_header_height = max(96, 26 * max(len(wrap_text(cp["name"], name_units)) for cp in cps[1:]) + 48)
-    readout_block_height = readout_header_height + (len(targets) + 1) * 64
-    terrain_heading = readout_heading + 28 + readout_blocks * (readout_block_height + 24) + 24
+    readout_column_width = (table_width - 500) / (len(targets) + 1)
+    readout_row_height = max(72, 26 * max(len(wrap_text(cp["name"], 28)) for cp in cps[1:]) + 20)
+    readout_top = readout_heading + 70
+    readout_height = 72 + count * readout_row_height
+    terrain_heading = readout_top + readout_height + 48
     elevation_top = terrain_heading + 162
     footer_y = elevation_top + 620
     ink, muted = "#202A35", "#626D79"
@@ -237,55 +235,53 @@ def render_svg(comparison: dict) -> str:
     parts.append('<g id="checkpoint-times">')
     text(64, readout_heading, "各站耗时", 28, weight=700)
     text(width - 64, readout_heading, "每格：累计 / 本段 · HH:MM:SS · 含停留", 22, muted, anchor="end")
-    for block in range(readout_blocks):
-        indices = range(1 + block * readout_columns, min(count + 1, 1 + (block + 1) * readout_columns))
-        top = readout_heading + 28 + block * (readout_block_height + 24)
-        column_width = (table_width - 240) / len(indices)
-        parts.append(f'<g class="time-readout-block" data-column-width="{column_width}">')
-        rect(64, top, table_width, readout_block_height, "#FFFFFF", 12)
-        rect(64, top, table_width, readout_header_height, "#EDF0F4", 8)
-        text(88, top + readout_header_height / 2 + 8, "时间来源", 23, muted, 600)
-        for column, i in enumerate(indices):
-            center = 304 + (column + .5) * column_width
-            cp, metrics = cps[i], comparison["terrain"][i - 1]
-            tip = (f'{cp["name"]}：赛道累计 {numeric(metrics["planned_distance_m"] / 1000, 3)} km；'
-                   f'佳明累计 {numeric(None if metrics["actual_distance_m"] is None else metrics["actual_distance_m"] / 1000, 3)} km')
-            focus_group(f"time-header-{i}", tip, "checkpoint-header inspectable")
-            parts[-2] = parts[-2].replace(' tabindex=', f' data-cp-id="{escape(cp["id"], quote=True)}" '
-                                         f'data-distance-m="{metrics["planned_distance_m"]}" tabindex=')
-            label(center, top + (readout_header_height - 36) / 2, cp["name"],
-                  units=name_units, size=22, anchor="middle")
-            text(center, top + readout_header_height - 16, f'{metrics["planned_distance_m"] / 1000:.1f} km',
-                 19, muted, anchor="middle")
-            parts.append("</g>")
+    text(64, readout_heading + 38, "预计本段耗时：红色 = 佳明实际更慢；绿色 = 佳明实际不慢于预计（含持平）", 21, muted)
+    rect(64, readout_top, table_width, readout_height, "#FFFFFF", 12)
+    rect(64, readout_top, table_width, 72, "#EDF0F4", 8)
+    text(88, readout_top + 45, "到达站点", 24, muted, 600)
+    text(494, readout_top + 45, "累计里程", 23, muted, 600, "middle")
+    for j in range(len(targets) + 1):
+        center = 564 + (j + .5) * readout_column_width
+        source_label = "佳明实际" if j == 0 else clock(targets[j - 1]).removesuffix(":00") + " 预计"
+        text(center, readout_top + 45, source_label, 26, ink, 650 if j == 0 else 500, "middle")
+    for i, (cp, metrics, segment) in enumerate(zip(cps[1:], comparison["terrain"], comparison["segments"]), 1):
+        y = readout_top + 72 + (i - 1) * readout_row_height
+        baseline = y + readout_row_height / 2 + 9
+        cp_id = escape(cp["id"], quote=True)
+        parts.append(f'<g class="time-row" data-cp-id="{cp_id}">')
+        rect(64, y, table_width, readout_row_height, "#FFFFFF" if i % 2 else "#F2F4F7")
+        path([(64, y + readout_row_height), (width - 64, y + readout_row_height)], "#E4E8ED", 1)
+        tip = (f'{cp["name"]}：赛道累计 {numeric(metrics["planned_distance_m"] / 1000, 3)} km；'
+               f'佳明累计 {numeric(None if metrics["actual_distance_m"] is None else metrics["actual_distance_m"] / 1000, 3)} km')
+        focus_group(f"time-header-{i}", tip, "checkpoint-header inspectable")
+        parts[-2] = parts[-2].replace(' tabindex=', f' data-cp-id="{cp_id}" '
+                                     f'data-distance-m="{metrics["planned_distance_m"]}" tabindex=')
+        label(88, baseline, cp["name"], units=28, size=23)
+        text(494, baseline, f'{metrics["planned_distance_m"] / 1000:.1f} km', 22, muted, anchor="middle")
+        parts.append("</g>")
         for j in range(len(targets) + 1):
-            y = top + readout_header_height + j * 64
+            center = 564 + (j + .5) * readout_column_width
             source = "actual" if j == 0 else "planned"
             source_label = "佳明实际" if j == 0 else clock(targets[j - 1]).removesuffix(":00") + " 预计"
             target_attribute = "" if j == 0 else f' data-target-seconds="{targets[j - 1]}"'
-            parts.append(f'<g class="time-row" data-series="{source}"{target_attribute}>')
-            rect(64, y, table_width, 64, "#F2F4F7" if j == 0 else "#FFFFFF")
-            path([(64, y + 64), (width - 64, y + 64)], "#E4E8ED", 1)
-            text(88, y + 40, source_label, 24, ink, 650 if j == 0 else 500)
-            for column, i in enumerate(indices):
-                center = 304 + (column + .5) * column_width
-                segment = comparison["segments"][i - 1]
-                elapsed = cps[i]["elapsed_seconds"] if j == 0 else schedules[j - 1]["checkpoints"][i]["arrival_seconds"]
-                seconds = segment["actual_seconds"] if j == 0 else segment["plans"][j - 1]["seconds"]
-                tip = (f'{source_label} · {cps[i]["name"]}：累计 {clock(elapsed)}；'
-                       f'{segment["from_name"]} → {segment["to_name"]} 本段 {clock(seconds)}，含停留')
-                focus_group(f"time-cell-{j}-{i}", tip, "time-cell inspectable")
-                parts[-2] = parts[-2].replace(' tabindex=', f' data-cp-id="{escape(cps[i]["id"], quote=True)}" '
-                                             f'data-elapsed-seconds="{elapsed}" data-segment-seconds="{seconds}" tabindex=')
-                text(center, y + 40, f"{clock(elapsed)} / {clock(seconds)}", 20, ink,
-                     650 if j == 0 else 400, "middle")
-                parts[-1] = parts[-1].replace("<text ", '<text data-role="time-values" ')
-                parts.append("</g>")
+            elapsed = cp["elapsed_seconds"] if j == 0 else schedules[j - 1]["checkpoints"][i]["arrival_seconds"]
+            seconds = segment["actual_seconds"] if j == 0 else segment["plans"][j - 1]["seconds"]
+            color = ink if j == 0 else time_status(-1 if segment["actual_seconds"] > seconds else 1)[1]
+            tip = (f'{source_label} · {cp["name"]}：累计 {clock(elapsed)}；'
+                   f'{segment["from_name"]} → {segment["to_name"]} 本段 {clock(seconds)}，含停留')
+            if j:
+                tip += "；佳明本段更慢" if segment["actual_seconds"] > seconds else "；佳明本段不慢于预计"
+            focus_group(f"time-cell-{j}-{i}", tip, "time-cell inspectable")
+            parts[-2] = parts[-2].replace(' tabindex=', f' data-cp-id="{cp_id}" data-series="{source}"{target_attribute} '
+                                         f'data-elapsed-seconds="{elapsed}" data-segment-seconds="{seconds}" tabindex=')
+            parts.append(f'<text x="{center}" y="{baseline}" font-size="26" fill="{ink}" '
+                         f'font-weight="{650 if j == 0 else 400}" text-anchor="middle" data-role="time-values">'
+                         f'<tspan data-role="cumulative-time" fill="{ink}">{clock(elapsed)}</tspan>'
+                         f'<tspan> / </tspan><tspan data-role="segment-time" fill="{color}">{clock(seconds)}</tspan></text>')
             parts.append("</g>")
-        for column in range(len(indices)):
-            x = 304 + column * column_width
-            path([(x, top), (x, top + readout_block_height)], "#E4E8ED", 1)
         parts.append("</g>")
+    for x in (424, *(564 + j * readout_column_width for j in range(len(targets) + 1))):
+        path([(x, readout_top), (x, readout_top + readout_height)], "#E4E8ED", 1)
     parts.append("</g>")
 
     parts.append('<g id="terrain">')
@@ -390,7 +386,8 @@ def render_svg(comparison: dict) -> str:
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" '
         f'viewBox="0 0 {width} {height}" role="img" aria-labelledby="title description">\n'
         f'<title id="title">{escape(plan["name"])}：佳明实际与仓库方案对比</title>\n'
-        '<desc id="description">每个目标上方为累计领先或落后曲线，下方为各区间快慢正负柱图；共用读数区按累计 / 本段展示实际与预计耗时，保留到秒。'
+        '<desc id="description">每个目标上方为累计领先或落后曲线，下方为各区间快慢正负柱图；耗时表以 CP 为行，实际和各方案为列，按累计 / 本段展示耗时，保留到秒。'
+        '预计本段耗时红色表示佳明实际更慢，绿色表示实际不慢于预计，累计时间保持中性色。'
         '赛道数据包括全程汇总及分段爬升、下降分组柱图。'
         '绿色表示实际领先或本段更快，红色表示实际落后或本段更慢；累计曲线零线上方领先、下方落后。'
         '分段柱图零线上方快、下方慢；赛道图用深灰表示佳明、蓝色表示仓库。时间含停留，差值先计算再取整。</desc>\n'
