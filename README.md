@@ -54,7 +54,7 @@ $even-effort-pace-chart
 
 | 示例 | 轨迹 | 配置 | 配速表 | 对比图 |
 | --- | --- | --- | --- | --- |
-| 天地留白 100K | [GPX](examples/tiandi-liubai-100k/天地留白100K.gpx) | [12–16 小时方案](examples/tiandi-liubai-100k/config.json) | [SVG](examples/tiandi-liubai-100k/pace-chart.svg) | — |
+| 天地留白 100K | [GPX](examples/tiandi-liubai-100k/天地留白100K.gpx) | [12–16 小时方案](examples/tiandi-liubai-100k/config.json) | [SVG](examples/tiandi-liubai-100k/pace-chart.svg) | [佳明实际 / 仓库 15、16、17 小时](examples/tiandi-liubai-100k/garmin-comparison.svg) |
 | 大境门 DGW100K | [KML](examples/大境门/DGW100K/2026京东大境门古长城越野赛by%20UTMB®DGW100K.kml) | [10–24 小时，每隔 1 小时](examples/大境门/DGW100K/config.json) | [SVG](examples/大境门/DGW100K/pace-chart.svg) | — |
 | 大境门 MGW50K | [原始 GPX](examples/大境门/DGW50K/2026京东大境门古长城越野赛by%20UTMB®MGW50K.gpx) / [海拔补全副本](examples/大境门/DGW50K/MGW50K-elevation-filled.gpx) | [5–12.5 小时，每隔 30 分钟](examples/大境门/DGW50K/config.json) | [SVG](examples/大境门/DGW50K/pace-chart.svg) | [耐力学社 / 仓库 / 佳明对比](examples/大境门/DGW50K/runart-comparison.svg) |
 
@@ -64,7 +64,11 @@ $even-effort-pace-chart
 
 50K 另提供单列 [6 小时 15 分钟方案](examples/大境门/DGW50K/pace-chart-6h15m.svg)及其[配置](examples/大境门/DGW50K/config-6h15m.json)，沿用默认的 06:00 出发和括号内区间配速。
 
-合并对比 SVG 仅作参考，依次展示 16 档方案时间、三方地形数据，以及佳明实际活动与仓库 6:15 方案的时间对照。耐力学社数据来自用户提供的截图；佳明使用 2026-09-12 的大境门活动，时间包含停留。实际活动对照按秒显示，差值为佳明实际减去方案，负值表示提前。距离为累计距离；佳明分段爬升、下降由 FIT 逐圈插值估算的相邻站累计值相减得到，终点累计值使用平台原值。
+天地留白对比图仅包含佳明实际与仓库方案，依次展示各站经过时间、双方地形数据，以及 15、16、17 小时三档时间曲线。佳明使用 2026-10-31「2026 徽州古城秋季赛」活动，经过时间包含停留，全程为 16:46:04。仓库单元格括号内显示「仓库−佳明」，时间差按秒显示；原有 12–16 小时配置和配速表保持不变。
+
+大境门合并对比图依次展示 16 档方案时间、三方地形数据，以及佳明实际活动与仓库 6:15 方案的时间对照。耐力学社数据来自用户提供的截图；佳明使用 2026-09-12 的大境门活动，时间包含停留。实际活动对照按秒显示，差值为佳明实际减去方案，负值表示提前。
+
+对比 SVG 仅作参考，CP 经过时间按实际轨迹投影估算，非官方打卡。距离为累计距离；佳明分段爬升、下降由 FIT 逐圈距离插值估算的相邻站累计值相减得到，终点使用平台原值，差值先用原值计算再取整。天地留白逐圈合计爬升 / 下降为 5018 / 5024 m，平台为 5019 / 5023 m，未按比例调整。
 
 ## 命令行快速开始
 

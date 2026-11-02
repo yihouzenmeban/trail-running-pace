@@ -54,7 +54,7 @@ You can also name `even-effort-pace-chart` in a natural-language request. The as
 
 | Example | Route | Configuration | Pace chart | Comparisons |
 | --- | --- | --- | --- | --- |
-| Tiandi Liubai 100K | [GPX](examples/tiandi-liubai-100k/天地留白100K.gpx) | [12–16 hour schedules](examples/tiandi-liubai-100k/config.json) | [SVG](examples/tiandi-liubai-100k/pace-chart.svg) | — |
+| Tiandi Liubai 100K | [GPX](examples/tiandi-liubai-100k/天地留白100K.gpx) | [12–16 hour schedules](examples/tiandi-liubai-100k/config.json) | [SVG](examples/tiandi-liubai-100k/pace-chart.svg) | [Garmin activity / repository 15h, 16h, 17h](examples/tiandi-liubai-100k/garmin-comparison.svg) |
 | Dajingmen DGW100K | [KML](examples/大境门/DGW100K/2026京东大境门古长城越野赛by%20UTMB®DGW100K.kml) | [10–24 hours, 1-hour intervals](examples/大境门/DGW100K/config.json) | [SVG](examples/大境门/DGW100K/pace-chart.svg) | — |
 | Dajingmen MGW50K | [Original GPX](examples/大境门/DGW50K/2026京东大境门古长城越野赛by%20UTMB®MGW50K.gpx) / [Elevation-filled copy](examples/大境门/DGW50K/MGW50K-elevation-filled.gpx) | [5–12.5 hours, 30-minute intervals](examples/大境门/DGW50K/config.json) | [SVG](examples/大境门/DGW50K/pace-chart.svg) | [RunArt / repository / Garmin comparison](examples/大境门/DGW50K/runart-comparison.svg) |
 
@@ -64,7 +64,11 @@ The original 50K GPX lacks elevation at 59 points in two gaps spanning about 834
 
 The 50K example also provides a single-column [6-hour-15-minute plan](examples/大境门/DGW50K/pace-chart-6h15m.svg) and its [configuration](examples/大境门/DGW50K/config-6h15m.json), using the default 06:00 start and segment pace in parentheses.
 
-The merged comparison SVG is for reference only. Its sections show times for all 16 plans, terrain data from all three sources, and Garmin activity times against the repository's 6:15 plan, in that order. RunArt values come from the user-provided screenshot. Garmin values come from the September 12, 2026 Dajingmen activity; elapsed times include stops. The activity comparison displays seconds; differences are Garmin minus plan, with negative values indicating earlier passage. Distances are cumulative. Garmin segment ascent/descent are differences between consecutive checkpoint totals estimated by interpolation within FIT laps; finish totals come from the platform.
+The Tiandi Liubai comparison includes only Garmin activity data and repository plans. Its sections show checkpoint elapsed times, terrain data from both sources, and time curves for the 15h, 16h, and 17h plans. Garmin values come from the October 31, 2026 activity “2026 徽州古城秋季赛”, with an elapsed time of 16:46:04 including stops. Parentheses in repository cells show repository minus Garmin; time differences include seconds. The original 12–16 hour configuration and pace chart remain unchanged.
+
+The Dajingmen merged comparison shows times for all 16 plans, terrain data from all three sources, and Garmin activity times against the repository's 6:15 plan, in that order. RunArt values come from the user-provided screenshot. Garmin values come from the September 12, 2026 Dajingmen activity; elapsed times include stops. The activity comparison displays seconds; differences are Garmin minus plan, with negative values indicating earlier passage.
+
+Comparison SVGs are for reference only. Checkpoint passage times are estimated by projection onto the recorded track, not official timing. Distances are cumulative. Garmin segment ascent/descent are differences between consecutive checkpoint totals estimated by distance interpolation within FIT laps; finish totals come from the platform. Differences use unrounded values before display rounding. Tiandi Liubai FIT laps sum to 5018 / 5024 m of ascent/descent, versus platform totals of 5019 / 5023 m; no proportional adjustment is applied.
 
 ## CLI quick start
 
