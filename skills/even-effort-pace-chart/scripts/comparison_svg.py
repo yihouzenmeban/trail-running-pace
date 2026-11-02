@@ -17,6 +17,25 @@ def numeric(value, digits=0, signed=False):
     return f"{rounded:+.{digits}f}" if signed and rounded else f"{rounded:.{digits}f}"
 
 
+def endpoint_label_positions(values: list[float], top: float, bottom: float, gap=44) -> list[float]:
+    """Keep endpoint labels ordered, separated, and inside the plot bounds."""
+    if not values:
+        return []
+    if bottom - top < gap * (len(values) - 1):
+        raise ValueError("Endpoint labels need more vertical space")
+    order = sorted(range(len(values)), key=lambda i: values[i])
+    placed = []
+    for index in order:
+        placed.append(max(top, values[index], placed[-1] + gap if placed else top))
+    placed[-1] = min(placed[-1], bottom)
+    for index in range(len(placed) - 2, -1, -1):
+        placed[index] = min(placed[index], placed[index + 1] - gap)
+    result = [0.0] * len(values)
+    for index, position in zip(order, placed):
+        result[index] = position
+    return result
+
+
 def render_svg(comparison: dict) -> str:
     plan, activity = comparison["plan"], comparison["activity"]
     cps, schedules = comparison["checkpoints"], plan["schedules"]
@@ -29,11 +48,15 @@ def render_svg(comparison: dict) -> str:
     terrain_heading = table1 + count * checkpoint_height + 62
     table2 = terrain_heading + 100
     curve_heading = table2 + count * row_height + 62
-    legend_rows = math.ceil((len(targets) + 1) / 6)
-    plot_top = curve_heading + 100 + legend_rows * 40
-    footer_y = plot_top + 540
-    ink, muted, teal, rust = "#203c46", "#627780", "#126b70", "#aa472e"
-    series_colors = ("#126b70", "#486aa6", "#9a6c1d", "#52694b", "#535b63", "#994d65")
+    plot_top = curve_heading + 100
+    plot_height = max(640, len(targets) * 44 + 88)
+    footer_y = plot_top + plot_height + 140
+    ink, muted = "#202A35", "#626D79"
+    series_colors = ("#0072B2", "#C05A00", "#007A5E", "#7B4F9D", "#566173", "#8A6840")
+    series_dashes = ("20 10", "8 8", "22 8 4 8", "4 9", "24 8 8 8", "14 7 4 7 4 7")
+    styles = [(series_colors[j % len(series_colors)],
+               series_dashes[(j + j // len(series_colors)) % len(series_dashes)])
+              for j in range(len(targets))]
     parts = []
 
     def rect(x, y, w, h, fill, radius=0):
@@ -48,30 +71,28 @@ def render_svg(comparison: dict) -> str:
         for i, line in enumerate(lines):
             text(x, y + (i - (len(lines) - 1) / 2) * (size + 3), line, size)
 
-    def path(points, color, line_width=3, dashed=False, series=None):
+    def path(points, color, line_width=3, dash="", series=None):
         d = " ".join(f'{"M" if i == 0 else "L"}{x:.3f} {y:.3f}'
                      for i, (x, y) in enumerate(points))
-        attrs = (' stroke-dasharray="9 6"' if dashed else "")
+        attrs = f' stroke-dasharray="{dash}"' if dash else ""
         if series:
             attrs += f' data-series="{series}"'
-        parts.append(f'<path d="{d}" fill="none" stroke="{color}" stroke-width="{line_width}"{attrs}/>')
+        parts.append(f'<path d="{d}" fill="none" stroke="{color}" stroke-width="{line_width}" '
+                     f'stroke-linecap="round" stroke-linejoin="round"{attrs}/>')
 
     def focus_group(identifier, description, css_class="inspectable"):
         parts.append(f'<g id="{identifier}" class="{css_class}" tabindex="0" '
                      f'aria-label="{escape(description, quote=True)}">')
         parts.append(f"<title>{escape(description)}</title>")
 
-    def delta_color(value):
-        return muted if value is None or value == 0 else teal if value < 0 else rust
-
     def paired(x, y, value, delta, is_time=False, digits=0):
         text(x, y + 27, clock(value) if is_time else numeric(value, digits), 26, anchor="middle")
         delta_text = ("—" if delta is None else time_delta(delta) if is_time
                       else numeric(delta, digits, signed=True))
-        text(x, y + 54, f"({delta_text})", 20, delta_color(delta), anchor="middle")
+        text(x, y + 54, f"({delta_text})", 20, muted, anchor="middle")
 
     def row(y, index):
-        rect(64, y, table_width, row_height - 2, "#ffffff" if index % 2 else "#eaf0ed", 3)
+        rect(64, y, table_width, row_height - 2, "#ffffff" if index % 2 else "#F2F4F7", 3)
 
     cell_width = (width - 704) / (len(targets) + 1)
     actual_x = 640 + cell_width / 2
@@ -80,20 +101,23 @@ def render_svg(comparison: dict) -> str:
     def time_headers(y, first):
         text(78, y, first, 22, muted, 600)
         text(484, y, "时间口径", 22, muted, 600)
-        text(actual_x, y, "佳明实际", 24, rust, 600, "middle")
-        for x, target in zip(plan_xs, targets):
-            text(x, y, "方案 " + clock(target).removesuffix(":00"), 24, teal, 600, "middle")
+        text(actual_x, y, "佳明实际", 24, ink, 700, "middle")
+        for x, target, (color, dash) in zip(plan_xs, targets, styles):
+            parts.append(f'<g data-target-seconds="{target}">')
+            path([(x - 136, y - 8), (x - 94, y - 8)], color, 5, dash)
+            text(x + 18, y, "方案 " + clock(target).removesuffix(":00"), 24, color, 600, "middle")
+            parts.append("</g>")
 
-    rect(0, 0, width, 10000, "#f5f4ef")
-    rect(0, 0, width, 10, teal)
+    rect(0, 0, width, 10000, "#F7F8FA")
+    rect(0, 0, width, 6, ink)
     text(64, 78, plan["name"], 45, weight=700)
     text(width - 64, 76, "佳明实际 × 仓库方案", 30, anchor="end")
     label(64, 125, f'{activity["start_time"][:10]} · {activity["activity_name"]}', units=140, size=24)
     card_width = (table_width - 72) / 4
-    rect(64, 157, card_width, 126, ink, 13)
-    text(88, 191, "实际完赛时间", 21, "#c8dbde")
-    text(88, 242, clock(activity["totals"]["elapsed_seconds"]), 40, "#ffffff", 650)
-    text(88, 269, "经过时间 · 包含停留", 18, "#c8dbde")
+    rect(64, 157, card_width, 126, "#ffffff", 13)
+    text(88, 191, "实际完赛时间", 21, muted)
+    text(88, 242, clock(activity["totals"]["elapsed_seconds"]), 40, ink, 700)
+    text(88, 269, "经过时间 · 包含停留", 18, muted)
     for j, (title, key, scale, unit, digits) in enumerate((
         ("全程距离", "distance_m", 1000, "km", 2),
         ("累计爬升", "ascent_m", 1, "m", 0),
@@ -109,7 +133,7 @@ def render_svg(comparison: dict) -> str:
         text(x + 24, 269, "佳明 / 仓库", 18, muted)
         delta = subtract(p, a)
         text(x + card_width - 24, 269, numeric(delta, digits, signed=True) + " " + unit,
-             23, delta_color(delta), anchor="end")
+             23, muted, anchor="end")
 
     parts.append('<g id="checkpoint-times">')
     text(64, 335, "01  逐站时间对比", 28, weight=700)
@@ -121,12 +145,12 @@ def render_svg(comparison: dict) -> str:
                        f'实际累计 {clock(cps[i]["elapsed_seconds"])}；'
                        f'本段 {clock(segment["actual_seconds"])}，包含停留。')
         focus_group(f"checkpoint-{i}", description)
-        rect(64, y, table_width, checkpoint_height - 4, "#ffffff" if i % 2 else "#eaf0ed", 5)
+        rect(64, y, table_width, checkpoint_height - 4, "#ffffff" if i % 2 else "#F2F4F7", 5)
         parts[-1] = parts[-1].replace("<rect ", '<rect class="row-bg" ')
         label(84, y + 42, cps[i]["name"], units=32)
         label(84, y + 91, "来自 " + cps[i - 1]["name"], units=34, size=18)
-        path([(464, y + 16), (464, y + 108)], "#d4dfdc", 1)
-        path([(484, y + 62), (width - 88, y + 62)], "#dce5e1", 1)
+        path([(464, y + 16), (464, y + 108)], "#E2E6EB", 1)
+        path([(484, y + 62), (width - 88, y + 62)], "#E2E6EB", 1)
         for row_id, offset, heading, actual, predictions in (
             ("time-cp", 0, "累计到站", cps[i]["elapsed_seconds"],
              [s["checkpoints"][i]["arrival_seconds"] for s in schedules]),
@@ -135,7 +159,7 @@ def render_svg(comparison: dict) -> str:
         ):
             parts.append(f'<g id="{row_id}-{i}">')
             text(484, y + offset + 38, heading, 21, muted)
-            text(actual_x, y + offset + 38, clock(actual), 26, rust, 600, "middle")
+            text(actual_x, y + offset + 38, clock(actual), 26, ink, 650, "middle")
             for x, predicted in zip(plan_xs, predictions):
                 paired(x, y + offset, predicted, predicted - actual, is_time=True)
             parts.append("</g>")
@@ -149,7 +173,7 @@ def render_svg(comparison: dict) -> str:
     for j, heading in enumerate(("累计距离 / km", "本段爬升 / m", "本段下降 / m")):
         left = 484 + j * terrain_width
         text(left + terrain_width / 2, terrain_heading + 42, heading, 24, weight=600, anchor="middle")
-        text(left + terrain_width / 4, terrain_heading + 74, "佳明", 22, rust, anchor="middle")
+        text(left + terrain_width / 4, terrain_heading + 74, "佳明", 22, ink, 600, anchor="middle")
         text(left + terrain_width * .75, terrain_heading + 74, "仓库", 22, muted, anchor="middle")
     text(78, terrain_heading + 74, "站点", 22, muted, 600)
     for i, metrics in enumerate(comparison["terrain"], 1):
@@ -163,7 +187,7 @@ def render_svg(comparison: dict) -> str:
             scale, digits = (1000, 2) if j == 0 else (1, 0)
             a, p = metrics["actual_" + key], metrics["planned_" + key]
             a, p = (None if a is None else a / scale), p / scale
-            text(left + terrain_width / 4, y + 42, numeric(a, digits), 24, rust, 600, "middle")
+            text(left + terrain_width / 4, y + 42, numeric(a, digits), 24, ink, 650, "middle")
             paired(left + terrain_width * .75, y, p, subtract(p, a), digits=digits)
         parts.append("</g>")
     parts.append("</g>")
@@ -171,22 +195,24 @@ def render_svg(comparison: dict) -> str:
     max_hours = max(targets + [activity["totals"]["elapsed_seconds"]]) / 3600
     tick = max(1, math.ceil(max_hours / 6))
     ceiling = math.ceil(max_hours / tick) * tick
-    plot_left, plot_right = 150, width - 100
-    bottom = plot_top + 400
+    plot_left, plot_right = 150, width - 484
+    bottom = plot_top + plot_height
     parts.append(f'<g id="time-curves" data-x-min="{plot_left}" data-x-max="{plot_right}" '
                  f'data-y-top="{plot_top}" data-y-bottom="{bottom}" data-max-seconds="{ceiling * 3600}">')
     text(64, curve_heading, "03  全程时间走势", 28, weight=700)
     text(64, curve_heading + 40, "横轴按赛道累计距离对齐 CP；同一位置比较实际与各目标的累计经过时间。", 22, muted)
+    text(width - 64, curve_heading, "实际：粗实线 / 方案：彩色虚线", 21, muted, anchor="end")
+    rect(64, plot_top - 26, table_width, plot_height + 112, "#ffffff", 8)
     labels = ["起点"] + [cp["name"].split("-")[0].split("－")[0] for cp in cps[1:-1]] + ["终点"]
     positions = [plot_left + cp["distance_m"] / plan["route"]["distance_m"] * (plot_right - plot_left)
                  for cp in plan["checkpoints"]]
     for hour in range(0, ceiling + 1, tick):
-        y = bottom - hour / ceiling * 400
-        path([(plot_left, y), (plot_right, y)], "#dde5e6", 2)
+        y = bottom - hour / ceiling * plot_height
+        path([(plot_left, y), (plot_right, y)], "#E5E9EE", 2)
         text(plot_left - 18, y + 7, f"{hour} h", 18, muted, anchor="end")
     previous_label_x = -math.inf
     for i, (x, cp_label) in enumerate(zip(positions, labels)):
-        path([(x, plot_top), (x, bottom)], "#e4e9e6", 1)
+        path([(x, plot_top), (x, bottom)], "#F0F2F5", 1)
         if i == count or x - previous_label_x > 90 and (i == 0 or plot_right - x > 90):
             text(x, bottom + 32, cp_label[:12], 19, muted, anchor="middle")
             text(x, bottom + 58, f'{plan["checkpoints"][i]["distance_m"] / 1000:.1f} km',
@@ -195,25 +221,38 @@ def render_svg(comparison: dict) -> str:
     series_data = [
         (f"方案 {clock(targets[j]).removesuffix(':00')}",
          [cp["arrival_seconds"] for cp in schedule["checkpoints"]],
-         series_colors[j % len(series_colors)], "repository", targets[j])
+         styles[j][0], styles[j][1], "repository", targets[j])
         for j, schedule in enumerate(schedules)
-    ] + [("佳明实际", [cp["elapsed_seconds"] for cp in cps], rust, "garmin", None)]
-    for j, (name, values, color, series, target) in enumerate(series_data):
+    ] + [("佳明实际", [cp["elapsed_seconds"] for cp in cps], ink, "", "garmin", None)]
+    endpoints = [bottom - values[-1] / (ceiling * 3600) * plot_height
+                 for _, values, _, _, _, _ in series_data]
+    label_positions = endpoint_label_positions(endpoints, plot_top, bottom)
+    for j, (name, values, color, dash, series, target) in enumerate(series_data):
         focus_group(f"curve-{j}", name + "：各 CP 累计经过时间", "curve")
-        lx = 78 + (j % 6) * (table_width / 6)
-        ly = curve_heading + 80 + (j // 6) * 40
-        path([(lx, ly - 8), (lx + 45, ly - 8)], color, 4, series != "garmin")
-        text(lx + 60, ly, name, 22, color)
-        points = [(x, bottom - value / (ceiling * 3600) * 400) for x, value in zip(positions, values)]
-        path(points, color, 4 if series == "garmin" else 3, series != "garmin", series)
+        parts[-2] = parts[-2].replace('class="curve"', f'class="curve" color="{color}"')
+        points = [(x, bottom - value / (ceiling * 3600) * plot_height) for x, value in zip(positions, values)]
+        path(points, color, 8 if series == "garmin" else 5, dash, series)
         if target is not None:
             parts[-1] = parts[-1].replace("/>", f' data-target-seconds="{target}"/>')
         for i, (x, y) in enumerate(points):
             tip = f'{cps[i]["name"]} · {name}：{clock(values[i])}'
             if target is not None:
                 tip += "；方案 − 佳明：" + time_delta(values[i] - cps[i]["elapsed_seconds"])
-            parts.append(f'<circle cx="{x:.3f}" cy="{y:.3f}" r="5" fill="{color}">'
-                         f'<title>{escape(tip)}</title></circle>')
+            if series == "garmin":
+                parts.append(f'<g class="actual-point"><circle cx="{x:.3f}" cy="{y:.3f}" r="6" '
+                             f'fill="{color}" stroke="#ffffff" stroke-width="2">'
+                             f'<title>{escape(tip)}</title></circle></g>')
+            else:
+                # Transparent targets retain point tooltips without adding visible marker clutter.
+                parts.append(f'<circle class="point-hit" cx="{x:.3f}" cy="{y:.3f}" r="10" fill="transparent">'
+                             f'<title>{escape(tip)}</title></circle>')
+        label_y = label_positions[j]
+        path([(plot_right + 12, endpoints[j]), (plot_right + 48, label_y),
+              (plot_right + 72, label_y)], color, 2)
+        parts[-1] = parts[-1].replace("/>", ' data-role="endpoint-leader"/>')
+        text(plot_right + 90, label_y + 7, name + "  " + clock(values[-1]),
+             23, color, 700 if series == "garmin" else 500)
+        parts[-1] = parts[-1].replace("<text ", '<text class="end-label" ')
         parts.append("</g>")
     parts.append("</g>")
 
@@ -254,9 +293,11 @@ def render_svg(comparison: dict) -> str:
         '<style>text{font-family:"PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif;'
         'font-variant-numeric:tabular-nums}'
         '.inspectable,.curve{outline:none}'
-        '.inspectable:hover .row-bg,.inspectable:focus .row-bg{fill:#deebe5;stroke:#126b70;stroke-width:2}'
-        '.curve:hover path[data-series],.curve:focus path[data-series]{stroke-width:6}'
-        '.curve:hover circle,.curve:focus circle{r:7}'
+        '.inspectable:hover .row-bg,.inspectable:focus .row-bg{fill:#E9EDF2;stroke:#8995A3;stroke-width:2}'
+        '.curve:hover path[data-series],.curve:focus path[data-series]{stroke-width:9}'
+        '.curve:hover .actual-point circle,.curve:focus .actual-point circle{r:8}'
+        '.curve:hover .point-hit,.curve:focus .point-hit{fill:#ffffff;stroke:currentColor;stroke-width:2;r:5}'
+        '.curve:hover .end-label,.curve:focus .end-label{font-weight:700;text-decoration:underline}'
         '#data-notes:focus text{text-decoration:underline}'
         '</style>\n'
     )

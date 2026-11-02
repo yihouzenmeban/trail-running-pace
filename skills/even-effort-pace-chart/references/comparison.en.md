@@ -22,13 +22,15 @@ python3 <skill-dir>/scripts/compare_activity.py generate race.gpx \
   --targets 15:00 16:00 17:00 --output-dir output/comparison
 ```
 
-`inspect` prints activity totals, matched checkpoints, segment times, terrain estimates, and warnings without writing files. `generate` writes only `garmin-comparison.svg` by default, with four sections:
+`inspect` prints activity totals, matched checkpoints, segment times, terrain estimates, and warnings without writing files. `generate` writes only `garmin-comparison.svg` by default, with three sections:
 
 1. A checkpoint time table: cumulative arrival and segment elapsed time, each with plan differences, grouped under the same checkpoint and labeled with the previous station.
 2. Cumulative distance and segment ascent/descent; Garmin first, repository values and differences in one cell.
 3. One cumulative time chart for the actual activity and all plans. The horizontal axis aligns checkpoints by cumulative race-route distance.
 
 The header prioritizes actual finish time, followed by terrain totals. When opened directly in a browser, SVG rows and curves support hover and Tab focus highlighting; point tooltips contain exact times and differences. Footnotes retain essential definitions, with full provenance and warnings in tooltips and SVG metadata. Image embeddings remain readable as a static chart without interaction. No additional HTML is generated.
+
+Table values use black and gray, with signed differences consistently gray. Targets receive colors in list order, starting with blue, orange, and green; header samples match their curve colors and distinct dash patterns. The recorded activity uses a thicker black solid line with visible markers; plan points retain hover tooltips. Direct labels on the right show each series and its exact finish time. Close labels are separated with leader lines, and larger target lists increase the plot height to keep every label.
 
 Parentheses mean **repository minus Garmin**. Negative time differences mean an earlier planned arrival or a shorter planned segment. Times include seconds and support durations beyond 24 hours. Add `--export-json` for unrounded `garmin-comparison.json`; it excludes raw GPS records but includes activity identity, passage times, and estimated metrics. Existing files require another output directory or authorized `--overwrite`.
 

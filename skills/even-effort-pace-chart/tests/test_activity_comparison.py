@@ -324,6 +324,82 @@ class ComparisonTests(unittest.TestCase):
         self.assertIn(result["warnings"][0], details.find("{*}title").text)
         self.assertEqual(details.get("tabindex"), "0")
 
+    def test_curve_styles_match_headers_and_actual_is_primary(self):
+        import xml.etree.ElementTree as ET
+        from comparison_svg import render_svg
+        self.plan, self.route = compare.load_plan(self.path, self.config, ["01:00", "01:01", "01:02"])
+        root = ET.fromstring(render_svg(self.build()))
+        plot = root.find(".//{*}g[@id='time-curves']")
+        actual = plot.find(".//{*}path[@data-series='garmin']")
+        plans = plot.findall(".//{*}path[@data-series='repository']")
+        self.assertEqual(actual.get("stroke"), "#202A35")
+        self.assertGreater(float(actual.get("stroke-width")), max(float(p.get("stroke-width")) for p in plans))
+        self.assertEqual(len({p.get("stroke-dasharray") for p in plans}), len(plans))
+        headers = root.findall(".//{*}g[@id='checkpoint-times']/{*}g[@data-target-seconds]")
+        self.assertEqual(len(headers), len(plans))
+        for header, curve in zip(headers, plans):
+            self.assertEqual(header.get("data-target-seconds"), curve.get("data-target-seconds"))
+            self.assertEqual(header.find("{*}path").get("stroke"), curve.get("stroke"))
+            self.assertEqual(header.find("{*}path").get("stroke-dasharray"), curve.get("stroke-dasharray"))
+        for i in (1, 2):
+            for row_id in ("time-cp", "segment", "terrain-cp"):
+                row = root.find(f".//{{*}}g[@id='{row_id}-{i}']")
+                for text in row.findall("{*}text"):
+                    self.assertIn(text.get("fill"), {"#202A35", "#626D79"})
+        self.assertEqual(len(plot.findall(".//{*}g[@class='actual-point']")), len(self.plan["checkpoints"]))
+        for curve in plot.findall(".//{*}g[@class='curve']"):
+            self.assertIsNotNone(curve.find("{*}text[@class='end-label']"))
+            self.assertEqual(curve.get("color"), curve.find("{*}path").get("stroke"))
+
+    def test_endpoint_labels_stay_ordered_and_separate_near_boundaries(self):
+        from comparison_svg import endpoint_label_positions
+        for values in ([100, 100, 100, 100], [698, 699, 700], [100, 700], [400], []):
+            positions = endpoint_label_positions(values, 100, 700, gap=44)
+            self.assertEqual(len(positions), len(values))
+            self.assertTrue(all(100 <= y <= 700 for y in positions))
+            self.assertTrue(all(b - a >= 44 for a, b in zip(sorted(positions), sorted(positions)[1:])))
+        values = [650, 120, 660, 140]
+        positions = endpoint_label_positions(values, 100, 700)
+        self.assertEqual(sorted(range(4), key=lambda i: positions[i]),
+                         sorted(range(4), key=lambda i: values[i]))
+
+    def test_curve_endpoint_labels_include_exact_finish_and_stay_inside_plot(self):
+        import xml.etree.ElementTree as ET
+        from comparison_svg import render_svg
+        self.plan, self.route = compare.load_plan(self.path, self.config, ["01:06:39", "01:06:40", "01:06:41"])
+        result = self.build()
+        root = ET.fromstring(render_svg(result))
+        plot = root.find(".//{*}g[@id='time-curves']")
+        labels = plot.findall(".//{*}text[@class='end-label']")
+        positions = sorted(float(label.get("y")) - 7 for label in labels)
+        self.assertEqual(len(labels), 4)
+        self.assertTrue(all(b - a >= 44 for a, b in zip(positions, positions[1:])))
+        self.assertGreaterEqual(positions[0], float(plot.get("data-y-top")))
+        self.assertLessEqual(positions[-1], float(plot.get("data-y-bottom")))
+        self.assertIn("01:06:40", next(label.text for label in labels if "佳明实际" in label.text))
+        for label in labels:
+            self.assertGreater(float(label.get("x")), float(plot.get("data-x-max")))
+        leaders = plot.findall(".//{*}path[@data-role='endpoint-leader']")
+        self.assertEqual(len(leaders), len(labels))
+
+    def test_many_close_targets_keep_all_curves_and_legible_endpoint_labels(self):
+        import xml.etree.ElementTree as ET
+        from comparison_svg import render_svg
+        targets = [f"01:06:{second:02d}" for second in range(36, 48)]
+        self.plan, self.route = compare.load_plan(self.path, self.config, targets)
+        root = ET.fromstring(render_svg(self.build()))
+        curves = root.findall(".//{*}path[@data-series='repository']")
+        self.assertEqual(len(curves), len(targets))
+        self.assertEqual(len({(curve.get("stroke"), curve.get("stroke-dasharray"))
+                              for curve in curves}), len(targets))
+        plot = root.find(".//{*}g[@id='time-curves']")
+        labels = plot.findall(".//{*}text[@class='end-label']")
+        positions = sorted(float(label.get("y")) - 7 for label in labels)
+        self.assertEqual(len(labels), len(targets) + 1)
+        self.assertTrue(all(b - a >= 44 for a, b in zip(positions, positions[1:])))
+        self.assertGreaterEqual(positions[0], float(plot.get("data-y-top")))
+        self.assertLessEqual(positions[-1], float(plot.get("data-y-bottom")))
+
 
 class NetworkAndCliTests(unittest.TestCase):
     def test_env_precedence_and_no_shell_evaluation(self):

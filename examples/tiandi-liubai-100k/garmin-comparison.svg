@@ -1,642 +1,653 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="2720" height="3624" viewBox="0 0 2720 3624" role="img" aria-labelledby="title description">
+<svg xmlns="http://www.w3.org/2000/svg" width="2720" height="3824" viewBox="0 0 2720 3824" role="img" aria-labelledby="title description">
 <title id="title">天地留白100K：佳明实际与仓库方案对比</title>
 <desc id="description">逐站并排比较累计到站与本段耗时，随后展示地形数据和共用坐标的全程时间走势。括号内差值为仓库减佳明，使用未取整数据计算。独立打开可悬停或聚焦站点与曲线查看。</desc>
 <metadata>{&quot;route_sha256&quot;: &quot;ee367c29a29ed1903f4cc2e368d7bc049a026ba532d8eb77b9b6e06be1f0e0fa&quot;, &quot;config_sha256&quot;: &quot;0e3667787a4845a02a38b5adf921c967d34e534dd38e37c988b3f1d92adbe7be&quot;, &quot;activity_id&quot;: 24918367466, &quot;activity_date&quot;: &quot;2026-10-31T06:00:23.0&quot;, &quot;targets_seconds&quot;: [54000.0, 57600.0, 61200.0], &quot;fit_sha256&quot;: &quot;cea001592bb78684714b993c248a5c53ad8aedd63211ca2dc55579353285e639&quot;, &quot;summary_sha256&quot;: &quot;6dfd37ba67e3bc96649c89c586834d2a2db1ca80d3432035072a0b84f73bb3cb&quot;, &quot;time_basis&quot;: &quot;Elapsed including stops; projected passage, not official timing&quot;, &quot;delta&quot;: &quot;repository minus recorded activity&quot;, &quot;terrain&quot;: &quot;Cumulative distance; per-segment ascent/descent from adjacent lap estimates&quot;, &quot;warnings&quot;: [&quot;Skipped 2 records without GPS/time/distance; gaps use linear interpolation.&quot;, &quot;ascent_m: FIT laps 5018.0, finish 5019.0; no rescaling.&quot;, &quot;descent_m: FIT laps 5024.0, finish 5023.0; no rescaling.&quot;, &quot;wpt:10: explicit passage override, offset 2.0 m.&quot;], &quot;passage_overrides&quot;: {&quot;wpt:10&quot;: 56267.677039998074}, &quot;data_notes&quot;: [&quot;来源：路线与现有配速模型；实际活动 2026-10-31「2026 徽州古城秋季赛」。汇总来源：Garmin platform + FIT session fallback。&quot;, &quot;CP 经过时间由原始 FIT 轨迹投影或明确指定的实际耗时得到，包含停留，非官方打卡；无法可靠拆分站内停留。&quot;, &quot;佳明分站累计爬升、下降按 FIT 逐圈距离插值；本段值为相邻站累计值之差。终点使用活动汇总，未按比例调整。&quot;, &quot;FIT 逐圈爬升 / 下降：5018 / 5024 m；汇总：5019 / 5023 m。差值使用未取整原值；分段显示值之和可能有取整误差；缺失值为 —。&quot;, &quot;数据提示：Skipped 2 records without GPS/time/distance; gaps use linear interpolation.&quot;, &quot;数据提示：ascent_m: FIT laps 5018.0, finish 5019.0; no rescaling.&quot;, &quot;数据提示：descent_m: FIT laps 5024.0, finish 5023.0; no rescaling.&quot;, &quot;数据提示：wpt:10: explicit passage override, offset 2.0 m.&quot;], &quot;checkpoint_matches&quot;: [{&quot;id&quot;: &quot;wpt:11:start&quot;, &quot;offset_m&quot;: 12.964957989585011, &quot;method&quot;: &quot;session endpoint&quot;}, {&quot;id&quot;: &quot;wpt:1&quot;, &quot;offset_m&quot;: 2.31814014546448, &quot;method&quot;: &quot;track projection&quot;}, {&quot;id&quot;: &quot;wpt:2&quot;, &quot;offset_m&quot;: 9.230749929622252, &quot;method&quot;: &quot;track projection&quot;}, {&quot;id&quot;: &quot;wpt:3&quot;, &quot;offset_m&quot;: 2.725762723097807, &quot;method&quot;: &quot;track projection&quot;}, {&quot;id&quot;: &quot;wpt:4&quot;, &quot;offset_m&quot;: 8.263480340553453, &quot;method&quot;: &quot;track projection&quot;}, {&quot;id&quot;: &quot;wpt:5&quot;, &quot;offset_m&quot;: 2.0526183385708525, &quot;method&quot;: &quot;track projection&quot;}, {&quot;id&quot;: &quot;wpt:6&quot;, &quot;offset_m&quot;: 2.359384398367951, &quot;method&quot;: &quot;track projection&quot;}, {&quot;id&quot;: &quot;wpt:7&quot;, &quot;offset_m&quot;: 2.700968808228777, &quot;method&quot;: &quot;track projection&quot;}, {&quot;id&quot;: &quot;wpt:8&quot;, &quot;offset_m&quot;: 3.902494573897764, &quot;method&quot;: &quot;track projection&quot;}, {&quot;id&quot;: &quot;wpt:9&quot;, &quot;offset_m&quot;: 7.719709467036301, &quot;method&quot;: &quot;track projection&quot;}, {&quot;id&quot;: &quot;wpt:10&quot;, &quot;offset_m&quot;: 1.9993483347545806, &quot;method&quot;: &quot;elapsed override&quot;}, {&quot;id&quot;: &quot;wpt:11:finish&quot;, &quot;offset_m&quot;: 12.443704885853712, &quot;method&quot;: &quot;session endpoint&quot;}]}</metadata>
-<style>text{font-family:"PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif;font-variant-numeric:tabular-nums}.inspectable,.curve{outline:none}.inspectable:hover .row-bg,.inspectable:focus .row-bg{fill:#deebe5;stroke:#126b70;stroke-width:2}.curve:hover path[data-series],.curve:focus path[data-series]{stroke-width:6}.curve:hover circle,.curve:focus circle{r:7}#data-notes:focus text{text-decoration:underline}</style>
-<rect x="0" y="0" width="2720" height="3624" rx="0" fill="#f5f4ef"/>
-<rect x="0" y="0" width="2720" height="10" rx="0" fill="#126b70"/>
-<text x="64" y="78" font-size="45" fill="#203c46" font-weight="700" text-anchor="start">天地留白100K</text>
-<text x="2656" y="76" font-size="30" fill="#203c46" font-weight="400" text-anchor="end">佳明实际 × 仓库方案</text>
-<text x="64" y="125.0" font-size="24" fill="#203c46" font-weight="400" text-anchor="start">2026-10-31 · 2026 徽州古城秋季赛</text>
-<rect x="64" y="157" width="630.0" height="126" rx="13" fill="#203c46"/>
-<text x="88" y="191" font-size="21" fill="#c8dbde" font-weight="400" text-anchor="start">实际完赛时间</text>
-<text x="88" y="242" font-size="40" fill="#ffffff" font-weight="650" text-anchor="start">16:46:04</text>
-<text x="88" y="269" font-size="18" fill="#c8dbde" font-weight="400" text-anchor="start">经过时间 · 包含停留</text>
+<style>text{font-family:"PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif;font-variant-numeric:tabular-nums}.inspectable,.curve{outline:none}.inspectable:hover .row-bg,.inspectable:focus .row-bg{fill:#E9EDF2;stroke:#8995A3;stroke-width:2}.curve:hover path[data-series],.curve:focus path[data-series]{stroke-width:9}.curve:hover .actual-point circle,.curve:focus .actual-point circle{r:8}.curve:hover .point-hit,.curve:focus .point-hit{fill:#ffffff;stroke:currentColor;stroke-width:2;r:5}.curve:hover .end-label,.curve:focus .end-label{font-weight:700;text-decoration:underline}#data-notes:focus text{text-decoration:underline}</style>
+<rect x="0" y="0" width="2720" height="3824" rx="0" fill="#F7F8FA"/>
+<rect x="0" y="0" width="2720" height="6" rx="0" fill="#202A35"/>
+<text x="64" y="78" font-size="45" fill="#202A35" font-weight="700" text-anchor="start">天地留白100K</text>
+<text x="2656" y="76" font-size="30" fill="#202A35" font-weight="400" text-anchor="end">佳明实际 × 仓库方案</text>
+<text x="64" y="125.0" font-size="24" fill="#202A35" font-weight="400" text-anchor="start">2026-10-31 · 2026 徽州古城秋季赛</text>
+<rect x="64" y="157" width="630.0" height="126" rx="13" fill="#ffffff"/>
+<text x="88" y="191" font-size="21" fill="#626D79" font-weight="400" text-anchor="start">实际完赛时间</text>
+<text x="88" y="242" font-size="40" fill="#202A35" font-weight="700" text-anchor="start">16:46:04</text>
+<text x="88" y="269" font-size="18" fill="#626D79" font-weight="400" text-anchor="start">经过时间 · 包含停留</text>
 <rect x="718.0" y="157" width="630.0" height="126" rx="13" fill="#ffffff"/>
-<text x="742.0" y="191" font-size="21" fill="#627780" font-weight="400" text-anchor="start">全程距离</text>
-<text x="742.0" y="238" font-size="30" fill="#203c46" font-weight="650" text-anchor="start">101.88 / 101.25 km</text>
-<text x="742.0" y="269" font-size="18" fill="#627780" font-weight="400" text-anchor="start">佳明 / 仓库</text>
-<text x="1324.0" y="269" font-size="23" fill="#126b70" font-weight="400" text-anchor="end">-0.63 km</text>
+<text x="742.0" y="191" font-size="21" fill="#626D79" font-weight="400" text-anchor="start">全程距离</text>
+<text x="742.0" y="238" font-size="30" fill="#202A35" font-weight="650" text-anchor="start">101.88 / 101.25 km</text>
+<text x="742.0" y="269" font-size="18" fill="#626D79" font-weight="400" text-anchor="start">佳明 / 仓库</text>
+<text x="1324.0" y="269" font-size="23" fill="#626D79" font-weight="400" text-anchor="end">-0.63 km</text>
 <rect x="1372.0" y="157" width="630.0" height="126" rx="13" fill="#ffffff"/>
-<text x="1396.0" y="191" font-size="21" fill="#627780" font-weight="400" text-anchor="start">累计爬升</text>
-<text x="1396.0" y="238" font-size="30" fill="#203c46" font-weight="650" text-anchor="start">5019 / 5965 m</text>
-<text x="1396.0" y="269" font-size="18" fill="#627780" font-weight="400" text-anchor="start">佳明 / 仓库</text>
-<text x="1978.0" y="269" font-size="23" fill="#aa472e" font-weight="400" text-anchor="end">+946 m</text>
+<text x="1396.0" y="191" font-size="21" fill="#626D79" font-weight="400" text-anchor="start">累计爬升</text>
+<text x="1396.0" y="238" font-size="30" fill="#202A35" font-weight="650" text-anchor="start">5019 / 5965 m</text>
+<text x="1396.0" y="269" font-size="18" fill="#626D79" font-weight="400" text-anchor="start">佳明 / 仓库</text>
+<text x="1978.0" y="269" font-size="23" fill="#626D79" font-weight="400" text-anchor="end">+946 m</text>
 <rect x="2026.0" y="157" width="630.0" height="126" rx="13" fill="#ffffff"/>
-<text x="2050.0" y="191" font-size="21" fill="#627780" font-weight="400" text-anchor="start">累计下降</text>
-<text x="2050.0" y="238" font-size="30" fill="#203c46" font-weight="650" text-anchor="start">5023 / 5965 m</text>
-<text x="2050.0" y="269" font-size="18" fill="#627780" font-weight="400" text-anchor="start">佳明 / 仓库</text>
-<text x="2632.0" y="269" font-size="23" fill="#aa472e" font-weight="400" text-anchor="end">+942 m</text>
+<text x="2050.0" y="191" font-size="21" fill="#626D79" font-weight="400" text-anchor="start">累计下降</text>
+<text x="2050.0" y="238" font-size="30" fill="#202A35" font-weight="650" text-anchor="start">5023 / 5965 m</text>
+<text x="2050.0" y="269" font-size="18" fill="#626D79" font-weight="400" text-anchor="start">佳明 / 仓库</text>
+<text x="2632.0" y="269" font-size="23" fill="#626D79" font-weight="400" text-anchor="end">+942 m</text>
 <g id="checkpoint-times">
-<text x="64" y="335" font-size="28" fill="#203c46" font-weight="700" text-anchor="start">01  逐站时间对比</text>
-<text x="64" y="375" font-size="22" fill="#627780" font-weight="400" text-anchor="start">每站两行：累计到站 / 本段耗时。括号为方案 − 佳明，负值表示方案更早或本段更短。</text>
-<text x="78" y="426" font-size="22" fill="#627780" font-weight="600" text-anchor="start">到达站点 / 来自上一站</text>
-<text x="484" y="426" font-size="22" fill="#627780" font-weight="600" text-anchor="start">时间口径</text>
-<text x="892.0" y="426" font-size="24" fill="#aa472e" font-weight="600" text-anchor="middle">佳明实际</text>
-<text x="1396.0" y="426" font-size="24" fill="#126b70" font-weight="600" text-anchor="middle">方案 15:00</text>
-<text x="1900.0" y="426" font-size="24" fill="#126b70" font-weight="600" text-anchor="middle">方案 16:00</text>
-<text x="2404.0" y="426" font-size="24" fill="#126b70" font-weight="600" text-anchor="middle">方案 17:00</text>
+<text x="64" y="335" font-size="28" fill="#202A35" font-weight="700" text-anchor="start">01  逐站时间对比</text>
+<text x="64" y="375" font-size="22" fill="#626D79" font-weight="400" text-anchor="start">每站两行：累计到站 / 本段耗时。括号为方案 − 佳明，负值表示方案更早或本段更短。</text>
+<text x="78" y="426" font-size="22" fill="#626D79" font-weight="600" text-anchor="start">到达站点 / 来自上一站</text>
+<text x="484" y="426" font-size="22" fill="#626D79" font-weight="600" text-anchor="start">时间口径</text>
+<text x="892.0" y="426" font-size="24" fill="#202A35" font-weight="700" text-anchor="middle">佳明实际</text>
+<g data-target-seconds="54000.0">
+<path d="M1260.000 418.000 L1302.000 418.000" fill="none" stroke="#0072B2" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="20 10"/>
+<text x="1414.0" y="426" font-size="24" fill="#0072B2" font-weight="600" text-anchor="middle">方案 15:00</text>
+</g>
+<g data-target-seconds="57600.0">
+<path d="M1764.000 418.000 L1806.000 418.000" fill="none" stroke="#C05A00" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="8 8"/>
+<text x="1918.0" y="426" font-size="24" fill="#C05A00" font-weight="600" text-anchor="middle">方案 16:00</text>
+</g>
+<g data-target-seconds="61200.0">
+<path d="M2268.000 418.000 L2310.000 418.000" fill="none" stroke="#007A5E" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="22 8 4 8"/>
+<text x="2422.0" y="426" font-size="24" fill="#007A5E" font-weight="600" text-anchor="middle">方案 17:00</text>
+</g>
 <g id="checkpoint-1" class="inspectable" tabindex="0" aria-label="起终点-徽州古城（起点） → CP1-雄村镇；实际累计 01:08:04；本段 01:08:04，包含停留。">
 <title>起终点-徽州古城（起点） → CP1-雄村镇；实际累计 01:08:04；本段 01:08:04，包含停留。</title>
 <rect class="row-bg" x="64" y="450" width="2592" height="124" rx="5" fill="#ffffff"/>
-<text x="84" y="492.0" font-size="23" fill="#203c46" font-weight="400" text-anchor="start">CP1-雄村镇</text>
-<text x="84" y="541.0" font-size="18" fill="#203c46" font-weight="400" text-anchor="start">来自 起终点-徽州古城（起点）</text>
-<path d="M464.000 466.000 L464.000 558.000" fill="none" stroke="#d4dfdc" stroke-width="1"/>
-<path d="M484.000 512.000 L2632.000 512.000" fill="none" stroke="#dce5e1" stroke-width="1"/>
+<text x="84" y="492.0" font-size="23" fill="#202A35" font-weight="400" text-anchor="start">CP1-雄村镇</text>
+<text x="84" y="541.0" font-size="18" fill="#202A35" font-weight="400" text-anchor="start">来自 起终点-徽州古城（起点）</text>
+<path d="M464.000 466.000 L464.000 558.000" fill="none" stroke="#E2E6EB" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M484.000 512.000 L2632.000 512.000" fill="none" stroke="#E2E6EB" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <g id="time-cp-1">
-<text x="484" y="488" font-size="21" fill="#627780" font-weight="400" text-anchor="start">累计到站</text>
-<text x="892.0" y="488" font-size="26" fill="#aa472e" font-weight="600" text-anchor="middle">01:08:04</text>
-<text x="1396.0" y="477" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">01:00:02</text>
-<text x="1396.0" y="504" font-size="20" fill="#126b70" font-weight="400" text-anchor="middle">(-00:08:02)</text>
-<text x="1900.0" y="477" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">01:04:02</text>
-<text x="1900.0" y="504" font-size="20" fill="#126b70" font-weight="400" text-anchor="middle">(-00:04:02)</text>
-<text x="2404.0" y="477" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">01:08:02</text>
-<text x="2404.0" y="504" font-size="20" fill="#126b70" font-weight="400" text-anchor="middle">(-00:00:02)</text>
+<text x="484" y="488" font-size="21" fill="#626D79" font-weight="400" text-anchor="start">累计到站</text>
+<text x="892.0" y="488" font-size="26" fill="#202A35" font-weight="650" text-anchor="middle">01:08:04</text>
+<text x="1396.0" y="477" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">01:00:02</text>
+<text x="1396.0" y="504" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(-00:08:02)</text>
+<text x="1900.0" y="477" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">01:04:02</text>
+<text x="1900.0" y="504" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(-00:04:02)</text>
+<text x="2404.0" y="477" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">01:08:02</text>
+<text x="2404.0" y="504" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(-00:00:02)</text>
 </g>
 <g id="segment-1">
-<text x="484" y="550" font-size="21" fill="#627780" font-weight="400" text-anchor="start">本段耗时</text>
-<text x="892.0" y="550" font-size="26" fill="#aa472e" font-weight="600" text-anchor="middle">01:08:04</text>
-<text x="1396.0" y="539" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">01:00:02</text>
-<text x="1396.0" y="566" font-size="20" fill="#126b70" font-weight="400" text-anchor="middle">(-00:08:02)</text>
-<text x="1900.0" y="539" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">01:04:02</text>
-<text x="1900.0" y="566" font-size="20" fill="#126b70" font-weight="400" text-anchor="middle">(-00:04:02)</text>
-<text x="2404.0" y="539" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">01:08:02</text>
-<text x="2404.0" y="566" font-size="20" fill="#126b70" font-weight="400" text-anchor="middle">(-00:00:02)</text>
+<text x="484" y="550" font-size="21" fill="#626D79" font-weight="400" text-anchor="start">本段耗时</text>
+<text x="892.0" y="550" font-size="26" fill="#202A35" font-weight="650" text-anchor="middle">01:08:04</text>
+<text x="1396.0" y="539" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">01:00:02</text>
+<text x="1396.0" y="566" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(-00:08:02)</text>
+<text x="1900.0" y="539" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">01:04:02</text>
+<text x="1900.0" y="566" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(-00:04:02)</text>
+<text x="2404.0" y="539" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">01:08:02</text>
+<text x="2404.0" y="566" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(-00:00:02)</text>
 </g>
 </g>
 <g id="checkpoint-2" class="inspectable" tabindex="0" aria-label="CP1-雄村镇 → CP2-庄源村；实际累计 02:04:22；本段 00:56:18，包含停留。">
 <title>CP1-雄村镇 → CP2-庄源村；实际累计 02:04:22；本段 00:56:18，包含停留。</title>
-<rect class="row-bg" x="64" y="578" width="2592" height="124" rx="5" fill="#eaf0ed"/>
-<text x="84" y="620.0" font-size="23" fill="#203c46" font-weight="400" text-anchor="start">CP2-庄源村</text>
-<text x="84" y="669.0" font-size="18" fill="#203c46" font-weight="400" text-anchor="start">来自 CP1-雄村镇</text>
-<path d="M464.000 594.000 L464.000 686.000" fill="none" stroke="#d4dfdc" stroke-width="1"/>
-<path d="M484.000 640.000 L2632.000 640.000" fill="none" stroke="#dce5e1" stroke-width="1"/>
+<rect class="row-bg" x="64" y="578" width="2592" height="124" rx="5" fill="#F2F4F7"/>
+<text x="84" y="620.0" font-size="23" fill="#202A35" font-weight="400" text-anchor="start">CP2-庄源村</text>
+<text x="84" y="669.0" font-size="18" fill="#202A35" font-weight="400" text-anchor="start">来自 CP1-雄村镇</text>
+<path d="M464.000 594.000 L464.000 686.000" fill="none" stroke="#E2E6EB" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M484.000 640.000 L2632.000 640.000" fill="none" stroke="#E2E6EB" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <g id="time-cp-2">
-<text x="484" y="616" font-size="21" fill="#627780" font-weight="400" text-anchor="start">累计到站</text>
-<text x="892.0" y="616" font-size="26" fill="#aa472e" font-weight="600" text-anchor="middle">02:04:22</text>
-<text x="1396.0" y="605" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">02:01:50</text>
-<text x="1396.0" y="632" font-size="20" fill="#126b70" font-weight="400" text-anchor="middle">(-00:02:32)</text>
-<text x="1900.0" y="605" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">02:09:58</text>
-<text x="1900.0" y="632" font-size="20" fill="#aa472e" font-weight="400" text-anchor="middle">(+00:05:35)</text>
-<text x="2404.0" y="605" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">02:18:05</text>
-<text x="2404.0" y="632" font-size="20" fill="#aa472e" font-weight="400" text-anchor="middle">(+00:13:43)</text>
+<text x="484" y="616" font-size="21" fill="#626D79" font-weight="400" text-anchor="start">累计到站</text>
+<text x="892.0" y="616" font-size="26" fill="#202A35" font-weight="650" text-anchor="middle">02:04:22</text>
+<text x="1396.0" y="605" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">02:01:50</text>
+<text x="1396.0" y="632" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(-00:02:32)</text>
+<text x="1900.0" y="605" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">02:09:58</text>
+<text x="1900.0" y="632" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(+00:05:35)</text>
+<text x="2404.0" y="605" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">02:18:05</text>
+<text x="2404.0" y="632" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(+00:13:43)</text>
 </g>
 <g id="segment-2">
-<text x="484" y="678" font-size="21" fill="#627780" font-weight="400" text-anchor="start">本段耗时</text>
-<text x="892.0" y="678" font-size="26" fill="#aa472e" font-weight="600" text-anchor="middle">00:56:18</text>
-<text x="1396.0" y="667" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">01:01:48</text>
-<text x="1396.0" y="694" font-size="20" fill="#aa472e" font-weight="400" text-anchor="middle">(+00:05:30)</text>
-<text x="1900.0" y="667" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">01:05:56</text>
-<text x="1900.0" y="694" font-size="20" fill="#aa472e" font-weight="400" text-anchor="middle">(+00:09:37)</text>
-<text x="2404.0" y="667" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">01:10:03</text>
-<text x="2404.0" y="694" font-size="20" fill="#aa472e" font-weight="400" text-anchor="middle">(+00:13:45)</text>
+<text x="484" y="678" font-size="21" fill="#626D79" font-weight="400" text-anchor="start">本段耗时</text>
+<text x="892.0" y="678" font-size="26" fill="#202A35" font-weight="650" text-anchor="middle">00:56:18</text>
+<text x="1396.0" y="667" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">01:01:48</text>
+<text x="1396.0" y="694" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(+00:05:30)</text>
+<text x="1900.0" y="667" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">01:05:56</text>
+<text x="1900.0" y="694" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(+00:09:37)</text>
+<text x="2404.0" y="667" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">01:10:03</text>
+<text x="2404.0" y="694" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(+00:13:45)</text>
 </g>
 </g>
 <g id="checkpoint-3" class="inspectable" tabindex="0" aria-label="CP2-庄源村 → CP3-长源村；实际累计 03:08:35；本段 01:04:12，包含停留。">
 <title>CP2-庄源村 → CP3-长源村；实际累计 03:08:35；本段 01:04:12，包含停留。</title>
 <rect class="row-bg" x="64" y="706" width="2592" height="124" rx="5" fill="#ffffff"/>
-<text x="84" y="748.0" font-size="23" fill="#203c46" font-weight="400" text-anchor="start">CP3-长源村</text>
-<text x="84" y="797.0" font-size="18" fill="#203c46" font-weight="400" text-anchor="start">来自 CP2-庄源村</text>
-<path d="M464.000 722.000 L464.000 814.000" fill="none" stroke="#d4dfdc" stroke-width="1"/>
-<path d="M484.000 768.000 L2632.000 768.000" fill="none" stroke="#dce5e1" stroke-width="1"/>
+<text x="84" y="748.0" font-size="23" fill="#202A35" font-weight="400" text-anchor="start">CP3-长源村</text>
+<text x="84" y="797.0" font-size="18" fill="#202A35" font-weight="400" text-anchor="start">来自 CP2-庄源村</text>
+<path d="M464.000 722.000 L464.000 814.000" fill="none" stroke="#E2E6EB" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M484.000 768.000 L2632.000 768.000" fill="none" stroke="#E2E6EB" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <g id="time-cp-3">
-<text x="484" y="744" font-size="21" fill="#627780" font-weight="400" text-anchor="start">累计到站</text>
-<text x="892.0" y="744" font-size="26" fill="#aa472e" font-weight="600" text-anchor="middle">03:08:35</text>
-<text x="1396.0" y="733" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">03:06:13</text>
-<text x="1396.0" y="760" font-size="20" fill="#126b70" font-weight="400" text-anchor="middle">(-00:02:22)</text>
-<text x="1900.0" y="733" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">03:18:38</text>
-<text x="1900.0" y="760" font-size="20" fill="#aa472e" font-weight="400" text-anchor="middle">(+00:10:03)</text>
-<text x="2404.0" y="733" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">03:31:03</text>
-<text x="2404.0" y="760" font-size="20" fill="#aa472e" font-weight="400" text-anchor="middle">(+00:22:28)</text>
+<text x="484" y="744" font-size="21" fill="#626D79" font-weight="400" text-anchor="start">累计到站</text>
+<text x="892.0" y="744" font-size="26" fill="#202A35" font-weight="650" text-anchor="middle">03:08:35</text>
+<text x="1396.0" y="733" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">03:06:13</text>
+<text x="1396.0" y="760" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(-00:02:22)</text>
+<text x="1900.0" y="733" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">03:18:38</text>
+<text x="1900.0" y="760" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(+00:10:03)</text>
+<text x="2404.0" y="733" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">03:31:03</text>
+<text x="2404.0" y="760" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(+00:22:28)</text>
 </g>
 <g id="segment-3">
-<text x="484" y="806" font-size="21" fill="#627780" font-weight="400" text-anchor="start">本段耗时</text>
-<text x="892.0" y="806" font-size="26" fill="#aa472e" font-weight="600" text-anchor="middle">01:04:12</text>
-<text x="1396.0" y="795" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">01:04:22</text>
-<text x="1396.0" y="822" font-size="20" fill="#aa472e" font-weight="400" text-anchor="middle">(+00:00:10)</text>
-<text x="1900.0" y="795" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">01:08:40</text>
-<text x="1900.0" y="822" font-size="20" fill="#aa472e" font-weight="400" text-anchor="middle">(+00:04:28)</text>
-<text x="2404.0" y="795" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">01:12:57</text>
-<text x="2404.0" y="822" font-size="20" fill="#aa472e" font-weight="400" text-anchor="middle">(+00:08:45)</text>
+<text x="484" y="806" font-size="21" fill="#626D79" font-weight="400" text-anchor="start">本段耗时</text>
+<text x="892.0" y="806" font-size="26" fill="#202A35" font-weight="650" text-anchor="middle">01:04:12</text>
+<text x="1396.0" y="795" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">01:04:22</text>
+<text x="1396.0" y="822" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(+00:00:10)</text>
+<text x="1900.0" y="795" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">01:08:40</text>
+<text x="1900.0" y="822" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(+00:04:28)</text>
+<text x="2404.0" y="795" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">01:12:57</text>
+<text x="2404.0" y="822" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(+00:08:45)</text>
 </g>
 </g>
 <g id="checkpoint-4" class="inspectable" tabindex="0" aria-label="CP3-长源村 → CP4-大源村；实际累计 04:37:19；本段 01:28:44，包含停留。">
 <title>CP3-长源村 → CP4-大源村；实际累计 04:37:19；本段 01:28:44，包含停留。</title>
-<rect class="row-bg" x="64" y="834" width="2592" height="124" rx="5" fill="#eaf0ed"/>
-<text x="84" y="876.0" font-size="23" fill="#203c46" font-weight="400" text-anchor="start">CP4-大源村</text>
-<text x="84" y="925.0" font-size="18" fill="#203c46" font-weight="400" text-anchor="start">来自 CP3-长源村</text>
-<path d="M464.000 850.000 L464.000 942.000" fill="none" stroke="#d4dfdc" stroke-width="1"/>
-<path d="M484.000 896.000 L2632.000 896.000" fill="none" stroke="#dce5e1" stroke-width="1"/>
+<rect class="row-bg" x="64" y="834" width="2592" height="124" rx="5" fill="#F2F4F7"/>
+<text x="84" y="876.0" font-size="23" fill="#202A35" font-weight="400" text-anchor="start">CP4-大源村</text>
+<text x="84" y="925.0" font-size="18" fill="#202A35" font-weight="400" text-anchor="start">来自 CP3-长源村</text>
+<path d="M464.000 850.000 L464.000 942.000" fill="none" stroke="#E2E6EB" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M484.000 896.000 L2632.000 896.000" fill="none" stroke="#E2E6EB" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <g id="time-cp-4">
-<text x="484" y="872" font-size="21" fill="#627780" font-weight="400" text-anchor="start">累计到站</text>
-<text x="892.0" y="872" font-size="26" fill="#aa472e" font-weight="600" text-anchor="middle">04:37:19</text>
-<text x="1396.0" y="861" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">04:45:35</text>
-<text x="1396.0" y="888" font-size="20" fill="#aa472e" font-weight="400" text-anchor="middle">(+00:08:16)</text>
-<text x="1900.0" y="861" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">05:04:38</text>
-<text x="1900.0" y="888" font-size="20" fill="#aa472e" font-weight="400" text-anchor="middle">(+00:27:19)</text>
-<text x="2404.0" y="861" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">05:23:40</text>
-<text x="2404.0" y="888" font-size="20" fill="#aa472e" font-weight="400" text-anchor="middle">(+00:46:21)</text>
+<text x="484" y="872" font-size="21" fill="#626D79" font-weight="400" text-anchor="start">累计到站</text>
+<text x="892.0" y="872" font-size="26" fill="#202A35" font-weight="650" text-anchor="middle">04:37:19</text>
+<text x="1396.0" y="861" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">04:45:35</text>
+<text x="1396.0" y="888" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(+00:08:16)</text>
+<text x="1900.0" y="861" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">05:04:38</text>
+<text x="1900.0" y="888" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(+00:27:19)</text>
+<text x="2404.0" y="861" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">05:23:40</text>
+<text x="2404.0" y="888" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(+00:46:21)</text>
 </g>
 <g id="segment-4">
-<text x="484" y="934" font-size="21" fill="#627780" font-weight="400" text-anchor="start">本段耗时</text>
-<text x="892.0" y="934" font-size="26" fill="#aa472e" font-weight="600" text-anchor="middle">01:28:44</text>
-<text x="1396.0" y="923" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">01:39:22</text>
-<text x="1396.0" y="950" font-size="20" fill="#aa472e" font-weight="400" text-anchor="middle">(+00:10:38)</text>
-<text x="1900.0" y="923" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">01:46:00</text>
-<text x="1900.0" y="950" font-size="20" fill="#aa472e" font-weight="400" text-anchor="middle">(+00:17:16)</text>
-<text x="2404.0" y="923" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">01:52:37</text>
-<text x="2404.0" y="950" font-size="20" fill="#aa472e" font-weight="400" text-anchor="middle">(+00:23:53)</text>
+<text x="484" y="934" font-size="21" fill="#626D79" font-weight="400" text-anchor="start">本段耗时</text>
+<text x="892.0" y="934" font-size="26" fill="#202A35" font-weight="650" text-anchor="middle">01:28:44</text>
+<text x="1396.0" y="923" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">01:39:22</text>
+<text x="1396.0" y="950" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(+00:10:38)</text>
+<text x="1900.0" y="923" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">01:46:00</text>
+<text x="1900.0" y="950" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(+00:17:16)</text>
+<text x="2404.0" y="923" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">01:52:37</text>
+<text x="2404.0" y="950" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(+00:23:53)</text>
 </g>
 </g>
 <g id="checkpoint-5" class="inspectable" tabindex="0" aria-label="CP4-大源村 → CP5-洲头梁村；实际累计 07:26:19；本段 02:49:00，包含停留。">
 <title>CP4-大源村 → CP5-洲头梁村；实际累计 07:26:19；本段 02:49:00，包含停留。</title>
 <rect class="row-bg" x="64" y="962" width="2592" height="124" rx="5" fill="#ffffff"/>
-<text x="84" y="1004.0" font-size="23" fill="#203c46" font-weight="400" text-anchor="start">CP5-洲头梁村</text>
-<text x="84" y="1053.0" font-size="18" fill="#203c46" font-weight="400" text-anchor="start">来自 CP4-大源村</text>
-<path d="M464.000 978.000 L464.000 1070.000" fill="none" stroke="#d4dfdc" stroke-width="1"/>
-<path d="M484.000 1024.000 L2632.000 1024.000" fill="none" stroke="#dce5e1" stroke-width="1"/>
+<text x="84" y="1004.0" font-size="23" fill="#202A35" font-weight="400" text-anchor="start">CP5-洲头梁村</text>
+<text x="84" y="1053.0" font-size="18" fill="#202A35" font-weight="400" text-anchor="start">来自 CP4-大源村</text>
+<path d="M464.000 978.000 L464.000 1070.000" fill="none" stroke="#E2E6EB" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M484.000 1024.000 L2632.000 1024.000" fill="none" stroke="#E2E6EB" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <g id="time-cp-5">
-<text x="484" y="1000" font-size="21" fill="#627780" font-weight="400" text-anchor="start">累计到站</text>
-<text x="892.0" y="1000" font-size="26" fill="#aa472e" font-weight="600" text-anchor="middle">07:26:19</text>
-<text x="1396.0" y="989" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">06:51:50</text>
-<text x="1396.0" y="1016" font-size="20" fill="#126b70" font-weight="400" text-anchor="middle">(-00:34:29)</text>
-<text x="1900.0" y="989" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">07:19:17</text>
-<text x="1900.0" y="1016" font-size="20" fill="#126b70" font-weight="400" text-anchor="middle">(-00:07:02)</text>
-<text x="2404.0" y="989" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">07:46:45</text>
-<text x="2404.0" y="1016" font-size="20" fill="#aa472e" font-weight="400" text-anchor="middle">(+00:20:25)</text>
+<text x="484" y="1000" font-size="21" fill="#626D79" font-weight="400" text-anchor="start">累计到站</text>
+<text x="892.0" y="1000" font-size="26" fill="#202A35" font-weight="650" text-anchor="middle">07:26:19</text>
+<text x="1396.0" y="989" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">06:51:50</text>
+<text x="1396.0" y="1016" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(-00:34:29)</text>
+<text x="1900.0" y="989" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">07:19:17</text>
+<text x="1900.0" y="1016" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(-00:07:02)</text>
+<text x="2404.0" y="989" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">07:46:45</text>
+<text x="2404.0" y="1016" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(+00:20:25)</text>
 </g>
 <g id="segment-5">
-<text x="484" y="1062" font-size="21" fill="#627780" font-weight="400" text-anchor="start">本段耗时</text>
-<text x="892.0" y="1062" font-size="26" fill="#aa472e" font-weight="600" text-anchor="middle">02:49:00</text>
-<text x="1396.0" y="1051" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">02:06:15</text>
-<text x="1396.0" y="1078" font-size="20" fill="#126b70" font-weight="400" text-anchor="middle">(-00:42:46)</text>
-<text x="1900.0" y="1051" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">02:14:40</text>
-<text x="1900.0" y="1078" font-size="20" fill="#126b70" font-weight="400" text-anchor="middle">(-00:34:21)</text>
-<text x="2404.0" y="1051" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">02:23:05</text>
-<text x="2404.0" y="1078" font-size="20" fill="#126b70" font-weight="400" text-anchor="middle">(-00:25:56)</text>
+<text x="484" y="1062" font-size="21" fill="#626D79" font-weight="400" text-anchor="start">本段耗时</text>
+<text x="892.0" y="1062" font-size="26" fill="#202A35" font-weight="650" text-anchor="middle">02:49:00</text>
+<text x="1396.0" y="1051" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">02:06:15</text>
+<text x="1396.0" y="1078" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(-00:42:46)</text>
+<text x="1900.0" y="1051" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">02:14:40</text>
+<text x="1900.0" y="1078" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(-00:34:21)</text>
+<text x="2404.0" y="1051" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">02:23:05</text>
+<text x="2404.0" y="1078" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(-00:25:56)</text>
 </g>
 </g>
 <g id="checkpoint-6" class="inspectable" tabindex="0" aria-label="CP5-洲头梁村 → CP6-武阳驿站；实际累计 09:07:44；本段 01:41:25，包含停留。">
 <title>CP5-洲头梁村 → CP6-武阳驿站；实际累计 09:07:44；本段 01:41:25，包含停留。</title>
-<rect class="row-bg" x="64" y="1090" width="2592" height="124" rx="5" fill="#eaf0ed"/>
-<text x="84" y="1132.0" font-size="23" fill="#203c46" font-weight="400" text-anchor="start">CP6-武阳驿站</text>
-<text x="84" y="1181.0" font-size="18" fill="#203c46" font-weight="400" text-anchor="start">来自 CP5-洲头梁村</text>
-<path d="M464.000 1106.000 L464.000 1198.000" fill="none" stroke="#d4dfdc" stroke-width="1"/>
-<path d="M484.000 1152.000 L2632.000 1152.000" fill="none" stroke="#dce5e1" stroke-width="1"/>
+<rect class="row-bg" x="64" y="1090" width="2592" height="124" rx="5" fill="#F2F4F7"/>
+<text x="84" y="1132.0" font-size="23" fill="#202A35" font-weight="400" text-anchor="start">CP6-武阳驿站</text>
+<text x="84" y="1181.0" font-size="18" fill="#202A35" font-weight="400" text-anchor="start">来自 CP5-洲头梁村</text>
+<path d="M464.000 1106.000 L464.000 1198.000" fill="none" stroke="#E2E6EB" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M484.000 1152.000 L2632.000 1152.000" fill="none" stroke="#E2E6EB" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <g id="time-cp-6">
-<text x="484" y="1128" font-size="21" fill="#627780" font-weight="400" text-anchor="start">累计到站</text>
-<text x="892.0" y="1128" font-size="26" fill="#aa472e" font-weight="600" text-anchor="middle">09:07:44</text>
-<text x="1396.0" y="1117" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">08:45:02</text>
-<text x="1396.0" y="1144" font-size="20" fill="#126b70" font-weight="400" text-anchor="middle">(-00:22:42)</text>
-<text x="1900.0" y="1117" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">09:20:02</text>
-<text x="1900.0" y="1144" font-size="20" fill="#aa472e" font-weight="400" text-anchor="middle">(+00:12:18)</text>
-<text x="2404.0" y="1117" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">09:55:03</text>
-<text x="2404.0" y="1144" font-size="20" fill="#aa472e" font-weight="400" text-anchor="middle">(+00:47:18)</text>
+<text x="484" y="1128" font-size="21" fill="#626D79" font-weight="400" text-anchor="start">累计到站</text>
+<text x="892.0" y="1128" font-size="26" fill="#202A35" font-weight="650" text-anchor="middle">09:07:44</text>
+<text x="1396.0" y="1117" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">08:45:02</text>
+<text x="1396.0" y="1144" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(-00:22:42)</text>
+<text x="1900.0" y="1117" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">09:20:02</text>
+<text x="1900.0" y="1144" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(+00:12:18)</text>
+<text x="2404.0" y="1117" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">09:55:03</text>
+<text x="2404.0" y="1144" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(+00:47:18)</text>
 </g>
 <g id="segment-6">
-<text x="484" y="1190" font-size="21" fill="#627780" font-weight="400" text-anchor="start">本段耗时</text>
-<text x="892.0" y="1190" font-size="26" fill="#aa472e" font-weight="600" text-anchor="middle">01:41:25</text>
-<text x="1396.0" y="1179" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">01:53:12</text>
-<text x="1396.0" y="1206" font-size="20" fill="#aa472e" font-weight="400" text-anchor="middle">(+00:11:47)</text>
-<text x="1900.0" y="1179" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">02:00:45</text>
-<text x="1900.0" y="1206" font-size="20" fill="#aa472e" font-weight="400" text-anchor="middle">(+00:19:20)</text>
-<text x="2404.0" y="1179" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">02:08:18</text>
-<text x="2404.0" y="1206" font-size="20" fill="#aa472e" font-weight="400" text-anchor="middle">(+00:26:53)</text>
+<text x="484" y="1190" font-size="21" fill="#626D79" font-weight="400" text-anchor="start">本段耗时</text>
+<text x="892.0" y="1190" font-size="26" fill="#202A35" font-weight="650" text-anchor="middle">01:41:25</text>
+<text x="1396.0" y="1179" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">01:53:12</text>
+<text x="1396.0" y="1206" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(+00:11:47)</text>
+<text x="1900.0" y="1179" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">02:00:45</text>
+<text x="1900.0" y="1206" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(+00:19:20)</text>
+<text x="2404.0" y="1179" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">02:08:18</text>
+<text x="2404.0" y="1206" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(+00:26:53)</text>
 </g>
 </g>
 <g id="checkpoint-7" class="inspectable" tabindex="0" aria-label="CP6-武阳驿站 → CP7-约源村委会；实际累计 11:00:09；本段 01:52:25，包含停留。">
 <title>CP6-武阳驿站 → CP7-约源村委会；实际累计 11:00:09；本段 01:52:25，包含停留。</title>
 <rect class="row-bg" x="64" y="1218" width="2592" height="124" rx="5" fill="#ffffff"/>
-<text x="84" y="1260.0" font-size="23" fill="#203c46" font-weight="400" text-anchor="start">CP7-约源村委会</text>
-<text x="84" y="1309.0" font-size="18" fill="#203c46" font-weight="400" text-anchor="start">来自 CP6-武阳驿站</text>
-<path d="M464.000 1234.000 L464.000 1326.000" fill="none" stroke="#d4dfdc" stroke-width="1"/>
-<path d="M484.000 1280.000 L2632.000 1280.000" fill="none" stroke="#dce5e1" stroke-width="1"/>
+<text x="84" y="1260.0" font-size="23" fill="#202A35" font-weight="400" text-anchor="start">CP7-约源村委会</text>
+<text x="84" y="1309.0" font-size="18" fill="#202A35" font-weight="400" text-anchor="start">来自 CP6-武阳驿站</text>
+<path d="M464.000 1234.000 L464.000 1326.000" fill="none" stroke="#E2E6EB" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M484.000 1280.000 L2632.000 1280.000" fill="none" stroke="#E2E6EB" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <g id="time-cp-7">
-<text x="484" y="1256" font-size="21" fill="#627780" font-weight="400" text-anchor="start">累计到站</text>
-<text x="892.0" y="1256" font-size="26" fill="#aa472e" font-weight="600" text-anchor="middle">11:00:09</text>
-<text x="1396.0" y="1245" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">10:07:06</text>
-<text x="1396.0" y="1272" font-size="20" fill="#126b70" font-weight="400" text-anchor="middle">(-00:53:03)</text>
-<text x="1900.0" y="1245" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">10:47:34</text>
-<text x="1900.0" y="1272" font-size="20" fill="#126b70" font-weight="400" text-anchor="middle">(-00:12:34)</text>
-<text x="2404.0" y="1245" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">11:28:03</text>
-<text x="2404.0" y="1272" font-size="20" fill="#aa472e" font-weight="400" text-anchor="middle">(+00:27:54)</text>
+<text x="484" y="1256" font-size="21" fill="#626D79" font-weight="400" text-anchor="start">累计到站</text>
+<text x="892.0" y="1256" font-size="26" fill="#202A35" font-weight="650" text-anchor="middle">11:00:09</text>
+<text x="1396.0" y="1245" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">10:07:06</text>
+<text x="1396.0" y="1272" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(-00:53:03)</text>
+<text x="1900.0" y="1245" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">10:47:34</text>
+<text x="1900.0" y="1272" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(-00:12:34)</text>
+<text x="2404.0" y="1245" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">11:28:03</text>
+<text x="2404.0" y="1272" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(+00:27:54)</text>
 </g>
 <g id="segment-7">
-<text x="484" y="1318" font-size="21" fill="#627780" font-weight="400" text-anchor="start">本段耗时</text>
-<text x="892.0" y="1318" font-size="26" fill="#aa472e" font-weight="600" text-anchor="middle">01:52:25</text>
-<text x="1396.0" y="1307" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">01:22:04</text>
-<text x="1396.0" y="1334" font-size="20" fill="#126b70" font-weight="400" text-anchor="middle">(-00:30:21)</text>
-<text x="1900.0" y="1307" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">01:27:32</text>
-<text x="1900.0" y="1334" font-size="20" fill="#126b70" font-weight="400" text-anchor="middle">(-00:24:53)</text>
-<text x="2404.0" y="1307" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">01:33:00</text>
-<text x="2404.0" y="1334" font-size="20" fill="#126b70" font-weight="400" text-anchor="middle">(-00:19:24)</text>
+<text x="484" y="1318" font-size="21" fill="#626D79" font-weight="400" text-anchor="start">本段耗时</text>
+<text x="892.0" y="1318" font-size="26" fill="#202A35" font-weight="650" text-anchor="middle">01:52:25</text>
+<text x="1396.0" y="1307" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">01:22:04</text>
+<text x="1396.0" y="1334" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(-00:30:21)</text>
+<text x="1900.0" y="1307" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">01:27:32</text>
+<text x="1900.0" y="1334" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(-00:24:53)</text>
+<text x="2404.0" y="1307" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">01:33:00</text>
+<text x="2404.0" y="1334" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(-00:19:24)</text>
 </g>
 </g>
 <g id="checkpoint-8" class="inspectable" tabindex="0" aria-label="CP7-约源村委会 → CP8-洪济小学旧址；实际累计 12:39:14；本段 01:39:06，包含停留。">
 <title>CP7-约源村委会 → CP8-洪济小学旧址；实际累计 12:39:14；本段 01:39:06，包含停留。</title>
-<rect class="row-bg" x="64" y="1346" width="2592" height="124" rx="5" fill="#eaf0ed"/>
-<text x="84" y="1388.0" font-size="23" fill="#203c46" font-weight="400" text-anchor="start">CP8-洪济小学旧址</text>
-<text x="84" y="1437.0" font-size="18" fill="#203c46" font-weight="400" text-anchor="start">来自 CP7-约源村委会</text>
-<path d="M464.000 1362.000 L464.000 1454.000" fill="none" stroke="#d4dfdc" stroke-width="1"/>
-<path d="M484.000 1408.000 L2632.000 1408.000" fill="none" stroke="#dce5e1" stroke-width="1"/>
+<rect class="row-bg" x="64" y="1346" width="2592" height="124" rx="5" fill="#F2F4F7"/>
+<text x="84" y="1388.0" font-size="23" fill="#202A35" font-weight="400" text-anchor="start">CP8-洪济小学旧址</text>
+<text x="84" y="1437.0" font-size="18" fill="#202A35" font-weight="400" text-anchor="start">来自 CP7-约源村委会</text>
+<path d="M464.000 1362.000 L464.000 1454.000" fill="none" stroke="#E2E6EB" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M484.000 1408.000 L2632.000 1408.000" fill="none" stroke="#E2E6EB" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <g id="time-cp-8">
-<text x="484" y="1384" font-size="21" fill="#627780" font-weight="400" text-anchor="start">累计到站</text>
-<text x="892.0" y="1384" font-size="26" fill="#aa472e" font-weight="600" text-anchor="middle">12:39:14</text>
-<text x="1396.0" y="1373" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">11:30:34</text>
-<text x="1396.0" y="1400" font-size="20" fill="#126b70" font-weight="400" text-anchor="middle">(-01:08:41)</text>
-<text x="1900.0" y="1373" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">12:16:36</text>
-<text x="1900.0" y="1400" font-size="20" fill="#126b70" font-weight="400" text-anchor="middle">(-00:22:39)</text>
-<text x="2404.0" y="1373" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">13:02:38</text>
-<text x="2404.0" y="1400" font-size="20" fill="#aa472e" font-weight="400" text-anchor="middle">(+00:23:24)</text>
+<text x="484" y="1384" font-size="21" fill="#626D79" font-weight="400" text-anchor="start">累计到站</text>
+<text x="892.0" y="1384" font-size="26" fill="#202A35" font-weight="650" text-anchor="middle">12:39:14</text>
+<text x="1396.0" y="1373" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">11:30:34</text>
+<text x="1396.0" y="1400" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(-01:08:41)</text>
+<text x="1900.0" y="1373" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">12:16:36</text>
+<text x="1900.0" y="1400" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(-00:22:39)</text>
+<text x="2404.0" y="1373" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">13:02:38</text>
+<text x="2404.0" y="1400" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(+00:23:24)</text>
 </g>
 <g id="segment-8">
-<text x="484" y="1446" font-size="21" fill="#627780" font-weight="400" text-anchor="start">本段耗时</text>
-<text x="892.0" y="1446" font-size="26" fill="#aa472e" font-weight="600" text-anchor="middle">01:39:06</text>
-<text x="1396.0" y="1435" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">01:23:28</text>
-<text x="1396.0" y="1462" font-size="20" fill="#126b70" font-weight="400" text-anchor="middle">(-00:15:38)</text>
-<text x="1900.0" y="1435" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">01:29:01</text>
-<text x="1900.0" y="1462" font-size="20" fill="#126b70" font-weight="400" text-anchor="middle">(-00:10:04)</text>
-<text x="2404.0" y="1435" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">01:34:35</text>
-<text x="2404.0" y="1462" font-size="20" fill="#126b70" font-weight="400" text-anchor="middle">(-00:04:31)</text>
+<text x="484" y="1446" font-size="21" fill="#626D79" font-weight="400" text-anchor="start">本段耗时</text>
+<text x="892.0" y="1446" font-size="26" fill="#202A35" font-weight="650" text-anchor="middle">01:39:06</text>
+<text x="1396.0" y="1435" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">01:23:28</text>
+<text x="1396.0" y="1462" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(-00:15:38)</text>
+<text x="1900.0" y="1435" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">01:29:01</text>
+<text x="1900.0" y="1462" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(-00:10:04)</text>
+<text x="2404.0" y="1435" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">01:34:35</text>
+<text x="2404.0" y="1462" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(-00:04:31)</text>
 </g>
 </g>
 <g id="checkpoint-9" class="inspectable" tabindex="0" aria-label="CP8-洪济小学旧址 → CP12-瞻淇村；实际累计 14:35:36；本段 01:56:22，包含停留。">
 <title>CP8-洪济小学旧址 → CP12-瞻淇村；实际累计 14:35:36；本段 01:56:22，包含停留。</title>
 <rect class="row-bg" x="64" y="1474" width="2592" height="124" rx="5" fill="#ffffff"/>
-<text x="84" y="1516.0" font-size="23" fill="#203c46" font-weight="400" text-anchor="start">CP12-瞻淇村</text>
-<text x="84" y="1565.0" font-size="18" fill="#203c46" font-weight="400" text-anchor="start">来自 CP8-洪济小学旧址</text>
-<path d="M464.000 1490.000 L464.000 1582.000" fill="none" stroke="#d4dfdc" stroke-width="1"/>
-<path d="M484.000 1536.000 L2632.000 1536.000" fill="none" stroke="#dce5e1" stroke-width="1"/>
+<text x="84" y="1516.0" font-size="23" fill="#202A35" font-weight="400" text-anchor="start">CP12-瞻淇村</text>
+<text x="84" y="1565.0" font-size="18" fill="#202A35" font-weight="400" text-anchor="start">来自 CP8-洪济小学旧址</text>
+<path d="M464.000 1490.000 L464.000 1582.000" fill="none" stroke="#E2E6EB" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M484.000 1536.000 L2632.000 1536.000" fill="none" stroke="#E2E6EB" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <g id="time-cp-9">
-<text x="484" y="1512" font-size="21" fill="#627780" font-weight="400" text-anchor="start">累计到站</text>
-<text x="892.0" y="1512" font-size="26" fill="#aa472e" font-weight="600" text-anchor="middle">14:35:36</text>
-<text x="1396.0" y="1501" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">13:09:41</text>
-<text x="1396.0" y="1528" font-size="20" fill="#126b70" font-weight="400" text-anchor="middle">(-01:25:56)</text>
-<text x="1900.0" y="1501" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">14:02:19</text>
-<text x="1900.0" y="1528" font-size="20" fill="#126b70" font-weight="400" text-anchor="middle">(-00:33:17)</text>
-<text x="2404.0" y="1501" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">14:54:58</text>
-<text x="2404.0" y="1528" font-size="20" fill="#aa472e" font-weight="400" text-anchor="middle">(+00:19:22)</text>
+<text x="484" y="1512" font-size="21" fill="#626D79" font-weight="400" text-anchor="start">累计到站</text>
+<text x="892.0" y="1512" font-size="26" fill="#202A35" font-weight="650" text-anchor="middle">14:35:36</text>
+<text x="1396.0" y="1501" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">13:09:41</text>
+<text x="1396.0" y="1528" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(-01:25:56)</text>
+<text x="1900.0" y="1501" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">14:02:19</text>
+<text x="1900.0" y="1528" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(-00:33:17)</text>
+<text x="2404.0" y="1501" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">14:54:58</text>
+<text x="2404.0" y="1528" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(+00:19:22)</text>
 </g>
 <g id="segment-9">
-<text x="484" y="1574" font-size="21" fill="#627780" font-weight="400" text-anchor="start">本段耗时</text>
-<text x="892.0" y="1574" font-size="26" fill="#aa472e" font-weight="600" text-anchor="middle">01:56:22</text>
-<text x="1396.0" y="1563" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">01:39:07</text>
-<text x="1396.0" y="1590" font-size="20" fill="#126b70" font-weight="400" text-anchor="middle">(-00:17:15)</text>
-<text x="1900.0" y="1563" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">01:45:43</text>
-<text x="1900.0" y="1590" font-size="20" fill="#126b70" font-weight="400" text-anchor="middle">(-00:10:38)</text>
-<text x="2404.0" y="1563" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">01:52:20</text>
-<text x="2404.0" y="1590" font-size="20" fill="#126b70" font-weight="400" text-anchor="middle">(-00:04:02)</text>
+<text x="484" y="1574" font-size="21" fill="#626D79" font-weight="400" text-anchor="start">本段耗时</text>
+<text x="892.0" y="1574" font-size="26" fill="#202A35" font-weight="650" text-anchor="middle">01:56:22</text>
+<text x="1396.0" y="1563" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">01:39:07</text>
+<text x="1396.0" y="1590" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(-00:17:15)</text>
+<text x="1900.0" y="1563" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">01:45:43</text>
+<text x="1900.0" y="1590" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(-00:10:38)</text>
+<text x="2404.0" y="1563" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">01:52:20</text>
+<text x="2404.0" y="1590" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(-00:04:02)</text>
 </g>
 </g>
 <g id="checkpoint-10" class="inspectable" tabindex="0" aria-label="CP12-瞻淇村 → CP13-画家村；实际累计 15:37:48；本段 01:02:12，包含停留。">
 <title>CP12-瞻淇村 → CP13-画家村；实际累计 15:37:48；本段 01:02:12，包含停留。</title>
-<rect class="row-bg" x="64" y="1602" width="2592" height="124" rx="5" fill="#eaf0ed"/>
-<text x="84" y="1644.0" font-size="23" fill="#203c46" font-weight="400" text-anchor="start">CP13-画家村</text>
-<text x="84" y="1693.0" font-size="18" fill="#203c46" font-weight="400" text-anchor="start">来自 CP12-瞻淇村</text>
-<path d="M464.000 1618.000 L464.000 1710.000" fill="none" stroke="#d4dfdc" stroke-width="1"/>
-<path d="M484.000 1664.000 L2632.000 1664.000" fill="none" stroke="#dce5e1" stroke-width="1"/>
+<rect class="row-bg" x="64" y="1602" width="2592" height="124" rx="5" fill="#F2F4F7"/>
+<text x="84" y="1644.0" font-size="23" fill="#202A35" font-weight="400" text-anchor="start">CP13-画家村</text>
+<text x="84" y="1693.0" font-size="18" fill="#202A35" font-weight="400" text-anchor="start">来自 CP12-瞻淇村</text>
+<path d="M464.000 1618.000 L464.000 1710.000" fill="none" stroke="#E2E6EB" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M484.000 1664.000 L2632.000 1664.000" fill="none" stroke="#E2E6EB" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <g id="time-cp-10">
-<text x="484" y="1640" font-size="21" fill="#627780" font-weight="400" text-anchor="start">累计到站</text>
-<text x="892.0" y="1640" font-size="26" fill="#aa472e" font-weight="600" text-anchor="middle">15:37:48</text>
-<text x="1396.0" y="1629" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">13:59:41</text>
-<text x="1396.0" y="1656" font-size="20" fill="#126b70" font-weight="400" text-anchor="middle">(-01:38:07)</text>
-<text x="1900.0" y="1629" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">14:55:39</text>
-<text x="1900.0" y="1656" font-size="20" fill="#126b70" font-weight="400" text-anchor="middle">(-00:42:08)</text>
-<text x="2404.0" y="1629" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">15:51:38</text>
-<text x="2404.0" y="1656" font-size="20" fill="#aa472e" font-weight="400" text-anchor="middle">(+00:13:51)</text>
+<text x="484" y="1640" font-size="21" fill="#626D79" font-weight="400" text-anchor="start">累计到站</text>
+<text x="892.0" y="1640" font-size="26" fill="#202A35" font-weight="650" text-anchor="middle">15:37:48</text>
+<text x="1396.0" y="1629" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">13:59:41</text>
+<text x="1396.0" y="1656" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(-01:38:07)</text>
+<text x="1900.0" y="1629" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">14:55:39</text>
+<text x="1900.0" y="1656" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(-00:42:08)</text>
+<text x="2404.0" y="1629" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">15:51:38</text>
+<text x="2404.0" y="1656" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(+00:13:51)</text>
 </g>
 <g id="segment-10">
-<text x="484" y="1702" font-size="21" fill="#627780" font-weight="400" text-anchor="start">本段耗时</text>
-<text x="892.0" y="1702" font-size="26" fill="#aa472e" font-weight="600" text-anchor="middle">01:02:12</text>
-<text x="1396.0" y="1691" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">00:50:00</text>
-<text x="1396.0" y="1718" font-size="20" fill="#126b70" font-weight="400" text-anchor="middle">(-00:12:11)</text>
-<text x="1900.0" y="1691" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">00:53:20</text>
-<text x="1900.0" y="1718" font-size="20" fill="#126b70" font-weight="400" text-anchor="middle">(-00:08:51)</text>
-<text x="2404.0" y="1691" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">00:56:40</text>
-<text x="2404.0" y="1718" font-size="20" fill="#126b70" font-weight="400" text-anchor="middle">(-00:05:31)</text>
+<text x="484" y="1702" font-size="21" fill="#626D79" font-weight="400" text-anchor="start">本段耗时</text>
+<text x="892.0" y="1702" font-size="26" fill="#202A35" font-weight="650" text-anchor="middle">01:02:12</text>
+<text x="1396.0" y="1691" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">00:50:00</text>
+<text x="1396.0" y="1718" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(-00:12:11)</text>
+<text x="1900.0" y="1691" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">00:53:20</text>
+<text x="1900.0" y="1718" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(-00:08:51)</text>
+<text x="2404.0" y="1691" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">00:56:40</text>
+<text x="2404.0" y="1718" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(-00:05:31)</text>
 </g>
 </g>
 <g id="checkpoint-11" class="inspectable" tabindex="0" aria-label="CP13-画家村 → 起终点-徽州古城（终点）；实际累计 16:46:04；本段 01:08:16，包含停留。">
 <title>CP13-画家村 → 起终点-徽州古城（终点）；实际累计 16:46:04；本段 01:08:16，包含停留。</title>
 <rect class="row-bg" x="64" y="1730" width="2592" height="124" rx="5" fill="#ffffff"/>
-<text x="84" y="1772.0" font-size="23" fill="#203c46" font-weight="400" text-anchor="start">起终点-徽州古城（终点）</text>
-<text x="84" y="1821.0" font-size="18" fill="#203c46" font-weight="400" text-anchor="start">来自 CP13-画家村</text>
-<path d="M464.000 1746.000 L464.000 1838.000" fill="none" stroke="#d4dfdc" stroke-width="1"/>
-<path d="M484.000 1792.000 L2632.000 1792.000" fill="none" stroke="#dce5e1" stroke-width="1"/>
+<text x="84" y="1772.0" font-size="23" fill="#202A35" font-weight="400" text-anchor="start">起终点-徽州古城（终点）</text>
+<text x="84" y="1821.0" font-size="18" fill="#202A35" font-weight="400" text-anchor="start">来自 CP13-画家村</text>
+<path d="M464.000 1746.000 L464.000 1838.000" fill="none" stroke="#E2E6EB" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M484.000 1792.000 L2632.000 1792.000" fill="none" stroke="#E2E6EB" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <g id="time-cp-11">
-<text x="484" y="1768" font-size="21" fill="#627780" font-weight="400" text-anchor="start">累计到站</text>
-<text x="892.0" y="1768" font-size="26" fill="#aa472e" font-weight="600" text-anchor="middle">16:46:04</text>
-<text x="1396.0" y="1757" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">15:00:00</text>
-<text x="1396.0" y="1784" font-size="20" fill="#126b70" font-weight="400" text-anchor="middle">(-01:46:04)</text>
-<text x="1900.0" y="1757" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">16:00:00</text>
-<text x="1900.0" y="1784" font-size="20" fill="#126b70" font-weight="400" text-anchor="middle">(-00:46:04)</text>
-<text x="2404.0" y="1757" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">17:00:00</text>
-<text x="2404.0" y="1784" font-size="20" fill="#aa472e" font-weight="400" text-anchor="middle">(+00:13:56)</text>
+<text x="484" y="1768" font-size="21" fill="#626D79" font-weight="400" text-anchor="start">累计到站</text>
+<text x="892.0" y="1768" font-size="26" fill="#202A35" font-weight="650" text-anchor="middle">16:46:04</text>
+<text x="1396.0" y="1757" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">15:00:00</text>
+<text x="1396.0" y="1784" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(-01:46:04)</text>
+<text x="1900.0" y="1757" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">16:00:00</text>
+<text x="1900.0" y="1784" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(-00:46:04)</text>
+<text x="2404.0" y="1757" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">17:00:00</text>
+<text x="2404.0" y="1784" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(+00:13:56)</text>
 </g>
 <g id="segment-11">
-<text x="484" y="1830" font-size="21" fill="#627780" font-weight="400" text-anchor="start">本段耗时</text>
-<text x="892.0" y="1830" font-size="26" fill="#aa472e" font-weight="600" text-anchor="middle">01:08:16</text>
-<text x="1396.0" y="1819" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">01:00:19</text>
-<text x="1396.0" y="1846" font-size="20" fill="#126b70" font-weight="400" text-anchor="middle">(-00:07:57)</text>
-<text x="1900.0" y="1819" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">01:04:21</text>
-<text x="1900.0" y="1846" font-size="20" fill="#126b70" font-weight="400" text-anchor="middle">(-00:03:55)</text>
-<text x="2404.0" y="1819" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">01:08:22</text>
-<text x="2404.0" y="1846" font-size="20" fill="#aa472e" font-weight="400" text-anchor="middle">(+00:00:06)</text>
+<text x="484" y="1830" font-size="21" fill="#626D79" font-weight="400" text-anchor="start">本段耗时</text>
+<text x="892.0" y="1830" font-size="26" fill="#202A35" font-weight="650" text-anchor="middle">01:08:16</text>
+<text x="1396.0" y="1819" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">01:00:19</text>
+<text x="1396.0" y="1846" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(-00:07:57)</text>
+<text x="1900.0" y="1819" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">01:04:21</text>
+<text x="1900.0" y="1846" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(-00:03:55)</text>
+<text x="2404.0" y="1819" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">01:08:22</text>
+<text x="2404.0" y="1846" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(+00:00:06)</text>
 </g>
 </g>
 </g>
 <g id="terrain">
-<text x="64" y="1920" font-size="28" fill="#203c46" font-weight="700" text-anchor="start">02  地形数据</text>
-<text x="2656" y="1920" font-size="22" fill="#627780" font-weight="400" text-anchor="end">佳明在前；仓库括号内：仓库 − 佳明</text>
-<text x="846.0" y="1962" font-size="24" fill="#203c46" font-weight="600" text-anchor="middle">累计距离 / km</text>
-<text x="665.0" y="1994" font-size="22" fill="#aa472e" font-weight="400" text-anchor="middle">佳明</text>
-<text x="1027.0" y="1994" font-size="22" fill="#627780" font-weight="400" text-anchor="middle">仓库</text>
-<text x="1570.0" y="1962" font-size="24" fill="#203c46" font-weight="600" text-anchor="middle">本段爬升 / m</text>
-<text x="1389.0" y="1994" font-size="22" fill="#aa472e" font-weight="400" text-anchor="middle">佳明</text>
-<text x="1751.0" y="1994" font-size="22" fill="#627780" font-weight="400" text-anchor="middle">仓库</text>
-<text x="2294.0" y="1962" font-size="24" fill="#203c46" font-weight="600" text-anchor="middle">本段下降 / m</text>
-<text x="2113.0" y="1994" font-size="22" fill="#aa472e" font-weight="400" text-anchor="middle">佳明</text>
-<text x="2475.0" y="1994" font-size="22" fill="#627780" font-weight="400" text-anchor="middle">仓库</text>
-<text x="78" y="1994" font-size="22" fill="#627780" font-weight="600" text-anchor="start">站点</text>
+<text x="64" y="1920" font-size="28" fill="#202A35" font-weight="700" text-anchor="start">02  地形数据</text>
+<text x="2656" y="1920" font-size="22" fill="#626D79" font-weight="400" text-anchor="end">佳明在前；仓库括号内：仓库 − 佳明</text>
+<text x="846.0" y="1962" font-size="24" fill="#202A35" font-weight="600" text-anchor="middle">累计距离 / km</text>
+<text x="665.0" y="1994" font-size="22" fill="#202A35" font-weight="600" text-anchor="middle">佳明</text>
+<text x="1027.0" y="1994" font-size="22" fill="#626D79" font-weight="400" text-anchor="middle">仓库</text>
+<text x="1570.0" y="1962" font-size="24" fill="#202A35" font-weight="600" text-anchor="middle">本段爬升 / m</text>
+<text x="1389.0" y="1994" font-size="22" fill="#202A35" font-weight="600" text-anchor="middle">佳明</text>
+<text x="1751.0" y="1994" font-size="22" fill="#626D79" font-weight="400" text-anchor="middle">仓库</text>
+<text x="2294.0" y="1962" font-size="24" fill="#202A35" font-weight="600" text-anchor="middle">本段下降 / m</text>
+<text x="2113.0" y="1994" font-size="22" fill="#202A35" font-weight="600" text-anchor="middle">佳明</text>
+<text x="2475.0" y="1994" font-size="22" fill="#626D79" font-weight="400" text-anchor="middle">仓库</text>
+<text x="78" y="1994" font-size="22" fill="#626D79" font-weight="600" text-anchor="start">站点</text>
 <g id="terrain-cp-1" class="inspectable" tabindex="0" aria-label="CP1-雄村镇：累计距离，本段爬升与下降；括号为仓库减佳明。">
 <title>CP1-雄村镇：累计距离，本段爬升与下降；括号为仓库减佳明。</title>
 <rect class="row-bg" x="64" y="2020" width="2592" height="70" rx="3" fill="#ffffff"/>
-<text x="78" y="2062.0" font-size="23" fill="#203c46" font-weight="400" text-anchor="start">CP1-雄村镇</text>
-<text x="665.0" y="2062" font-size="24" fill="#aa472e" font-weight="600" text-anchor="middle">10.36</text>
-<text x="1027.0" y="2047" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">10.20</text>
-<text x="1027.0" y="2074" font-size="20" fill="#126b70" font-weight="400" text-anchor="middle">(-0.15)</text>
-<text x="1389.0" y="2062" font-size="24" fill="#aa472e" font-weight="600" text-anchor="middle">373</text>
-<text x="1751.0" y="2047" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">387</text>
-<text x="1751.0" y="2074" font-size="20" fill="#aa472e" font-weight="400" text-anchor="middle">(+13)</text>
-<text x="2113.0" y="2062" font-size="24" fill="#aa472e" font-weight="600" text-anchor="middle">388</text>
-<text x="2475.0" y="2047" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">396</text>
-<text x="2475.0" y="2074" font-size="20" fill="#aa472e" font-weight="400" text-anchor="middle">(+7)</text>
+<text x="78" y="2062.0" font-size="23" fill="#202A35" font-weight="400" text-anchor="start">CP1-雄村镇</text>
+<text x="665.0" y="2062" font-size="24" fill="#202A35" font-weight="650" text-anchor="middle">10.36</text>
+<text x="1027.0" y="2047" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">10.20</text>
+<text x="1027.0" y="2074" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(-0.15)</text>
+<text x="1389.0" y="2062" font-size="24" fill="#202A35" font-weight="650" text-anchor="middle">373</text>
+<text x="1751.0" y="2047" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">387</text>
+<text x="1751.0" y="2074" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(+13)</text>
+<text x="2113.0" y="2062" font-size="24" fill="#202A35" font-weight="650" text-anchor="middle">388</text>
+<text x="2475.0" y="2047" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">396</text>
+<text x="2475.0" y="2074" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(+7)</text>
 </g>
 <g id="terrain-cp-2" class="inspectable" tabindex="0" aria-label="CP2-庄源村：累计距离，本段爬升与下降；括号为仓库减佳明。">
 <title>CP2-庄源村：累计距离，本段爬升与下降；括号为仓库减佳明。</title>
-<rect class="row-bg" x="64" y="2092" width="2592" height="70" rx="3" fill="#eaf0ed"/>
-<text x="78" y="2134.0" font-size="23" fill="#203c46" font-weight="400" text-anchor="start">CP2-庄源村</text>
-<text x="665.0" y="2134" font-size="24" fill="#aa472e" font-weight="600" text-anchor="middle">18.28</text>
-<text x="1027.0" y="2119" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">18.16</text>
-<text x="1027.0" y="2146" font-size="20" fill="#126b70" font-weight="400" text-anchor="middle">(-0.12)</text>
-<text x="1389.0" y="2134" font-size="24" fill="#aa472e" font-weight="600" text-anchor="middle">391</text>
-<text x="1751.0" y="2119" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">458</text>
-<text x="1751.0" y="2146" font-size="20" fill="#aa472e" font-weight="400" text-anchor="middle">(+67)</text>
-<text x="2113.0" y="2134" font-size="24" fill="#aa472e" font-weight="600" text-anchor="middle">323</text>
-<text x="2475.0" y="2119" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">394</text>
-<text x="2475.0" y="2146" font-size="20" fill="#aa472e" font-weight="400" text-anchor="middle">(+71)</text>
+<rect class="row-bg" x="64" y="2092" width="2592" height="70" rx="3" fill="#F2F4F7"/>
+<text x="78" y="2134.0" font-size="23" fill="#202A35" font-weight="400" text-anchor="start">CP2-庄源村</text>
+<text x="665.0" y="2134" font-size="24" fill="#202A35" font-weight="650" text-anchor="middle">18.28</text>
+<text x="1027.0" y="2119" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">18.16</text>
+<text x="1027.0" y="2146" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(-0.12)</text>
+<text x="1389.0" y="2134" font-size="24" fill="#202A35" font-weight="650" text-anchor="middle">391</text>
+<text x="1751.0" y="2119" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">458</text>
+<text x="1751.0" y="2146" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(+67)</text>
+<text x="2113.0" y="2134" font-size="24" fill="#202A35" font-weight="650" text-anchor="middle">323</text>
+<text x="2475.0" y="2119" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">394</text>
+<text x="2475.0" y="2146" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(+71)</text>
 </g>
 <g id="terrain-cp-3" class="inspectable" tabindex="0" aria-label="CP3-长源村：累计距离，本段爬升与下降；括号为仓库减佳明。">
 <title>CP3-长源村：累计距离，本段爬升与下降；括号为仓库减佳明。</title>
 <rect class="row-bg" x="64" y="2164" width="2592" height="70" rx="3" fill="#ffffff"/>
-<text x="78" y="2206.0" font-size="23" fill="#203c46" font-weight="400" text-anchor="start">CP3-长源村</text>
-<text x="665.0" y="2206" font-size="24" fill="#aa472e" font-weight="600" text-anchor="middle">26.30</text>
-<text x="1027.0" y="2191" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">26.15</text>
-<text x="1027.0" y="2218" font-size="20" fill="#126b70" font-weight="400" text-anchor="middle">(-0.15)</text>
-<text x="1389.0" y="2206" font-size="24" fill="#aa472e" font-weight="600" text-anchor="middle">467</text>
-<text x="1751.0" y="2191" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">438</text>
-<text x="1751.0" y="2218" font-size="20" fill="#126b70" font-weight="400" text-anchor="middle">(-29)</text>
-<text x="2113.0" y="2206" font-size="24" fill="#aa472e" font-weight="600" text-anchor="middle">466</text>
-<text x="2475.0" y="2191" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">433</text>
-<text x="2475.0" y="2218" font-size="20" fill="#126b70" font-weight="400" text-anchor="middle">(-33)</text>
+<text x="78" y="2206.0" font-size="23" fill="#202A35" font-weight="400" text-anchor="start">CP3-长源村</text>
+<text x="665.0" y="2206" font-size="24" fill="#202A35" font-weight="650" text-anchor="middle">26.30</text>
+<text x="1027.0" y="2191" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">26.15</text>
+<text x="1027.0" y="2218" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(-0.15)</text>
+<text x="1389.0" y="2206" font-size="24" fill="#202A35" font-weight="650" text-anchor="middle">467</text>
+<text x="1751.0" y="2191" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">438</text>
+<text x="1751.0" y="2218" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(-29)</text>
+<text x="2113.0" y="2206" font-size="24" fill="#202A35" font-weight="650" text-anchor="middle">466</text>
+<text x="2475.0" y="2191" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">433</text>
+<text x="2475.0" y="2218" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(-33)</text>
 </g>
 <g id="terrain-cp-4" class="inspectable" tabindex="0" aria-label="CP4-大源村：累计距离，本段爬升与下降；括号为仓库减佳明。">
 <title>CP4-大源村：累计距离，本段爬升与下降；括号为仓库减佳明。</title>
-<rect class="row-bg" x="64" y="2236" width="2592" height="70" rx="3" fill="#eaf0ed"/>
-<text x="78" y="2278.0" font-size="23" fill="#203c46" font-weight="400" text-anchor="start">CP4-大源村</text>
-<text x="665.0" y="2278" font-size="24" fill="#aa472e" font-weight="600" text-anchor="middle">36.07</text>
-<text x="1027.0" y="2263" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">35.99</text>
-<text x="1027.0" y="2290" font-size="20" fill="#126b70" font-weight="400" text-anchor="middle">(-0.08)</text>
-<text x="1389.0" y="2278" font-size="24" fill="#aa472e" font-weight="600" text-anchor="middle">641</text>
-<text x="1751.0" y="2263" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">845</text>
-<text x="1751.0" y="2290" font-size="20" fill="#aa472e" font-weight="400" text-anchor="middle">(+203)</text>
-<text x="2113.0" y="2278" font-size="24" fill="#aa472e" font-weight="600" text-anchor="middle">638</text>
-<text x="2475.0" y="2263" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">846</text>
-<text x="2475.0" y="2290" font-size="20" fill="#aa472e" font-weight="400" text-anchor="middle">(+208)</text>
+<rect class="row-bg" x="64" y="2236" width="2592" height="70" rx="3" fill="#F2F4F7"/>
+<text x="78" y="2278.0" font-size="23" fill="#202A35" font-weight="400" text-anchor="start">CP4-大源村</text>
+<text x="665.0" y="2278" font-size="24" fill="#202A35" font-weight="650" text-anchor="middle">36.07</text>
+<text x="1027.0" y="2263" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">35.99</text>
+<text x="1027.0" y="2290" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(-0.08)</text>
+<text x="1389.0" y="2278" font-size="24" fill="#202A35" font-weight="650" text-anchor="middle">641</text>
+<text x="1751.0" y="2263" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">845</text>
+<text x="1751.0" y="2290" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(+203)</text>
+<text x="2113.0" y="2278" font-size="24" fill="#202A35" font-weight="650" text-anchor="middle">638</text>
+<text x="2475.0" y="2263" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">846</text>
+<text x="2475.0" y="2290" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(+208)</text>
 </g>
 <g id="terrain-cp-5" class="inspectable" tabindex="0" aria-label="CP5-洲头梁村：累计距离，本段爬升与下降；括号为仓库减佳明。">
 <title>CP5-洲头梁村：累计距离，本段爬升与下降；括号为仓库减佳明。</title>
 <rect class="row-bg" x="64" y="2308" width="2592" height="70" rx="3" fill="#ffffff"/>
-<text x="78" y="2350.0" font-size="23" fill="#203c46" font-weight="400" text-anchor="start">CP5-洲头梁村</text>
-<text x="665.0" y="2350" font-size="24" fill="#aa472e" font-weight="600" text-anchor="middle">47.79</text>
-<text x="1027.0" y="2335" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">47.58</text>
-<text x="1027.0" y="2362" font-size="20" fill="#126b70" font-weight="400" text-anchor="middle">(-0.21)</text>
-<text x="1389.0" y="2350" font-size="24" fill="#aa472e" font-weight="600" text-anchor="middle">1060</text>
-<text x="1751.0" y="2335" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">1076</text>
-<text x="1751.0" y="2362" font-size="20" fill="#aa472e" font-weight="400" text-anchor="middle">(+16)</text>
-<text x="2113.0" y="2350" font-size="24" fill="#aa472e" font-weight="600" text-anchor="middle">1105</text>
-<text x="2475.0" y="2335" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">1145</text>
-<text x="2475.0" y="2362" font-size="20" fill="#aa472e" font-weight="400" text-anchor="middle">(+40)</text>
+<text x="78" y="2350.0" font-size="23" fill="#202A35" font-weight="400" text-anchor="start">CP5-洲头梁村</text>
+<text x="665.0" y="2350" font-size="24" fill="#202A35" font-weight="650" text-anchor="middle">47.79</text>
+<text x="1027.0" y="2335" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">47.58</text>
+<text x="1027.0" y="2362" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(-0.21)</text>
+<text x="1389.0" y="2350" font-size="24" fill="#202A35" font-weight="650" text-anchor="middle">1060</text>
+<text x="1751.0" y="2335" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">1076</text>
+<text x="1751.0" y="2362" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(+16)</text>
+<text x="2113.0" y="2350" font-size="24" fill="#202A35" font-weight="650" text-anchor="middle">1105</text>
+<text x="2475.0" y="2335" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">1145</text>
+<text x="2475.0" y="2362" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(+40)</text>
 </g>
 <g id="terrain-cp-6" class="inspectable" tabindex="0" aria-label="CP6-武阳驿站：累计距离，本段爬升与下降；括号为仓库减佳明。">
 <title>CP6-武阳驿站：累计距离，本段爬升与下降；括号为仓库减佳明。</title>
-<rect class="row-bg" x="64" y="2380" width="2592" height="70" rx="3" fill="#eaf0ed"/>
-<text x="78" y="2422.0" font-size="23" fill="#203c46" font-weight="400" text-anchor="start">CP6-武阳驿站</text>
-<text x="665.0" y="2422" font-size="24" fill="#aa472e" font-weight="600" text-anchor="middle">59.92</text>
-<text x="1027.0" y="2407" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">59.80</text>
-<text x="1027.0" y="2434" font-size="20" fill="#126b70" font-weight="400" text-anchor="middle">(-0.12)</text>
-<text x="1389.0" y="2422" font-size="24" fill="#aa472e" font-weight="600" text-anchor="middle">311</text>
-<text x="1751.0" y="2407" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">723</text>
-<text x="1751.0" y="2434" font-size="20" fill="#aa472e" font-weight="400" text-anchor="middle">(+411)</text>
-<text x="2113.0" y="2422" font-size="24" fill="#aa472e" font-weight="600" text-anchor="middle">325</text>
-<text x="2475.0" y="2407" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">719</text>
-<text x="2475.0" y="2434" font-size="20" fill="#aa472e" font-weight="400" text-anchor="middle">(+394)</text>
+<rect class="row-bg" x="64" y="2380" width="2592" height="70" rx="3" fill="#F2F4F7"/>
+<text x="78" y="2422.0" font-size="23" fill="#202A35" font-weight="400" text-anchor="start">CP6-武阳驿站</text>
+<text x="665.0" y="2422" font-size="24" fill="#202A35" font-weight="650" text-anchor="middle">59.92</text>
+<text x="1027.0" y="2407" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">59.80</text>
+<text x="1027.0" y="2434" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(-0.12)</text>
+<text x="1389.0" y="2422" font-size="24" fill="#202A35" font-weight="650" text-anchor="middle">311</text>
+<text x="1751.0" y="2407" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">723</text>
+<text x="1751.0" y="2434" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(+411)</text>
+<text x="2113.0" y="2422" font-size="24" fill="#202A35" font-weight="650" text-anchor="middle">325</text>
+<text x="2475.0" y="2407" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">719</text>
+<text x="2475.0" y="2434" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(+394)</text>
 </g>
 <g id="terrain-cp-7" class="inspectable" tabindex="0" aria-label="CP7-约源村委会：累计距离，本段爬升与下降；括号为仓库减佳明。">
 <title>CP7-约源村委会：累计距离，本段爬升与下降；括号为仓库减佳明。</title>
 <rect class="row-bg" x="64" y="2452" width="2592" height="70" rx="3" fill="#ffffff"/>
-<text x="78" y="2494.0" font-size="23" fill="#203c46" font-weight="400" text-anchor="start">CP7-约源村委会</text>
-<text x="665.0" y="2494" font-size="24" fill="#aa472e" font-weight="600" text-anchor="middle">67.86</text>
-<text x="1027.0" y="2479" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">67.73</text>
-<text x="1027.0" y="2506" font-size="20" fill="#126b70" font-weight="400" text-anchor="middle">(-0.13)</text>
-<text x="1389.0" y="2494" font-size="24" fill="#aa472e" font-weight="600" text-anchor="middle">498</text>
-<text x="1751.0" y="2479" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">591</text>
-<text x="1751.0" y="2506" font-size="20" fill="#aa472e" font-weight="400" text-anchor="middle">(+93)</text>
-<text x="2113.0" y="2494" font-size="24" fill="#aa472e" font-weight="600" text-anchor="middle">439</text>
-<text x="2475.0" y="2479" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">542</text>
-<text x="2475.0" y="2506" font-size="20" fill="#aa472e" font-weight="400" text-anchor="middle">(+103)</text>
+<text x="78" y="2494.0" font-size="23" fill="#202A35" font-weight="400" text-anchor="start">CP7-约源村委会</text>
+<text x="665.0" y="2494" font-size="24" fill="#202A35" font-weight="650" text-anchor="middle">67.86</text>
+<text x="1027.0" y="2479" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">67.73</text>
+<text x="1027.0" y="2506" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(-0.13)</text>
+<text x="1389.0" y="2494" font-size="24" fill="#202A35" font-weight="650" text-anchor="middle">498</text>
+<text x="1751.0" y="2479" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">591</text>
+<text x="1751.0" y="2506" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(+93)</text>
+<text x="2113.0" y="2494" font-size="24" fill="#202A35" font-weight="650" text-anchor="middle">439</text>
+<text x="2475.0" y="2479" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">542</text>
+<text x="2475.0" y="2506" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(+103)</text>
 </g>
 <g id="terrain-cp-8" class="inspectable" tabindex="0" aria-label="CP8-洪济小学旧址：累计距离，本段爬升与下降；括号为仓库减佳明。">
 <title>CP8-洪济小学旧址：累计距离，本段爬升与下降；括号为仓库减佳明。</title>
-<rect class="row-bg" x="64" y="2524" width="2592" height="70" rx="3" fill="#eaf0ed"/>
-<text x="78" y="2566.0" font-size="23" fill="#203c46" font-weight="400" text-anchor="start">CP8-洪济小学旧址</text>
-<text x="665.0" y="2566" font-size="24" fill="#aa472e" font-weight="600" text-anchor="middle">77.49</text>
-<text x="1027.0" y="2551" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">77.32</text>
-<text x="1027.0" y="2578" font-size="20" fill="#126b70" font-weight="400" text-anchor="middle">(-0.18)</text>
-<text x="1389.0" y="2566" font-size="24" fill="#aa472e" font-weight="600" text-anchor="middle">336</text>
-<text x="1751.0" y="2551" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">429</text>
-<text x="1751.0" y="2578" font-size="20" fill="#aa472e" font-weight="400" text-anchor="middle">(+92)</text>
-<text x="2113.0" y="2566" font-size="24" fill="#aa472e" font-weight="600" text-anchor="middle">401</text>
-<text x="2475.0" y="2551" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">480</text>
-<text x="2475.0" y="2578" font-size="20" fill="#aa472e" font-weight="400" text-anchor="middle">(+79)</text>
+<rect class="row-bg" x="64" y="2524" width="2592" height="70" rx="3" fill="#F2F4F7"/>
+<text x="78" y="2566.0" font-size="23" fill="#202A35" font-weight="400" text-anchor="start">CP8-洪济小学旧址</text>
+<text x="665.0" y="2566" font-size="24" fill="#202A35" font-weight="650" text-anchor="middle">77.49</text>
+<text x="1027.0" y="2551" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">77.32</text>
+<text x="1027.0" y="2578" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(-0.18)</text>
+<text x="1389.0" y="2566" font-size="24" fill="#202A35" font-weight="650" text-anchor="middle">336</text>
+<text x="1751.0" y="2551" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">429</text>
+<text x="1751.0" y="2578" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(+92)</text>
+<text x="2113.0" y="2566" font-size="24" fill="#202A35" font-weight="650" text-anchor="middle">401</text>
+<text x="2475.0" y="2551" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">480</text>
+<text x="2475.0" y="2578" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(+79)</text>
 </g>
 <g id="terrain-cp-9" class="inspectable" tabindex="0" aria-label="CP12-瞻淇村：累计距离，本段爬升与下降；括号为仓库减佳明。">
 <title>CP12-瞻淇村：累计距离，本段爬升与下降；括号为仓库减佳明。</title>
 <rect class="row-bg" x="64" y="2596" width="2592" height="70" rx="3" fill="#ffffff"/>
-<text x="78" y="2638.0" font-size="23" fill="#203c46" font-weight="400" text-anchor="start">CP12-瞻淇村</text>
-<text x="665.0" y="2638" font-size="24" fill="#aa472e" font-weight="600" text-anchor="middle">88.12</text>
-<text x="1027.0" y="2623" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">87.65</text>
-<text x="1027.0" y="2650" font-size="20" fill="#126b70" font-weight="400" text-anchor="middle">(-0.47)</text>
-<text x="1389.0" y="2638" font-size="24" fill="#aa472e" font-weight="600" text-anchor="middle">522</text>
-<text x="1751.0" y="2623" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">593</text>
-<text x="1751.0" y="2650" font-size="20" fill="#aa472e" font-weight="400" text-anchor="middle">(+72)</text>
-<text x="2113.0" y="2638" font-size="24" fill="#aa472e" font-weight="600" text-anchor="middle">509</text>
-<text x="2475.0" y="2623" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">578</text>
-<text x="2475.0" y="2650" font-size="20" fill="#aa472e" font-weight="400" text-anchor="middle">(+69)</text>
+<text x="78" y="2638.0" font-size="23" fill="#202A35" font-weight="400" text-anchor="start">CP12-瞻淇村</text>
+<text x="665.0" y="2638" font-size="24" fill="#202A35" font-weight="650" text-anchor="middle">88.12</text>
+<text x="1027.0" y="2623" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">87.65</text>
+<text x="1027.0" y="2650" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(-0.47)</text>
+<text x="1389.0" y="2638" font-size="24" fill="#202A35" font-weight="650" text-anchor="middle">522</text>
+<text x="1751.0" y="2623" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">593</text>
+<text x="1751.0" y="2650" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(+72)</text>
+<text x="2113.0" y="2638" font-size="24" fill="#202A35" font-weight="650" text-anchor="middle">509</text>
+<text x="2475.0" y="2623" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">578</text>
+<text x="2475.0" y="2650" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(+69)</text>
 </g>
 <g id="terrain-cp-10" class="inspectable" tabindex="0" aria-label="CP13-画家村：累计距离，本段爬升与下降；括号为仓库减佳明。">
 <title>CP13-画家村：累计距离，本段爬升与下降；括号为仓库减佳明。</title>
-<rect class="row-bg" x="64" y="2668" width="2592" height="70" rx="3" fill="#eaf0ed"/>
-<text x="78" y="2710.0" font-size="23" fill="#203c46" font-weight="400" text-anchor="start">CP13-画家村</text>
-<text x="665.0" y="2710" font-size="24" fill="#aa472e" font-weight="600" text-anchor="middle">94.25</text>
-<text x="1027.0" y="2695" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">93.57</text>
-<text x="1027.0" y="2722" font-size="20" fill="#126b70" font-weight="400" text-anchor="middle">(-0.68)</text>
-<text x="1389.0" y="2710" font-size="24" fill="#aa472e" font-weight="600" text-anchor="middle">196</text>
-<text x="1751.0" y="2695" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">221</text>
-<text x="1751.0" y="2722" font-size="20" fill="#aa472e" font-weight="400" text-anchor="middle">(+25)</text>
-<text x="2113.0" y="2710" font-size="24" fill="#aa472e" font-weight="600" text-anchor="middle">180</text>
-<text x="2475.0" y="2695" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">219</text>
-<text x="2475.0" y="2722" font-size="20" fill="#aa472e" font-weight="400" text-anchor="middle">(+39)</text>
+<rect class="row-bg" x="64" y="2668" width="2592" height="70" rx="3" fill="#F2F4F7"/>
+<text x="78" y="2710.0" font-size="23" fill="#202A35" font-weight="400" text-anchor="start">CP13-画家村</text>
+<text x="665.0" y="2710" font-size="24" fill="#202A35" font-weight="650" text-anchor="middle">94.25</text>
+<text x="1027.0" y="2695" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">93.57</text>
+<text x="1027.0" y="2722" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(-0.68)</text>
+<text x="1389.0" y="2710" font-size="24" fill="#202A35" font-weight="650" text-anchor="middle">196</text>
+<text x="1751.0" y="2695" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">221</text>
+<text x="1751.0" y="2722" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(+25)</text>
+<text x="2113.0" y="2710" font-size="24" fill="#202A35" font-weight="650" text-anchor="middle">180</text>
+<text x="2475.0" y="2695" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">219</text>
+<text x="2475.0" y="2722" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(+39)</text>
 </g>
 <g id="terrain-cp-11" class="inspectable" tabindex="0" aria-label="起终点-徽州古城（终点）：累计距离，本段爬升与下降；括号为仓库减佳明。">
 <title>起终点-徽州古城（终点）：累计距离，本段爬升与下降；括号为仓库减佳明。</title>
 <rect class="row-bg" x="64" y="2740" width="2592" height="70" rx="3" fill="#ffffff"/>
-<text x="78" y="2782.0" font-size="23" fill="#203c46" font-weight="400" text-anchor="start">起终点-徽州古城（终点）</text>
-<text x="665.0" y="2782" font-size="24" fill="#aa472e" font-weight="600" text-anchor="middle">101.88</text>
-<text x="1027.0" y="2767" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">101.25</text>
-<text x="1027.0" y="2794" font-size="20" fill="#126b70" font-weight="400" text-anchor="middle">(-0.63)</text>
-<text x="1389.0" y="2782" font-size="24" fill="#aa472e" font-weight="600" text-anchor="middle">223</text>
-<text x="1751.0" y="2767" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">206</text>
-<text x="1751.0" y="2794" font-size="20" fill="#126b70" font-weight="400" text-anchor="middle">(-18)</text>
-<text x="2113.0" y="2782" font-size="24" fill="#aa472e" font-weight="600" text-anchor="middle">247</text>
-<text x="2475.0" y="2767" font-size="26" fill="#203c46" font-weight="400" text-anchor="middle">214</text>
-<text x="2475.0" y="2794" font-size="20" fill="#126b70" font-weight="400" text-anchor="middle">(-34)</text>
+<text x="78" y="2782.0" font-size="23" fill="#202A35" font-weight="400" text-anchor="start">起终点-徽州古城（终点）</text>
+<text x="665.0" y="2782" font-size="24" fill="#202A35" font-weight="650" text-anchor="middle">101.88</text>
+<text x="1027.0" y="2767" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">101.25</text>
+<text x="1027.0" y="2794" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(-0.63)</text>
+<text x="1389.0" y="2782" font-size="24" fill="#202A35" font-weight="650" text-anchor="middle">223</text>
+<text x="1751.0" y="2767" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">206</text>
+<text x="1751.0" y="2794" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(-18)</text>
+<text x="2113.0" y="2782" font-size="24" fill="#202A35" font-weight="650" text-anchor="middle">247</text>
+<text x="2475.0" y="2767" font-size="26" fill="#202A35" font-weight="400" text-anchor="middle">214</text>
+<text x="2475.0" y="2794" font-size="20" fill="#626D79" font-weight="400" text-anchor="middle">(-34)</text>
 </g>
 </g>
-<g id="time-curves" data-x-min="150" data-x-max="2620" data-y-top="3014" data-y-bottom="3414" data-max-seconds="64800">
-<text x="64" y="2874" font-size="28" fill="#203c46" font-weight="700" text-anchor="start">03  全程时间走势</text>
-<text x="64" y="2914" font-size="22" fill="#627780" font-weight="400" text-anchor="start">横轴按赛道累计距离对齐 CP；同一位置比较实际与各目标的累计经过时间。</text>
-<path d="M150.000 3414.000 L2620.000 3414.000" fill="none" stroke="#dde5e6" stroke-width="2"/>
-<text x="132" y="3421.0" font-size="18" fill="#627780" font-weight="400" text-anchor="end">0 h</text>
-<path d="M150.000 3347.333 L2620.000 3347.333" fill="none" stroke="#dde5e6" stroke-width="2"/>
-<text x="132" y="3354.3333333333335" font-size="18" fill="#627780" font-weight="400" text-anchor="end">3 h</text>
-<path d="M150.000 3280.667 L2620.000 3280.667" fill="none" stroke="#dde5e6" stroke-width="2"/>
-<text x="132" y="3287.6666666666665" font-size="18" fill="#627780" font-weight="400" text-anchor="end">6 h</text>
-<path d="M150.000 3214.000 L2620.000 3214.000" fill="none" stroke="#dde5e6" stroke-width="2"/>
-<text x="132" y="3221.0" font-size="18" fill="#627780" font-weight="400" text-anchor="end">9 h</text>
-<path d="M150.000 3147.333 L2620.000 3147.333" fill="none" stroke="#dde5e6" stroke-width="2"/>
-<text x="132" y="3154.3333333333335" font-size="18" fill="#627780" font-weight="400" text-anchor="end">12 h</text>
-<path d="M150.000 3080.667 L2620.000 3080.667" fill="none" stroke="#dde5e6" stroke-width="2"/>
-<text x="132" y="3087.6666666666665" font-size="18" fill="#627780" font-weight="400" text-anchor="end">15 h</text>
-<path d="M150.000 3014.000 L2620.000 3014.000" fill="none" stroke="#dde5e6" stroke-width="2"/>
-<text x="132" y="3021.0" font-size="18" fill="#627780" font-weight="400" text-anchor="end">18 h</text>
-<path d="M150.000 3014.000 L150.000 3414.000" fill="none" stroke="#e4e9e6" stroke-width="1"/>
-<text x="150.0" y="3446" font-size="19" fill="#627780" font-weight="400" text-anchor="middle">起点</text>
-<text x="150.0" y="3472" font-size="16" fill="#627780" font-weight="400" text-anchor="middle">0.0 km</text>
-<path d="M398.854 3014.000 L398.854 3414.000" fill="none" stroke="#e4e9e6" stroke-width="1"/>
-<text x="398.85360666888096" y="3446" font-size="19" fill="#627780" font-weight="400" text-anchor="middle">CP1</text>
-<text x="398.85360666888096" y="3472" font-size="16" fill="#627780" font-weight="400" text-anchor="middle">10.2 km</text>
-<path d="M592.928 3014.000 L592.928 3414.000" fill="none" stroke="#e4e9e6" stroke-width="1"/>
-<text x="592.9278618786034" y="3446" font-size="19" fill="#627780" font-weight="400" text-anchor="middle">CP2</text>
-<text x="592.9278618786034" y="3472" font-size="16" fill="#627780" font-weight="400" text-anchor="middle">18.2 km</text>
-<path d="M787.837 3014.000 L787.837 3414.000" fill="none" stroke="#e4e9e6" stroke-width="1"/>
-<text x="787.8365949230249" y="3446" font-size="19" fill="#627780" font-weight="400" text-anchor="middle">CP3</text>
-<text x="787.8365949230249" y="3472" font-size="16" fill="#627780" font-weight="400" text-anchor="middle">26.1 km</text>
-<path d="M1028.077 3014.000 L1028.077 3414.000" fill="none" stroke="#e4e9e6" stroke-width="1"/>
-<text x="1028.077329660463" y="3446" font-size="19" fill="#627780" font-weight="400" text-anchor="middle">CP4</text>
-<text x="1028.077329660463" y="3472" font-size="16" fill="#627780" font-weight="400" text-anchor="middle">36.0 km</text>
-<path d="M1310.702 3014.000 L1310.702 3414.000" fill="none" stroke="#e4e9e6" stroke-width="1"/>
-<text x="1310.702256574133" y="3446" font-size="19" fill="#627780" font-weight="400" text-anchor="middle">CP5</text>
-<text x="1310.702256574133" y="3472" font-size="16" fill="#627780" font-weight="400" text-anchor="middle">47.6 km</text>
-<path d="M1608.911 3014.000 L1608.911 3414.000" fill="none" stroke="#e4e9e6" stroke-width="1"/>
-<text x="1608.9112310271605" y="3446" font-size="19" fill="#627780" font-weight="400" text-anchor="middle">CP6</text>
-<text x="1608.9112310271605" y="3472" font-size="16" fill="#627780" font-weight="400" text-anchor="middle">59.8 km</text>
-<path d="M1802.195 3014.000 L1802.195 3414.000" fill="none" stroke="#e4e9e6" stroke-width="1"/>
-<text x="1802.19500208882" y="3446" font-size="19" fill="#627780" font-weight="400" text-anchor="middle">CP7</text>
-<text x="1802.19500208882" y="3472" font-size="16" fill="#627780" font-weight="400" text-anchor="middle">67.7 km</text>
-<path d="M2036.137 3014.000 L2036.137 3414.000" fill="none" stroke="#e4e9e6" stroke-width="1"/>
-<text x="2036.1371516584475" y="3446" font-size="19" fill="#627780" font-weight="400" text-anchor="middle">CP8</text>
-<text x="2036.1371516584475" y="3472" font-size="16" fill="#627780" font-weight="400" text-anchor="middle">77.3 km</text>
-<path d="M2288.174 3014.000 L2288.174 3414.000" fill="none" stroke="#e4e9e6" stroke-width="1"/>
-<text x="2288.173516728903" y="3446" font-size="19" fill="#627780" font-weight="400" text-anchor="middle">CP12</text>
-<text x="2288.173516728903" y="3472" font-size="16" fill="#627780" font-weight="400" text-anchor="middle">87.6 km</text>
-<path d="M2432.561 3014.000 L2432.561 3414.000" fill="none" stroke="#e4e9e6" stroke-width="1"/>
-<text x="2432.560813844414" y="3446" font-size="19" fill="#627780" font-weight="400" text-anchor="middle">CP13</text>
-<text x="2432.560813844414" y="3472" font-size="16" fill="#627780" font-weight="400" text-anchor="middle">93.6 km</text>
-<path d="M2620.000 3014.000 L2620.000 3414.000" fill="none" stroke="#e4e9e6" stroke-width="1"/>
-<text x="2620.0" y="3446" font-size="19" fill="#627780" font-weight="400" text-anchor="middle">终点</text>
-<text x="2620.0" y="3472" font-size="16" fill="#627780" font-weight="400" text-anchor="middle">101.2 km</text>
-<g id="curve-0" class="curve" tabindex="0" aria-label="方案 15:00：各 CP 累计经过时间">
+<g id="time-curves" data-x-min="150" data-x-max="2236" data-y-top="2974" data-y-bottom="3614" data-max-seconds="64800">
+<text x="64" y="2874" font-size="28" fill="#202A35" font-weight="700" text-anchor="start">03  全程时间走势</text>
+<text x="64" y="2914" font-size="22" fill="#626D79" font-weight="400" text-anchor="start">横轴按赛道累计距离对齐 CP；同一位置比较实际与各目标的累计经过时间。</text>
+<text x="2656" y="2874" font-size="21" fill="#626D79" font-weight="400" text-anchor="end">实际：粗实线 / 方案：彩色虚线</text>
+<rect x="64" y="2948" width="2592" height="752" rx="8" fill="#ffffff"/>
+<path d="M150.000 3614.000 L2236.000 3614.000" fill="none" stroke="#E5E9EE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="132" y="3621.0" font-size="18" fill="#626D79" font-weight="400" text-anchor="end">0 h</text>
+<path d="M150.000 3507.333 L2236.000 3507.333" fill="none" stroke="#E5E9EE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="132" y="3514.3333333333335" font-size="18" fill="#626D79" font-weight="400" text-anchor="end">3 h</text>
+<path d="M150.000 3400.667 L2236.000 3400.667" fill="none" stroke="#E5E9EE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="132" y="3407.6666666666665" font-size="18" fill="#626D79" font-weight="400" text-anchor="end">6 h</text>
+<path d="M150.000 3294.000 L2236.000 3294.000" fill="none" stroke="#E5E9EE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="132" y="3301.0" font-size="18" fill="#626D79" font-weight="400" text-anchor="end">9 h</text>
+<path d="M150.000 3187.333 L2236.000 3187.333" fill="none" stroke="#E5E9EE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="132" y="3194.3333333333335" font-size="18" fill="#626D79" font-weight="400" text-anchor="end">12 h</text>
+<path d="M150.000 3080.667 L2236.000 3080.667" fill="none" stroke="#E5E9EE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="132" y="3087.6666666666665" font-size="18" fill="#626D79" font-weight="400" text-anchor="end">15 h</text>
+<path d="M150.000 2974.000 L2236.000 2974.000" fill="none" stroke="#E5E9EE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="132" y="2981.0" font-size="18" fill="#626D79" font-weight="400" text-anchor="end">18 h</text>
+<path d="M150.000 2974.000 L150.000 3614.000" fill="none" stroke="#F0F2F5" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="150.0" y="3646" font-size="19" fill="#626D79" font-weight="400" text-anchor="middle">起点</text>
+<text x="150.0" y="3672" font-size="16" fill="#626D79" font-weight="400" text-anchor="middle">0.0 km</text>
+<path d="M360.165 2974.000 L360.165 3614.000" fill="none" stroke="#F0F2F5" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="360.16543461995377" y="3646" font-size="19" fill="#626D79" font-weight="400" text-anchor="middle">CP1</text>
+<text x="360.16543461995377" y="3672" font-size="16" fill="#626D79" font-weight="400" text-anchor="middle">10.2 km</text>
+<path d="M524.068 2974.000 L524.068 3614.000" fill="none" stroke="#F0F2F5" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="524.0678218132659" y="3646" font-size="19" fill="#626D79" font-weight="400" text-anchor="middle">CP2</text>
+<text x="524.0678218132659" y="3672" font-size="16" fill="#626D79" font-weight="400" text-anchor="middle">18.2 km</text>
+<path d="M688.675 2974.000 L688.675 3614.000" fill="none" stroke="#F0F2F5" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="688.6749542548299" y="3646" font-size="19" fill="#626D79" font-weight="400" text-anchor="middle">CP3</text>
+<text x="688.6749542548299" y="3672" font-size="16" fill="#626D79" font-weight="400" text-anchor="middle">26.1 km</text>
+<path d="M891.567 2974.000 L891.567 3614.000" fill="none" stroke="#F0F2F5" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="891.566522134302" y="3646" font-size="19" fill="#626D79" font-weight="400" text-anchor="middle">CP4</text>
+<text x="891.566522134302" y="3672" font-size="16" fill="#626D79" font-weight="400" text-anchor="middle">36.0 km</text>
+<path d="M1130.253 2974.000 L1130.253 3614.000" fill="none" stroke="#F0F2F5" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="1130.2529988719193" y="3646" font-size="19" fill="#626D79" font-weight="400" text-anchor="middle">CP5</text>
+<text x="1130.2529988719193" y="3672" font-size="16" fill="#626D79" font-weight="400" text-anchor="middle">47.6 km</text>
+<path d="M1382.101 2974.000 L1382.101 3614.000" fill="none" stroke="#F0F2F5" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="1382.1007400496585" y="3646" font-size="19" fill="#626D79" font-weight="400" text-anchor="middle">CP6</text>
+<text x="1382.1007400496585" y="3672" font-size="16" fill="#626D79" font-weight="400" text-anchor="middle">59.8 km</text>
+<path d="M1545.336 2974.000 L1545.336 3614.000" fill="none" stroke="#F0F2F5" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="1545.335536177036" y="3646" font-size="19" fill="#626D79" font-weight="400" text-anchor="middle">CP7</text>
+<text x="1545.335536177036" y="3672" font-size="16" fill="#626D79" font-weight="400" text-anchor="middle">67.7 km</text>
+<path d="M1742.908 2974.000 L1742.908 3614.000" fill="none" stroke="#F0F2F5" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="1742.907732129361" y="3646" font-size="19" fill="#626D79" font-weight="400" text-anchor="middle">CP8</text>
+<text x="1742.907732129361" y="3672" font-size="16" fill="#626D79" font-weight="400" text-anchor="middle">77.3 km</text>
+<path d="M1955.761 2974.000 L1955.761 3614.000" fill="none" stroke="#F0F2F5" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="1955.7611157475674" y="3646" font-size="19" fill="#626D79" font-weight="400" text-anchor="middle">CP12</text>
+<text x="1955.7611157475674" y="3672" font-size="16" fill="#626D79" font-weight="400" text-anchor="middle">87.6 km</text>
+<path d="M2077.701 2974.000 L2077.701 3614.000" fill="none" stroke="#F0F2F5" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="2077.701156955242" y="3646" font-size="19" fill="#626D79" font-weight="400" text-anchor="middle">CP13</text>
+<text x="2077.701156955242" y="3672" font-size="16" fill="#626D79" font-weight="400" text-anchor="middle">93.6 km</text>
+<path d="M2236.000 2974.000 L2236.000 3614.000" fill="none" stroke="#F0F2F5" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="2236.0" y="3646" font-size="19" fill="#626D79" font-weight="400" text-anchor="middle">终点</text>
+<text x="2236.0" y="3672" font-size="16" fill="#626D79" font-weight="400" text-anchor="middle">101.2 km</text>
+<g id="curve-0" class="curve" color="#0072B2" tabindex="0" aria-label="方案 15:00：各 CP 累计经过时间">
 <title>方案 15:00：各 CP 累计经过时间</title>
-<path d="M78.000 2946.000 L123.000 2946.000" fill="none" stroke="#126b70" stroke-width="4" stroke-dasharray="9 6"/>
-<text x="138.0" y="2954" font-size="22" fill="#126b70" font-weight="400" text-anchor="start">方案 15:00</text>
-<path d="M150.000 3414.000 L398.854 3391.766 L592.928 3368.874 L787.837 3345.032 L1028.077 3308.227 L1310.702 3261.469 L1608.911 3219.542 L1802.195 3189.148 L2036.137 3158.237 L2288.174 3121.528 L2432.561 3103.008 L2620.000 3080.667" fill="none" stroke="#126b70" stroke-width="3" stroke-dasharray="9 6" data-series="repository" data-target-seconds="54000.0"/>
-<circle cx="150.000" cy="3414.000" r="5" fill="#126b70"><title>起终点-徽州古城（起点） · 方案 15:00：00:00:00；方案 − 佳明：00:00:00</title></circle>
-<circle cx="398.854" cy="3391.766" r="5" fill="#126b70"><title>CP1-雄村镇 · 方案 15:00：01:00:02；方案 − 佳明：-00:08:02</title></circle>
-<circle cx="592.928" cy="3368.874" r="5" fill="#126b70"><title>CP2-庄源村 · 方案 15:00：02:01:50；方案 − 佳明：-00:02:32</title></circle>
-<circle cx="787.837" cy="3345.032" r="5" fill="#126b70"><title>CP3-长源村 · 方案 15:00：03:06:13；方案 − 佳明：-00:02:22</title></circle>
-<circle cx="1028.077" cy="3308.227" r="5" fill="#126b70"><title>CP4-大源村 · 方案 15:00：04:45:35；方案 − 佳明：+00:08:16</title></circle>
-<circle cx="1310.702" cy="3261.469" r="5" fill="#126b70"><title>CP5-洲头梁村 · 方案 15:00：06:51:50；方案 − 佳明：-00:34:29</title></circle>
-<circle cx="1608.911" cy="3219.542" r="5" fill="#126b70"><title>CP6-武阳驿站 · 方案 15:00：08:45:02；方案 − 佳明：-00:22:42</title></circle>
-<circle cx="1802.195" cy="3189.148" r="5" fill="#126b70"><title>CP7-约源村委会 · 方案 15:00：10:07:06；方案 − 佳明：-00:53:03</title></circle>
-<circle cx="2036.137" cy="3158.237" r="5" fill="#126b70"><title>CP8-洪济小学旧址 · 方案 15:00：11:30:34；方案 − 佳明：-01:08:41</title></circle>
-<circle cx="2288.174" cy="3121.528" r="5" fill="#126b70"><title>CP12-瞻淇村 · 方案 15:00：13:09:41；方案 − 佳明：-01:25:56</title></circle>
-<circle cx="2432.561" cy="3103.008" r="5" fill="#126b70"><title>CP13-画家村 · 方案 15:00：13:59:41；方案 − 佳明：-01:38:07</title></circle>
-<circle cx="2620.000" cy="3080.667" r="5" fill="#126b70"><title>起终点-徽州古城（终点） · 方案 15:00：15:00:00；方案 − 佳明：-01:46:04</title></circle>
+<path d="M150.000 3614.000 L360.165 3578.426 L524.068 3541.799 L688.675 3503.651 L891.567 3444.763 L1130.253 3369.950 L1382.101 3302.866 L1545.336 3254.237 L1742.908 3204.779 L1955.761 3146.044 L2077.701 3116.412 L2236.000 3080.667" fill="none" stroke="#0072B2" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="20 10" data-series="repository" data-target-seconds="54000.0"/>
+<circle class="point-hit" cx="150.000" cy="3614.000" r="10" fill="transparent"><title>起终点-徽州古城（起点） · 方案 15:00：00:00:00；方案 − 佳明：00:00:00</title></circle>
+<circle class="point-hit" cx="360.165" cy="3578.426" r="10" fill="transparent"><title>CP1-雄村镇 · 方案 15:00：01:00:02；方案 − 佳明：-00:08:02</title></circle>
+<circle class="point-hit" cx="524.068" cy="3541.799" r="10" fill="transparent"><title>CP2-庄源村 · 方案 15:00：02:01:50；方案 − 佳明：-00:02:32</title></circle>
+<circle class="point-hit" cx="688.675" cy="3503.651" r="10" fill="transparent"><title>CP3-长源村 · 方案 15:00：03:06:13；方案 − 佳明：-00:02:22</title></circle>
+<circle class="point-hit" cx="891.567" cy="3444.763" r="10" fill="transparent"><title>CP4-大源村 · 方案 15:00：04:45:35；方案 − 佳明：+00:08:16</title></circle>
+<circle class="point-hit" cx="1130.253" cy="3369.950" r="10" fill="transparent"><title>CP5-洲头梁村 · 方案 15:00：06:51:50；方案 − 佳明：-00:34:29</title></circle>
+<circle class="point-hit" cx="1382.101" cy="3302.866" r="10" fill="transparent"><title>CP6-武阳驿站 · 方案 15:00：08:45:02；方案 − 佳明：-00:22:42</title></circle>
+<circle class="point-hit" cx="1545.336" cy="3254.237" r="10" fill="transparent"><title>CP7-约源村委会 · 方案 15:00：10:07:06；方案 − 佳明：-00:53:03</title></circle>
+<circle class="point-hit" cx="1742.908" cy="3204.779" r="10" fill="transparent"><title>CP8-洪济小学旧址 · 方案 15:00：11:30:34；方案 − 佳明：-01:08:41</title></circle>
+<circle class="point-hit" cx="1955.761" cy="3146.044" r="10" fill="transparent"><title>CP12-瞻淇村 · 方案 15:00：13:09:41；方案 − 佳明：-01:25:56</title></circle>
+<circle class="point-hit" cx="2077.701" cy="3116.412" r="10" fill="transparent"><title>CP13-画家村 · 方案 15:00：13:59:41；方案 − 佳明：-01:38:07</title></circle>
+<circle class="point-hit" cx="2236.000" cy="3080.667" r="10" fill="transparent"><title>起终点-徽州古城（终点） · 方案 15:00：15:00:00；方案 − 佳明：-01:46:04</title></circle>
+<path d="M2248.000 3080.667 L2284.000 3141.556 L2308.000 3141.556" fill="none" stroke="#0072B2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-role="endpoint-leader"/>
+<text class="end-label" x="2326" y="3148.5555555555557" font-size="23" fill="#0072B2" font-weight="500" text-anchor="start">方案 15:00  15:00:00</text>
 </g>
-<g id="curve-1" class="curve" tabindex="0" aria-label="方案 16:00：各 CP 累计经过时间">
+<g id="curve-1" class="curve" color="#C05A00" tabindex="0" aria-label="方案 16:00：各 CP 累计经过时间">
 <title>方案 16:00：各 CP 累计经过时间</title>
-<path d="M510.000 2946.000 L555.000 2946.000" fill="none" stroke="#486aa6" stroke-width="4" stroke-dasharray="9 6"/>
-<text x="570.0" y="2954" font-size="22" fill="#486aa6" font-weight="400" text-anchor="start">方案 16:00</text>
-<path d="M150.000 3414.000 L398.854 3390.284 L592.928 3365.866 L787.837 3340.434 L1028.077 3301.175 L1310.702 3251.300 L1608.911 3206.578 L1802.195 3174.158 L2036.137 3141.186 L2288.174 3102.030 L2432.561 3082.275 L2620.000 3058.444" fill="none" stroke="#486aa6" stroke-width="3" stroke-dasharray="9 6" data-series="repository" data-target-seconds="57600.0"/>
-<circle cx="150.000" cy="3414.000" r="5" fill="#486aa6"><title>起终点-徽州古城（起点） · 方案 16:00：00:00:00；方案 − 佳明：00:00:00</title></circle>
-<circle cx="398.854" cy="3390.284" r="5" fill="#486aa6"><title>CP1-雄村镇 · 方案 16:00：01:04:02；方案 − 佳明：-00:04:02</title></circle>
-<circle cx="592.928" cy="3365.866" r="5" fill="#486aa6"><title>CP2-庄源村 · 方案 16:00：02:09:58；方案 − 佳明：+00:05:35</title></circle>
-<circle cx="787.837" cy="3340.434" r="5" fill="#486aa6"><title>CP3-长源村 · 方案 16:00：03:18:38；方案 − 佳明：+00:10:03</title></circle>
-<circle cx="1028.077" cy="3301.175" r="5" fill="#486aa6"><title>CP4-大源村 · 方案 16:00：05:04:38；方案 − 佳明：+00:27:19</title></circle>
-<circle cx="1310.702" cy="3251.300" r="5" fill="#486aa6"><title>CP5-洲头梁村 · 方案 16:00：07:19:17；方案 − 佳明：-00:07:02</title></circle>
-<circle cx="1608.911" cy="3206.578" r="5" fill="#486aa6"><title>CP6-武阳驿站 · 方案 16:00：09:20:02；方案 − 佳明：+00:12:18</title></circle>
-<circle cx="1802.195" cy="3174.158" r="5" fill="#486aa6"><title>CP7-约源村委会 · 方案 16:00：10:47:34；方案 − 佳明：-00:12:34</title></circle>
-<circle cx="2036.137" cy="3141.186" r="5" fill="#486aa6"><title>CP8-洪济小学旧址 · 方案 16:00：12:16:36；方案 − 佳明：-00:22:39</title></circle>
-<circle cx="2288.174" cy="3102.030" r="5" fill="#486aa6"><title>CP12-瞻淇村 · 方案 16:00：14:02:19；方案 − 佳明：-00:33:17</title></circle>
-<circle cx="2432.561" cy="3082.275" r="5" fill="#486aa6"><title>CP13-画家村 · 方案 16:00：14:55:39；方案 − 佳明：-00:42:08</title></circle>
-<circle cx="2620.000" cy="3058.444" r="5" fill="#486aa6"><title>起终点-徽州古城（终点） · 方案 16:00：16:00:00；方案 − 佳明：-00:46:04</title></circle>
+<path d="M150.000 3614.000 L360.165 3576.054 L524.068 3536.985 L688.675 3496.295 L891.567 3433.480 L1130.253 3353.680 L1382.101 3282.124 L1545.336 3230.253 L1742.908 3177.498 L1955.761 3114.847 L2077.701 3083.240 L2236.000 3045.111" fill="none" stroke="#C05A00" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="8 8" data-series="repository" data-target-seconds="57600.0"/>
+<circle class="point-hit" cx="150.000" cy="3614.000" r="10" fill="transparent"><title>起终点-徽州古城（起点） · 方案 16:00：00:00:00；方案 − 佳明：00:00:00</title></circle>
+<circle class="point-hit" cx="360.165" cy="3576.054" r="10" fill="transparent"><title>CP1-雄村镇 · 方案 16:00：01:04:02；方案 − 佳明：-00:04:02</title></circle>
+<circle class="point-hit" cx="524.068" cy="3536.985" r="10" fill="transparent"><title>CP2-庄源村 · 方案 16:00：02:09:58；方案 − 佳明：+00:05:35</title></circle>
+<circle class="point-hit" cx="688.675" cy="3496.295" r="10" fill="transparent"><title>CP3-长源村 · 方案 16:00：03:18:38；方案 − 佳明：+00:10:03</title></circle>
+<circle class="point-hit" cx="891.567" cy="3433.480" r="10" fill="transparent"><title>CP4-大源村 · 方案 16:00：05:04:38；方案 − 佳明：+00:27:19</title></circle>
+<circle class="point-hit" cx="1130.253" cy="3353.680" r="10" fill="transparent"><title>CP5-洲头梁村 · 方案 16:00：07:19:17；方案 − 佳明：-00:07:02</title></circle>
+<circle class="point-hit" cx="1382.101" cy="3282.124" r="10" fill="transparent"><title>CP6-武阳驿站 · 方案 16:00：09:20:02；方案 − 佳明：+00:12:18</title></circle>
+<circle class="point-hit" cx="1545.336" cy="3230.253" r="10" fill="transparent"><title>CP7-约源村委会 · 方案 16:00：10:47:34；方案 − 佳明：-00:12:34</title></circle>
+<circle class="point-hit" cx="1742.908" cy="3177.498" r="10" fill="transparent"><title>CP8-洪济小学旧址 · 方案 16:00：12:16:36；方案 − 佳明：-00:22:39</title></circle>
+<circle class="point-hit" cx="1955.761" cy="3114.847" r="10" fill="transparent"><title>CP12-瞻淇村 · 方案 16:00：14:02:19；方案 − 佳明：-00:33:17</title></circle>
+<circle class="point-hit" cx="2077.701" cy="3083.240" r="10" fill="transparent"><title>CP13-画家村 · 方案 16:00：14:55:39；方案 − 佳明：-00:42:08</title></circle>
+<circle class="point-hit" cx="2236.000" cy="3045.111" r="10" fill="transparent"><title>起终点-徽州古城（终点） · 方案 16:00：16:00:00；方案 − 佳明：-00:46:04</title></circle>
+<path d="M2248.000 3045.111 L2284.000 3097.556 L2308.000 3097.556" fill="none" stroke="#C05A00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-role="endpoint-leader"/>
+<text class="end-label" x="2326" y="3104.5555555555557" font-size="23" fill="#C05A00" font-weight="500" text-anchor="start">方案 16:00  16:00:00</text>
 </g>
-<g id="curve-2" class="curve" tabindex="0" aria-label="方案 17:00：各 CP 累计经过时间">
+<g id="curve-2" class="curve" color="#007A5E" tabindex="0" aria-label="方案 17:00：各 CP 累计经过时间">
 <title>方案 17:00：各 CP 累计经过时间</title>
-<path d="M942.000 2946.000 L987.000 2946.000" fill="none" stroke="#9a6c1d" stroke-width="4" stroke-dasharray="9 6"/>
-<text x="1002.0" y="2954" font-size="22" fill="#9a6c1d" font-weight="400" text-anchor="start">方案 17:00</text>
-<path d="M150.000 3414.000 L398.854 3388.802 L592.928 3362.857 L787.837 3335.836 L1028.077 3294.124 L1310.702 3241.132 L1608.911 3193.614 L1802.195 3159.168 L2036.137 3124.135 L2288.174 3082.531 L2432.561 3061.542 L2620.000 3036.222" fill="none" stroke="#9a6c1d" stroke-width="3" stroke-dasharray="9 6" data-series="repository" data-target-seconds="61200.0"/>
-<circle cx="150.000" cy="3414.000" r="5" fill="#9a6c1d"><title>起终点-徽州古城（起点） · 方案 17:00：00:00:00；方案 − 佳明：00:00:00</title></circle>
-<circle cx="398.854" cy="3388.802" r="5" fill="#9a6c1d"><title>CP1-雄村镇 · 方案 17:00：01:08:02；方案 − 佳明：-00:00:02</title></circle>
-<circle cx="592.928" cy="3362.857" r="5" fill="#9a6c1d"><title>CP2-庄源村 · 方案 17:00：02:18:05；方案 − 佳明：+00:13:43</title></circle>
-<circle cx="787.837" cy="3335.836" r="5" fill="#9a6c1d"><title>CP3-长源村 · 方案 17:00：03:31:03；方案 − 佳明：+00:22:28</title></circle>
-<circle cx="1028.077" cy="3294.124" r="5" fill="#9a6c1d"><title>CP4-大源村 · 方案 17:00：05:23:40；方案 − 佳明：+00:46:21</title></circle>
-<circle cx="1310.702" cy="3241.132" r="5" fill="#9a6c1d"><title>CP5-洲头梁村 · 方案 17:00：07:46:45；方案 − 佳明：+00:20:25</title></circle>
-<circle cx="1608.911" cy="3193.614" r="5" fill="#9a6c1d"><title>CP6-武阳驿站 · 方案 17:00：09:55:03；方案 − 佳明：+00:47:18</title></circle>
-<circle cx="1802.195" cy="3159.168" r="5" fill="#9a6c1d"><title>CP7-约源村委会 · 方案 17:00：11:28:03；方案 − 佳明：+00:27:54</title></circle>
-<circle cx="2036.137" cy="3124.135" r="5" fill="#9a6c1d"><title>CP8-洪济小学旧址 · 方案 17:00：13:02:38；方案 − 佳明：+00:23:24</title></circle>
-<circle cx="2288.174" cy="3082.531" r="5" fill="#9a6c1d"><title>CP12-瞻淇村 · 方案 17:00：14:54:58；方案 − 佳明：+00:19:22</title></circle>
-<circle cx="2432.561" cy="3061.542" r="5" fill="#9a6c1d"><title>CP13-画家村 · 方案 17:00：15:51:38；方案 − 佳明：+00:13:51</title></circle>
-<circle cx="2620.000" cy="3036.222" r="5" fill="#9a6c1d"><title>起终点-徽州古城（终点） · 方案 17:00：17:00:00；方案 − 佳明：+00:13:56</title></circle>
+<path d="M150.000 3614.000 L360.165 3573.683 L524.068 3532.172 L688.675 3488.938 L891.567 3422.198 L1130.253 3337.410 L1382.101 3261.382 L1545.336 3206.269 L1742.908 3150.216 L1955.761 3083.650 L2077.701 3050.067 L2236.000 3009.556" fill="none" stroke="#007A5E" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="22 8 4 8" data-series="repository" data-target-seconds="61200.0"/>
+<circle class="point-hit" cx="150.000" cy="3614.000" r="10" fill="transparent"><title>起终点-徽州古城（起点） · 方案 17:00：00:00:00；方案 − 佳明：00:00:00</title></circle>
+<circle class="point-hit" cx="360.165" cy="3573.683" r="10" fill="transparent"><title>CP1-雄村镇 · 方案 17:00：01:08:02；方案 − 佳明：-00:00:02</title></circle>
+<circle class="point-hit" cx="524.068" cy="3532.172" r="10" fill="transparent"><title>CP2-庄源村 · 方案 17:00：02:18:05；方案 − 佳明：+00:13:43</title></circle>
+<circle class="point-hit" cx="688.675" cy="3488.938" r="10" fill="transparent"><title>CP3-长源村 · 方案 17:00：03:31:03；方案 − 佳明：+00:22:28</title></circle>
+<circle class="point-hit" cx="891.567" cy="3422.198" r="10" fill="transparent"><title>CP4-大源村 · 方案 17:00：05:23:40；方案 − 佳明：+00:46:21</title></circle>
+<circle class="point-hit" cx="1130.253" cy="3337.410" r="10" fill="transparent"><title>CP5-洲头梁村 · 方案 17:00：07:46:45；方案 − 佳明：+00:20:25</title></circle>
+<circle class="point-hit" cx="1382.101" cy="3261.382" r="10" fill="transparent"><title>CP6-武阳驿站 · 方案 17:00：09:55:03；方案 − 佳明：+00:47:18</title></circle>
+<circle class="point-hit" cx="1545.336" cy="3206.269" r="10" fill="transparent"><title>CP7-约源村委会 · 方案 17:00：11:28:03；方案 − 佳明：+00:27:54</title></circle>
+<circle class="point-hit" cx="1742.908" cy="3150.216" r="10" fill="transparent"><title>CP8-洪济小学旧址 · 方案 17:00：13:02:38；方案 − 佳明：+00:23:24</title></circle>
+<circle class="point-hit" cx="1955.761" cy="3083.650" r="10" fill="transparent"><title>CP12-瞻淇村 · 方案 17:00：14:54:58；方案 − 佳明：+00:19:22</title></circle>
+<circle class="point-hit" cx="2077.701" cy="3050.067" r="10" fill="transparent"><title>CP13-画家村 · 方案 17:00：15:51:38；方案 − 佳明：+00:13:51</title></circle>
+<circle class="point-hit" cx="2236.000" cy="3009.556" r="10" fill="transparent"><title>起终点-徽州古城（终点） · 方案 17:00：17:00:00；方案 − 佳明：+00:13:56</title></circle>
+<path d="M2248.000 3009.556 L2284.000 3009.556 L2308.000 3009.556" fill="none" stroke="#007A5E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-role="endpoint-leader"/>
+<text class="end-label" x="2326" y="3016.5555555555557" font-size="23" fill="#007A5E" font-weight="500" text-anchor="start">方案 17:00  17:00:00</text>
 </g>
-<g id="curve-3" class="curve" tabindex="0" aria-label="佳明实际：各 CP 累计经过时间">
+<g id="curve-3" class="curve" color="#202A35" tabindex="0" aria-label="佳明实际：各 CP 累计经过时间">
 <title>佳明实际：各 CP 累计经过时间</title>
-<path d="M1374.000 2946.000 L1419.000 2946.000" fill="none" stroke="#aa472e" stroke-width="4"/>
-<text x="1434.0" y="2954" font-size="22" fill="#aa472e" font-weight="400" text-anchor="start">佳明实际</text>
-<path d="M150.000 3414.000 L398.854 3388.790 L592.928 3367.936 L787.837 3344.156 L1028.077 3311.290 L1310.702 3248.696 L1608.911 3211.135 L1802.195 3169.502 L2036.137 3132.800 L2288.174 3089.703 L2432.561 3066.669 L2620.000 3041.385" fill="none" stroke="#aa472e" stroke-width="4" data-series="garmin"/>
-<circle cx="150.000" cy="3414.000" r="5" fill="#aa472e"><title>起终点-徽州古城（起点） · 佳明实际：00:00:00</title></circle>
-<circle cx="398.854" cy="3388.790" r="5" fill="#aa472e"><title>CP1-雄村镇 · 佳明实际：01:08:04</title></circle>
-<circle cx="592.928" cy="3367.936" r="5" fill="#aa472e"><title>CP2-庄源村 · 佳明实际：02:04:22</title></circle>
-<circle cx="787.837" cy="3344.156" r="5" fill="#aa472e"><title>CP3-长源村 · 佳明实际：03:08:35</title></circle>
-<circle cx="1028.077" cy="3311.290" r="5" fill="#aa472e"><title>CP4-大源村 · 佳明实际：04:37:19</title></circle>
-<circle cx="1310.702" cy="3248.696" r="5" fill="#aa472e"><title>CP5-洲头梁村 · 佳明实际：07:26:19</title></circle>
-<circle cx="1608.911" cy="3211.135" r="5" fill="#aa472e"><title>CP6-武阳驿站 · 佳明实际：09:07:44</title></circle>
-<circle cx="1802.195" cy="3169.502" r="5" fill="#aa472e"><title>CP7-约源村委会 · 佳明实际：11:00:09</title></circle>
-<circle cx="2036.137" cy="3132.800" r="5" fill="#aa472e"><title>CP8-洪济小学旧址 · 佳明实际：12:39:14</title></circle>
-<circle cx="2288.174" cy="3089.703" r="5" fill="#aa472e"><title>CP12-瞻淇村 · 佳明实际：14:35:36</title></circle>
-<circle cx="2432.561" cy="3066.669" r="5" fill="#aa472e"><title>CP13-画家村 · 佳明实际：15:37:48</title></circle>
-<circle cx="2620.000" cy="3041.385" r="5" fill="#aa472e"><title>起终点-徽州古城（终点） · 佳明实际：16:46:04</title></circle>
+<path d="M150.000 3614.000 L360.165 3573.664 L524.068 3540.298 L688.675 3502.249 L891.567 3449.664 L1130.253 3349.513 L1382.101 3289.416 L1545.336 3222.804 L1742.908 3164.080 L1955.761 3095.125 L2077.701 3058.270 L2236.000 3017.817" fill="none" stroke="#202A35" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" data-series="garmin"/>
+<g class="actual-point"><circle cx="150.000" cy="3614.000" r="6" fill="#202A35" stroke="#ffffff" stroke-width="2"><title>起终点-徽州古城（起点） · 佳明实际：00:00:00</title></circle></g>
+<g class="actual-point"><circle cx="360.165" cy="3573.664" r="6" fill="#202A35" stroke="#ffffff" stroke-width="2"><title>CP1-雄村镇 · 佳明实际：01:08:04</title></circle></g>
+<g class="actual-point"><circle cx="524.068" cy="3540.298" r="6" fill="#202A35" stroke="#ffffff" stroke-width="2"><title>CP2-庄源村 · 佳明实际：02:04:22</title></circle></g>
+<g class="actual-point"><circle cx="688.675" cy="3502.249" r="6" fill="#202A35" stroke="#ffffff" stroke-width="2"><title>CP3-长源村 · 佳明实际：03:08:35</title></circle></g>
+<g class="actual-point"><circle cx="891.567" cy="3449.664" r="6" fill="#202A35" stroke="#ffffff" stroke-width="2"><title>CP4-大源村 · 佳明实际：04:37:19</title></circle></g>
+<g class="actual-point"><circle cx="1130.253" cy="3349.513" r="6" fill="#202A35" stroke="#ffffff" stroke-width="2"><title>CP5-洲头梁村 · 佳明实际：07:26:19</title></circle></g>
+<g class="actual-point"><circle cx="1382.101" cy="3289.416" r="6" fill="#202A35" stroke="#ffffff" stroke-width="2"><title>CP6-武阳驿站 · 佳明实际：09:07:44</title></circle></g>
+<g class="actual-point"><circle cx="1545.336" cy="3222.804" r="6" fill="#202A35" stroke="#ffffff" stroke-width="2"><title>CP7-约源村委会 · 佳明实际：11:00:09</title></circle></g>
+<g class="actual-point"><circle cx="1742.908" cy="3164.080" r="6" fill="#202A35" stroke="#ffffff" stroke-width="2"><title>CP8-洪济小学旧址 · 佳明实际：12:39:14</title></circle></g>
+<g class="actual-point"><circle cx="1955.761" cy="3095.125" r="6" fill="#202A35" stroke="#ffffff" stroke-width="2"><title>CP12-瞻淇村 · 佳明实际：14:35:36</title></circle></g>
+<g class="actual-point"><circle cx="2077.701" cy="3058.270" r="6" fill="#202A35" stroke="#ffffff" stroke-width="2"><title>CP13-画家村 · 佳明实际：15:37:48</title></circle></g>
+<g class="actual-point"><circle cx="2236.000" cy="3017.817" r="6" fill="#202A35" stroke="#ffffff" stroke-width="2"><title>起终点-徽州古城（终点） · 佳明实际：16:46:04</title></circle></g>
+<path d="M2248.000 3017.817 L2284.000 3053.556 L2308.000 3053.556" fill="none" stroke="#202A35" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-role="endpoint-leader"/>
+<text class="end-label" x="2326" y="3060.5555555555557" font-size="23" fill="#202A35" font-weight="700" text-anchor="start">佳明实际  16:46:04</text>
 </g>
 </g>
 <g id="data-notes" class="inspectable" tabindex="0" aria-label="来源：路线与现有配速模型；实际活动 2026-10-31「2026 徽州古城秋季赛」。汇总来源：Garmin platform + FIT session fallback。
@@ -655,7 +666,7 @@ FIT 逐圈爬升 / 下降：5018 / 5024 m；汇总：5019 / 5023 m。差值使�
 数据提示：ascent_m: FIT laps 5018.0, finish 5019.0; no rescaling.
 数据提示：descent_m: FIT laps 5024.0, finish 5023.0; no rescaling.
 数据提示：wpt:10: explicit passage override, offset 2.0 m.</title>
-<text x="64" y="3554" font-size="20" fill="#627780" font-weight="400" text-anchor="start">口径：时间包含停留，CP 非官方打卡；本段爬升 / 下降由 FIT 逐圈累计估算值相减，未知为 —。</text>
-<text x="64" y="3586" font-size="20" fill="#627780" font-weight="400" text-anchor="start">差值先计算再取整；方案停留计入下一段。数据来源与匹配详情可悬停此处查看，也保存在 SVG 元数据中。</text>
+<text x="64" y="3754" font-size="20" fill="#626D79" font-weight="400" text-anchor="start">口径：时间包含停留，CP 非官方打卡；本段爬升 / 下降由 FIT 逐圈累计估算值相减，未知为 —。</text>
+<text x="64" y="3786" font-size="20" fill="#626D79" font-weight="400" text-anchor="start">差值先计算再取整；方案停留计入下一段。数据来源与匹配详情可悬停此处查看，也保存在 SVG 元数据中。</text>
 </g>
 </svg>
