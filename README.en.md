@@ -65,7 +65,7 @@ The original 50K GPX lacks elevation at 59 points in two gaps spanning about 834
 
 The 50K example also provides a single-column [6-hour-15-minute plan](examples/大境门/DGW50K/pace-chart-6h15m.svg) and its [configuration](examples/大境门/DGW50K/config-6h15m.json), using the default 06:00 start and segment pace in parentheses.
 
-The Tiandi Liubai comparison includes only Garmin activity data and repository plans. The main table groups cumulative arrival and segment elapsed time under each checkpoint, followed by terrain data and a single time chart for the actual activity and the 15h, 16h, and 17h plans. Garmin values come from the October 31, 2026 activity “2026 徽州古城秋季赛”, with an elapsed time of 16:46:04 including stops. Parentheses in repository cells show repository minus Garmin; time differences include seconds. The original 12–16 hour configuration and pace chart remain unchanged.
+The Tiandi Liubai comparison includes only Garmin activity data and repository plans. Separate panels for 15h, 16h, and 17h show cumulative ahead/behind curves and per-segment faster/slower bars, followed by checkpoint time details and terrain data. Green means actually ahead/faster, red means behind/slower, with explicit text labels. Garmin values come from the October 31, 2026 activity “2026 徽州古城秋季赛”, with an elapsed time of 16:46:04 including stops. Terrain parentheses retain repository minus Garmin. The original 12–16 hour configuration and pace chart remain unchanged.
 
 The Dajingmen merged comparison shows times for all 16 plans, terrain data from all three sources, and Garmin activity times against the repository's 6:15 plan, in that order. RunArt values come from the user-provided screenshot. Garmin values come from the September 12, 2026 Dajingmen activity; elapsed times include stops. The activity comparison displays seconds; differences are Garmin minus plan, with negative values indicating earlier passage.
 
@@ -101,7 +101,7 @@ python3 skills/even-effort-pace-chart/scripts/compare_activity.py generate race.
   --targets 15:00 16:00 17:00 --output-dir output/comparison
 ```
 
-Original FIT and FIT ZIP are supported. Omit `--summary` to use FIT session totals. The default SVG contains checkpoint times, terrain data, and a combined time chart; add `--export-json` for structured output. `--targets` overrides the exact target list without changing the configuration. Segment times include stops; parentheses mean repository minus Garmin. Open the SVG directly to hover or focus station rows and curves; image previews retain all values.
+Original FIT and FIT ZIP are supported. Omit `--summary` to use FIT session totals. The default SVG contains an ahead/behind overview, checkpoint time details, and terrain data; add `--export-json` for structured output. `--targets` overrides the exact target list without changing the configuration. Segment times include stops. Time labels explicitly describe the actual activity as ahead/behind or faster/slower; terrain parentheses mean repository minus Garmin. Open the SVG directly to hover or focus station rows, curve points, and segment bars; image previews retain all values.
 
 To retrieve Garmin activities, set `GARMIN_PERSONAL_API_KEY` in the environment or a local Git-ignored `.env.local`, then run:
 

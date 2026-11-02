@@ -24,15 +24,15 @@ python3 <skill-dir>/scripts/compare_activity.py generate race.gpx \
 
 `inspect` prints activity totals, matched checkpoints, segment times, terrain estimates, and warnings without writing files. `generate` writes only `garmin-comparison.svg` by default, with three sections:
 
-1. A checkpoint time table: cumulative arrival and segment elapsed time, each with plan differences, grouped under the same checkpoint and labeled with the previous station.
-2. Cumulative distance and segment ascent/descent; Garmin first, repository values and differences in one cell.
-3. One cumulative time chart for the actual activity and all plans. The horizontal axis aligns checkpoints by cumulative race-route distance.
+1. Ahead/behind overview: one panel per target, up to three per row. Each panel states the actual finish advantage or deficit, followed by a cumulative arrival difference curve and per-segment faster/slower bars.
+2. Checkpoint time details: cumulative arrival and segment elapsed time grouped under each checkpoint. Garmin comes first; plan cells explicitly label the actual activity as ahead/behind or the segment as faster/slower.
+3. Terrain: cumulative distance and segment ascent/descent; Garmin first, repository values and differences in one cell.
 
-The header prioritizes actual finish time, followed by terrain totals. When opened directly in a browser, SVG rows and curves support hover and Tab focus highlighting; point tooltips contain exact times and differences. Footnotes retain essential definitions, with full provenance and warnings in tooltips and SVG metadata. Image embeddings remain readable as a static chart without interaction. No additional HTML is generated.
+Green means actually ahead or faster; red means behind or slower; a tie is gray. Text and position above/below zero also convey status. Cumulative curves align checkpoints by race-route distance and change color at zero crossings. Segment bars use equally spaced destination checkpoints. All cumulative panels share one symmetric scale; all segment panels share another. Charts use minutes, with nonzero differences under six seconds labeled directly in seconds. Tables and tooltips preserve exact times.
 
-Table values use black and gray, with signed differences consistently gray. Targets receive colors in list order, starting with blue, orange, and green; header samples match their curve colors and distinct dash patterns. The recorded activity uses a thicker black solid line with visible markers; plan points retain hover tooltips. Direct labels on the right show each series and its exact finish time. Close labels are separated with leader lines, and larger target lists increase the plot height to keep every label.
+The header shows actual finish time and terrain totals. When opened directly in a browser, station rows, curve points, and segment bars support hover or Tab focus; tooltips include exact times and differences. Footnotes retain essential definitions, with full provenance and warnings in tooltips and SVG metadata. Image embeddings remain readable without interaction. No extra HTML or external chart library is required.
 
-Parentheses mean **repository minus Garmin**. Negative time differences mean an earlier planned arrival or a shorter planned segment. Times include seconds and support durations beyond 24 hours. Add `--export-json` for unrounded `garmin-comparison.json`; it excludes raw GPS records but includes activity identity, passage times, and estimated metrics. Existing files require another output directory or authorized `--overwrite`.
+Time labels describe the **recorded activity**: `plan minus Garmin > 0` means actually ahead/faster; `< 0` means behind/slower. Absolute differences below half a second display as a tie at 00:00:00. Terrain parentheses retain **repository minus Garmin**, styled neutrally without implying better/worse performance. Times include seconds and support durations beyond 24 hours. Add `--export-json` for unrounded `garmin-comparison.json`, which retains the original plan-minus-actual deltas. It excludes raw GPS records but includes activity identity, passage times, and estimated metrics. Existing files require another output directory or authorized `--overwrite`.
 
 ## Passage matching and timing semantics
 
