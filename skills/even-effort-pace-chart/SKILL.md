@@ -5,17 +5,22 @@ description: Convert GPX/KML race routes into even-effort trail running pace cha
 
 # 耐力学社 Even-Effort Pace Chart Skills
 
-Use `scripts/pace_chart.py` for deterministic, offline calculations and exports. It requires Python 3.10+ and the standard library only. Resolve script paths relative to this file's directory, regardless of the user's working directory.
-
-Read references only as needed, in the user's language: Chinese [configuration](references/configuration.md) / [model](references/model.md), or English [configuration](references/configuration.en.md) / [model](references/model.en.md). Configuration defines fields and CLI contracts; model explains equations and limitations.
-
-For post-race comparisons, use `scripts/compare_activity.py` and read Chinese [activity comparison](references/comparison.md) or English [activity comparison](references/comparison.en.md). Its `inspect`/`generate` commands work offline with FIT/FIT ZIP and require the optional FIT SDK; `list`/`fetch` explicitly access Garmin using environment credentials. Reuse the supplied pace configuration and exact requested targets. Resolve ambiguous activity passages using confirmed CP ID → elapsed overrides. Compare elapsed times including stops and adjacent-station differences; missing activity terrain stays unknown. Export only SVG unless JSON is requested. This mode does not import RunArt screenshots.
+Resolve script paths relative to this file's directory, regardless of the user's working directory. Both workflows share the existing route processing and pacing model; do not duplicate or retune the model for an activity comparison.
 
 Apply **current explicit request > selected configuration > script defaults**. Use a minimal configuration with the requested target, explicit overrides, and confirmed route selections. Omit unspecified fields; preserve valid zeros and `false`. Do not inherit settings from unrelated charts or examples, fill defaults with `null`/empty strings, or ask about optional fields with usable defaults.
 
+## Choose the workflow
+
+- **Pre-race pace chart:** use `scripts/pace_chart.py` and the steps below. Python 3.10+ and the standard library suffice.
+- **Post-race actual-versus-plan comparison:** use `scripts/compare_activity.py` and follow Chinese [activity comparison](references/comparison.md) or English [activity comparison](references/comparison.en.md), instead of the pace-chart export steps below. `inspect`/`generate` are offline with an optional FIT dependency; `list`/`fetch` access Garmin only when retrieval is requested. Reuse the supplied configuration, preserve exact requested targets, and resolve ambiguous actual passages before generation. This workflow defaults to comparison SVG, not a pace chart; its parentheses are plan-minus-actual differences.
+
+Read configuration/model references only when needed for model or route choices: Chinese [configuration](references/configuration.md) / [model](references/model.md), English [configuration](references/configuration.en.md) / [model](references/model.en.md). Activity-only requests do not require loading the entire model reference or retrieving online data.
+
+## Pre-race pace charts
+
 Default output is SVG, with segment pace in parentheses and a local 06:00 start. A supplied start time changes `start_time` only. Select `secondary_display: "arrival_time"` or `"equivalent_pace"` only when requested or already selected in the supplied configuration. Legacy `pace_basis: "equivalent"` still selects equivalent pace when `secondary_display` is absent.
 
-## Inspect the route first
+### Inspect the route first
 
 ```bash
 python3 <skill-dir>/scripts/pace_chart.py inspect <race.gpx-or-kml>
@@ -32,7 +37,7 @@ Resolve ambiguous inputs before generation:
 - Loops/crossings or offsets over 100 m: confirm the route occurrence with a processed-route `distance_km` override, or confirm `allow_off_route`; do not silently choose the nearest projection.
 - KML missing/ground-clamped altitude mode: verify supplied heights before `inspect --use-kml-altitudes` and `use_kml_altitudes: true`. Never fill missing heights with zero. See configuration for supported KML modes and geometry.
 
-## Set targets and assumptions
+### Set targets and assumptions
 
 Obtain the finish target if missing. A `target` expands to five columns with 30-minute spacing; `target_step_minutes` changes the interval. Use `targets` for an exact list, including a single column. When replacing a selected configuration's list with a new central target, remove old `targets`; otherwise the script keeps list precedence and warns. If expansion gives nonpositive durations, obtain an explicit list or interval.
 
@@ -50,7 +55,7 @@ For example, “生成体感一致配速表，目标完赛时间 5 小时，相�
 
 This keeps the default pace display and SVG export. Ascent defaults to no window averaging (`ascent_smoothing_m: 0`), applying a 10 m peak/valley reversal threshold directly to cleaned source elevation vertices. Display smoothing is independent. An explicit positive `ascent_smoothing_m` enables ascent averaging. Consult the model for filtering choices and the explicit `window` alternative. Interpolation adds no measurement accuracy; never tune filters or rescale climbs solely to force a platform's total or claim equivalence to RunArt.Net.
 
-## Generate and verify
+### Generate and verify
 
 Write the selected assumptions to a JSON file, then run:
 

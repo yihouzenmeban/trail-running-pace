@@ -260,10 +260,69 @@ class ComparisonTests(unittest.TestCase):
         svg = render_svg(result)
         root = ET.fromstring(svg)
         ids = {item.get("id") for item in root.iter()}
-        self.assertTrue({"cumulative-times", "terrain", "segment-times", "time-curves"} <= ids)
+        self.assertTrue({"checkpoint-times", "terrain", "time-curves"} <= ids)
         self.assertIn("01:06:40", "".join(root.itertext()))
         self.assertIn("—", svg)
-        self.assertEqual(len(root.findall(".//{*}path[@data-series='garmin']")), 2)
+        self.assertEqual(len(root.findall(".//{*}path[@data-series='garmin']")), 1)
+        self.assertEqual(len(root.findall(".//{*}path[@data-series='repository']")), 2)
+
+    def test_comparison_groups_both_times_at_each_checkpoint(self):
+        import xml.etree.ElementTree as ET
+        from comparison_svg import render_svg
+        result = self.build()
+        root = ET.fromstring(render_svg(result))
+        for i, segment in enumerate(result["segments"], 1):
+            group = root.find(f".//{{*}}g[@id='checkpoint-{i}']")
+            self.assertIsNotNone(group)
+            self.assertEqual(group.get("tabindex"), "0")
+            self.assertIn(segment["to_name"], group.find("{*}title").text)
+            for row_id, actual, predicted in (
+                ("time-cp", result["checkpoints"][i]["elapsed_seconds"],
+                 [s["checkpoints"][i]["arrival_seconds"] for s in self.plan["schedules"]]),
+                ("segment", segment["actual_seconds"], [p["seconds"] for p in segment["plans"]]),
+            ):
+                row = group.find(f".//{{*}}g[@id='{row_id}-{i}']")
+                text = [e.text for e in row.findall("{*}text")]
+                expected = [compare.clock(actual)]
+                for value in predicted:
+                    expected.extend([compare.clock(value), "(" + compare.time_delta(value - actual) + ")"])
+                self.assertEqual(text[1:], expected)
+
+    def test_shared_plot_preserves_values_and_uses_route_distance(self):
+        import re
+        import xml.etree.ElementTree as ET
+        from comparison_svg import render_svg
+        self.config["checkpoint_overrides"] = {"wpt:1": {"distance_km": self.route.total_m / 4000}}
+        self.plan, self.route = compare.load_plan(self.path, self.config)
+        result = self.build()
+        root = ET.fromstring(render_svg(result))
+        plot = root.find(".//{*}g[@id='time-curves']")
+        x0, x1, y0, y1, maximum = [float(plot.get(k)) for k in (
+            "data-x-min", "data-x-max", "data-y-top", "data-y-bottom", "data-max-seconds")]
+        for path in plot.findall(".//{*}path[@data-series]"):
+            points = [tuple(map(float, xy)) for xy in re.findall(r"[ML]([0-9.]+) ([0-9.]+)", path.get("d"))]
+            if path.get("data-series") == "garmin":
+                values = [c["elapsed_seconds"] for c in result["checkpoints"]]
+            else:
+                target = float(path.get("data-target-seconds"))
+                values = [c["arrival_seconds"] for s in self.plan["schedules"]
+                          if s["target_seconds"] == target for c in s["checkpoints"]]
+            self.assertEqual(len(points), len(self.plan["checkpoints"]))
+            for cp, value, (x, y) in zip(self.plan["checkpoints"], values, points):
+                self.assertAlmostEqual(x, x0 + cp["distance_m"] / self.plan["route"]["distance_m"] * (x1 - x0), places=2)
+                self.assertAlmostEqual(y, y1 - value / maximum * (y1 - y0), places=2)
+
+    def test_svg_details_preserve_warnings_and_escape_labels(self):
+        import xml.etree.ElementTree as ET
+        from comparison_svg import render_svg
+        result = self.build()
+        result["warnings"] = ["GPS <gap> & station override"]
+        root = ET.fromstring(render_svg(result))
+        metadata = json.loads(root.find("{*}metadata").text)
+        self.assertEqual(metadata["warnings"], result["warnings"])
+        details = root.find(".//{*}g[@id='data-notes']")
+        self.assertIn(result["warnings"][0], details.find("{*}title").text)
+        self.assertEqual(details.get("tabindex"), "0")
 
 
 class NetworkAndCliTests(unittest.TestCase):
