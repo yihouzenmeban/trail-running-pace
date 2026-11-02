@@ -62,25 +62,30 @@ def metric_delta_label(delta: float | None) -> str:
     return ("仓库多 " if delta > 0 else "仓库少 ") + f"{rounded} m"
 
 
+def minute_delta_label(delta: float) -> str:
+    if abs(delta) < .5:
+        return "持平"
+    if abs(delta) < 6:
+        return ("快" if delta > 0 else "慢") + str(math.floor(abs(delta) + .5)) + "秒"
+    return numeric(delta / 60, 1, signed=True)
+
+
 def render_svg(comparison: dict) -> str:
     plan, activity = comparison["plan"], comparison["activity"]
     cps, schedules = comparison["checkpoints"], plan["schedules"]
     count, targets = len(cps) - 1, plan["targets_seconds"]
     width = max(2720, 560 + 500 * (len(targets) + 1))
     table_width = width - 128
-    row_height = 84
     summary_columns = min(4, len(targets) + 1)
     summary_rows = math.ceil((len(targets) + 1) / summary_columns)
     overview_heading = 157 + summary_rows * 150 + 28
     panel_columns = min(3, len(targets))
     panel_rows = math.ceil(len(targets) / panel_columns)
-    panel_height, panel_gap, panel_top = 450, 24, overview_heading + 75
-    time_heading = panel_top + panel_rows * (panel_height + panel_gap) + 36
-    table1 = time_heading + 116
-    checkpoint_height = 92
-    terrain_heading = table1 + count * checkpoint_height + 62
-    table2 = terrain_heading + 252
-    footer_y = table2 + count * row_height + 62
+    panel_height, panel_gap, panel_top = 790, 24, overview_heading + 75
+    terrain_heading = panel_top + panel_rows * (panel_height + panel_gap) + 36
+    distance_top = terrain_heading + 162
+    elevation_top = distance_top + 424
+    footer_y = elevation_top + 620
     ink, muted = "#202A35", "#626D79"
     recorded_color, planned_color = "#475569", "#3274AC"
     parts = []
@@ -108,12 +113,6 @@ def render_svg(comparison: dict) -> str:
         parts.append(f'<g id="{identifier}" class="{css_class}" tabindex="0" '
                      f'aria-label="{escape(description, quote=True)}">')
         parts.append(f"<title>{escape(description)}</title>")
-
-    def row(y, index):
-        rect(64, y, table_width, row_height - 2, "#ffffff" if index % 2 else "#F2F4F7", 3)
-
-    cell_width = (width - 784) / len(targets)
-    actual_x = 588
 
     rect(0, 0, width, 10000, "#F7F8FA")
     rect(0, 0, width, 6, ink)
@@ -148,12 +147,13 @@ def render_svg(comparison: dict) -> str:
     parts.append('<g id="time-advantage">')
     text(64, overview_heading, "01  时间表现", 30, weight=700)
     text(64, overview_heading + 42, "累计差距：绿色领先、红色落后；零线 = 与计划一致", 22, muted)
-    text(width - 64, overview_heading + 42, "各目标共用刻度 · 悬停点查看累计到站时间", 22, muted, anchor="end")
+    text(width - 64, overview_heading + 42, "上图看累计差距，下图看每段快慢 · 同类图共用刻度", 22, muted, anchor="end")
 
     def axes(left, right, top, height, limit, kind):
         zero, scale = top + height / 2, height / (2 * limit)
         parts.append(f'<g data-kind="{kind}" data-x-min="{left}" data-x-max="{right}" '
-                     f'data-zero-y="{zero}" data-pixels-per-second="{scale}" data-limit-seconds="{limit}">')
+                     f'data-y-top="{top}" data-y-bottom="{top + height}" data-zero-y="{zero}" '
+                     f'data-pixels-per-second="{scale}" data-limit-seconds="{limit}">')
         rect(left, top, right - left, height / 2, "#F3FAF6")
         rect(left, zero, right - left, height / 2, "#FEF5F5")
         for fraction in (1, .5, 0, -.5, -1):
@@ -205,55 +205,32 @@ def render_svg(comparison: dict) -> str:
         text(x1, plot_top + plot_height + 74, "赛道累计距离 / km →", 17, muted, anchor="end")
         parts.append("</g>")
 
-        parts.append("</g>")
-
-    parts.append('<g id="checkpoint-times">')
-    text(64, time_heading, "每个区间用了多久", 28, weight=700)
-    text(64, time_heading + 40, "实际耗时与计划并排；横条越长，快慢差距越大。时间均包含途中停留。", 22, muted)
-    text(78, table1 - 24, "到达站点 / 来自上一站", 22, muted, 600)
-    text(actual_x, table1 - 24, "佳明实际耗时", 24, ink, 700, "middle")
-    for j, target in enumerate(targets):
-        center = 720 + cell_width * (j + .5)
-        text(center, table1 - 46, "方案 " + clock(target).removesuffix(":00"), 24, ink, 600, "middle")
-        text(center, table1 - 18, f"慢 {numeric(segment_limit / 60)} 分 ← 0 → 快 {numeric(segment_limit / 60)} 分",
-             18, muted, anchor="middle")
-    for i, segment in enumerate(comparison["segments"], 1):
-        y = table1 + (i - 1) * checkpoint_height
-        description = (f'{segment["from_name"]} → {segment["to_name"]}；'
-                       f'实际本段 {clock(segment["actual_seconds"])}，包含停留。')
-        focus_group(f"segment-{i}", description, "segment-row inspectable")
-        rect(64, y, table_width, checkpoint_height - 4, "#ffffff" if i % 2 else "#F2F4F7", 5)
-        parts[-1] = parts[-1].replace("<rect ", '<rect class="row-bg" ')
-        label(84, y + 35, cps[i]["name"], units=32)
-        label(84, y + 64, "来自 " + cps[i - 1]["name"], units=34, size=18)
-        text(actual_x, y + 49, clock(segment["actual_seconds"]), 28, ink, 700, "middle")
-        parts[-1] = parts[-1].replace("<text ", '<text data-role="actual-time" ')
-        for j, predicted in enumerate(segment["plans"]):
-            left = 720 + j * cell_width
-            zero, scale = left + cell_width / 2, (cell_width / 2 - 28) / segment_limit
-            delta = predicted["delta_seconds"]
+        text(left + 28, top + 490, "每段快 / 慢了多少", 24, weight=650)
+        text(left + panel_width - 28, top + 490, "上方快 · 下方慢", 19, muted, anchor="end")
+        bar_top, bar_height = top + 530, 190
+        zero, scale = axes(x0, x1, bar_top, bar_height, segment_limit, "segment")
+        slot = (x1 - x0) / count
+        bar_width = min(38, slot * .55)
+        for i, delta in enumerate(segment_deltas[j], 1):
+            x = x0 + (i - .5) * slot
             status, color, _ = time_status(delta, True)
-            focus_group(f"segment-{i}-plan-{j}", description + f'计划 {clock(predicted["seconds"])}；{status}',
-                        "segment-plan inspectable")
-            parts[-2] = parts[-2].replace(' tabindex=', f' data-target-seconds="{predicted["target_seconds"]}" '
-                                         f'data-zero-x="{zero}" data-pixels-per-second="{scale}" tabindex=')
-            text(left + 24, y + 32, clock(predicted["seconds"]), 25, ink, 500)
-            parts[-1] = parts[-1].replace("<text ", '<text data-role="planned-time" ')
-            text(left + cell_width - 24, y + 32, status, 22, color, 650, "end")
-            parts[-1] = parts[-1].replace("<text ", '<text data-role="segment-status" ')
-            path([(left + 28, y + 62), (left + cell_width - 28, y + 62)], "#DCE2E8", 2)
-            path([(zero, y + 48), (zero, y + 76)], "#8995A3", 2)
-            parts.append(f'<rect x="{zero + min(0, delta) * scale:.3f}" y="{y + 54}" '
-                         f'width="{abs(delta) * scale:.3f}" height="16" rx="2" fill="{color}" '
-                         f'data-delta-seconds="{delta}"/>')
+            segment = comparison["segments"][i - 1]
+            tip = (f'{segment["from_name"]} → {segment["to_name"]}：{status}；'
+                   f'实际 {clock(segment["actual_seconds"])}；计划 {clock(segment["plans"][j]["seconds"])}')
+            focus_group(f"segment-{j}-{i}", tip)
+            parts.append(f'<rect x="{x - bar_width / 2:.3f}" y="{zero - max(0, delta) * scale:.3f}" '
+                         f'width="{bar_width:.3f}" height="{abs(delta) * scale:.3f}" fill="{color}" '
+                         f'data-delta-seconds="{delta}"><title>{escape(tip)}</title></rect>')
+            text(x, zero - delta * scale + (-10 if delta >= 0 else 22), minute_delta_label(delta),
+                 min(19, slot / 3), color, 600, "middle")
+            text(x, bar_top + bar_height + 32, labels[i][:10], min(18, slot / 3), muted, anchor="middle")
             parts.append("</g>")
-        parts.append("</g>")
-    parts.append("</g></g>")
+        parts.append("</g></g>")
+    parts.append("</g>")
 
     parts.append('<g id="terrain">')
     text(64, terrain_heading, "02  赛道数据对比", 30, weight=700)
-    text(width - 64, terrain_heading, "深灰 = 佳明 · 蓝色 = 仓库 · 差值为仓库减佳明", 22, muted, anchor="end")
-    terrain_width = (width - 548) / 3
+    text(width - 64, terrain_heading, "距离看偏差趋势，爬升 / 下降看分段柱高", 22, muted, anchor="end")
     summary_width = (table_width - 48) / 3
     for j, (title, key, divisor, unit, digits) in enumerate((
         ("全程距离", "distance_m", 1000, "km", 2),
@@ -269,66 +246,96 @@ def render_svg(comparison: dict) -> str:
         text(left + summary_width - 24, terrain_heading + 105, metric_delta_label(subtract(p, a)),
              22, muted, anchor="end")
 
-    distance_limit = metric_limit([subtract(m["planned_distance_m"], m["actual_distance_m"])
-                                   for m in comparison["terrain"]])
+    deltas = [subtract(m["planned_distance_m"], m["actual_distance_m"]) for m in comparison["terrain"]]
+    distance_limit = metric_limit(deltas)
+    low = -distance_limit if any(d is not None and d < 0 for d in deltas) else 0
+    high = distance_limit if any(d is not None and d > 0 for d in deltas) or low == 0 else 0
+    left, right, plot_top, plot_height = 150, width - 100, distance_top + 94, 230
+    scale = plot_height / (high - low)
+    zero = plot_top + high * scale
+    parts.append(f'<g id="distance-difference" data-kind="distance-difference" '
+                 f'data-zero-y="{zero}" data-pixels-per-meter="{scale}">')
+    rect(64, distance_top, table_width, 400, "#FFFFFF", 12)
+    text(92, distance_top + 42, "累计距离偏差", 27, weight=700)
+    text(width - 92, distance_top + 42, "仓库 − 佳明 · 正值：仓库更长 / 负值：仓库更短", 21, muted, anchor="end")
+    text(left - 18, plot_top - 20, "米", 18, muted, anchor="end")
+    for tick in range(5):
+        value = low + (high - low) * tick / 4
+        y = zero - value * scale
+        path([(left, y), (right, y)], "#A1ABB5" if value == 0 else "#E2E7ED", 2 if value == 0 else 1,
+             "" if value == 0 else "4 5")
+        text(left - 16, y + 6, numeric(value, signed=True), 18, muted, anchor="end")
+    slot = (right - left) / count
+    positions = [left + (i + .5) * slot for i in range(count)]
+    for i in range(1, count):
+        if deltas[i - 1] is not None and deltas[i] is not None:
+            path([(positions[i - 1], zero - deltas[i - 1] * scale), (positions[i], zero - deltas[i] * scale)],
+                 planned_color, 4)
+            parts[-1] = parts[-1].replace("<path ", '<path data-role="distance-line" ')
+    for i, (metrics, delta, x) in enumerate(zip(comparison["terrain"], deltas, positions), 1):
+        a, p = metrics["actual_distance_m"], metrics["planned_distance_m"]
+        tip = (f'{cps[i]["name"]}：佳明累计 {numeric(None if a is None else a / 1000, 3)} km；'
+               f'仓库累计 {numeric(p / 1000, 3)} km；{metric_delta_label(delta) if delta is not None else "佳明距离未知"}')
+        focus_group(f"distance-cp-{i}", tip)
+        parts[-2] = parts[-2].replace(' tabindex=', f' data-actual-available="{str(a is not None).lower()}" tabindex=')
+        if delta is not None:
+            y = zero - delta * scale
+            parts.append(f'<circle class="metric-point" cx="{x:.3f}" cy="{y:.3f}" r="6" '
+                         f'fill="{planned_color}" stroke="#FFFFFF" stroke-width="2" data-delta-m="{delta}" '
+                         f'data-actual-m="{a}" data-planned-m="{p}"><title>{escape(tip)}</title></circle>')
+            text(x, y - 16, numeric(delta, signed=True), 21, planned_color, 600, "middle")
+        else:
+            text(x, plot_top + plot_height / 2, "—", 24, muted, anchor="middle")
+        text(x, plot_top + plot_height + 36, labels[i][:10], 21, muted, anchor="middle")
+        parts.append("</g>")
+    parts.append("</g>")
+
     elevation_limit = metric_limit([m[source + key] for m in comparison["terrain"]
                                     for source in ("actual_", "planned_") for key in ("ascent_m", "descent_m")])
-    for j, title in enumerate(("累计距离差 / m", "本段爬升 / m", "本段下降 / m")):
-        left = 484 + j * terrain_width
-        text(left + terrain_width / 2, terrain_heading + 177, title, 24, weight=650, anchor="middle")
-        if j == 0:
-            text(left + 24, table2 - 20, f"仓库少 {numeric(distance_limit)} m", 18, muted)
-            text(left + terrain_width / 2, table2 - 20, "0", 18, muted, anchor="middle")
-            text(left + terrain_width - 24, table2 - 20, f"仓库多 {numeric(distance_limit)} m", 18, muted, anchor="end")
-        else:
-            text(left + 24, table2 - 20, "0", 18, muted)
-            text(left + terrain_width - 276, table2 - 20, numeric(elevation_limit), 18, muted, anchor="end")
-            text(left + terrain_width - 24, table2 - 20, "差值", 18, muted, anchor="end")
-    text(78, table2 - 20, "到达站点 / 来自上一站", 22, muted, 600)
-    for i, metrics in enumerate(comparison["terrain"], 1):
-        y = table2 + (i - 1) * row_height
-        focus_group(f"terrain-cp-{i}", f'{cps[i - 1]["name"]} → {cps[i]["name"]}：累计距离，本段爬升与下降。')
-        row(y, i)
-        parts[-1] = parts[-1].replace("<rect ", '<rect class="row-bg" ')
-        label(84, y + 32, cps[i]["name"], units=32)
-        label(84, y + 61, "来自 " + cps[i - 1]["name"], units=34, size=18)
-        for j, key in enumerate(("distance_m", "ascent_m", "descent_m")):
-            left = 484 + j * terrain_width
+    chart_width = (table_width - 24) / 2
+    for j, (key, heading) in enumerate((("ascent_m", "分段爬升"), ("descent_m", "分段下降"))):
+        card_left = 64 + j * (chart_width + 24)
+        left, right = card_left + 88, card_left + chart_width - 42
+        plot_top, plot_height = elevation_top + 150, 330
+        zero, scale = plot_top + plot_height, plot_height / elevation_limit
+        parts.append(f'<g id="{key}-chart" data-kind="{key}" data-zero-y="{zero}" data-pixels-per-meter="{scale}">')
+        rect(card_left, elevation_top, chart_width, 550, "#FFFFFF", 12)
+        text(card_left + 28, elevation_top + 44, heading, 27, weight=700)
+        text(card_left + 28, elevation_top + 82, "按相邻 CP 区间比较 · 两张图共用刻度", 20, muted)
+        for index, (source, color) in enumerate((("佳明", recorded_color), ("仓库", planned_color))):
+            legend_x = card_left + chart_width - 262 + index * 120
+            rect(legend_x, elevation_top + 27, 22, 14, color, 2)
+            text(legend_x + 32, elevation_top + 41, source, 21, muted)
+        text(left - 18, plot_top - 22, "米", 18, muted, anchor="end")
+        for tick in range(4):
+            value = elevation_limit * tick / 3
+            y = zero - value * scale
+            path([(left, y), (right, y)], "#A1ABB5" if tick == 0 else "#E2E7ED", 2 if tick == 0 else 1,
+                 "" if tick == 0 else "4 5")
+            text(left - 16, y + 6, numeric(value), 18, muted, anchor="end")
+        slot = (right - left) / count
+        bar_width = min(23, slot * .20)
+        offset = bar_width * .7
+        for i, metrics in enumerate(comparison["terrain"], 1):
+            center = left + (i - .5) * slot
             a, p = metrics["actual_" + key], metrics["planned_" + key]
             delta = subtract(p, a)
-            if key == "distance_m":
-                zero = left + terrain_width / 2
-                scale = (terrain_width / 2 - 24) / distance_limit
-            else:
-                zero, scale = left + 24, (terrain_width - 300) / elevation_limit
-            focus_group(f"terrain-{key}-{i}", f'{cps[i]["name"]}：{("累计距离", "本段爬升", "本段下降")[j]}；'
-                        f'佳明 {numeric(a, 2)} m；仓库 {numeric(p, 2)} m；{metric_delta_label(delta)}')
-            parts[-2] = parts[-2].replace(' tabindex=', f' data-metric="{key}" data-zero-x="{zero}" '
-                                         f'data-pixels-per-meter="{scale}" '
-                                         f'data-actual-available="{str(a is not None).lower()}" tabindex=')
-            if key == "distance_m":
-                for index, (source, value, color) in enumerate((("actual", a, recorded_color), ("planned", p, planned_color))):
-                    value_text = "—" if value is None else numeric(value / 1000, 2) + " km"
-                    text(left + 24 + index * 180, y + 30, value_text, 23, color, 600)
-                    parts[-1] = parts[-1].replace("<text ", f'<text data-role="{source}-value" ')
-                path([(left + 24, y + 60), (left + terrain_width - 24, y + 60)], "#DCE2E8", 2)
-                path([(zero, y + 47), (zero, y + 73)], "#8995A3", 2)
-                if delta is not None:
-                    parts.append(f'<rect x="{zero + min(0, delta) * scale:.3f}" y="{y + 52}" '
-                                 f'width="{abs(delta) * scale:.3f}" height="16" rx="2" '
-                                 f'fill="{planned_color}" data-delta-m="{delta}"/>')
-                text(left + terrain_width - 24, y + 30, metric_delta_label(delta), 21, muted, anchor="end")
-            else:
-                for index, (source, value, color) in enumerate((("actual", a, recorded_color), ("planned", p, planned_color))):
-                    baseline = y + 28 + index * 30
-                    if value is not None:
-                        parts.append(f'<rect x="{zero:.3f}" y="{baseline - 14}" width="{value * scale:.3f}" '
-                                     f'height="16" rx="2" fill="{color}" data-series="{source}" data-value-m="{value}"/>')
-                    value_text = "—" if value is None else numeric(value) + " m"
-                    text(zero + (0 if value is None else value * scale) + 10, baseline, value_text, 21, color, 600)
-                    parts[-1] = parts[-1].replace("<text ", f'<text data-role="{source}-value" ')
-                text(left + terrain_width - 24, y + 48, metric_delta_label(delta), 20, muted, anchor="end")
-            parts[-1] = parts[-1].replace("<text ", '<text data-role="metric-delta" ')
+            tip = (f'{cps[i - 1]["name"]} → {cps[i]["name"]}：{heading}；'
+                   f'佳明 {numeric(a)} m；仓库 {numeric(p)} m；{metric_delta_label(delta)}')
+            focus_group(f"{key}-cp-{i}", tip)
+            parts[-2] = parts[-2].replace(' tabindex=', f' data-actual-available="{str(a is not None).lower()}" tabindex=')
+            label_y = [zero - (value or 0) * scale - 12 for value in (a, p)]
+            if abs(label_y[0] - label_y[1]) < 28:
+                label_y[1] = min(label_y) - 28
+            for index, (source, value, color) in enumerate((("actual", a, recorded_color), ("planned", p, planned_color))):
+                x = center + (-offset if index == 0 else offset)
+                if value is not None:
+                    y = zero - value * scale
+                    parts.append(f'<rect x="{x - bar_width / 2:.3f}" y="{y:.3f}" width="{bar_width:.3f}" '
+                                 f'height="{value * scale:.3f}" rx="2" fill="{color}" data-series="{source}" '
+                                 f'data-value-m="{value}"><title>{escape(tip)}</title></rect>')
+                text(x, label_y[index], numeric(value), min(21, slot * .21), color, 600, "middle")
+            text(center, zero + 36, labels[i][:10], min(21, slot * .25), muted, anchor="middle")
             parts.append("</g>")
         parts.append("</g>")
     parts.append("</g>")
@@ -365,15 +372,15 @@ def render_svg(comparison: dict) -> str:
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" '
         f'viewBox="0 0 {width} {height}" role="img" aria-labelledby="title description">\n'
         f'<title id="title">{escape(plan["name"])}：佳明实际与仓库方案对比</title>\n'
-        '<desc id="description">时间表现包含累计差距曲线，以及实际、计划耗时与快慢横条合并的区间表；赛道数据展示距离差与分段爬升、下降横条。'
+        '<desc id="description">每个目标上方为累计领先或落后曲线，下方为各区间快慢正负柱图；赛道数据包括累计距离偏差折线图、分段爬升和下降分组柱图。'
         '绿色表示实际领先或本段更快，红色表示实际落后或本段更慢；累计曲线零线上方领先、下方落后。'
-        '横向快慢条左慢右快；地形用深灰表示佳明、蓝色表示仓库。时间含停留，差值先计算再取整。</desc>\n'
+        '分段柱图零线上方快、下方慢；赛道图用深灰表示佳明、蓝色表示仓库。时间含停留，差值先计算再取整。</desc>\n'
         '<metadata>' + escape(json.dumps(metadata, ensure_ascii=False)) + '</metadata>\n'
         '<style>text{font-family:"PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif;'
         'font-variant-numeric:tabular-nums}'
         '.inspectable,.delta-point{outline:none}'
         '.inspectable:hover .row-bg,.inspectable:focus .row-bg{fill:#E9EDF2;stroke:#8995A3;stroke-width:2}'
-        '.delta-point:hover,.delta-point:focus{r:8;stroke:#202A35}'
+        '.delta-point:hover,.delta-point:focus,.metric-point:hover{r:8;stroke:#202A35}'
         '.inspectable:hover rect[data-delta-seconds],.inspectable:focus rect[data-delta-seconds]'
         '{stroke:#202A35;stroke-width:2}'
         '.inspectable:hover > rect[data-delta-m],.inspectable:focus > rect[data-delta-m],'
