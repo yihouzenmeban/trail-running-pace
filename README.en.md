@@ -2,26 +2,25 @@
 
 [简体中文](README.md) | [English](README.en.md)
 
-An independent community implementation inspired by 耐力学社's even-effort pacing approach. Turn a GPX/KML race route or recorded FIT track into a checkpoint-based trail running pace chart and compare multiple finish targets. Invoke `even-effort-pace-chart` through an AI assistant or use the command-line tool directly.
+An independent community implementation inspired by 耐力学社's even-effort pacing approach. Before a race, turn GPX, KML, or FIT routes into checkpoint-based plans for multiple finish targets. After a race, compare a FIT activity with those plans to review cumulative differences, segment times, and terrain metrics. Invoke `even-effort-pace-chart` through an AI assistant or use the command line.
 
-> **Source and copyright notice:** The approach draws on [《耐力科学|体感一致配速表全面指南》](https://mp.weixin.qq.com/s/spYCP-upbqAZN0kzUm-0ng) by 耐力学社 / Pili（表哥）. This project independently implements equivalent-distance and fatigue curves; it is not an official RunArt.Net tool or output. Rights to the article and illustrations remain with their respective rights holders. The [repository archive](docs/reference/) preserves the source and copyright notice; use of third-party material is subject to that notice.
+The approach draws on [《耐力科学｜体感一致配速表全面指南》](https://mp.weixin.qq.com/s/spYCP-upbqAZN0kzUm-0ng) by 耐力学社 / Pili（表哥）. This project independently implements equivalent-distance and fatigue curves; it is not an official RunArt.Net tool or output. See [sources and licensing](#sources-and-licensing).
 
-- Prefer checkpoints embedded in the route; supply a manual list only when usable stations are missing.
-- Expand one finish target into five schedules, 30 minutes apart by default, or specify an interval or exact target list.
-- Show segment distance, ascent, descent, slope distribution, elevation profiles, and reference water for the next leg.
-- Include station rests and supplied cutoffs; omit cutoff details from station cells when none are supplied.
-- Export SVG with segment pace in parentheses by default; optionally select equivalent pace, arrival clock times, and other export formats.
-- Compare recorded FIT activities against plans, including checkpoint times, adjacent-station elapsed times, and terrain metrics.
+## Preview
 
-## Requirements
+![Tiandi Liubai 100K pace chart](examples/tiandi-liubai-100k/pace-chart.svg)
 
-- **Runtime:** Python 3.10 or newer. GPX/KML pace charts use only the standard library; FIT routes and activity comparisons require an optional FIT dependency.
-- **Quick installation:** The installer below requires Node.js, npm, and Git. Manual copying is also supported.
-- **Route:** A local GPX, KML, FIT, or single-activity FIT ZIP with coordinates and elevations at every route point. FIT routes use recorded device distance and manual CPs.
+| Example and notes | Pace charts | Activity comparisons |
+| --- | --- | --- |
+| [Tiandi Liubai 100K](examples/tiandi-liubai-100k/README.en.md): reproducible GPX plans; personal FIT results are previews | [GPX plans](examples/tiandi-liubai-100k/pace-chart.svg) / [FIT-route plans](examples/tiandi-liubai-100k/pace-chart-fit.svg) | [On the pre-race GPX](examples/tiandi-liubai-100k/garmin-comparison.svg) / [On the recorded FIT](examples/tiandi-liubai-100k/garmin-comparison2.svg) |
+| [Dajingmen DGW100K](examples/大境门/DGW100K/README.en.md): reproducible from the public KML | [10–24 hours](examples/大境门/DGW100K/pace-chart.svg) | — |
+| [Dajingmen MGW50K](examples/大境门/DGW50K/README.en.md): plans use the public elevation-filled copy; the three-source comparison is a historical reference | [5–12.5 hours](examples/大境门/DGW50K/pace-chart.svg) / [Single 6:15 plan](examples/大境门/DGW50K/pace-chart-6h15m.svg) | [RunArt / repository / Garmin](examples/大境门/DGW50K/runart-comparison.svg) |
 
-## Install and use the Skills package
+Example notes include input provenance, configurations, reproduction commands, and metric definitions. Example targets are not individual fitness assessments.
 
-### Quick installation
+## Installation and first use
+
+Requires **Python 3.10+**. GPX/KML pace charts use only the standard library; FIT inputs and activity comparisons need an [optional dependency](skills/even-effort-pace-chart/references/comparison.en.md#prepare-inputs). Quick installation also requires Node.js, npm, and Git.
 
 Run this from the project where you want to use the Skills package:
 
@@ -29,54 +28,30 @@ Run this from the project where you want to use the Skills package:
 npx skills add yihouzenmeban/trail-running-pace --skill even-effort-pace-chart
 ```
 
-Follow the prompts to select your AI assistant. Installation is scoped to the current project; add `-g` for a user-level installation available across projects:
+Follow the prompts to select your AI assistant; add `-g` for a user-level installation. Alternatively, copy the entire `skills/even-effort-pace-chart/` directory into your assistant's skills directory. Runtime use does not depend on repository examples or the archived article.
 
-```bash
-npx skills add yihouzenmeban/trail-running-pace --skill even-effort-pace-chart -g
-```
-
-For manual installation, copy the entire `skills/even-effort-pace-chart/` directory into your AI assistant's skills directory. The repository examples and reference article are not runtime dependencies.
-
-### First use
-
-Replace `race.gpx` with your own GPX or KML route path and provide your finish target. In an assistant that supports `$name` invocation, use:
+Provide your route path and finish target. In assistants that support `$name` invocation, use:
 
 ```text
 $even-effort-pace-chart
-Create an even-effort pace chart from race.gpx,
-with a 14-hour finish target, 30-minute target intervals, and a 06:00 start. Save it to output/my-race/.
+Generate an even-effort pace chart from race.gpx with a 14-hour finish target,
+writing to output/my-race/.
 ```
 
-You can also name `even-effort-pace-chart` in a natural-language request. The assistant inspects the route and checkpoints before generating a chart. This request defaults to SVG with segment pace in parentheses; providing a start time does not select arrival clock times. Chart labels currently default to Chinese.
+You can also name `even-effort-pace-chart` in a natural-language request. Defaults are five plans, 30 minutes apart, a 06:00 start, SVG-only output, and segment pace in parentheses. Specifying a start time does not change the parenthesized display. Embedded CPs are preferred; supply manual CPs when usable stations are missing. FIT routes require manual CPs. Chart labels are Chinese.
 
-## Preview and examples
+### CLI quick start
 
-![Tiandi Liubai 100K pace chart](examples/tiandi-liubai-100k/pace-chart.svg)
+Run these commands from the root of a cloned repository. Save this as `race.json`:
 
-| Example | Route | Configuration | Pace chart | Comparisons |
-| --- | --- | --- | --- | --- |
-| Tiandi Liubai 100K | [GPX](examples/tiandi-liubai-100k/天地留白100K.gpx) | [12–16 hour schedules](examples/tiandi-liubai-100k/config.json) | [SVG](examples/tiandi-liubai-100k/pace-chart.svg) | [Garmin activity / repository 15h, 16h, 17h](examples/tiandi-liubai-100k/garmin-comparison.svg) |
-| Tiandi Liubai 100K · recorded route | Local FIT (not published) | [15h, 16h, 17h plans](examples/tiandi-liubai-100k/config-fit.json) | [FIT-based SVG](examples/tiandi-liubai-100k/pace-chart-fit.svg) | [Garmin actual / FIT-route plans](examples/tiandi-liubai-100k/garmin-comparison2.svg) |
-| Dajingmen DGW100K | [KML](examples/大境门/DGW100K/2026京东大境门古长城越野赛by%20UTMB®DGW100K.kml) | [10–24 hours, 1-hour intervals](examples/大境门/DGW100K/config.json) | [SVG](examples/大境门/DGW100K/pace-chart.svg) | — |
-| Dajingmen MGW50K | [Original GPX](examples/大境门/DGW50K/2026京东大境门古长城越野赛by%20UTMB®MGW50K.gpx) / [Elevation-filled copy](examples/大境门/DGW50K/MGW50K-elevation-filled.gpx) | [5–12.5 hours, 30-minute intervals](examples/大境门/DGW50K/config.json) | [SVG](examples/大境门/DGW50K/pace-chart.svg) | [RunArt / repository / Garmin comparison](examples/大境门/DGW50K/runart-comparison.svg) |
+```json
+{
+  "name": "My race",
+  "target": "14:00"
+}
+```
 
-The original two GPX/KML 100K examples explicitly select all four export formats. The FIT-route and 50K examples use the defaults: SVG, a 06:00 start, and segment pace in parentheses. Example targets are not individual fitness assessments. The 50K directory is named `DGW50K`; chart titles retain the race category name `MGW50K`.
-
-The original 50K GPX lacks elevation at 59 points in two gaps spanning about 834.6 m and 34.1 m between known endpoints. Generate its pace chart using the copy with linear elevation interpolation along distance and its adjacent configuration. The original is unchanged; the [repair report](examples/大境门/DGW50K/elevation-repair.json) records the gaps and file hashes.
-
-The 50K example also provides a single-column [6-hour-15-minute plan](examples/大境门/DGW50K/pace-chart-6h15m.svg) and its [configuration](examples/大境门/DGW50K/config-6h15m.json), using the default 06:00 start and segment pace in parentheses.
-
-The Tiandi Liubai comparison includes only Garmin activity data and repository plans, organized into time performance and course data comparison. Each of the 15h, 16h, and 17h targets pairs a cumulative difference curve above with segment faster/slower bars below. Green means actually ahead/faster; red means behind/slower. A table below the plots uses checkpoint rows and actual/plan columns, with station names and cumulative course distance combined in the first column. The actual column shows segment time; plan columns show bold segment time (actual minus plan difference), including seconds. Planned times and differences are red when Garmin actually took longer and green otherwise, including ties; the actual column stays neutral. Terrain retains total metric cards and grouped segment ascent/descent bars. Garmin values come from the October 31, 2026 activity “2026 徽州古城秋季赛”, with an elapsed time of 16:46:04 including stops. The original 12–16 hour configuration and pace chart remain unchanged.
-
-The additional `garmin-comparison2.svg` builds plans from that activity's FIT recorded distance and elevations, retaining the same reviewed checkpoint passages. The route is 101.877 km, with approximately 4783 / 4760 m of ascent/descent recomputed by the existing algorithm. The Garmin activity side keeps platform totals of 5019 / 5023 m. This supports retrospective pacing review on the actual course alongside the original GPX version, without forcing terrain totals to agree. Raw activity files remain in the local Git-ignored `output/` directory.
-
-The Dajingmen merged comparison shows times for all 16 plans, terrain data from all three sources, and Garmin activity times against the repository's 6:15 plan, in that order. RunArt values come from the user-provided screenshot. Garmin values come from the September 12, 2026 Dajingmen activity; elapsed times include stops. The activity comparison displays seconds; differences are Garmin minus plan, with negative values indicating earlier passage.
-
-Comparison SVGs are for reference only. Checkpoint passage times are estimated by projection onto the recorded track, not official timing. Distances are cumulative. Garmin segment ascent/descent are differences between consecutive checkpoint totals estimated by distance interpolation within FIT laps; finish totals come from the platform. Differences use unrounded values before display rounding. Tiandi Liubai FIT laps sum to 5018 / 5024 m of ascent/descent, versus platform totals of 5019 / 5023 m; no proportional adjustment is applied.
-
-## CLI quick start
-
-Run these commands from the root of a cloned repository. Inspect the sample route and checkpoints, then generate five schedules for 12, 13, 14, 15, and 16 hours using the example configuration:
+Inspect the public example route, then generate the chart:
 
 ```bash
 python3 skills/even-effort-pace-chart/scripts/pace_chart.py inspect \
@@ -84,86 +59,45 @@ python3 skills/even-effort-pace-chart/scripts/pace_chart.py inspect \
 
 python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate \
   'examples/tiandi-liubai-100k/天地留白100K.gpx' \
-  --config examples/tiandi-liubai-100k/config.json \
-  --output-dir output/tiandi-liubai-100k
+  --config race.json --output-dir output/my-race
 ```
 
-Results go into the Git-ignored `output/` directory. Add `--overwrite` when you intend to replace existing outputs.
-
-See the table above for the KML example. For files with an omitted altitude mode or `clampToGround`, first verify that the coordinate heights are suitable, then explicitly enable `use_kml_altitudes`. Full rules and inspection commands are in the [KML input reference](skills/even-effort-pace-chart/references/configuration.en.md#kml-input).
+This produces five plans for 13:00, 13:30, 14:00, 14:30, and 15:00 in `output/my-race/pace-chart.svg`. Git ignores `output/`; use `--overwrite` to replace existing results. When using your own route, resolve any route or checkpoint ambiguities reported by inspection first.
 
 ## Post-race activity comparisons
 
-Ask your assistant to compare a FIT activity against a race configuration with exact targets and elapsed times between adjacent stations. Install the optional dependency, then generate offline:
+Give your assistant the race route, pace configuration, and recorded FIT activity:
+
+```text
+Use even-effort-pace-chart to compare activity.fit with race.gpx and race.json.
+Use exact targets of 15, 16, and 17 hours, include elapsed times between adjacent
+checkpoints, and write to output/comparison/.
+```
+
+For the CLI, install the FIT dependency, then generate offline:
 
 ```bash
 python3 -m pip install -r skills/even-effort-pace-chart/scripts/requirements-comparison.txt
 
 python3 skills/even-effort-pace-chart/scripts/compare_activity.py generate race.gpx \
-  --config race.json --fit activity-original.zip --summary activity-details.json \
+  --config race.json --fit activity.fit \
   --targets 15:00 16:00 17:00 --output-dir output/comparison
 ```
 
-Original FIT and FIT ZIP are supported. Omit `--summary` to use FIT session totals. The default SVG contains time performance and course data comparison; add `--export-json` for structured output. `--targets` overrides the exact target list without changing the configuration. Segment times include stops. Each target pairs a cumulative difference curve with segment faster/slower bars below; a shared table shows actual segment times and planned segment times with actual-minus-plan differences, combining station names and cumulative course distance in the first column. Terrain uses total metric cards and grouped ascent/descent bars. Open the SVG directly to hover or focus chart elements for cumulative elapsed times, full checkpoint names, both cumulative distances, and terrain differences.
+The default output is `garmin-comparison.svg`. FIT and single-activity FIT ZIP are supported without online credentials. Resolve ambiguous checkpoint matches before generating. See the [activity comparison reference](skills/even-effort-pace-chart/references/comparison.en.md) for reading charts, platform totals, rebuilding routes from FIT, and optional Garmin downloads.
 
-To rebuild plans on the recorded FIT route, replace the first `race.gpx` argument with the FIT or FIT ZIP and supply CPs on the recorded cumulative-distance axis. Pace-chart generation accepts the same route input. Device distance is retained and ascent is independently recomputed with the existing algorithm; see [FIT route input](skills/even-effort-pace-chart/references/configuration.en.md#fit-route-input).
+## Documentation
 
-To retrieve Garmin activities, set `GARMIN_PERSONAL_API_KEY` in the environment or a local Git-ignored `.env.local`, then run:
+| Topic | Reference |
+| --- | --- |
+| All parameters, exact targets, manual CPs, rests, cutoffs, and exports | [Configuration and CLI](skills/even-effort-pace-chart/references/configuration.en.md) |
+| KML heights, FIT device distance, and checkpoint requirements | [KML input](skills/even-effort-pace-chart/references/configuration.en.md#kml-input) / [FIT route input](skills/even-effort-pace-chart/references/configuration.en.md#fit-route-input) |
+| Activity comparisons, delta signs, passage matching, and Garmin retrieval | [Activity comparison](skills/even-effort-pace-chart/references/comparison.en.md) |
+| Equivalent distance, fatigue curves, distance, and elevation processing | [Model and limitations](skills/even-effort-pace-chart/references/model.en.md) |
+| Why no averaging + 10 m is the default, and how to switch | [Ascent methods and historical experiments](skills/even-effort-pace-chart/references/ascent-options.en.md) |
+| AI assistant workflow | [SKILL.md](skills/even-effort-pace-chart/SKILL.md) |
 
-```bash
-python3 skills/even-effort-pace-chart/scripts/compare_activity.py list \
-  --start-date 2026-10-01 --end-date 2026-11-02 --env-file .env.local
-
-python3 skills/even-effort-pace-chart/scripts/compare_activity.py fetch <activity-id> \
-  --env-file .env.local
-```
-
-Downloads default to `output/activities/<activity-id>/`. Offline `inspect`/`generate` make no network calls. See the [activity comparison reference](skills/even-effort-pace-chart/references/comparison.en.md) for parameters, ambiguous passage handling, and metric limitations.
-
-## Configuration and exports
-
-When using an AI assistant, describe your requirements directly. For the CLI, save the following as `race.json`:
-
-```json
-{
-  "name": "我的比赛",
-  "target": "14:00"
-}
-```
-
-```bash
-python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate \
-  race.gpx --config race.json --output-dir output/my-race
-```
-
-This minimal configuration produces 13:00, 13:30, 14:00, 14:30, and 15:00 schedules, with a default 06:00 start and SVG export.
-
-| Common parameter | Default | Meaning |
-| --- | --- | --- |
-| `target` / `targets` | Supply one | Central target or exact list; use `H:MM` or `H:MM:SS`, including durations beyond 24 hours |
-| `target_step_minutes` | `30` | Interval in minutes between the five schedules expanded from one target |
-| `start_time` | `"06:00"` | Local race start as `HH:MM` or a full date/time |
-| `secondary_display` | `"pace"` | Parenthesized segment pace, equivalent pace, or arrival clock time |
-| `output_formats` | `["svg"]` | Export format selection; formats can be combined |
-
-The three parenthesized modes are `"pace"`, `"equivalent_pace"`, and `"arrival_time"`. Start time and parenthesized display are independent. Optional parameters follow “current explicit request > selected configuration > script defaults,” without inheriting example choices. See the [configuration reference](skills/even-effort-pace-chart/references/configuration.en.md) for all fields, checkpoints, rests, and cutoffs.
-
-### Export formats
-
-| Format | Filename | Purpose |
-| --- | --- | --- |
-| SVG (default) | `pace-chart.svg` | Self-contained vector chart for previewing, scaling, and sharing |
-| HTML | `pace-chart.html` | Offline browser viewing and landscape printing |
-| CSV | `pace-chart.csv` | Process checkpoint and target timing data in spreadsheet software |
-| JSON | `pace-chart.json` | Full calculation precision, parameters, provenance, and warnings |
-
-To export all four formats, explicitly add:
-
-```json
-{
-  "output_formats": ["svg", "html", "csv", "json"]
-}
-```
+Parameters follow “current explicit request > selected configuration > script defaults,” without inheriting example settings. Ascent statistics and display smoothing are independent. Results depend on source elevations and processing parameters and may differ from event or other platform statistics. Water values only compare relative segment demand.
 
 ## Development and tests
 
@@ -171,10 +105,10 @@ To export all four formats, explicitly add:
 python3 -m unittest discover -s skills/even-effort-pace-chart/tests -v
 ```
 
-Tests cover synthetic GPX/KML, FIT record processing, and real courses. Package-level real-route tests are skipped when the Skills package is copied without `examples/`. See the [behavior evaluation guide](skills/even-effort-pace-chart/evals/guide.en.md) for natural-language cases, the checker, and manual review steps.
+Tests cover route processing, pacing, and activity comparisons. Real-course tests are skipped when the Skills package is copied without `examples/`. See the [behavior evaluation guide](skills/even-effort-pace-chart/evals/guide.en.md) for natural-language cases and manual review, or the [development article](docs/articles/从配速表到百公里复盘.md) for the project story in Chinese.
 
-## Model and limitations
+## Sources and licensing
 
-Default ascent uses no window averaging (`ascent_smoothing_m: 0`) and applies a 10 m peak/valley reversal threshold directly to cleaned source elevation vertices. The display curve independently uses 5 m sampling and 20 m smoothing. An explicit positive `ascent_smoothing_m` enables ascent averaging. Isolated elevation corrections are reported; horizontal simplification requires an explicit setting. Both inspection and generation summaries include input quality and before/after metrics. The previous 100 m window approach remains selectable; see the [migration configuration](skills/even-effort-pace-chart/references/configuration.en.md#previous-window-method-and-explicit-filtering).
+No project license has been specified for the project code or its own documentation. The repository currently has no `LICENSE` file.
 
-See [ascent methods and selection rationale](skills/even-effort-pace-chart/references/ascent-options.en.md) for comparisons, the default choice, and configuration options; see the [model reference](skills/even-effort-pace-chart/references/model.en.md) for equations, filtering rules, and assumptions. Results depend on source elevations, methods, and thresholds; they may differ from event or other platform statistics. Water values compare relative segment demand and cannot establish individual hydration needs or finish capability.
+The [article and illustration archive](docs/reference/) preserves the original source and copyright notice. Rights remain with their respective holders; use of those materials is subject to the original notice. Third-party notices and the project's own licensing status are documented separately; neither substitutes for the other. Race-route and activity-comparison provenance is listed in each example's notes. Raw personal FIT activities are not published with the repository.

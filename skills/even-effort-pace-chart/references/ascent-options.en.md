@@ -4,7 +4,7 @@
 
 **The default is no averaging with a 10 m peak/valley reversal threshold.** Across the twenty trail activities tested, this method was closest overall to Garmin's displayed totals and avoided further suppression of short hills by window averaging. Other windows remain explicit options.
 
-## Comparison
+## Historical method comparison
 
 All methods used the same original FIT coordinates and elevations for twenty activities, compared against Garmin's displayed ascent and descent. Mean absolute difference is the average of the absolute differences for individual activities; platform totals are not terrain ground truth.
 
@@ -24,15 +24,27 @@ Ascent for three race routes is shown below in metres. All five methods used the
 | Dajingmen DGW100K | 3635.0 | 3729.0 | 3575.0 | 3651.8 | 3680.8 |
 | Dajingmen MGW50K | 1900.8 | 1960.0 | 1867.8 | 1929.3 | 1949.9 |
 
-Comparison revisions: `28270dc` for legacy, `461ace7` for no averaging, and `dd4b95e` for the 40/20/10 m windows. The current default has returned to no averaging. Only aggregate personal activity results are published. The MGW50K source is not distributed with the repository; all methods used the same copy with 59 missing elevations linearly interpolated by distance across gaps of approximately 835 m and 34 m. This cannot recover missing terrain detail.
+These are historical experiment snapshots: `28270dc` for legacy, `461ace7` for no averaging, and `dd4b95e` for the 40/20/10 m windows. They are not recalculated after every update. The current default remains no averaging + 10 m. Only aggregates from the twenty personal activities are published; without the raw FIT files, that set of statistics cannot be reproduced from the public repository alone.
 
-## Why Tiandi Liubai differs
+The full repository now includes the MGW50K [original GPX](../../../examples/大境门/DGW50K/2026京东大境门古长城越野赛by%20UTMB®MGW50K.gpx), [elevation-filled copy](../../../examples/大境门/DGW50K/MGW50K-elevation-filled.gpx), and [repair report](../../../examples/大境门/DGW50K/elevation-repair.json). All methods in the table used that same distance-interpolated copy, filling 59 missing elevations across gaps of approximately 835 m and 34 m. Missing terrain cannot be recovered. Public-route reproduction commands are in the example notes; independently installed Skills do not need these case files.
 
-No averaging adds approximately 634 m relative to legacy, with **77.9% of that difference between CP3 and CP6**. Inspection found no confirmed isolated large spikes to remove or elevation jumps at CP boundaries. Independent turning-point accumulation also returned 5965.47 m.
+## Tiandi Liubai before and after the race
+
+### Pre-race GPX inspection
+
+On the same pre-race GPX, no averaging adds approximately 634 m relative to legacy, with **77.9% of that difference between CP3 and CP6**. Inspection at that stage found no confirmed isolated large spikes to remove or elevation jumps at CP boundaries. Independent turning-point accumulation also returned 5965.47 m. This only ruled out the inspected anomaly types, not errors in continuous undulations.
 
 The difference mainly involves continuous undulations crossing the 10 m threshold. For example, a 12.81 m descent becomes a local drop of approximately 7.73 m after 40 m averaging, potentially removing a confirmed downward reversal. Independent elevation data is still needed to establish whether these undulations are real.
 
 Additional trials produced 5290.0 m with a 60 m window and 10 m threshold, and 4895.4 m with a 100 m window and 10 m threshold. Resampling every 5 m without averaging, retaining the threshold, produced 5935.7 m. Agreement with the reported COROS total of roughly 5300 m does not establish accuracy or justify deleting points or tuning parameters.
+
+### Post-race FIT comparison
+
+After the October 31, 2026 race, recomputing the route from recorded FIT device distance and per-record elevations produced approximately 4783 m ascent. Garmin displayed 5019 m, versus approximately 5965 m on the pre-race GPX. Inputs or statistical definitions differ; no rescaling forces agreement.
+
+With the same no-averaging + 10 m algorithm, CP3→CP4 ascent changed from 844.8 m on the GPX to 635.2 m on the FIT, and CP5→CP6 changed from 722.6 m to 273.0 m. Position comparisons show multi-point oscillations on the original GPX with smaller fluctuations at corresponding FIT locations. Continuous oscillations above the threshold still count; no isolated spikes does not imply error-free input.
+
+This adds comparative evidence, not surveyed elevation validation or an automatic change to defaults. See the [Tiandi Liubai example](../../../examples/tiandi-liubai-100k/README.en.md#post-race-fit-comparison) for full segment ascent/descent and pacing effects. The personal FIT is not published, so that part is available for viewing and understanding metric definitions only.
 
 ## Selecting a method
 
