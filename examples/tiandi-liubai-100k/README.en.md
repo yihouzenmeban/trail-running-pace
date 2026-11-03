@@ -2,20 +2,20 @@
 
 [简体中文](README.md) | [English](README.en.md) | [Project home](../../README.en.md)
 
-This directory keeps both pre-race GPX plans and a retrospective review on the recorded FIT route. GPX charts can be generated from public files. Charts involving the personal FIT activity are previews; the raw activity is not published.
+This example shows pre-race GPX pace charts and a post-race review based on the recorded FIT route.
 
 ## Files and provenance
 
 | File | Contents and reproduction requirements |
 | --- | --- |
-| [天地留白100K.gpx](天地留白100K.gpx) | User-supplied race-route copy used for pre-race plans |
+| [天地留白100K.gpx](天地留白100K.gpx) | Race GPX track used for pre-race plans |
 | [config.json](config.json) | 12h, 13h, 14h, 15h, and 16h; a 2026-10-31 06:00 start; SVG, HTML, CSV, and JSON explicitly selected |
 | [pace-chart.svg](pace-chart.svg) | Generated from the public GPX and configuration, with segment pace in parentheses |
 | [garmin-comparison.svg](garmin-comparison.svg) | The same GPX compared with the Garmin activity using exact 15h, 16h, and 17h targets without modifying the original configuration |
 | [config-fit.json](config-fit.json) / [pace-chart-fit.svg](pace-chart-fit.svg) | 15h, 16h, and 17h plans using personal FIT device distance and elevations; manual CP distances apply only to this recording |
 | [garmin-comparison2.svg](garmin-comparison2.svg) | Plans recomputed on the FIT route and compared with that same activity, preserving reviewed checkpoint passage times |
 
-The Garmin activity is “2026 徽州古城秋季赛” from October 31, 2026. Elapsed time is 16:46:04 including stops; platform totals are 101.877 km and 5019 / 5023 m ascent/descent. The raw personal FIT, platform details, and local download cache are not published. The activity comparisons cannot be regenerated using this directory alone.
+The Garmin activity is “2026 徽州古城秋季赛” from October 31, 2026. Elapsed time is 16:46:04 including stops; platform totals are 101.877 km and 5019 / 5023 m ascent/descent. The GPX chart can be generated from this directory's files. The personal FIT and platform details needed for the two activity comparisons are not published; those charts are available as previews.
 
 ## Reproduce the public GPX chart
 
@@ -31,7 +31,7 @@ python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate \
   --output-dir output/tiandi-liubai-100k
 ```
 
-This example explicitly generates four formats, unlike the SVG-only default for a new task. Results go into Git-ignored `output/`; add `--overwrite` to replace existing files. The current code can recompute plans from these inputs, but output files need not be byte-identical across code versions.
+This example generates SVG, HTML, CSV, and JSON in Git-ignored `output/`. Add `--overwrite` to replace existing files.
 
 ## Post-race FIT comparison
 

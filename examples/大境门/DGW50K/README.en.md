@@ -6,9 +6,9 @@ The directory retains the name `DGW50K`, while route and chart titles use the ra
 
 ## Inputs and elevation repair
 
-The user-supplied [original GPX](2026京东大境门古长城越野赛by%20UTMB®MGW50K.gpx) lacks elevation at 59 points and cannot be used directly for generation. The two gaps span approximately 834.6 m and 34.1 m between known endpoints.
+The [original GPX](2026京东大境门古长城越野赛by%20UTMB®MGW50K.gpx) lacks elevation at 59 points; use the filled copy below to generate charts. The two gaps span approximately 834.6 m and 34.1 m between known endpoints.
 
-[MGW50K-elevation-filled.gpx](MGW50K-elevation-filled.gpx) is a copy with elevations linearly interpolated along horizontal distance between known endpoints; the original remains unchanged. [elevation-repair.json](elevation-repair.json) records point indices, gaps, the repair method, and hashes of both files. Interpolation cannot recover missing hills. The script does not automatically perform this historical repair.
+[MGW50K-elevation-filled.gpx](MGW50K-elevation-filled.gpx) is a copy with elevations linearly interpolated along horizontal distance between known endpoints. [elevation-repair.json](elevation-repair.json) records point indices, gaps, the repair method, and hashes of both files. The copy is ready to use; interpolation cannot recover missing hills.
 
 ## Pace charts and reproduction
 
@@ -36,16 +36,16 @@ python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate \
   --output-dir output/dgw50k-6h15m
 ```
 
-Results go into Git-ignored `output/`; add `--overwrite` to replace existing files. Reproduction means recomputing with the current code and the same inputs, not byte-identical output across versions.
+Results go into Git-ignored `output/`; add `--overwrite` to replace existing files.
 
 ## Historical three-source comparison
 
-[runart-comparison.svg](runart-comparison.svg) combines a 耐力学社 / RunArt.Net screenshot, repository plans, and the Garmin Dajingmen activity from September 12, 2026. It presents:
+[runart-comparison.svg](runart-comparison.svg) combines data transcribed from a 耐力学社 / RunArt.Net pace-chart screenshot, repository plans, and the Garmin Dajingmen activity from September 12, 2026. It presents:
 
 1. Cumulative checkpoint times across all 16 targets.
 2. Cumulative distance and segment ascent/descent for all three sources, with RunArt-minus-Garmin and repository-minus-Garmin differences beside their values.
 3. Repository 6:15 plans against actual Garmin checkpoint times; time differences mean actual minus plan, so negative means earlier.
 
-The screenshot was supplied by the user. The raw personal activity and the original comparison-building script are not retained in the repository. Elapsed times include stops. Intermediate terrain values are estimated by distance interpolation within FIT laps, then differenced between adjacent cumulative values. Finish totals come from the platform; differences are computed before rounding.
+Elapsed times include stops. Intermediate terrain values are estimated by distance interpolation within FIT laps, then differenced between adjacent cumulative values. Finish totals come from the platform; differences are computed before rounding. The raw personal FIT is not published.
 
-This is a manually assembled historical chart and cannot be generated directly by the current `compare_activity.py`. The current standard output has time-performance and course-data sections; see the [activity comparison reference](../../../skills/even-effort-pace-chart/references/comparison.en.md). This chart's three-source layout is not the output template for new comparisons.
+The three-source chart is provided as an SVG. To generate a plan-versus-activity comparison from your own FIT, see the [activity comparison reference](../../../skills/even-effort-pace-chart/references/comparison.en.md).

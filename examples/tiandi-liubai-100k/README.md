@@ -2,20 +2,20 @@
 
 [简体中文](README.md) | [English](README.en.md) | [项目首页](../../README.md)
 
-本目录保留赛前 GPX 方案与赛后 FIT 路线复盘。GPX 配速表可用公开文件生成；涉及个人 FIT 的图仅供查看，原始活动未公开。
+本示例展示赛前 GPX 配速表，以及基于实际 FIT 路线的赛后复盘。
 
 ## 文件与来源
 
 | 文件 | 内容与复现条件 |
 | --- | --- |
-| [天地留白100K.gpx](天地留白100K.gpx) | 用户提供的比赛路线副本，作为赛前方案输入 |
+| [天地留白100K.gpx](天地留白100K.gpx) | 比赛 GPX 轨迹，作为赛前方案输入 |
 | [config.json](config.json) | 12、13、14、15、16 小时；2026-10-31 06:00 出发；显式导出 SVG、HTML、CSV、JSON |
 | [pace-chart.svg](pace-chart.svg) | 使用公开 GPX 和上述配置生成，括号内为区间配速 |
 | [garmin-comparison.svg](garmin-comparison.svg) | 同一 GPX 与佳明实际活动对比，参照目标改为 15、16、17 小时，不改写原配置 |
 | [config-fit.json](config-fit.json) / [pace-chart-fit.svg](pace-chart-fit.svg) | 15、16、17 小时方案，使用个人 FIT 设备距离与海拔；配置中的人工 CP 仅适用于该次记录 |
 | [garmin-comparison2.svg](garmin-comparison2.svg) | 用 FIT 路线重算方案后，与同一次活动比较；保留已核对的 CP 经过时刻 |
 
-实际活动为佳明 2026-10-31「2026 徽州古城秋季赛」。经过时间 16:46:04（包含停留），平台距离 101.877 km、爬升 / 下降 5019 / 5023 m。个人原始 FIT、平台详情和本地下载缓存不随仓库公开，不能只用本目录文件重新生成活动对比图。
+实际活动为佳明 2026-10-31「2026 徽州古城秋季赛」。经过时间 16:46:04（包含停留），平台距离 101.877 km、爬升 / 下降 5019 / 5023 m。GPX 配速表可用本目录文件生成；两张活动对比图所需的个人原始 FIT 与平台详情未公开，仅提供结果供查看。
 
 ## 复现公开 GPX 配速表
 
@@ -31,7 +31,7 @@ python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate \
   --output-dir output/tiandi-liubai-100k
 ```
 
-这份示例配置会生成四种格式，和新任务默认仅输出 SVG 不同。输出到被 Git 忽略的 `output/`，替换已有文件时加 `--overwrite`。使用当前代码和相同输入可重新计算方案，不承诺不同代码版本的文件逐字节相同。
+这份示例配置生成 SVG、HTML、CSV、JSON 四种格式，写入被 Git 忽略的 `output/`。替换已有文件时加 `--overwrite`。
 
 ## 赛后 FIT 对照
 

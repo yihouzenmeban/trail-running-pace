@@ -6,11 +6,11 @@ Run with Python 3.10+. GPX/KML pace charts use only the standard library; FIT in
 
 ## Defaults and overrides
 
-All optional parameters follow the same rule: **current explicit request > user-selected configuration > script defaults**. Build a new task's configuration from the target and explicit overrides, leaving other optional fields absent. Retain route and CP selections only when confirmed by inspection of the current route. Example targets, exports, rests, cutoffs, and track indices are example choices, not defaults to inherit.
+A finish target is required. Omitted optional fields use script defaults; when editing an existing configuration, other fields retain their configured values. See the [parameter table](#parameters) for all defaults.
 
-Omitted fields use defaults. Valid `0` and `false` values take effect without being replaced; for example, `fatigue_rate: 0` disables fatigue progression and `smoothing_m: 0` disables that smoothing. `null`, empty strings, and empty lists are not general ways to request defaults; invalid types or values raise errors. `track_index: null` selects the only available track automatically, and station `cutoff: null` means no supplied cutoff.
+Valid `0` and `false` values take effect as configured; for example, `fatigue_rate: 0` disables fatigue progression and `smoothing_m: 0` disables that smoothing. `null`, empty strings, and empty lists are not general ways to request defaults; invalid types or values raise errors. `track_index: null` selects the only available track automatically, and station `cutoff: null` means no supplied cutoff.
 
-Two compatibility precedence rules apply: a present `targets` list takes precedence over `target`, and omitted `secondary_display` honors an explicitly supplied legacy `pace_basis`. Remove the old `targets` when replacing a list with a central target. Changing one parameter does not automatically adjust other parameters. Missing finish targets, unselected multiple routes, and absent or ambiguous CPs require input rather than invented choices. If five-column expansion produces nonpositive durations, supply an explicit target list or interval instead of silently reducing the interval.
+`targets` takes precedence over `target`; remove the old `targets` when replacing a list with a central target. An omitted `secondary_display` honors an explicitly configured legacy `pace_basis`. Missing finish targets, unselected multiple routes, and absent or ambiguous CPs stop generation with a request for the required information. All five expanded targets must be positive; otherwise adjust the target list or interval.
 
 ## Inspect
 

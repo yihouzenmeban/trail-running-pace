@@ -10,7 +10,7 @@ Original: https://mp.weixin.qq.com/s/spYCP-upbqAZN0kzUm-0ng
 
 The repository archive is `docs/reference/耐力科学_体感一致配速表全面指南.md`, with its illustrations under `docs/reference/assets/pace-chart/`. These paths are relative to the repository root. The Skills package remains usable when copied independently; it does not require the archive at runtime.
 
-This is an independent implementation of the article's equivalent-distance and fatigue-curve ideas. The article does not expose RunArt.Net's full algorithm. The equations below are this implementation's explicit, reproducible choices; generated charts must not be represented as official RunArt.Net output. Preserve the source attribution included by the exporters. The article's original copyright statement remains in the repository archive; this project does not reinterpret the terms for third-party material.
+The equations below describe this project's equivalent-distance and fatigue-curve implementation. The reference article does not expose RunArt.Net's full algorithm; charts generated here are not official output. The article's copyright notice remains in the archive.
 
 ## Input normalization
 
@@ -96,15 +96,13 @@ arrival_i = M_i + sum(rest before station i)
 departure_i = arrival_i + rest_i
 ```
 
-`r = 0` gives constant equivalent pace. With the default, average pace over a doubled equivalent distance changes by the factor `2^(b-1) = 1.08`. This is a power-curve parameterization, not a claim that the article's illustrated interval examples or the proprietary tool use these exact equations. The curve is normalized separately for each target, so every final departure is exactly that target before presentation rounding.
+`r = 0` gives constant equivalent pace. With the default, average pace over a doubled equivalent distance changes by the factor `2^(b-1) = 1.08`. The curve is normalized separately for each target, so every final departure is exactly that target before presentation rounding.
 
 Rest is explicit and included once; no automatic extra delay or stop is inferred. Every target must exceed total rest. Time calculations retain floating-point precision; segment totals calculated from rounded display values may differ slightly.
 
-The reference-style table displays cumulative departure durations truncated to full minutes. `secondary_display` selects the parenthesized value: default `"pace"` divides incoming segment moving seconds by horizontal kilometres; `"equivalent_pace"` divides by equivalent kilometres. Both round to seconds as `MM:SS`; equivalent pace is labeled “等强配速” in the chart. `"arrival_time"` instead adds cumulative arrival duration to `start_time`, showing local clock time before the current rest as `HH:MM`, truncated to minutes. Midnight rollover is marked “次日” or “+N天”, with no time-zone or daylight-saving conversion. Start time defaults to 06:00 and accepts an override as `HH:MM` or a full date/time; no race date is assumed when omitted. Pace modes omit parentheses at the start; arrival clock mode shows the gun time there.
+Segment pace is moving time divided by route kilometres; equivalent pace divides that same time by equivalent kilometres. Arrival clock time adds cumulative arrival duration to the race start, giving local time before the current station rest.
 
-All three modes preserve timing allocation and rest calculations. Legacy `pace_basis: "equivalent"` still selects equivalent pace when `secondary_display` is absent; the new field takes precedence. Both paces and cumulative arrival/departure durations retain full precision. CSV formatted cumulative durations continue to round to seconds.
-
-Start time and the parenthesized display are independent; providing a start time still defaults to pace. Arrival clock time appears only when `secondary_display: "arrival_time"` is explicitly selected. Only SVG is exported by default; additional `output_formats` affect exported files without changing model calculations. CSV/JSON fields discussed here are exported when those formats are selected.
+Calculations retain full precision; display modes and export formats preserve timing allocation. See [parenthesized display](configuration.en.md#parenthesized-display) for display selection, start time, and legacy compatibility, and [generation and outputs](configuration.en.md#generate-and-outputs) for display precision and output fields.
 
 These columns are pre-race reference schedules. Switching to an adjacent column mid-race does not recompute the remaining schedule from the runner's current time, fatigue, or position.
 

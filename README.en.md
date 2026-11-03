@@ -12,11 +12,11 @@ The approach draws on [《耐力科学｜体感一致配速表全面指南》](h
 
 | Example and notes | Pace charts | Activity comparisons |
 | --- | --- | --- |
-| [Tiandi Liubai 100K](examples/tiandi-liubai-100k/README.en.md): reproducible GPX plans; personal FIT results are previews | [GPX plans](examples/tiandi-liubai-100k/pace-chart.svg) / [FIT-route plans](examples/tiandi-liubai-100k/pace-chart-fit.svg) | [On the pre-race GPX](examples/tiandi-liubai-100k/garmin-comparison.svg) / [On the recorded FIT](examples/tiandi-liubai-100k/garmin-comparison2.svg) |
+| [Tiandi Liubai 100K](examples/tiandi-liubai-100k/README.en.md): GPX planning and post-race FIT review | [GPX plans](examples/tiandi-liubai-100k/pace-chart.svg) / [FIT-route plans](examples/tiandi-liubai-100k/pace-chart-fit.svg) | [On the pre-race GPX](examples/tiandi-liubai-100k/garmin-comparison.svg) / [On the recorded FIT](examples/tiandi-liubai-100k/garmin-comparison2.svg) |
 | [Dajingmen DGW100K](examples/大境门/DGW100K/README.en.md): reproducible from the public KML | [10–24 hours](examples/大境门/DGW100K/pace-chart.svg) | — |
 | [Dajingmen MGW50K](examples/大境门/DGW50K/README.en.md): plans use the public elevation-filled copy; the three-source comparison is a historical reference | [5–12.5 hours](examples/大境门/DGW50K/pace-chart.svg) / [Single 6:15 plan](examples/大境门/DGW50K/pace-chart-6h15m.svg) | [RunArt / repository / Garmin](examples/大境门/DGW50K/runart-comparison.svg) |
 
-Example notes include input provenance, configurations, reproduction commands, and metric definitions. Example targets are not individual fitness assessments.
+Example notes include input provenance, configurations, files needed for reproduction, commands, and metric definitions.
 
 ## Installation and first use
 
@@ -97,7 +97,7 @@ The default output is `garmin-comparison.svg`. FIT and single-activity FIT ZIP a
 | Why no averaging + 10 m is the default, and how to switch | [Ascent methods and historical experiments](skills/even-effort-pace-chart/references/ascent-options.en.md) |
 | AI assistant workflow | [SKILL.md](skills/even-effort-pace-chart/SKILL.md) |
 
-Parameters follow “current explicit request > selected configuration > script defaults,” without inheriting example settings. Ascent statistics and display smoothing are independent. Results depend on source elevations and processing parameters and may differ from event or other platform statistics. Water values only compare relative segment demand.
+Ascent statistics and display smoothing are independent. Results depend on source elevations and processing parameters and may differ from event or other platform statistics. Water values compare relative segment demand.
 
 ## Development and tests
 
@@ -109,4 +109,4 @@ Tests cover route processing, pacing, and activity comparisons. Real-course test
 
 ## Sources and copyright
 
-The [article and illustration archive](docs/reference/) preserves the original source and copyright notice. Rights remain with their respective holders; use of those materials is subject to the original notice. Race-route and activity-comparison provenance is listed in each example's notes. Raw personal FIT activities are not published with the repository.
+The [article and illustration archive](docs/reference/) preserves the original source and copyright notice. Rights remain with their respective holders; use of those materials is subject to the original notice. Race-route and activity-comparison provenance is listed in each example's notes.

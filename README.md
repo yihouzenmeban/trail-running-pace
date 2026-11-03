@@ -12,11 +12,11 @@
 
 | 示例与说明 | 配速表 | 活动对比 |
 | --- | --- | --- |
-| [天地留白 100K](examples/tiandi-liubai-100k/README.md)：公开 GPX 可复现，个人 FIT 结果仅供展示 | [GPX 方案](examples/tiandi-liubai-100k/pace-chart.svg) / [FIT 路线方案](examples/tiandi-liubai-100k/pace-chart-fit.svg) | [按赛前 GPX](examples/tiandi-liubai-100k/garmin-comparison.svg) / [按实际 FIT](examples/tiandi-liubai-100k/garmin-comparison2.svg) |
+| [天地留白 100K](examples/tiandi-liubai-100k/README.md)：GPX 制表与 FIT 赛后复盘 | [GPX 方案](examples/tiandi-liubai-100k/pace-chart.svg) / [FIT 路线方案](examples/tiandi-liubai-100k/pace-chart-fit.svg) | [按赛前 GPX](examples/tiandi-liubai-100k/garmin-comparison.svg) / [按实际 FIT](examples/tiandi-liubai-100k/garmin-comparison2.svg) |
 | [大境门 DGW100K](examples/大境门/DGW100K/README.md)：公开 KML 可复现 | [10–24 小时](examples/大境门/DGW100K/pace-chart.svg) | — |
 | [大境门 MGW50K](examples/大境门/DGW50K/README.md)：使用公开的海拔补全副本生成配速表，三方对比为历史参考图 | [5–12.5 小时](examples/大境门/DGW50K/pace-chart.svg) / [6:15 单列](examples/大境门/DGW50K/pace-chart-6h15m.svg) | [耐力学社 / 仓库 / 佳明](examples/大境门/DGW50K/runart-comparison.svg) |
 
-各示例说明包含输入来源、配置、复现命令和结果口径。示例目标不是个人能力评估。
+各示例说明包含输入来源、配置、复现所需文件、命令和结果口径。
 
 ## 安装与首次使用
 
@@ -95,7 +95,7 @@ python3 skills/even-effort-pace-chart/scripts/compare_activity.py generate race.
 | 为什么默认不平滑＋10 米阈值，如何切换 | [爬升方案与历史实验](skills/even-effort-pace-chart/references/ascent-options.md) |
 | AI 助手的执行流程 | [SKILL.md](skills/even-effort-pace-chart/SKILL.md) |
 
-参数遵循“当前明确要求 > 指定使用的配置 > 脚本默认值”，不从示例继承。爬升统计和图示平滑各自独立；结果依赖输入海拔与处理参数，不能保证复现赛事或其他平台统计。参考水量仅用于比较赛段需求。
+爬升统计和图示平滑各自独立；结果依赖输入海拔与处理参数，可能与赛事或其他平台统计不同。参考水量用于比较赛段需求。
 
 ## 开发与测试
 
@@ -107,4 +107,4 @@ python3 -m unittest discover -s skills/even-effort-pace-chart/tests -v
 
 ## 来源与版权
 
-[参考文章及配图归档](docs/reference/)保留原文来源与版权声明，权利归原权利人所有，使用条件以原文声明为准。比赛轨迹与活动对比的来源见各示例说明；个人原始 FIT 不随仓库公开。
+[参考文章及配图归档](docs/reference/)保留原文来源与版权声明，权利归原权利人所有，使用条件以原文声明为准。比赛轨迹与活动对比的来源见各示例说明。
