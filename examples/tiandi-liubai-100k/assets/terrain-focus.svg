@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="476" viewBox="0 0 1040 476" role="img" aria-labelledby="title description" lang="en">
+  <title id="title">Tiandi Liubai · selected CP segments</title>
+  <desc id="description">Published ascent and descent comparison for CP3–CP4 and CP5–CP6. GPX and FIT are independently recomputed; Garmin values are lap-based estimates.</desc>
+  <style>text{font-family:"PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif;font-variant-numeric:tabular-nums}</style>
+  <rect x="0" y="0" width="1040" height="476" fill="#FFFFFF" rx="0" />
+  <text x="32" y="45" font-size="27" fill="#202A35" font-weight="700" text-anchor="start">CP3 → CP4 / CP5 → CP6</text>
+  <rect x="580" y="26" width="22" height="16" fill="#B78032" rx="3" />
+  <text x="611" y="42" font-size="18" fill="#202A35" font-weight="400" text-anchor="start">GPX</text>
+  <rect x="725" y="26" width="22" height="16" fill="#5470C6" rx="3" />
+  <text x="756" y="42" font-size="18" fill="#202A35" font-weight="400" text-anchor="start">FIT</text>
+  <rect x="850" y="26" width="22" height="16" fill="#4B5563" rx="3" />
+  <text x="881" y="42" font-size="18" fill="#202A35" font-weight="400" text-anchor="start">Garmin</text>
+  <text x="32" y="80" font-size="18" fill="#626D79" font-weight="400" text-anchor="start">GPX / FIT: recomputed  ·  Garmin: lap-based estimate</text>
+  <text x="32" y="124" font-size="23" fill="#202A35" font-weight="650" text-anchor="start">Ascent / m</text>
+  <line x1="74.0" y1="166" x2="74.0" y2="415" stroke="#E4E8ED" stroke-width="1" />
+  <text x="74.0" y="443" font-size="17" fill="#626D79" font-weight="400" text-anchor="middle">0</text>
+  <line x1="190.66666666666669" y1="166" x2="190.66666666666669" y2="415" stroke="#E4E8ED" stroke-width="1" />
+  <text x="190.66666666666669" y="443" font-size="17" fill="#626D79" font-weight="400" text-anchor="middle">300</text>
+  <line x1="307.33333333333337" y1="166" x2="307.33333333333337" y2="415" stroke="#E4E8ED" stroke-width="1" />
+  <text x="307.33333333333337" y="443" font-size="17" fill="#626D79" font-weight="400" text-anchor="middle">600</text>
+  <line x1="424.0" y1="166" x2="424.0" y2="415" stroke="#E4E8ED" stroke-width="1" />
+  <text x="424.0" y="443" font-size="17" fill="#626D79" font-weight="400" text-anchor="middle">900</text>
+  <text x="32" y="162" font-size="18" fill="#626D79" font-weight="600" text-anchor="start">CP3 → CP4</text>
+  <rect x="74" y="177" width="328.5333333333333" height="17" fill="#B78032" rx="2" />
+  <text x="409.5333333333333" y="192" font-size="18" fill="#B78032" font-weight="600" text-anchor="start">844.8</text>
+  <rect x="74" y="204" width="247.02222222222224" height="17" fill="#5470C6" rx="2" />
+  <text x="328.02222222222224" y="219" font-size="18" fill="#5470C6" font-weight="600" text-anchor="start">635.2</text>
+  <rect x="74" y="231" width="249.39444444444442" height="17" fill="#4B5563" rx="2" />
+  <text x="330.3944444444444" y="246" font-size="18" fill="#4B5563" font-weight="600" text-anchor="start">641.3</text>
+  <text x="32" y="298" font-size="18" fill="#626D79" font-weight="600" text-anchor="start">CP5 → CP6</text>
+  <rect x="74" y="313" width="281.0111111111111" height="17" fill="#B78032" rx="2" />
+  <text x="362.0111111111111" y="328" font-size="18" fill="#B78032" font-weight="600" text-anchor="start">722.6</text>
+  <rect x="74" y="340" width="106.16666666666667" height="17" fill="#5470C6" rx="2" />
+  <text x="187.16666666666669" y="355" font-size="18" fill="#5470C6" font-weight="600" text-anchor="start">273.0</text>
+  <rect x="74" y="367" width="120.98333333333335" height="17" fill="#4B5563" rx="2" />
+  <text x="201.98333333333335" y="382" font-size="18" fill="#4B5563" font-weight="600" text-anchor="start">311.1</text>
+  <text x="552" y="124" font-size="23" fill="#202A35" font-weight="650" text-anchor="start">Descent / m</text>
+  <line x1="594.0" y1="166" x2="594.0" y2="415" stroke="#E4E8ED" stroke-width="1" />
+  <text x="594.0" y="443" font-size="17" fill="#626D79" font-weight="400" text-anchor="middle">0</text>
+  <line x1="710.6666666666666" y1="166" x2="710.6666666666666" y2="415" stroke="#E4E8ED" stroke-width="1" />
+  <text x="710.6666666666666" y="443" font-size="17" fill="#626D79" font-weight="400" text-anchor="middle">300</text>
+  <line x1="827.3333333333334" y1="166" x2="827.3333333333334" y2="415" stroke="#E4E8ED" stroke-width="1" />
+  <text x="827.3333333333334" y="443" font-size="17" fill="#626D79" font-weight="400" text-anchor="middle">600</text>
+  <line x1="944.0" y1="166" x2="944.0" y2="415" stroke="#E4E8ED" stroke-width="1" />
+  <text x="944.0" y="443" font-size="17" fill="#626D79" font-weight="400" text-anchor="middle">900</text>
+  <text x="552" y="162" font-size="18" fill="#626D79" font-weight="600" text-anchor="start">CP3 → CP4</text>
+  <rect x="594" y="177" width="329.1166666666667" height="17" fill="#B78032" rx="2" />
+  <text x="930.1166666666667" y="192" font-size="18" fill="#B78032" font-weight="600" text-anchor="start">846.3</text>
+  <rect x="594" y="204" width="245.15555555555554" height="17" fill="#5470C6" rx="2" />
+  <text x="846.1555555555556" y="219" font-size="18" fill="#5470C6" font-weight="600" text-anchor="start">630.4</text>
+  <rect x="594" y="231" width="248.26666666666665" height="17" fill="#4B5563" rx="2" />
+  <text x="849.2666666666667" y="246" font-size="18" fill="#4B5563" font-weight="600" text-anchor="start">638.4</text>
+  <text x="552" y="298" font-size="18" fill="#626D79" font-weight="600" text-anchor="start">CP5 → CP6</text>
+  <rect x="594" y="313" width="279.49444444444447" height="17" fill="#B78032" rx="2" />
+  <text x="880.4944444444445" y="328" font-size="18" fill="#B78032" font-weight="600" text-anchor="start">718.7</text>
+  <rect x="594" y="340" width="111.22222222222223" height="17" fill="#5470C6" rx="2" />
+  <text x="712.2222222222222" y="355" font-size="18" fill="#5470C6" font-weight="600" text-anchor="start">286.0</text>
+  <rect x="594" y="367" width="126.42777777777779" height="17" fill="#4B5563" rx="2" />
+  <text x="727.4277777777778" y="382" font-size="18" fill="#4B5563" font-weight="600" text-anchor="start">325.1</text>
+</svg>

@@ -189,6 +189,8 @@ python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate activity-or
 | `"equivalent_pace"` | 区间等强配速 | 本段移动秒数 / 本段等效公里数 |
 | `"arrival_time"` | 到达时间 | `start_time` + 本站累计到站时长，使用本站停留前的时间 |
 
+![三种括号显示示意：同一站累计到站时长为 03:10，分别显示区间配速 08:00、等强配速 05:00、到达钟点 09:10](assets/secondary-display.svg)
+
 两种配速均显示 `MM:SS`，按秒取整；起点无上一段，因此没有配速括号。到达钟点显示 `HH:MM`，秒数向下截断，起点显示发枪钟点。跨过发枪日的午夜后标注“次日”，两天及以上标注“+N天”，例如 `(次日 01:20)`、`(+2天 00:30)`。时间采用赛事当地时间，不进行时区或夏令时转换。未提供 `start_time` 时按早上 `06:00` 发枪，不假定比赛日期；显式时间优先。JSON 的 `parameters.start_time` 记录实际使用的值。
 
 例如，将以下字段加入含目标时间的配置：

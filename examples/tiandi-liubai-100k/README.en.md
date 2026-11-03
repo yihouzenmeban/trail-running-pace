@@ -19,6 +19,8 @@ The Garmin activity is “2026 徽州古城秋季赛” from October 31, 2026. E
 
 ## Reproduce the public GPX chart
 
+![Tiandi Liubai 100K: 12–16 hour pace charts generated from the public GPX](pace-chart.svg)
+
 Requires Python 3.10+. Run from the repository root:
 
 ```bash
@@ -37,6 +39,10 @@ This example generates SVG, HTML, CSV, and JSON in Git-ignored `output/`. Add `-
 
 The two activity charts use the same actual checkpoint passage times but build plans on different routes:
 
+![Tiandi Liubai 100K: recorded FIT route plans for 15h, 16h, and 17h compared with the Garmin activity](garmin-comparison2.svg)
+
+The chart above rebuilds plans on the recorded FIT route. The [pre-race GPX comparison](garmin-comparison.svg) retains the pre-race route, making it possible to compare the effect of route inputs.
+
 | Metric | Pre-race GPX route | Recorded FIT route | Garmin activity statistics |
 | --- | ---: | ---: | ---: |
 | Total distance (km) | 101.249 | 101.877 | 101.877 |
@@ -50,6 +56,8 @@ Two closely reviewed segments are shown below. Each cell is segment ascent / des
 | --- | ---: | ---: | ---: |
 | CP3→CP4 | 844.8 / 846.3 | 635.2 / 630.4 | 641.3 / 638.4 |
 | CP5→CP6 | 722.6 / 718.7 | 273.0 / 286.0 | 311.1 / 325.1 |
+
+![Segment ascent and descent for CP3–CP4 and CP5–CP6: GPX recomputation, FIT recomputation, and Garmin lap-based estimates](assets/terrain-focus.svg)
 
 Some GPX locations contain continuous elevation oscillations across multiple points, with smaller fluctuations at corresponding FIT locations. This provides comparative evidence, not surveyed FIT elevations or a rule for correcting individual points. See [ascent methods](../../skills/even-effort-pace-chart/references/ascent-options.en.md) for the method and historical experiments.
 

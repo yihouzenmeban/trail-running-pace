@@ -65,6 +65,10 @@ python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate \
 
 ## 赛后活动对比
 
+![天地留白 100K：16 小时方案累计差距与部分区间耗时](examples/tiandi-liubai-100k/assets/comparison-preview.svg)
+
+上图截取基于实际 FIT 路线的 16 小时方案；[完整对比图](examples/tiandi-liubai-100k/garmin-comparison2.svg)包含 15、16、17 小时方案及各段爬升、下降。
+
 向助手提供比赛轨迹、配速配置和活动 FIT，例如：
 
 ```text

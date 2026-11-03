@@ -12,6 +12,8 @@ This example generates 10–24 hour pace charts from a race KML track. The route
 | [config.json](config.json) | 15 plans from 10h to 24h, one hour apart; 06:00 start; explicitly selected CPs and KML coordinate heights |
 | [pace-chart.svg](pace-chart.svg) | Segment pace in parentheses; the same configuration also exports HTML, CSV, and JSON |
 
+![Dajingmen DGW100K: 10–24 hour pace charts generated from the KML route](pace-chart.svg)
+
 `cp_selection` contains this file's checkpoint candidate IDs. Re-exporting the KML can change those IDs, so inspect candidates again afterward.
 
 ## Reproduction

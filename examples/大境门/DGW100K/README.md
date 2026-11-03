@@ -12,6 +12,8 @@
 | [config.json](config.json) | 10–24 小时、每隔 1 小时，共 15 组；06:00 出发；显式选用 CP 和 KML 坐标高度 |
 | [pace-chart.svg](pace-chart.svg) | 括号内为区间配速；同配置另导出 HTML、CSV、JSON |
 
+![大境门 DGW100K：KML 路线生成的 10–24 小时配速表](pace-chart.svg)
+
 配置中的 `cp_selection` 对应本文件的站点候选 ID。重新导出 KML 后，候选 ID 可能变化，需要再次检查。
 
 ## 复现

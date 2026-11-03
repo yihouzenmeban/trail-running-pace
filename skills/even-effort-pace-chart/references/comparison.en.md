@@ -42,6 +42,8 @@ The header shows actual finish time and the final advantage or deficit against e
 - **Time performance:** cumulative difference curves and segment faster/slower bars for each target, followed by checkpoint rows with actual segment times, planned segment times, and differences. Cumulative differences answer “how far ahead/behind at this station”; segment differences answer “how much faster/slower on this leg.”
 - **Course data comparison:** total distance, ascent, and descent, followed by ascent/descent bars for adjacent checkpoint intervals.
 
+![Illustration: eight minutes ahead at CP1 and tied at CP2, despite an eight-minute slower second leg; corresponding curve, bars, and table values](assets/comparison-reading.en.svg)
+
 Read each difference according to its location:
 
 | Location | Calculation | Positive | Negative |

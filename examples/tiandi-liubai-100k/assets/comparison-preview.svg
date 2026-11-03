@@ -1,0 +1,135 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="790" viewBox="0 0 1040 790" role="img" aria-labelledby="title description" lang="zh-CN">
+  <title id="title">天地留白 100K · 16 小时方案赛后对比（局部）</title>
+  <desc id="description">从 garmin-comparison2.svg 摘取实际 FIT 路线的 16 小时方案累计差距曲线，并列出 CP3→CP4、CP5→CP6 的实际和预计本段耗时。完整图见同目录。</desc>
+  <style>text{font-family:"PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif;font-variant-numeric:tabular-nums}</style>
+  <rect x="0" y="0" width="1040" height="790" fill="#FFFFFF" rx="0" />
+  <text x="32" y="48" font-size="28" fill="#202A35" font-weight="700" text-anchor="start">天地留白 100K · 16 小时方案</text>
+  <text x="32" y="82" font-size="20" fill="#626D79" font-weight="400" text-anchor="start">实际完赛 16:46:04 · 绿色领先 / 更快，红色落后 / 更慢</text>
+  <text x="32" y="124" font-size="21" fill="#202A35" font-weight="650" text-anchor="start">累计差距 · 方案 − 实际</text>
+  <svg x="24" y="144" width="992" height="427" viewBox="936 460 848 390">
+    <g data-kind="cumulative" data-x-min="1016.0" data-x-max="1752.0" data-y-top="500" data-y-bottom="760" data-zero-y="630.0" data-pixels-per-second="0.018055555555555554" data-limit-seconds="7200">
+      <rect x="1016.0" y="500" width="736.0" height="130.0" rx="0" fill="#F3FAF6" />
+      <rect x="1016.0" y="630.0" width="736.0" height="130.0" rx="0" fill="#FEF5F5" />
+      <path d="M1016.000 500.000 L1752.000 500.000" fill="none" stroke="#E0E6E9" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 5" />
+      <text x="1004.0" y="506.0" font-size="18" fill="#626D79" font-weight="400" text-anchor="end">+120</text>
+      <path d="M1016.000 565.000 L1752.000 565.000" fill="none" stroke="#E0E6E9" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 5" />
+      <text x="1004.0" y="571.0" font-size="18" fill="#626D79" font-weight="400" text-anchor="end">+60</text>
+      <path d="M1016.000 630.000 L1752.000 630.000" fill="none" stroke="#A1ABB5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-role="zero-line" />
+      <text x="1004.0" y="636.0" font-size="18" fill="#626D79" font-weight="400" text-anchor="end">0</text>
+      <path d="M1016.000 695.000 L1752.000 695.000" fill="none" stroke="#E0E6E9" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 5" />
+      <text x="1004.0" y="701.0" font-size="18" fill="#626D79" font-weight="400" text-anchor="end">-60</text>
+      <path d="M1016.000 760.000 L1752.000 760.000" fill="none" stroke="#E0E6E9" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 5" />
+      <text x="1004.0" y="766.0" font-size="18" fill="#626D79" font-weight="400" text-anchor="end">-120</text>
+      <text x="1016.0" y="486" font-size="17" fill="#626D79" font-weight="400" text-anchor="start">分钟</text>
+      <path d="M1016.000 630.000 L1016.000 630.000 L1090.809 630.314 L1090.809 630.000 Z" fill="#C23B38" opacity=".12" />
+      <path d="M1016.000 630.000 L1090.809 630.314" fill="none" stroke="#C23B38" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M1090.809 630.000 L1090.809 630.314 L1092.433 630.000 L1092.433 630.000 Z" fill="#C23B38" opacity=".12" />
+      <path d="M1090.809 630.314 L1092.433 630.000" fill="none" stroke="#C23B38" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M1092.433 630.000 L1092.433 630.000 L1148.069 619.252 L1148.069 630.000 Z" fill="#087F5B" opacity=".12" />
+      <path d="M1092.433 630.000 L1148.069 619.252" fill="none" stroke="#087F5B" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M1148.069 630.000 L1148.069 619.252 L1206.000 606.779 L1206.000 630.000 Z" fill="#087F5B" opacity=".12" />
+      <path d="M1148.069 619.252 L1206.000 606.779" fill="none" stroke="#087F5B" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M1206.000 630.000 L1206.000 606.779 L1276.603 593.744 L1276.603 630.000 Z" fill="#087F5B" opacity=".12" />
+      <path d="M1206.000 606.779 L1276.603 593.744" fill="none" stroke="#087F5B" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M1276.603 630.000 L1276.603 593.744 L1361.273 625.153 L1361.273 630.000 Z" fill="#087F5B" opacity=".12" />
+      <path d="M1276.603 593.744 L1361.273 625.153" fill="none" stroke="#087F5B" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M1361.273 630.000 L1361.273 625.153 L1448.885 627.593 L1448.885 630.000 Z" fill="#087F5B" opacity=".12" />
+      <path d="M1361.273 625.153 L1448.885 627.593" fill="none" stroke="#087F5B" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M1448.885 630.000 L1448.885 627.593 L1453.967 630.000 L1453.967 630.000 Z" fill="#087F5B" opacity=".12" />
+      <path d="M1448.885 627.593 L1453.967 630.000" fill="none" stroke="#087F5B" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M1453.967 630.000 L1453.967 630.000 L1506.237 654.757 L1506.237 630.000 Z" fill="#C23B38" opacity=".12" />
+      <path d="M1453.967 630.000 L1506.237 654.757" fill="none" stroke="#C23B38" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M1506.237 630.000 L1506.237 654.757 L1575.824 669.547 L1575.824 630.000 Z" fill="#C23B38" opacity=".12" />
+      <path d="M1506.237 654.757 L1575.824 669.547" fill="none" stroke="#C23B38" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M1575.824 630.000 L1575.824 669.547 L1652.588 677.029 L1652.588 630.000 Z" fill="#C23B38" opacity=".12" />
+      <path d="M1575.824 669.547 L1652.588 677.029" fill="none" stroke="#C23B38" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M1652.588 630.000 L1652.588 677.029 L1696.883 682.416 L1696.883 630.000 Z" fill="#C23B38" opacity=".12" />
+      <path d="M1652.588 677.029 L1696.883 682.416" fill="none" stroke="#C23B38" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M1696.883 630.000 L1696.883 682.416 L1752.000 679.898 L1752.000 630.000 Z" fill="#C23B38" opacity=".12" />
+      <path d="M1696.883 682.416 L1752.000 679.898" fill="none" stroke="#C23B38" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+      <circle class="delta-point" tabindex="0" cx="1016.000" cy="630.000" r="5" fill="#626D79" stroke="#FFFFFF" stroke-width="2" data-delta-seconds="0.0" aria-label="起终点-徽州古城（起点）：持平 00:00:00；实际 00:00:00；计划 00:00:00">
+        <title>起终点-徽州古城（起点）：持平 00:00:00；实际 00:00:00；计划 00:00:00</title>
+      </circle>
+      <text x="1016.0" y="788" font-size="17" fill="#626D79" font-weight="400" text-anchor="middle">起点</text>
+      <text x="1016.0" y="809" font-size="15" fill="#626D79" font-weight="400" text-anchor="middle">0.0</text>
+      <circle class="delta-point" tabindex="0" cx="1090.809" cy="630.314" r="5" fill="#C23B38" stroke="#FFFFFF" stroke-width="2" data-delta-seconds="-17.3832281409168" aria-label="CP1-雄村镇：实际落后 00:00:17；实际 01:08:04；计划 01:07:47">
+        <title>CP1-雄村镇：实际落后 00:00:17；实际 01:08:04；计划 01:07:47</title>
+      </circle>
+      <text x="1090.8086344505007" y="788" font-size="17" fill="#626D79" font-weight="400" text-anchor="middle">CP1</text>
+      <text x="1090.8086344505007" y="809" font-size="15" fill="#626D79" font-weight="400" text-anchor="middle">10.4</text>
+      <circle class="delta-point" tabindex="0" cx="1148.069" cy="619.252" r="5" fill="#087F5B" stroke="#FFFFFF" stroke-width="2" data-delta-seconds="595.2624527097041" aria-label="CP2-庄源村：实际领先 00:09:55；实际 02:04:22；计划 02:14:18">
+        <title>CP2-庄源村：实际领先 00:09:55；实际 02:04:22；计划 02:14:18</title>
+      </circle>
+      <text x="1148.0692780002314" y="788" font-size="17" fill="#626D79" font-weight="400" text-anchor="middle">CP2</text>
+      <text x="1148.0692780002314" y="809" font-size="15" fill="#626D79" font-weight="400" text-anchor="middle">18.3</text>
+      <circle class="delta-point" tabindex="0" cx="1206.000" cy="606.779" r="5" fill="#087F5B" stroke="#FFFFFF" stroke-width="2" data-delta-seconds="1286.0707390822154" aria-label="CP3-长源村：实际领先 00:21:26；实际 03:08:35；计划 03:30:01">
+        <title>CP3-长源村：实际领先 00:21:26；实际 03:08:35；计划 03:30:01</title>
+      </circle>
+      <text x="1205.9996649950533" y="788" font-size="17" fill="#626D79" font-weight="400" text-anchor="middle">CP3</text>
+      <text x="1205.9996649950533" y="809" font-size="15" fill="#626D79" font-weight="400" text-anchor="middle">26.3</text>
+      <circle class="delta-point" tabindex="0" cx="1276.603" cy="593.744" r="5" fill="#087F5B" stroke="#FFFFFF" stroke-width="2" data-delta-seconds="2008.0408109702257" aria-label="CP4-大源村：实际领先 00:33:28；实际 04:37:19；计划 05:10:47">
+        <title>CP4-大源村：实际领先 00:33:28；实际 04:37:19；计划 05:10:47</title>
+      </circle>
+      <text x="1276.6033234347283" y="788" font-size="17" fill="#626D79" font-weight="400" text-anchor="middle">CP4</text>
+      <text x="1276.6033234347283" y="809" font-size="15" fill="#626D79" font-weight="400" text-anchor="middle">36.1</text>
+      <circle class="delta-point" tabindex="0" cx="1361.273" cy="625.153" r="5" fill="#087F5B" stroke="#FFFFFF" stroke-width="2" data-delta-seconds="268.4438274295535" aria-label="CP5-洲头梁村：实际领先 00:04:28；实际 07:26:19；计划 07:30:48">
+        <title>CP5-洲头梁村：实际领先 00:04:28；实际 07:26:19；计划 07:30:48</title>
+      </circle>
+      <text x="1361.2725899927832" y="788" font-size="17" fill="#626D79" font-weight="400" text-anchor="middle">CP5</text>
+      <text x="1361.2725899927832" y="809" font-size="15" fill="#626D79" font-weight="400" text-anchor="middle">47.8</text>
+      <circle class="delta-point" tabindex="0" cx="1448.885" cy="627.593" r="5" fill="#087F5B" stroke="#FFFFFF" stroke-width="2" data-delta-seconds="133.30314408733102" aria-label="CP6-武阳驿站：实际领先 00:02:13；实际 09:07:44；计划 09:09:57">
+        <title>CP6-武阳驿站：实际领先 00:02:13；实际 09:07:44；计划 09:09:57</title>
+      </circle>
+      <text x="1448.8847561360108" y="788" font-size="17" fill="#626D79" font-weight="400" text-anchor="middle">CP6</text>
+      <text x="1448.8847561360108" y="809" font-size="15" fill="#626D79" font-weight="400" text-anchor="middle">59.9</text>
+      <circle class="delta-point" tabindex="0" cx="1506.237" cy="654.757" r="5" fill="#C23B38" stroke="#FFFFFF" stroke-width="2" data-delta-seconds="-1371.1369329636218" aria-label="CP7-约源村委会：实际落后 00:22:51；实际 11:00:09；计划 10:37:17">
+        <title>CP7-约源村委会：实际落后 00:22:51；实际 11:00:09；计划 10:37:17</title>
+      </circle>
+      <text x="1506.2367853134067" y="788" font-size="17" fill="#626D79" font-weight="400" text-anchor="middle">CP7</text>
+      <text x="1506.2367853134067" y="809" font-size="15" fill="#626D79" font-weight="400" text-anchor="middle">67.9</text>
+      <circle class="delta-point" tabindex="0" cx="1575.824" cy="669.547" r="5" fill="#C23B38" stroke="#FFFFFF" stroke-width="2" data-delta-seconds="-2190.2818594432465" aria-label="CP8-洪济小学旧址：实际落后 00:36:30；实际 12:39:14；计划 12:02:44">
+        <title>CP8-洪济小学旧址：实际落后 00:36:30；实际 12:39:14；计划 12:02:44</title>
+      </circle>
+      <text x="1575.8237532976657" y="788" font-size="17" fill="#626D79" font-weight="400" text-anchor="middle">CP8</text>
+      <text x="1575.8237532976657" y="809" font-size="15" fill="#626D79" font-weight="400" text-anchor="middle">77.5</text>
+      <circle class="delta-point" tabindex="0" cx="1652.588" cy="677.029" r="5" fill="#C23B38" stroke="#FFFFFF" stroke-width="2" data-delta-seconds="-2604.6591694547096" aria-label="CP12-瞻淇村：实际落后 00:43:25；实际 14:35:36；计划 13:52:11">
+        <title>CP12-瞻淇村：实际落后 00:43:25；实际 14:35:36；计划 13:52:11</title>
+      </circle>
+      <text x="1652.5877115291014" y="788" font-size="17" fill="#626D79" font-weight="400" text-anchor="middle">CP12</text>
+      <text x="1652.5877115291014" y="809" font-size="15" fill="#626D79" font-weight="400" text-anchor="middle">88.1</text>
+      <circle class="delta-point" tabindex="0" cx="1696.883" cy="682.416" r="5" fill="#C23B38" stroke="#FFFFFF" stroke-width="2" data-delta-seconds="-2903.0565893695675" aria-label="CP13-画家村：实际落后 00:48:23；实际 15:37:48；计划 14:49:25">
+        <title>CP13-画家村：实际落后 00:48:23；实际 15:37:48；计划 14:49:25</title>
+      </circle>
+      <circle class="delta-point" tabindex="0" cx="1752.000" cy="679.898" r="5" fill="#C23B38" stroke="#FFFFFF" stroke-width="2" data-delta-seconds="-2763.5780000000013" aria-label="起终点-徽州古城（终点）：实际落后 00:46:04；实际 16:46:04；计划 16:00:00">
+        <title>起终点-徽州古城（终点）：实际落后 00:46:04；实际 16:46:04；计划 16:00:00</title>
+      </circle>
+      <text x="1752.0" y="788" font-size="17" fill="#626D79" font-weight="400" text-anchor="middle">终点</text>
+      <text x="1752.0" y="809" font-size="15" fill="#626D79" font-weight="400" text-anchor="middle">101.9</text>
+      <text x="1752.0" y="834" font-size="17" fill="#626D79" font-weight="400" text-anchor="end">赛道累计距离 / km →</text>
+    </g>
+  </svg>
+  <text x="32" y="600" font-size="22" fill="#202A35" font-weight="650" text-anchor="start">各站耗时（局部）</text>
+  <rect x="24" y="618" width="992" height="44" fill="#EDF0F4" rx="6" />
+  <text x="48" y="647" font-size="18" fill="#626D79" font-weight="500" text-anchor="start">区间</text>
+  <text x="450" y="647" font-size="18" fill="#626D79" font-weight="500" text-anchor="middle">佳明实际</text>
+  <text x="800" y="647" font-size="18" fill="#626D79" font-weight="500" text-anchor="middle">16:00 预计（实际 − 预计）</text>
+  <text x="48" y="698" font-size="21" fill="#202A35" font-weight="400" text-anchor="start">CP3 → CP4</text>
+  <text x="450" y="698" font-size="22" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values">
+    <tspan data-role="segment-time" fill="#202A35">01:28:44</tspan>
+  </text>
+  <text x="800" y="698" font-size="22" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values">
+    <tspan data-role="segment-time" fill="#087F5B">01:40:46</tspan>
+    <tspan data-role="segment-difference" fill="#087F5B">（-00:12:02）</tspan>
+  </text>
+  <line x1="24" y1="715" x2="1016" y2="715" stroke="#E4E8ED" stroke-width="1" />
+  <text x="48" y="753" font-size="21" fill="#202A35" font-weight="400" text-anchor="start">CP5 → CP6</text>
+  <text x="450" y="753" font-size="22" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values">
+    <tspan data-role="segment-time" fill="#202A35">01:41:25</tspan>
+  </text>
+  <text x="800" y="753" font-size="22" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values">
+    <tspan data-role="segment-time" fill="#C23B38">01:39:10</tspan>
+    <tspan data-role="segment-difference" fill="#C23B38">（+00:02:15）</tspan>
+  </text>
+  <line x1="24" y1="770" x2="1016" y2="770" stroke="#E4E8ED" stroke-width="1" />
+</svg>

@@ -19,6 +19,8 @@
 
 ## 复现公开 GPX 配速表
 
+![天地留白 100K：公开 GPX 生成的 12–16 小时配速表](pace-chart.svg)
+
 需要 Python 3.10+，在仓库根目录执行：
 
 ```bash
@@ -37,6 +39,10 @@ python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate \
 
 两张活动对比图使用相同的实际 CP 经过时刻，但方案所依据的路线不同：
 
+![天地留白 100K：实际 FIT 路线的 15、16、17 小时方案与佳明活动对比](garmin-comparison2.svg)
+
+上图按实际 FIT 路线重算方案；[赛前 GPX 对比图](garmin-comparison.svg)保留赛前路线，便于对照路线输入带来的差异。
+
 | 口径 | 赛前 GPX 路线 | 实际 FIT 路线 | 佳明实际统计 |
 | --- | ---: | ---: | ---: |
 | 全程距离（km） | 101.249 | 101.877 | 101.877 |
@@ -50,6 +56,8 @@ GPX 距离由坐标计算；FIT 路线保留设备记录距离，不按 GPS 坐�
 | --- | ---: | ---: | ---: |
 | CP3→CP4 | 844.8 / 846.3 | 635.2 / 630.4 | 641.3 / 638.4 |
 | CP5→CP6 | 722.6 / 718.7 | 273.0 / 286.0 | 311.1 / 325.1 |
+
+![CP3→CP4 与 CP5→CP6 的分段爬升、下降：GPX 重算、FIT 重算及佳明逐圈估算](assets/terrain-focus.svg)
 
 原 GPX 某些位置存在多点连续海拔起伏，FIT 对应位置波动较小。这为差异提供了比较证据，不代表 FIT 是实测高程，也不足以确定每个点应如何纠正。方法与历史实验见[爬升方案](../../skills/even-effort-pace-chart/references/ascent-options.md)。
 

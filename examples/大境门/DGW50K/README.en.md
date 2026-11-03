@@ -19,6 +19,8 @@ The [original GPX](2026京东大境门古长城越野赛by%20UTMB®MGW50K.gpx) l
 
 Both configurations use the defaults: SVG, a 06:00 start, and segment pace in parentheses. Both explicitly select CP IDs from this route.
 
+![Dajingmen MGW50K: a single 6-hour 15-minute pace plan](pace-chart-6h15m.svg)
+
 Requires Python 3.10+. Run from the repository root:
 
 ```bash
@@ -45,6 +47,8 @@ Results go into Git-ignored `output/`; add `--overwrite` to replace existing fil
 1. Cumulative checkpoint times across all 16 targets.
 2. Cumulative distance and segment ascent/descent for all three sources, with RunArt-minus-Garmin and repository-minus-Garmin differences beside their values.
 3. Repository 6:15 plans against actual Garmin checkpoint times; time differences mean actual minus plan, so negative means earlier.
+
+![Dajingmen MGW50K: historical comparison of RunArt, repository plans, and the Garmin activity](runart-comparison.svg)
 
 Elapsed times include stops. Intermediate terrain values are estimated by distance interpolation within FIT laps, then differenced between adjacent cumulative values. Finish totals come from the platform; differences are computed before rounding. The raw personal FIT is not published.
 

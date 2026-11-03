@@ -66,6 +66,10 @@ This produces five plans for 13:00, 13:30, 14:00, 14:30, and 15:00 in `output/my
 
 ## Post-race activity comparisons
 
+![Tiandi Liubai 100K: cumulative gap and selected segment times against the 16-hour plan](examples/tiandi-liubai-100k/assets/comparison-preview.svg)
+
+This excerpt uses the recorded FIT route and the 16-hour plan. The [full comparison](examples/tiandi-liubai-100k/garmin-comparison2.svg) includes 15h, 16h, and 17h plans plus segment ascent and descent.
+
 Give your assistant the race route, pace configuration, and recorded FIT activity:
 
 ```text
