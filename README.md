@@ -4,7 +4,7 @@
 
 基于耐力学社体感一致配速思路的社区独立实现。赛前，将 GPX、KML 或 FIT 路线转换成按检查点（CP）分段的多目标配速表；赛后，将 FIT 活动与方案对照，查看累计差距、相邻站耗时和地形差异。可通过 AI 助手调用 `even-effort-pace-chart`，也可直接使用命令行。
 
-思路参考耐力学社 / Pili（表哥）的[《耐力科学｜体感一致配速表全面指南》](https://mp.weixin.qq.com/s/spYCP-upbqAZN0kzUm-0ng)。本项目独立实现等效距离与疲劳曲线，并非 RunArt.Net 官方工具或输出；来源及授权现状见[下方说明](#来源与授权)。
+思路参考耐力学社 / Pili（表哥）的[《耐力科学｜体感一致配速表全面指南》](https://mp.weixin.qq.com/s/spYCP-upbqAZN0kzUm-0ng)。本项目独立实现等效距离与疲劳曲线，并非 RunArt.Net 官方工具或输出；详见[来源与版权](#来源与版权)。
 
 ## 效果预览
 
@@ -105,8 +105,6 @@ python3 -m unittest discover -s skills/even-effort-pace-chart/tests -v
 
 测试覆盖路线处理、配速和活动对比。独立复制 Skills、未携带 `examples/` 时，真实赛道测试会跳过。自然语言用例及人工复核步骤见[行为评测指南](skills/even-effort-pace-chart/evals/guide.md)；开发经历见[投稿文章](docs/articles/从配速表到百公里复盘.md)。
 
-## 来源与授权
+## 来源与版权
 
-本项目代码与项目自有文档尚未指定项目许可证，仓库当前没有 `LICENSE` 文件。
-
-[参考文章及配图归档](docs/reference/)保留原文来源与版权声明，权利归原权利人所有，使用条件以原文声明为准。第三方资料的声明与项目自身的授权状态分别列示，不互相替代。比赛轨迹与活动对比的来源见各示例说明；个人原始 FIT 不随仓库公开。
+[参考文章及配图归档](docs/reference/)保留原文来源与版权声明，权利归原权利人所有，使用条件以原文声明为准。比赛轨迹与活动对比的来源见各示例说明；个人原始 FIT 不随仓库公开。

@@ -4,7 +4,7 @@
 
 An independent community implementation inspired by 耐力学社's even-effort pacing approach. Before a race, turn GPX, KML, or FIT routes into checkpoint-based plans for multiple finish targets. After a race, compare a FIT activity with those plans to review cumulative differences, segment times, and terrain metrics. Invoke `even-effort-pace-chart` through an AI assistant or use the command line.
 
-The approach draws on [《耐力科学｜体感一致配速表全面指南》](https://mp.weixin.qq.com/s/spYCP-upbqAZN0kzUm-0ng) by 耐力学社 / Pili（表哥）. This project independently implements equivalent-distance and fatigue curves; it is not an official RunArt.Net tool or output. See [sources and licensing](#sources-and-licensing).
+The approach draws on [《耐力科学｜体感一致配速表全面指南》](https://mp.weixin.qq.com/s/spYCP-upbqAZN0kzUm-0ng) by 耐力学社 / Pili（表哥）. This project independently implements equivalent-distance and fatigue curves; it is not an official RunArt.Net tool or output. See [sources and copyright](#sources-and-copyright).
 
 ## Preview
 
@@ -107,8 +107,6 @@ python3 -m unittest discover -s skills/even-effort-pace-chart/tests -v
 
 Tests cover route processing, pacing, and activity comparisons. Real-course tests are skipped when the Skills package is copied without `examples/`. See the [behavior evaluation guide](skills/even-effort-pace-chart/evals/guide.en.md) for natural-language cases and manual review, or the [development article](docs/articles/从配速表到百公里复盘.md) for the project story in Chinese.
 
-## Sources and licensing
+## Sources and copyright
 
-No project license has been specified for the project code or its own documentation. The repository currently has no `LICENSE` file.
-
-The [article and illustration archive](docs/reference/) preserves the original source and copyright notice. Rights remain with their respective holders; use of those materials is subject to the original notice. Third-party notices and the project's own licensing status are documented separately; neither substitutes for the other. Race-route and activity-comparison provenance is listed in each example's notes. Raw personal FIT activities are not published with the repository.
+The [article and illustration archive](docs/reference/) preserves the original source and copyright notice. Rights remain with their respective holders; use of those materials is subject to the original notice. Race-route and activity-comparison provenance is listed in each example's notes. Raw personal FIT activities are not published with the repository.
