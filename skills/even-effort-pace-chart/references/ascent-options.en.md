@@ -44,7 +44,7 @@ After the October 31, 2026 race, recomputing the route from recorded FIT device 
 
 With the same no-averaging + 10 m algorithm, CP3→CP4 ascent changed from 844.8 m on the GPX to 635.2 m on the FIT, and CP5→CP6 changed from 722.6 m to 273.0 m. Position comparisons show multi-point oscillations on the original GPX with smaller fluctuations at corresponding FIT locations. Continuous oscillations above the threshold still count; no isolated spikes does not imply error-free input.
 
-This adds comparative evidence, not surveyed elevation validation or an automatic change to defaults. See the [Huizhou Ancient City example](../../../examples/huizhou-gucheng-100k/README.en.md#post-race-fit-comparison) for full segment ascent/descent and pacing effects. The personal FIT is not published, so that part is available for viewing and understanding metric definitions only.
+This adds comparative evidence, not surveyed elevation validation or an automatic change to defaults. See the [Huizhou Ancient City example](../../../examples/huizhou-gucheng-100k/README.en.md#post-race-activity-comparison) for full segment ascent/descent and pacing effects. The personal FIT is not published, so that part is available for viewing and understanding metric definitions only.
 
 ## Selecting a method
 

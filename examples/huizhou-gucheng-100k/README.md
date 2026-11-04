@@ -11,11 +11,11 @@
 | [徽州古城100K.gpx](徽州古城100K.gpx) | 比赛 GPX 轨迹，作为赛前方案输入 |
 | [config.json](config.json) | 12、13、14、15、16 小时；2026-10-31 06:00 出发；显式导出 SVG、HTML、CSV、JSON |
 | [pace-chart.svg](pace-chart.svg) | 使用公开 GPX 和上述配置生成，括号内为区间配速 |
-| [garmin-comparison.svg](garmin-comparison.svg) | 同一 GPX 与佳明实际活动对比，参照目标改为 15、16、17 小时，不改写原配置 |
-| [config-fit.json](config-fit.json) / [pace-chart-fit.svg](pace-chart-fit.svg) | 15、16、17 小时方案，使用个人 FIT 设备距离与海拔；配置中的人工 CP 仅适用于该次记录 |
-| [garmin-comparison2.svg](garmin-comparison2.svg) | 用 FIT 路线重算方案后，与同一次活动比较；保留已核对的 CP 经过时刻 |
+| [garmin-comparison.svg](garmin-comparison.svg) | 赛前 GPX 路线与佳明实际活动对比，参照目标改为 15、16、17 小时，不改写原配置 |
+| [config-fit.json](config-fit.json) / [pace-chart-fit.svg](pace-chart-fit.svg) | 15、16、17 小时方案，使用实际 FIT 路线的设备距离与海拔；配置中的人工 CP 仅适用于该次记录 |
+| [garmin-comparison2.svg](garmin-comparison2.svg) | 用实际 FIT 路线重算方案后，与同一次活动比较；保留已核对的 CP 经过时刻 |
 
-实际活动为佳明 2026-10-31「2026 徽州古城秋季赛」。经过时间 16:46:04（包含停留），平台距离 101.877 km、爬升 / 下降 5019 / 5023 m。GPX 配速表可用本目录文件生成；两张活动对比图所需的个人原始 FIT 与平台详情未公开，仅提供结果供查看。
+实际活动为佳明 2026-10-31「2026 徽州古城秋季赛」。经过时间 16:46:04（包含停留），平台距离 101.877 km、爬升 / 下降 5019 / 5023 m。GPX 配速表可用本目录文件生成；两张赛后对比图所需的个人原始 FIT 与平台详情未公开，仅提供结果供查看。
 
 ## 复现公开 GPX 配速表
 
@@ -35,13 +35,13 @@ python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate \
 
 这份示例配置生成 SVG、HTML、CSV、JSON 四种格式，写入被 Git 忽略的 `output/`。替换已有文件时加 `--overwrite`。
 
-## 赛后 FIT 对照
+## 赛后活动对比
 
-两张活动对比图使用相同的实际 CP 经过时刻，但方案所依据的路线不同：
+两张赛后对比图使用相同的实际 CP 经过时刻，但方案所依据的路线不同：
 
 ![徽州古城 100K：实际 FIT 路线的 15、16、17 小时方案与佳明活动对比](garmin-comparison2.svg)
 
-上图按实际 FIT 路线重算方案；[赛前 GPX 对比图](garmin-comparison.svg)保留赛前路线，便于对照路线输入带来的差异。
+上图按实际 FIT 路线重算方案；[赛前 GPX 路线对比图](garmin-comparison.svg)保留赛前路线，便于对照路线输入带来的差异。
 
 | 口径 | 赛前 GPX 路线 | 实际 FIT 路线 | 佳明实际统计 |
 | --- | ---: | ---: | ---: |

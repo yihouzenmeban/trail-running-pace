@@ -14,7 +14,7 @@
 | --- | --- | --- |
 | [徽州古城 100K](examples/huizhou-gucheng-100k/README.md)：GPX 制表与 FIT 赛后复盘 | [GPX 方案](examples/huizhou-gucheng-100k/pace-chart.svg) / [FIT 路线方案](examples/huizhou-gucheng-100k/pace-chart-fit.svg) | [按赛前 GPX](examples/huizhou-gucheng-100k/garmin-comparison.svg) / [按实际 FIT](examples/huizhou-gucheng-100k/garmin-comparison2.svg) |
 | [大境门 DGW100K](examples/大境门/DGW100K/README.md)：公开 KML 可复现 | [10–24 小时](examples/大境门/DGW100K/pace-chart.svg) | — |
-| [大境门 MGW50K](examples/大境门/DGW50K/README.md)：使用公开的海拔补全副本生成配速表，含官方 GPX 与实际 FIT 两版赛后对比 | [5–12.5 小时](examples/大境门/DGW50K/pace-chart.svg) / [6:15 单列](examples/大境门/DGW50K/pace-chart-6h15m.svg) / [FIT 路线方案](examples/大境门/DGW50K/pace-chart-fit.svg) | [官方 GPX 对比](examples/大境门/DGW50K/garmin-comparison.svg) / [实际 FIT 对比](examples/大境门/DGW50K/garmin-comparison2.svg) / [三方历史参考](examples/大境门/DGW50K/runart-comparison.svg) |
+| [大境门 MGW50K](examples/大境门/DGW50K/README.md)：使用公开的海拔补全副本生成配速表，含赛前 GPX 与实际 FIT 两版赛后对比 | [5–12.5 小时](examples/大境门/DGW50K/pace-chart.svg) / [6:15 单列](examples/大境门/DGW50K/pace-chart-6h15m.svg) / [FIT 路线方案](examples/大境门/DGW50K/pace-chart-fit.svg) | [按赛前 GPX](examples/大境门/DGW50K/garmin-comparison.svg) / [按实际 FIT](examples/大境门/DGW50K/garmin-comparison2.svg) |
 
 各示例说明包含输入来源、配置、复现所需文件、命令和结果口径。
 
@@ -67,7 +67,7 @@ python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate \
 
 ![徽州古城 100K：16 小时方案累计差距与部分区间耗时](examples/huizhou-gucheng-100k/assets/comparison-preview.svg)
 
-上图截取基于实际 FIT 路线的 16 小时方案；[完整对比图](examples/huizhou-gucheng-100k/garmin-comparison2.svg)包含 15、16、17 小时方案及各段爬升、下降。大境门 MGW50K 的[示例说明](examples/大境门/DGW50K/README.md#赛后活动对比)同时提供官方 GPX 与实际 FIT 两版对比，可对照路线输入带来的差异。
+上图截取基于实际 FIT 路线的 16 小时方案；[完整对比图](examples/huizhou-gucheng-100k/garmin-comparison2.svg)包含 15、16、17 小时方案及各段爬升、下降。大境门 MGW50K 的[示例说明](examples/大境门/DGW50K/README.md#赛后活动对比)同时提供赛前 GPX 与实际 FIT 两版对比，可对照路线输入带来的差异。
 
 向助手提供比赛轨迹、配速配置和活动 FIT，例如：
 

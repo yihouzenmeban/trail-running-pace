@@ -14,7 +14,7 @@ The approach draws on [《耐力科学｜体感一致配速表全面指南》](h
 | --- | --- | --- |
 | [Huizhou Ancient City 100K](examples/huizhou-gucheng-100k/README.en.md): GPX planning and post-race FIT review | [GPX plans](examples/huizhou-gucheng-100k/pace-chart.svg) / [FIT-route plans](examples/huizhou-gucheng-100k/pace-chart-fit.svg) | [On the pre-race GPX](examples/huizhou-gucheng-100k/garmin-comparison.svg) / [On the recorded FIT](examples/huizhou-gucheng-100k/garmin-comparison2.svg) |
 | [Dajingmen DGW100K](examples/大境门/DGW100K/README.en.md): reproducible from the public KML | [10–24 hours](examples/大境门/DGW100K/pace-chart.svg) | — |
-| [Dajingmen MGW50K](examples/大境门/DGW50K/README.en.md): plans use the public elevation-filled copy; includes official-GPX and recorded-FIT post-race comparisons | [5–12.5 hours](examples/大境门/DGW50K/pace-chart.svg) / [Single 6:15 plan](examples/大境门/DGW50K/pace-chart-6h15m.svg) / [FIT-route plans](examples/大境门/DGW50K/pace-chart-fit.svg) | [Official GPX](examples/大境门/DGW50K/garmin-comparison.svg) / [Recorded FIT](examples/大境门/DGW50K/garmin-comparison2.svg) / [RunArt / repository / Garmin](examples/大境门/DGW50K/runart-comparison.svg) |
+| [Dajingmen MGW50K](examples/大境门/DGW50K/README.en.md): plans use the public elevation-filled copy; includes pre-race-GPX and recorded-FIT post-race comparisons | [5–12.5 hours](examples/大境门/DGW50K/pace-chart.svg) / [Single 6:15 plan](examples/大境门/DGW50K/pace-chart-6h15m.svg) / [FIT-route plans](examples/大境门/DGW50K/pace-chart-fit.svg) | [On the pre-race GPX](examples/大境门/DGW50K/garmin-comparison.svg) / [On the recorded FIT](examples/大境门/DGW50K/garmin-comparison2.svg) |
 
 Example notes include input provenance, configurations, files needed for reproduction, commands, and metric definitions.
 
@@ -64,11 +64,11 @@ python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate \
 
 This produces five plans for 13:00, 13:30, 14:00, 14:30, and 15:00 in `output/my-race/pace-chart.svg`. Git ignores `output/`; use `--overwrite` to replace existing results. When using your own route, resolve any route or checkpoint ambiguities reported by inspection first.
 
-## Post-race activity comparisons
+## Post-race activity comparison
 
 ![Huizhou Ancient City 100K: cumulative gap and selected segment times against the 16-hour plan](examples/huizhou-gucheng-100k/assets/comparison-preview.svg)
 
-This excerpt uses the recorded FIT route and the 16-hour plan. The [full comparison](examples/huizhou-gucheng-100k/garmin-comparison2.svg) includes 15h, 16h, and 17h plans plus segment ascent and descent. The [Dajingmen MGW50K notes](examples/大境门/DGW50K/README.en.md#post-race-activity-comparison) also include both official-GPX and recorded-FIT comparisons, showing how the route input changes the plans.
+This excerpt uses the recorded FIT route and the 16-hour plan. The [full comparison](examples/huizhou-gucheng-100k/garmin-comparison2.svg) includes 15h, 16h, and 17h plans plus segment ascent and descent. The [Dajingmen MGW50K notes](examples/大境门/DGW50K/README.en.md#post-race-activity-comparison) also include both pre-race-GPX and recorded-FIT comparisons, showing how the route input changes the plans.
 
 Give your assistant the race route, pace configuration, and recorded FIT activity:
 
