@@ -12,7 +12,7 @@
 
 ## 从我们分享的指南，到一张自己能用的跑表
 
-备战天地留白百公里时，跑友 yihouzenmeban（以后怎么办）参考耐力学社公开分享的[《耐力科学｜体感一致配速表全面指南》](https://mp.weixin.qq.com/s/spYCP-upbqAZN0kzUm-0ng)，借助 AI 编程助手，做出了一套跑表工具。
+备战徽州古城百公里时，跑友 yihouzenmeban（以后怎么办）参考耐力学社公开分享的[《耐力科学｜体感一致配速表全面指南》](https://mp.weixin.qq.com/s/spYCP-upbqAZN0kzUm-0ng)，借助 AI 编程助手，做出了一套跑表工具。
 
 10 月 31 日，他以 16 小时 46 分完赛。跑完以后，又拿手表记录和参考方案比了一遍，把工具用到了赛后复盘中。
 
@@ -20,13 +20,13 @@
 
 **赛前，把各站时间排出来**。提供比赛路线和目标完赛时间，就能生成跑表，查看各站的计划用时，也能同时列出几套方案作比较。
 
-![天地留白百公里赛前配速表示例](../../examples/tiandi-liubai-100k/pace-chart.svg)
+![徽州古城百公里赛前配速表示例](../../examples/huizhou-gucheng-100k/pace-chart.svg)
 
 *左侧看各段距离、爬升和地形，右侧每列对应一个完赛目标。每格上方是累计用时，括号内是上一段的参考配速。*
 
 **赛后，看看时间差在哪里**。导入手表记录，就能对照各段实际用了多久，比计划快了还是慢了，以及从哪里开始逐渐落后。
 
-![天地留白百公里赛后分站对比示例](../../examples/tiandi-liubai-100k/assets/comparison-preview.svg)
+![徽州古城百公里赛后分站对比示例](../../examples/huizhou-gucheng-100k/assets/comparison-preview.svg)
 
 *上方看累计进度，下方看单段耗时。绿色表示领先或更快，红色表示落后或更慢。*
 

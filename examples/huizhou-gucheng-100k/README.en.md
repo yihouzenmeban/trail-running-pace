@@ -1,4 +1,4 @@
-# Tiandi Liubai 100K example
+# Huizhou Ancient City 100K example
 
 [简体中文](README.md) | [English](README.en.md) | [Project home](../../README.en.md)
 
@@ -8,7 +8,7 @@ This example shows pre-race GPX pace charts and a post-race review based on the 
 
 | File | Contents and reproduction requirements |
 | --- | --- |
-| [天地留白100K.gpx](天地留白100K.gpx) | Race GPX track used for pre-race plans |
+| [徽州古城100K.gpx](徽州古城100K.gpx) | Race GPX track used for pre-race plans |
 | [config.json](config.json) | 12h, 13h, 14h, 15h, and 16h; a 2026-10-31 06:00 start; SVG, HTML, CSV, and JSON explicitly selected |
 | [pace-chart.svg](pace-chart.svg) | Generated from the public GPX and configuration, with segment pace in parentheses |
 | [garmin-comparison.svg](garmin-comparison.svg) | The same GPX compared with the Garmin activity using exact 15h, 16h, and 17h targets without modifying the original configuration |
@@ -19,18 +19,18 @@ The Garmin activity is “2026 徽州古城秋季赛” from October 31, 2026. E
 
 ## Reproduce the public GPX chart
 
-![Tiandi Liubai 100K: 12–16 hour pace charts generated from the public GPX](pace-chart.svg)
+![Huizhou Ancient City 100K: 12–16 hour pace charts generated from the public GPX](pace-chart.svg)
 
 Requires Python 3.10+. Run from the repository root:
 
 ```bash
 python3 skills/even-effort-pace-chart/scripts/pace_chart.py inspect \
-  'examples/tiandi-liubai-100k/天地留白100K.gpx'
+  'examples/huizhou-gucheng-100k/徽州古城100K.gpx'
 
 python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate \
-  'examples/tiandi-liubai-100k/天地留白100K.gpx' \
-  --config examples/tiandi-liubai-100k/config.json \
-  --output-dir output/tiandi-liubai-100k
+  'examples/huizhou-gucheng-100k/徽州古城100K.gpx' \
+  --config examples/huizhou-gucheng-100k/config.json \
+  --output-dir output/huizhou-gucheng-100k
 ```
 
 This example generates SVG, HTML, CSV, and JSON in Git-ignored `output/`. Add `--overwrite` to replace existing files.
@@ -39,7 +39,7 @@ This example generates SVG, HTML, CSV, and JSON in Git-ignored `output/`. Add `-
 
 The two activity charts use the same actual checkpoint passage times but build plans on different routes:
 
-![Tiandi Liubai 100K: recorded FIT route plans for 15h, 16h, and 17h compared with the Garmin activity](garmin-comparison2.svg)
+![Huizhou Ancient City 100K: recorded FIT route plans for 15h, 16h, and 17h compared with the Garmin activity](garmin-comparison2.svg)
 
 The chart above rebuilds plans on the recorded FIT route. The [pre-race GPX comparison](garmin-comparison.svg) retains the pre-race route, making it possible to compare the effect of route inputs.
 

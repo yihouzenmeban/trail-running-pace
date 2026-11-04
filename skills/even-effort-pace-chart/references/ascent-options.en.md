@@ -20,7 +20,7 @@ Ascent for three race routes is shown below in metres. All five methods used the
 
 | Route | Legacy 100 m | No averaging + 10 m | 40 m + 10 m | 20 m + 10 m | 10 m + 10 m |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| Tiandi Liubai 100K | 5331.6 | 5965.5 | 5521.0 | 5768.6 | 5852.6 |
+| Huizhou Ancient City 100K | 5331.6 | 5965.5 | 5521.0 | 5768.6 | 5852.6 |
 | Dajingmen DGW100K | 3635.0 | 3729.0 | 3575.0 | 3651.8 | 3680.8 |
 | Dajingmen MGW50K | 1900.8 | 1960.0 | 1867.8 | 1929.3 | 1949.9 |
 
@@ -28,7 +28,7 @@ These are historical experiment snapshots: `28270dc` for legacy, `461ace7` for n
 
 The full repository now includes the MGW50K [original GPX](../../../examples/大境门/DGW50K/2026京东大境门古长城越野赛by%20UTMB®MGW50K.gpx), [elevation-filled copy](../../../examples/大境门/DGW50K/MGW50K-elevation-filled.gpx), and [repair report](../../../examples/大境门/DGW50K/elevation-repair.json). All methods in the table used that same distance-interpolated copy, filling 59 missing elevations across gaps of approximately 835 m and 34 m. Missing terrain cannot be recovered. Public-route reproduction commands are in the example notes; independently installed Skills do not need these case files.
 
-## Tiandi Liubai before and after the race
+## Huizhou Ancient City before and after the race
 
 ### Pre-race GPX inspection
 
@@ -44,7 +44,7 @@ After the October 31, 2026 race, recomputing the route from recorded FIT device 
 
 With the same no-averaging + 10 m algorithm, CP3→CP4 ascent changed from 844.8 m on the GPX to 635.2 m on the FIT, and CP5→CP6 changed from 722.6 m to 273.0 m. Position comparisons show multi-point oscillations on the original GPX with smaller fluctuations at corresponding FIT locations. Continuous oscillations above the threshold still count; no isolated spikes does not imply error-free input.
 
-This adds comparative evidence, not surveyed elevation validation or an automatic change to defaults. See the [Tiandi Liubai example](../../../examples/tiandi-liubai-100k/README.en.md#post-race-fit-comparison) for full segment ascent/descent and pacing effects. The personal FIT is not published, so that part is available for viewing and understanding metric definitions only.
+This adds comparative evidence, not surveyed elevation validation or an automatic change to defaults. See the [Huizhou Ancient City example](../../../examples/huizhou-gucheng-100k/README.en.md#post-race-fit-comparison) for full segment ascent/descent and pacing effects. The personal FIT is not published, so that part is available for viewing and understanding metric definitions only.
 
 ## Selecting a method
 

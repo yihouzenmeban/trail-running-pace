@@ -1,4 +1,4 @@
-# 天地留白 100K 示例
+# 徽州古城 100K 示例
 
 [简体中文](README.md) | [English](README.en.md) | [项目首页](../../README.md)
 
@@ -8,7 +8,7 @@
 
 | 文件 | 内容与复现条件 |
 | --- | --- |
-| [天地留白100K.gpx](天地留白100K.gpx) | 比赛 GPX 轨迹，作为赛前方案输入 |
+| [徽州古城100K.gpx](徽州古城100K.gpx) | 比赛 GPX 轨迹，作为赛前方案输入 |
 | [config.json](config.json) | 12、13、14、15、16 小时；2026-10-31 06:00 出发；显式导出 SVG、HTML、CSV、JSON |
 | [pace-chart.svg](pace-chart.svg) | 使用公开 GPX 和上述配置生成，括号内为区间配速 |
 | [garmin-comparison.svg](garmin-comparison.svg) | 同一 GPX 与佳明实际活动对比，参照目标改为 15、16、17 小时，不改写原配置 |
@@ -19,18 +19,18 @@
 
 ## 复现公开 GPX 配速表
 
-![天地留白 100K：公开 GPX 生成的 12–16 小时配速表](pace-chart.svg)
+![徽州古城 100K：公开 GPX 生成的 12–16 小时配速表](pace-chart.svg)
 
 需要 Python 3.10+，在仓库根目录执行：
 
 ```bash
 python3 skills/even-effort-pace-chart/scripts/pace_chart.py inspect \
-  'examples/tiandi-liubai-100k/天地留白100K.gpx'
+  'examples/huizhou-gucheng-100k/徽州古城100K.gpx'
 
 python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate \
-  'examples/tiandi-liubai-100k/天地留白100K.gpx' \
-  --config examples/tiandi-liubai-100k/config.json \
-  --output-dir output/tiandi-liubai-100k
+  'examples/huizhou-gucheng-100k/徽州古城100K.gpx' \
+  --config examples/huizhou-gucheng-100k/config.json \
+  --output-dir output/huizhou-gucheng-100k
 ```
 
 这份示例配置生成 SVG、HTML、CSV、JSON 四种格式，写入被 Git 忽略的 `output/`。替换已有文件时加 `--overwrite`。
@@ -39,7 +39,7 @@ python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate \
 
 两张活动对比图使用相同的实际 CP 经过时刻，但方案所依据的路线不同：
 
-![天地留白 100K：实际 FIT 路线的 15、16、17 小时方案与佳明活动对比](garmin-comparison2.svg)
+![徽州古城 100K：实际 FIT 路线的 15、16、17 小时方案与佳明活动对比](garmin-comparison2.svg)
 
 上图按实际 FIT 路线重算方案；[赛前 GPX 对比图](garmin-comparison.svg)保留赛前路线，便于对照路线输入带来的差异。
 

@@ -1,9 +1,9 @@
 {
   "schema_version": 2,
-  "name": "天地留白100K",
+  "name": "徽州古城100K",
   "source": {
-    "filename": "天地留白100K.gpx",
-    "sha256": "ee367c29a29ed1903f4cc2e368d7bc049a026ba532d8eb77b9b6e06be1f0e0fa"
+    "filename": "徽州古城100K.gpx",
+    "sha256": "9ac42f8d0c01617b7691022ae924950c732ebb56a8de3d9120be8fc51f5295ed"
   },
   "article": {
     "title": "耐力科学|体感一致配速表全面指南",
@@ -11,7 +11,7 @@
     "url": "https://mp.weixin.qq.com/s/spYCP-upbqAZN0kzUm-0ng"
   },
   "configuration": {
-    "name": "天地留白100K",
+    "name": "徽州古城100K",
     "start_time": "2026-10-31 06:00",
     "pace_basis": "distance",
     "output_formats": [

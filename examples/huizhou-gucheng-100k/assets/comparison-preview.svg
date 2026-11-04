@@ -1,10 +1,10 @@
 <?xml version='1.0' encoding='utf-8'?>
 <svg xmlns="http://www.w3.org/2000/svg" width="1040" height="790" viewBox="0 0 1040 790" role="img" aria-labelledby="title description" lang="zh-CN">
-  <title id="title">天地留白 100K · 16 小时方案赛后对比（局部）</title>
+  <title id="title">徽州古城 100K · 16 小时方案赛后对比（局部）</title>
   <desc id="description">从 garmin-comparison2.svg 摘取实际 FIT 路线的 16 小时方案累计差距曲线，并列出 CP3→CP4、CP5→CP6 的实际和预计本段耗时。完整图见同目录。</desc>
   <style>text{font-family:"PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif;font-variant-numeric:tabular-nums}</style>
   <rect x="0" y="0" width="1040" height="790" fill="#FFFFFF" rx="0" />
-  <text x="32" y="48" font-size="28" fill="#202A35" font-weight="700" text-anchor="start">天地留白 100K · 16 小时方案</text>
+  <text x="32" y="48" font-size="28" fill="#202A35" font-weight="700" text-anchor="start">徽州古城 100K · 16 小时方案</text>
   <text x="32" y="82" font-size="20" fill="#626D79" font-weight="400" text-anchor="start">实际完赛 16:46:04 · 绿色领先 / 更快，红色落后 / 更慢</text>
   <text x="32" y="124" font-size="21" fill="#202A35" font-weight="650" text-anchor="start">累计差距 · 方案 − 实际</text>
   <svg x="24" y="144" width="992" height="427" viewBox="936 460 848 390">

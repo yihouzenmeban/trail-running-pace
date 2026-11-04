@@ -8,11 +8,11 @@
 
 ## 效果预览
 
-![天地留白100K 配速表示例](examples/tiandi-liubai-100k/pace-chart.svg)
+![徽州古城100K 配速表示例](examples/huizhou-gucheng-100k/pace-chart.svg)
 
 | 示例与说明 | 配速表 | 活动对比 |
 | --- | --- | --- |
-| [天地留白 100K](examples/tiandi-liubai-100k/README.md)：GPX 制表与 FIT 赛后复盘 | [GPX 方案](examples/tiandi-liubai-100k/pace-chart.svg) / [FIT 路线方案](examples/tiandi-liubai-100k/pace-chart-fit.svg) | [按赛前 GPX](examples/tiandi-liubai-100k/garmin-comparison.svg) / [按实际 FIT](examples/tiandi-liubai-100k/garmin-comparison2.svg) |
+| [徽州古城 100K](examples/huizhou-gucheng-100k/README.md)：GPX 制表与 FIT 赛后复盘 | [GPX 方案](examples/huizhou-gucheng-100k/pace-chart.svg) / [FIT 路线方案](examples/huizhou-gucheng-100k/pace-chart-fit.svg) | [按赛前 GPX](examples/huizhou-gucheng-100k/garmin-comparison.svg) / [按实际 FIT](examples/huizhou-gucheng-100k/garmin-comparison2.svg) |
 | [大境门 DGW100K](examples/大境门/DGW100K/README.md)：公开 KML 可复现 | [10–24 小时](examples/大境门/DGW100K/pace-chart.svg) | — |
 | [大境门 MGW50K](examples/大境门/DGW50K/README.md)：使用公开的海拔补全副本生成配速表，三方对比为历史参考图 | [5–12.5 小时](examples/大境门/DGW50K/pace-chart.svg) / [6:15 单列](examples/大境门/DGW50K/pace-chart-6h15m.svg) | [耐力学社 / 仓库 / 佳明](examples/大境门/DGW50K/runart-comparison.svg) |
 
@@ -54,10 +54,10 @@ $even-effort-pace-chart
 
 ```bash
 python3 skills/even-effort-pace-chart/scripts/pace_chart.py inspect \
-  'examples/tiandi-liubai-100k/天地留白100K.gpx'
+  'examples/huizhou-gucheng-100k/徽州古城100K.gpx'
 
 python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate \
-  'examples/tiandi-liubai-100k/天地留白100K.gpx' \
+  'examples/huizhou-gucheng-100k/徽州古城100K.gpx' \
   --config race.json --output-dir output/my-race
 ```
 
@@ -65,9 +65,9 @@ python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate \
 
 ## 赛后活动对比
 
-![天地留白 100K：16 小时方案累计差距与部分区间耗时](examples/tiandi-liubai-100k/assets/comparison-preview.svg)
+![徽州古城 100K：16 小时方案累计差距与部分区间耗时](examples/huizhou-gucheng-100k/assets/comparison-preview.svg)
 
-上图截取基于实际 FIT 路线的 16 小时方案；[完整对比图](examples/tiandi-liubai-100k/garmin-comparison2.svg)包含 15、16、17 小时方案及各段爬升、下降。
+上图截取基于实际 FIT 路线的 16 小时方案；[完整对比图](examples/huizhou-gucheng-100k/garmin-comparison2.svg)包含 15、16、17 小时方案及各段爬升、下降。
 
 向助手提供比赛轨迹、配速配置和活动 FIT，例如：
 

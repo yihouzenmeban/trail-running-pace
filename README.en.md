@@ -8,11 +8,11 @@ The approach draws on [《耐力科学｜体感一致配速表全面指南》](h
 
 ## Preview
 
-![Tiandi Liubai 100K pace chart](examples/tiandi-liubai-100k/pace-chart.svg)
+![Huizhou Ancient City 100K pace chart](examples/huizhou-gucheng-100k/pace-chart.svg)
 
 | Example and notes | Pace charts | Activity comparisons |
 | --- | --- | --- |
-| [Tiandi Liubai 100K](examples/tiandi-liubai-100k/README.en.md): GPX planning and post-race FIT review | [GPX plans](examples/tiandi-liubai-100k/pace-chart.svg) / [FIT-route plans](examples/tiandi-liubai-100k/pace-chart-fit.svg) | [On the pre-race GPX](examples/tiandi-liubai-100k/garmin-comparison.svg) / [On the recorded FIT](examples/tiandi-liubai-100k/garmin-comparison2.svg) |
+| [Huizhou Ancient City 100K](examples/huizhou-gucheng-100k/README.en.md): GPX planning and post-race FIT review | [GPX plans](examples/huizhou-gucheng-100k/pace-chart.svg) / [FIT-route plans](examples/huizhou-gucheng-100k/pace-chart-fit.svg) | [On the pre-race GPX](examples/huizhou-gucheng-100k/garmin-comparison.svg) / [On the recorded FIT](examples/huizhou-gucheng-100k/garmin-comparison2.svg) |
 | [Dajingmen DGW100K](examples/大境门/DGW100K/README.en.md): reproducible from the public KML | [10–24 hours](examples/大境门/DGW100K/pace-chart.svg) | — |
 | [Dajingmen MGW50K](examples/大境门/DGW50K/README.en.md): plans use the public elevation-filled copy; the three-source comparison is a historical reference | [5–12.5 hours](examples/大境门/DGW50K/pace-chart.svg) / [Single 6:15 plan](examples/大境门/DGW50K/pace-chart-6h15m.svg) | [RunArt / repository / Garmin](examples/大境门/DGW50K/runart-comparison.svg) |
 
@@ -55,10 +55,10 @@ Inspect the public example route, then generate the chart:
 
 ```bash
 python3 skills/even-effort-pace-chart/scripts/pace_chart.py inspect \
-  'examples/tiandi-liubai-100k/天地留白100K.gpx'
+  'examples/huizhou-gucheng-100k/徽州古城100K.gpx'
 
 python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate \
-  'examples/tiandi-liubai-100k/天地留白100K.gpx' \
+  'examples/huizhou-gucheng-100k/徽州古城100K.gpx' \
   --config race.json --output-dir output/my-race
 ```
 
@@ -66,9 +66,9 @@ This produces five plans for 13:00, 13:30, 14:00, 14:30, and 15:00 in `output/my
 
 ## Post-race activity comparisons
 
-![Tiandi Liubai 100K: cumulative gap and selected segment times against the 16-hour plan](examples/tiandi-liubai-100k/assets/comparison-preview.svg)
+![Huizhou Ancient City 100K: cumulative gap and selected segment times against the 16-hour plan](examples/huizhou-gucheng-100k/assets/comparison-preview.svg)
 
-This excerpt uses the recorded FIT route and the 16-hour plan. The [full comparison](examples/tiandi-liubai-100k/garmin-comparison2.svg) includes 15h, 16h, and 17h plans plus segment ascent and descent.
+This excerpt uses the recorded FIT route and the 16-hour plan. The [full comparison](examples/huizhou-gucheng-100k/garmin-comparison2.svg) includes 15h, 16h, and 17h plans plus segment ascent and descent.
 
 Give your assistant the race route, pace configuration, and recorded FIT activity:
 

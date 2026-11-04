@@ -539,8 +539,8 @@ class CheckpointTests(Fixture):
             self.assertAlmostEqual(sum(cp["grade_fractions"]), 1)
 
 
-EXAMPLE_DIR = SCRIPT.parents[3] / "examples" / "tiandi-liubai-100k"
-REAL_GPX = EXAMPLE_DIR / "天地留白100K.gpx"
+EXAMPLE_DIR = SCRIPT.parents[3] / "examples" / "huizhou-gucheng-100k"
+REAL_GPX = EXAMPLE_DIR / "徽州古城100K.gpx"
 KML_EXAMPLE_DIR = SCRIPT.parents[3] / "examples" / "大境门" / "DGW100K"
 REAL_KML = KML_EXAMPLE_DIR / "2026京东大境门古长城越野赛by UTMB®DGW100K.kml"
 
