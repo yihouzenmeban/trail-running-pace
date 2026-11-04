@@ -2,7 +2,7 @@
 
 [简体中文](README.md) | [English](README.en.md) | [项目首页](../../../README.md)
 
-目录沿用 `DGW50K` 名称，轨迹与图表保留赛事组别 `MGW50K`。公开文件可复现两份配速表；三方合并对比图为人工整理的历史参考图。
+目录沿用 `DGW50K` 名称，轨迹与图表保留赛事组别 `MGW50K`。公开文件可复现两份 GPX 配速表；实际 FIT 路线方案与赛后对比图使用个人活动记录，原始 FIT 未公开；三方合并对比图为人工整理的历史参考图。
 
 ## 输入与海拔修复
 
@@ -16,8 +16,9 @@
 | --- | --- | --- |
 | [config.json](config.json) | 5–12.5 小时，每隔 30 分钟，共 16 组 | [pace-chart.svg](pace-chart.svg) |
 | [config-6h15m.json](config-6h15m.json) | 仅 6 小时 15 分钟 | [pace-chart-6h15m.svg](pace-chart-6h15m.svg) |
+| [config-fit.json](config-fit.json) | 6:00、6:15、6:30，使用实际 FIT 设备距离与海拔；人工 CP 仅适用于该次记录 | [pace-chart-fit.svg](pace-chart-fit.svg) |
 
-两份配置均使用默认的 SVG、06:00 出发和括号内区间配速，并明确选择本轨迹的 CP ID。
+前两份 GPX 配置均使用默认的 SVG、06:00 出发和括号内区间配速，并明确选择本轨迹的 CP ID；FIT 配置使用实际记录的设备距离轴和人工 CP。
 
 ![大境门 MGW50K：6 小时 15 分钟单目标配速表](pace-chart-6h15m.svg)
 
@@ -40,6 +41,57 @@ python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate \
 
 输出写入被 Git 忽略的 `output/`，替换已有结果时加 `--overwrite`。
 
+## 赛后活动对比
+
+两版对比图使用同一次 2026-09-12 佳明活动，差别只在路线输入：
+
+| 图表 / 配置 | 路线输入 | 说明 |
+| --- | --- | --- |
+| [garmin-comparison.svg](garmin-comparison.svg) | 官方 GPX（海拔补全副本） | 对照 6:00、6:15、6:30；不改写 `config-6h15m.json` |
+| [garmin-comparison2.svg](garmin-comparison2.svg) | 实际 FIT 设备距离与逐点海拔 | 同一批目标，按 FIT 路线重算方案 |
+| [config-fit.json](config-fit.json) / [pace-chart-fit.svg](pace-chart-fit.svg) | 实际 FIT 路线 | 6:00、6:15、6:30 方案；人工 CP 仅适用于该次记录 |
+
+| 口径 | 官方 GPX 路线 | 实际 FIT 路线 | 佳明实际统计 |
+| --- | ---: | ---: | ---: |
+| 全程距离 | 52.20 km | 52.57 km | 52.57 km |
+| 累计爬升 | 1960 m | 2043 m | 2205 m |
+| 累计下降 | 1996 m | 2049 m | 2216 m |
+
+实际完赛 6:14:15，比 6:15 方案快 45 秒；前 42.6 km 领先 18:46，最后 9.85 km 慢 18:00。
+
+| 目标 | GPX 方案 M5 领先 | FIT 方案 M5 领先 | 终点差（两版相同） |
+| --- | ---: | ---: | ---: |
+| 6:00 | 7:12 | 6:20 | 落后 14:15 |
+| 6:15 | 18:46 | 17:51 | 领先 0:45 |
+| 6:30 | 30:19 | 29:23 | 领先 15:45 |
+
+个人原始 FIT 未公开；CP 时刻为轨迹投影，不是官方打卡。用自己的 FIT 复现同类对比：
+
+```bash
+python3 -m pip install -r skills/even-effort-pace-chart/scripts/requirements-comparison.txt
+
+# 官方 GPX 路线对比
+python3 skills/even-effort-pace-chart/scripts/compare_activity.py generate \
+  'examples/大境门/DGW50K/MGW50K-elevation-filled.gpx' \
+  --config 'examples/大境门/DGW50K/config-6h15m.json' \
+  --fit activity.fit \
+  --targets 06:00 06:15 06:30 --output-dir output/dgw50k-comparison
+
+# 实际 FIT 路线方案与同一次活动对比
+python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate \
+  activity.fit \
+  --config 'examples/大境门/DGW50K/config-fit.json' \
+  --output-dir output/dgw50k-fit
+
+python3 skills/even-effort-pace-chart/scripts/compare_activity.py generate \
+  activity.fit \
+  --config 'examples/大境门/DGW50K/config-fit.json' \
+  --fit activity.fit \
+  --targets 06:00 06:15 06:30 --output-dir output/dgw50k-fit-comparison
+```
+
+有佳明活动详情时可加 `--summary activity-details.json`，终点汇总优先采用平台数据。按实际 FIT 重算时，需要在该次活动的设备距离轴上重新定义 CP；`config-fit.json` 仅适用于这次记录，不能直接套用到其他活动。图中经过时间包含停留；差值方向和读图方式见[活动对比文档](../../../skills/even-effort-pace-chart/references/comparison.md)。
+
 ## 三方历史参考图
 
 [runart-comparison.svg](runart-comparison.svg) 包含耐力学社 / RunArt.Net 配速表截图中的数据、本仓库方案、佳明 2026-09-12 大境门活动，依次展示：
@@ -52,4 +104,4 @@ python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate \
 
 图中的经过时间包含停留，中间站地形由 FIT 逐圈数据按距离插值，再由相邻累计值相减估算；终点采用平台汇总，先相减再取整。个人原始 FIT 未公开。
 
-三方合并图仅提供 SVG；用自己的 FIT 生成方案与实际活动的对照图，见[活动对比文档](../../../skills/even-effort-pace-chart/references/comparison.md)。
+三方合并图仅提供 SVG；两版赛后对比图使用个人 FIT 生成，原始 FIT 未公开。用自己的 FIT 生成同类图，见[活动对比文档](../../../skills/even-effort-pace-chart/references/comparison.md)。

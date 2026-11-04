@@ -1,0 +1,676 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2720" height="2734" viewBox="0 0 2720 2734" role="img" aria-labelledby="title description">
+<title id="title">大境门 MGW50K · 6 小时 15 分钟：佳明实际与仓库方案对比</title>
+<desc id="description">每个目标上方为累计领先或落后曲线，下方为各区间快慢正负柱图；耗时表以 CP 为行，站名与累计里程合并为首列。实际列展示本段耗时，各预计列展示本段耗时和实际减预计的差额，均加粗并保留到秒；累计经过时间保留在提示中。预计本段耗时及差额红色表示佳明实际更慢，绿色表示实际更快或持平。赛道数据包括全程汇总及分段爬升、下降分组柱图。绿色表示实际领先或本段更快，红色表示实际落后或本段更慢；累计曲线零线上方领先、下方落后。分段柱图零线上方快、下方慢；赛道图用深灰表示佳明、蓝色表示仓库。时间含停留，差值先计算再取整。</desc>
+<metadata>{&quot;route_sha256&quot;: &quot;bc2c65f40f9de9a68f378641454db541640cbad660befee3e96e0e8ea49a613e&quot;, &quot;config_sha256&quot;: &quot;d262a78f580eaff8284a314caaf364f697e55919b178d6bafb8433e1d59f499e&quot;, &quot;activity_id&quot;: 24328274164, &quot;activity_date&quot;: &quot;2026-09-12T06:01:32.0&quot;, &quot;targets_seconds&quot;: [21600.0, 22500.0, 23400.0], &quot;fit_sha256&quot;: &quot;4256e645d4df026f66e6cc5ca27b08fb9046a4d86d145545dd8175b7ea5929ef&quot;, &quot;summary_sha256&quot;: &quot;aaf9b0b3e1afcee0f02b40d58a23ca7181fff0958d19ff916c8662aa21b00307&quot;, &quot;time_basis&quot;: &quot;Elapsed including stops; projected passage, not official timing&quot;, &quot;delta&quot;: &quot;repository minus recorded activity&quot;, &quot;terrain&quot;: &quot;Cumulative distance; per-segment ascent/descent from adjacent lap estimates&quot;, &quot;warnings&quot;: [&quot;ascent_m: FIT laps 2204.0, finish 2205.0; no rescaling.&quot;], &quot;passage_overrides&quot;: {}, &quot;route_diagnostics&quot;: {&quot;quality_flagged_points&quot;: 0, &quot;quality_metadata_points&quot;: 0, &quot;invalid_quality_fields&quot;: 0, &quot;source_points&quot;: 4548, &quot;original_distance_m&quot;: 52197.07063803112, &quot;processed_distance_m&quot;: 52197.07063803112, &quot;distance_removed_m&quot;: 0.0, &quot;spacing_min_m&quot;: 0.3661038800055394, &quot;spacing_median_m&quot;: 10.831492161214555, &quot;spacing_max_m&quot;: 47.5362961950741, &quot;distance_trial_tolerance_m&quot;: 5.0, &quot;distance_trial_m&quot;: 51642.176000562555, &quot;geometry_vertices&quot;: 4527, &quot;elevation_spikes_corrected&quot;: 0, &quot;elevation_spike_indices&quot;: [], &quot;original_ascent_m&quot;: 2442.727, &quot;cleaned_ascent_m&quot;: 2442.727}, &quot;data_notes&quot;: [&quot;来源：路线与现有配速模型；实际活动 2026-09-12「张家口市 越野跑」。汇总来源：Garmin platform + FIT session fallback。&quot;, &quot;CP 经过时间由原始 FIT 轨迹投影或明确指定的实际耗时得到，包含停留，非官方打卡；无法可靠拆分站内停留。&quot;, &quot;佳明分站累计爬升、下降按 FIT 逐圈距离插值；本段值为相邻站累计值之差。终点使用活动汇总，未按比例调整。&quot;, &quot;FIT 逐圈爬升 / 下降：2204 / 2216 m；汇总：2205 / 2216 m。差值使用未取整原值；分段显示值之和可能有取整误差；缺失值为 —。&quot;, &quot;数据提示：ascent_m: FIT laps 2204.0, finish 2205.0; no rescaling.&quot;], &quot;time_display&quot;: &quot;actual ahead/faster when plan minus actual is positive; behind/slower when negative&quot;, &quot;checkpoint_matches&quot;: [{&quot;id&quot;: &quot;wpt:1:start&quot;, &quot;offset_m&quot;: 6.134374996071338, &quot;method&quot;: &quot;session endpoint&quot;}, {&quot;id&quot;: &quot;wpt:2&quot;, &quot;offset_m&quot;: 2.8816585681332625, &quot;method&quot;: &quot;track projection&quot;}, {&quot;id&quot;: &quot;wpt:3&quot;, &quot;offset_m&quot;: 0.3566877277877865, &quot;method&quot;: &quot;track projection&quot;}, {&quot;id&quot;: &quot;wpt:4&quot;, &quot;offset_m&quot;: 0.9640241416785204, &quot;method&quot;: &quot;track projection&quot;}, {&quot;id&quot;: &quot;wpt:5&quot;, &quot;offset_m&quot;: 12.63720230266167, &quot;method&quot;: &quot;track projection&quot;}, {&quot;id&quot;: &quot;wpt:6&quot;, &quot;offset_m&quot;: 5.808105473709306, &quot;method&quot;: &quot;track projection&quot;}, {&quot;id&quot;: &quot;wpt:1:finish&quot;, &quot;offset_m&quot;: 8.681053460958946, &quot;method&quot;: &quot;session endpoint&quot;}]}</metadata>
+<style>text{font-family:"PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif;font-variant-numeric:tabular-nums}.inspectable,.delta-point{outline:none}.delta-point:hover,.delta-point:focus{r:8;stroke:#202A35}.inspectable:hover rect[data-delta-seconds],.inspectable:focus rect[data-delta-seconds]{stroke:#202A35;stroke-width:2}.inspectable:hover > rect[data-series],.inspectable:focus > rect[data-series]{stroke:#202A35;stroke-width:2}.inspectable:focus > text{text-decoration:underline}#data-notes:focus text{text-decoration:underline}</style>
+<rect x="0" y="0" width="2720" height="2734" rx="0" fill="#F7F8FA"/>
+<rect x="0" y="0" width="2720" height="6" rx="0" fill="#202A35"/>
+<text x="64" y="78" font-size="45" fill="#202A35" font-weight="700" text-anchor="start">大境门 MGW50K · 6 小时 15 分钟</text>
+<text x="2656" y="76" font-size="30" fill="#202A35" font-weight="400" text-anchor="end">佳明实际 × 仓库方案</text>
+<text x="64" y="125.0" font-size="24" fill="#202A35" font-weight="400" text-anchor="start">2026-09-12 · 张家口市 越野跑</text>
+<rect x="64.0" y="157" width="630.0" height="126" rx="13" fill="#ffffff"/>
+<text x="88.0" y="191" font-size="21" fill="#626D79" font-weight="400" text-anchor="start">实际完赛时间</text>
+<text x="88.0" y="242" font-size="40" fill="#202A35" font-weight="700" text-anchor="start">06:14:15</text>
+<text x="88.0" y="269" font-size="18" fill="#626D79" font-weight="400" text-anchor="start">经过时间 · 包含停留</text>
+<rect x="718.0" y="157" width="630.0" height="126" rx="13" fill="#FCEEEE"/>
+<text x="742.0" y="191" font-size="23" fill="#202A35" font-weight="600" text-anchor="start">对照 06:00 方案</text>
+<text class="finish-status" x="742.0" y="245" font-size="31" fill="#C23B38" font-weight="700" text-anchor="start">实际落后 00:14:15</text>
+<rect x="1372.0" y="157" width="630.0" height="126" rx="13" fill="#EAF6EF"/>
+<text x="1396.0" y="191" font-size="23" fill="#202A35" font-weight="600" text-anchor="start">对照 06:15 方案</text>
+<text class="finish-status" x="1396.0" y="245" font-size="31" fill="#087F5B" font-weight="700" text-anchor="start">实际领先 00:00:45</text>
+<rect x="2026.0" y="157" width="630.0" height="126" rx="13" fill="#EAF6EF"/>
+<text x="2050.0" y="191" font-size="23" fill="#202A35" font-weight="600" text-anchor="start">对照 06:30 方案</text>
+<text class="finish-status" x="2050.0" y="245" font-size="31" fill="#087F5B" font-weight="700" text-anchor="start">实际领先 00:15:45</text>
+<g id="time-advantage">
+<text x="64" y="335" font-size="30" fill="#202A35" font-weight="700" text-anchor="start">01  时间表现</text>
+<text x="64" y="377" font-size="22" fill="#626D79" font-weight="400" text-anchor="start">累计差距：绿色领先、红色落后；零线 = 与计划一致</text>
+<text x="2656" y="377" font-size="22" fill="#626D79" font-weight="400" text-anchor="end">上图看累计差距，下图看每段快慢 · 同类图共用刻度</text>
+<g class="target-panel" data-target-seconds="21600.0" data-column="0" data-row="0">
+<rect x="64.0" y="410" width="848.0" height="790" rx="12" fill="#FFFFFF"/>
+<text x="92.0" y="453" font-size="26" fill="#202A35" font-weight="700" text-anchor="start">06:00 方案 · 累计差距</text>
+<text x="884.0" y="453" font-size="19" fill="#626D79" font-weight="400" text-anchor="end">上方领先 · 下方落后</text>
+<g data-kind="cumulative" data-x-min="144.0" data-x-max="880.0" data-y-top="500" data-y-bottom="760" data-zero-y="630.0" data-pixels-per-second="0.05416666666666667" data-limit-seconds="2400">
+<rect x="144.0" y="500" width="736.0" height="130.0" rx="0" fill="#F3FAF6"/>
+<rect x="144.0" y="630.0" width="736.0" height="130.0" rx="0" fill="#FEF5F5"/>
+<path d="M144.000 500.000 L880.000 500.000" fill="none" stroke="#E0E6E9" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 5"/>
+<text x="132.0" y="506.0" font-size="18" fill="#626D79" font-weight="400" text-anchor="end">+40</text>
+<path d="M144.000 565.000 L880.000 565.000" fill="none" stroke="#E0E6E9" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 5"/>
+<text x="132.0" y="571.0" font-size="18" fill="#626D79" font-weight="400" text-anchor="end">+20</text>
+<path d="M144.000 630.000 L880.000 630.000" fill="none" stroke="#A1ABB5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-role="zero-line"/>
+<text x="132.0" y="636.0" font-size="18" fill="#626D79" font-weight="400" text-anchor="end">0</text>
+<path d="M144.000 695.000 L880.000 695.000" fill="none" stroke="#E0E6E9" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 5"/>
+<text x="132.0" y="701.0" font-size="18" fill="#626D79" font-weight="400" text-anchor="end">-20</text>
+<path d="M144.000 760.000 L880.000 760.000" fill="none" stroke="#E0E6E9" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 5"/>
+<text x="132.0" y="766.0" font-size="18" fill="#626D79" font-weight="400" text-anchor="end">-40</text>
+<text x="144.0" y="486" font-size="17" fill="#626D79" font-weight="400" text-anchor="start">分钟</text>
+<path d="M144.000 630.000 L144.000 630.000 L254.388 637.663 L254.388 630.000 Z" fill="#C23B38" opacity=".12"/>
+<path d="M144.000 630.000 L254.388 637.663" fill="none" stroke="#C23B38" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M254.388 630.000 L254.388 637.663 L341.649 634.923 L341.649 630.000 Z" fill="#C23B38" opacity=".12"/>
+<path d="M254.388 637.663 L341.649 634.923" fill="none" stroke="#C23B38" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M341.649 630.000 L341.649 634.923 L388.470 630.000 L388.470 630.000 Z" fill="#C23B38" opacity=".12"/>
+<path d="M341.649 634.923 L388.470 630.000" fill="none" stroke="#C23B38" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M388.470 630.000 L388.470 630.000 L507.201 617.516 L507.201 630.000 Z" fill="#087F5B" opacity=".12"/>
+<path d="M388.470 630.000 L507.201 617.516" fill="none" stroke="#087F5B" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M507.201 630.000 L507.201 617.516 L609.218 603.104 L609.218 630.000 Z" fill="#087F5B" opacity=".12"/>
+<path d="M507.201 617.516 L609.218 603.104" fill="none" stroke="#087F5B" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M609.218 630.000 L609.218 603.104 L741.256 606.614 L741.256 630.000 Z" fill="#087F5B" opacity=".12"/>
+<path d="M609.218 603.104 L741.256 606.614" fill="none" stroke="#087F5B" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M741.256 630.000 L741.256 606.614 L787.823 630.000 L787.823 630.000 Z" fill="#087F5B" opacity=".12"/>
+<path d="M741.256 606.614 L787.823 630.000" fill="none" stroke="#087F5B" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M787.823 630.000 L787.823 630.000 L880.000 676.290 L880.000 630.000 Z" fill="#C23B38" opacity=".12"/>
+<path d="M787.823 630.000 L880.000 676.290" fill="none" stroke="#C23B38" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<circle class="delta-point" tabindex="0" cx="144.000" cy="630.000" r="5" fill="#626D79" stroke="#FFFFFF" stroke-width="2" data-delta-seconds="0.0" aria-label="起终点-大境门（起点）：持平 00:00:00；实际 00:00:00；计划 00:00:00"><title>起终点-大境门（起点）：持平 00:00:00；实际 00:00:00；计划 00:00:00</title></circle>
+<text x="144.0" y="788" font-size="17" fill="#626D79" font-weight="400" text-anchor="middle">起点</text>
+<text x="144.0" y="809" font-size="15" fill="#626D79" font-weight="400" text-anchor="middle">0.0</text>
+<circle class="delta-point" tabindex="0" cx="254.388" cy="637.663" r="5" fill="#C23B38" stroke="#FFFFFF" stroke-width="2" data-delta-seconds="-141.47695790879743" aria-label="M1四岔村7.9：实际落后 00:02:21；实际 00:47:33；计划 00:45:11"><title>M1四岔村7.9：实际落后 00:02:21；实际 00:47:33；计划 00:45:11</title></circle>
+<text x="254.38758809353666" y="788" font-size="17" fill="#626D79" font-weight="400" text-anchor="middle">M1四岔村7.9</text>
+<text x="254.38758809353666" y="809" font-size="15" fill="#626D79" font-weight="400" text-anchor="middle">7.8</text>
+<circle class="delta-point" tabindex="0" cx="341.649" cy="634.923" r="5" fill="#C23B38" stroke="#FFFFFF" stroke-width="2" data-delta-seconds="-90.88557517634217" aria-label="M2黄土窑14.1：实际落后 00:01:31；实际 01:25:40；计划 01:24:09"><title>M2黄土窑14.1：实际落后 00:01:31；实际 01:25:40；计划 01:24:09</title></circle>
+<text x="341.6489068965427" y="788" font-size="17" fill="#626D79" font-weight="400" text-anchor="middle">M2黄土窑14.1</text>
+<text x="341.6489068965427" y="809" font-size="15" fill="#626D79" font-weight="400" text-anchor="middle">14.0</text>
+<circle class="delta-point" tabindex="0" cx="507.201" cy="617.516" r="5" fill="#087F5B" stroke="#FFFFFF" stroke-width="2" data-delta-seconds="230.4730806601292" aria-label="M3土井子25.9：实际领先 00:03:50；实际 02:41:35；计划 02:45:26"><title>M3土井子25.9：实际领先 00:03:50；实际 02:41:35；计划 02:45:26</title></circle>
+<text x="507.20061859433054" y="788" font-size="17" fill="#626D79" font-weight="400" text-anchor="middle">M3土井子25.9</text>
+<text x="507.20061859433054" y="809" font-size="15" fill="#626D79" font-weight="400" text-anchor="middle">25.8</text>
+<circle class="delta-point" tabindex="0" cx="609.218" cy="603.104" r="5" fill="#087F5B" stroke="#FFFFFF" stroke-width="2" data-delta-seconds="496.5334104698959" aria-label="M4清河村33.2：实际领先 00:08:17；实际 03:20:54；计划 03:29:11"><title>M4清河村33.2：实际领先 00:08:17；实际 03:20:54；计划 03:29:11</title></circle>
+<text x="609.2178825872921" y="788" font-size="17" fill="#626D79" font-weight="400" text-anchor="middle">M4清河村33.2</text>
+<text x="609.2178825872921" y="809" font-size="15" fill="#626D79" font-weight="400" text-anchor="middle">33.0</text>
+<circle class="delta-point" tabindex="0" cx="741.256" cy="606.614" r="5" fill="#087F5B" stroke="#FFFFFF" stroke-width="2" data-delta-seconds="431.73269951080147" aria-label="M5翠屏庵42.6：实际领先 00:07:12；实际 04:30:20；计划 04:37:32"><title>M5翠屏庵42.6：实际领先 00:07:12；实际 04:30:20；计划 04:37:32</title></circle>
+<text x="741.2559271914989" y="788" font-size="17" fill="#626D79" font-weight="400" text-anchor="middle">M5翠屏庵42.6</text>
+<text x="741.2559271914989" y="809" font-size="15" fill="#626D79" font-weight="400" text-anchor="middle">42.4</text>
+<circle class="delta-point" tabindex="0" cx="880.000" cy="676.290" r="5" fill="#C23B38" stroke="#FFFFFF" stroke-width="2" data-delta-seconds="-854.5800000000017" aria-label="起终点-大境门（终点）：实际落后 00:14:15；实际 06:14:15；计划 06:00:00"><title>起终点-大境门（终点）：实际落后 00:14:15；实际 06:14:15；计划 06:00:00</title></circle>
+<text x="880.0" y="788" font-size="17" fill="#626D79" font-weight="400" text-anchor="middle">终点</text>
+<text x="880.0" y="809" font-size="15" fill="#626D79" font-weight="400" text-anchor="middle">52.2</text>
+<text x="880.0" y="834" font-size="17" fill="#626D79" font-weight="400" text-anchor="end">赛道累计距离 / km →</text>
+</g>
+<text x="92.0" y="900" font-size="24" fill="#202A35" font-weight="650" text-anchor="start">每段快 / 慢了多少</text>
+<text x="884.0" y="900" font-size="19" fill="#626D79" font-weight="400" text-anchor="end">上方快 · 下方慢</text>
+<g data-kind="segment" data-x-min="144.0" data-x-max="880.0" data-y-top="940" data-y-bottom="1130" data-zero-y="1035.0" data-pixels-per-second="0.05277777777777778" data-limit-seconds="1800.0">
+<rect x="144.0" y="940" width="736.0" height="95.0" rx="0" fill="#F3FAF6"/>
+<rect x="144.0" y="1035.0" width="736.0" height="95.0" rx="0" fill="#FEF5F5"/>
+<path d="M144.000 940.000 L880.000 940.000" fill="none" stroke="#E0E6E9" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 5"/>
+<text x="132.0" y="946.0" font-size="18" fill="#626D79" font-weight="400" text-anchor="end">+30</text>
+<path d="M144.000 987.500 L880.000 987.500" fill="none" stroke="#E0E6E9" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 5"/>
+<text x="132.0" y="993.5" font-size="18" fill="#626D79" font-weight="400" text-anchor="end">+15</text>
+<path d="M144.000 1035.000 L880.000 1035.000" fill="none" stroke="#A1ABB5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-role="zero-line"/>
+<text x="132.0" y="1041.0" font-size="18" fill="#626D79" font-weight="400" text-anchor="end">0</text>
+<path d="M144.000 1082.500 L880.000 1082.500" fill="none" stroke="#E0E6E9" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 5"/>
+<text x="132.0" y="1088.5" font-size="18" fill="#626D79" font-weight="400" text-anchor="end">-15</text>
+<path d="M144.000 1130.000 L880.000 1130.000" fill="none" stroke="#E0E6E9" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 5"/>
+<text x="132.0" y="1136.0" font-size="18" fill="#626D79" font-weight="400" text-anchor="end">-30</text>
+<text x="144.0" y="926" font-size="17" fill="#626D79" font-weight="400" text-anchor="start">分钟</text>
+<g id="segment-0-1" class="inspectable" tabindex="0" aria-label="起终点-大境门（起点） → M1四岔村7.9：本段慢 00:02:21；实际 00:47:33；计划 00:45:11">
+<title>起终点-大境门（起点） → M1四岔村7.9：本段慢 00:02:21；实际 00:47:33；计划 00:45:11</title>
+<rect x="186.333" y="1035.000" width="38.000" height="7.467" fill="#C23B38" data-delta-seconds="-141.47695790879743"><title>起终点-大境门（起点） → M1四岔村7.9：本段慢 00:02:21；实际 00:47:33；计划 00:45:11</title></rect>
+<text x="205.33333333333334" y="1064.4668394451865" font-size="19" fill="#C23B38" font-weight="600" text-anchor="middle">-2.4</text>
+<text x="205.33333333333334" y="1162" font-size="18" fill="#626D79" font-weight="400" text-anchor="middle">M1四岔村7.9</text>
+</g>
+<g id="segment-0-2" class="inspectable" tabindex="0" aria-label="M1四岔村7.9 → M2黄土窑14.1：本段快 00:00:51；实际 00:38:08；计划 00:38:58">
+<title>M1四岔村7.9 → M2黄土窑14.1：本段快 00:00:51；实际 00:38:08；计划 00:38:58</title>
+<rect x="309.000" y="1032.330" width="38.000" height="2.670" fill="#087F5B" data-delta-seconds="50.59138273245526"><title>M1四岔村7.9 → M2黄土窑14.1：本段快 00:00:51；实际 00:38:08；计划 00:38:58</title></rect>
+<text x="328.0" y="1022.329899244676" font-size="19" fill="#087F5B" font-weight="600" text-anchor="middle">+0.8</text>
+<text x="328.0" y="1162" font-size="18" fill="#626D79" font-weight="400" text-anchor="middle">M2黄土窑14.1</text>
+</g>
+<g id="segment-0-3" class="inspectable" tabindex="0" aria-label="M2黄土窑14.1 → M3土井子25.9：本段快 00:05:21；实际 01:15:55；计划 01:21:16">
+<title>M2黄土窑14.1 → M3土井子25.9：本段快 00:05:21；实际 01:15:55；计划 01:21:16</title>
+<rect x="431.667" y="1018.039" width="38.000" height="16.961" fill="#087F5B" data-delta-seconds="321.35865583647137"><title>M2黄土窑14.1 → M3土井子25.9：本段快 00:05:21；实际 01:15:55；计划 01:21:16</title></rect>
+<text x="450.6666666666667" y="1008.0394042752973" font-size="19" fill="#087F5B" font-weight="600" text-anchor="middle">+5.4</text>
+<text x="450.6666666666667" y="1162" font-size="18" fill="#626D79" font-weight="400" text-anchor="middle">M3土井子25.9</text>
+</g>
+<g id="segment-0-4" class="inspectable" tabindex="0" aria-label="M3土井子25.9 → M4清河村33.2：本段快 00:04:26；实际 00:39:19；计划 00:43:45">
+<title>M3土井子25.9 → M4清河村33.2：本段快 00:04:26；实际 00:39:19；计划 00:43:45</title>
+<rect x="554.333" y="1020.958" width="38.000" height="14.042" fill="#087F5B" data-delta-seconds="266.0603298097667"><title>M3土井子25.9 → M4清河村33.2：本段快 00:04:26；实际 00:39:19；计划 00:43:45</title></rect>
+<text x="573.3333333333334" y="1010.9579270378179" font-size="19" fill="#087F5B" font-weight="600" text-anchor="middle">+4.4</text>
+<text x="573.3333333333334" y="1162" font-size="18" fill="#626D79" font-weight="400" text-anchor="middle">M4清河村33.2</text>
+</g>
+<g id="segment-0-5" class="inspectable" tabindex="0" aria-label="M4清河村33.2 → M5翠屏庵42.6：本段慢 00:01:05；实际 01:09:26；计划 01:08:21">
+<title>M4清河村33.2 → M5翠屏庵42.6：本段慢 00:01:05；实际 01:09:26；计划 01:08:21</title>
+<rect x="677.000" y="1035.000" width="38.000" height="3.420" fill="#C23B38" data-delta-seconds="-64.80071095909443"><title>M4清河村33.2 → M5翠屏庵42.6：本段慢 00:01:05；实际 01:09:26；计划 01:08:21</title></rect>
+<text x="696.0" y="1060.420037522841" font-size="19" fill="#C23B38" font-weight="600" text-anchor="middle">-1.1</text>
+<text x="696.0" y="1162" font-size="18" fill="#626D79" font-weight="400" text-anchor="middle">M5翠屏庵42.6</text>
+</g>
+<g id="segment-0-6" class="inspectable" tabindex="0" aria-label="M5翠屏庵42.6 → 起终点-大境门（终点）：本段慢 00:21:26；实际 01:43:55；计划 01:22:28">
+<title>M5翠屏庵42.6 → 起终点-大境门（终点）：本段慢 00:21:26；实际 01:43:55；计划 01:22:28</title>
+<rect x="799.667" y="1035.000" width="38.000" height="67.889" fill="#C23B38" data-delta-seconds="-1286.3126995108032"><title>M5翠屏庵42.6 → 起终点-大境门（终点）：本段慢 00:21:26；实际 01:43:55；计划 01:22:28</title></rect>
+<text x="818.6666666666667" y="1124.8887258075147" font-size="19" fill="#C23B38" font-weight="600" text-anchor="middle">-21.4</text>
+<text x="818.6666666666667" y="1162" font-size="18" fill="#626D79" font-weight="400" text-anchor="middle">终点</text>
+</g>
+</g></g>
+<g class="target-panel" data-target-seconds="22500.0" data-column="1" data-row="0">
+<rect x="936.0" y="410" width="848.0" height="790" rx="12" fill="#FFFFFF"/>
+<text x="964.0" y="453" font-size="26" fill="#202A35" font-weight="700" text-anchor="start">06:15 方案 · 累计差距</text>
+<text x="1756.0" y="453" font-size="19" fill="#626D79" font-weight="400" text-anchor="end">上方领先 · 下方落后</text>
+<g data-kind="cumulative" data-x-min="1016.0" data-x-max="1752.0" data-y-top="500" data-y-bottom="760" data-zero-y="630.0" data-pixels-per-second="0.05416666666666667" data-limit-seconds="2400">
+<rect x="1016.0" y="500" width="736.0" height="130.0" rx="0" fill="#F3FAF6"/>
+<rect x="1016.0" y="630.0" width="736.0" height="130.0" rx="0" fill="#FEF5F5"/>
+<path d="M1016.000 500.000 L1752.000 500.000" fill="none" stroke="#E0E6E9" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 5"/>
+<text x="1004.0" y="506.0" font-size="18" fill="#626D79" font-weight="400" text-anchor="end">+40</text>
+<path d="M1016.000 565.000 L1752.000 565.000" fill="none" stroke="#E0E6E9" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 5"/>
+<text x="1004.0" y="571.0" font-size="18" fill="#626D79" font-weight="400" text-anchor="end">+20</text>
+<path d="M1016.000 630.000 L1752.000 630.000" fill="none" stroke="#A1ABB5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-role="zero-line"/>
+<text x="1004.0" y="636.0" font-size="18" fill="#626D79" font-weight="400" text-anchor="end">0</text>
+<path d="M1016.000 695.000 L1752.000 695.000" fill="none" stroke="#E0E6E9" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 5"/>
+<text x="1004.0" y="701.0" font-size="18" fill="#626D79" font-weight="400" text-anchor="end">-20</text>
+<path d="M1016.000 760.000 L1752.000 760.000" fill="none" stroke="#E0E6E9" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 5"/>
+<text x="1004.0" y="766.0" font-size="18" fill="#626D79" font-weight="400" text-anchor="end">-40</text>
+<text x="1016.0" y="486" font-size="17" fill="#626D79" font-weight="400" text-anchor="start">分钟</text>
+<path d="M1016.000 630.000 L1016.000 630.000 L1126.388 631.544 L1126.388 630.000 Z" fill="#C23B38" opacity=".12"/>
+<path d="M1016.000 630.000 L1126.388 631.544" fill="none" stroke="#C23B38" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1126.388 630.000 L1126.388 631.544 L1143.197 630.000 L1143.197 630.000 Z" fill="#C23B38" opacity=".12"/>
+<path d="M1126.388 631.544 L1143.197 630.000" fill="none" stroke="#C23B38" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1143.197 630.000 L1143.197 630.000 L1213.649 623.527 L1213.649 630.000 Z" fill="#087F5B" opacity=".12"/>
+<path d="M1143.197 630.000 L1213.649 623.527" fill="none" stroke="#087F5B" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1213.649 630.000 L1213.649 623.527 L1379.201 595.114 L1379.201 630.000 Z" fill="#087F5B" opacity=".12"/>
+<path d="M1213.649 623.527 L1379.201 595.114" fill="none" stroke="#087F5B" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1379.201 630.000 L1379.201 595.114 L1481.218 574.779 L1481.218 630.000 Z" fill="#087F5B" opacity=".12"/>
+<path d="M1379.201 595.114 L1481.218 574.779" fill="none" stroke="#087F5B" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1481.218 630.000 L1481.218 574.779 L1613.256 569.032 L1613.256 630.000 Z" fill="#087F5B" opacity=".12"/>
+<path d="M1481.218 574.779 L1613.256 569.032" fill="none" stroke="#087F5B" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1613.256 630.000 L1613.256 569.032 L1752.000 627.540 L1752.000 630.000 Z" fill="#087F5B" opacity=".12"/>
+<path d="M1613.256 569.032 L1752.000 627.540" fill="none" stroke="#087F5B" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<circle class="delta-point" tabindex="0" cx="1016.000" cy="630.000" r="5" fill="#626D79" stroke="#FFFFFF" stroke-width="2" data-delta-seconds="0.0" aria-label="起终点-大境门（起点）：持平 00:00:00；实际 00:00:00；计划 00:00:00"><title>起终点-大境门（起点）：持平 00:00:00；实际 00:00:00；计划 00:00:00</title></circle>
+<text x="1016.0" y="788" font-size="17" fill="#626D79" font-weight="400" text-anchor="middle">起点</text>
+<text x="1016.0" y="809" font-size="15" fill="#626D79" font-weight="400" text-anchor="middle">0.0</text>
+<circle class="delta-point" tabindex="0" cx="1126.388" cy="631.544" r="5" fill="#C23B38" stroke="#FFFFFF" stroke-width="2" data-delta-seconds="-28.511916609706986" aria-label="M1四岔村7.9：实际落后 00:00:29；实际 00:47:33；计划 00:47:04"><title>M1四岔村7.9：实际落后 00:00:29；实际 00:47:33；计划 00:47:04</title></circle>
+<text x="1126.3875880935366" y="788" font-size="17" fill="#626D79" font-weight="400" text-anchor="middle">M1四岔村7.9</text>
+<text x="1126.3875880935366" y="809" font-size="15" fill="#626D79" font-weight="400" text-anchor="middle">7.8</text>
+<circle class="delta-point" tabindex="0" cx="1213.649" cy="623.527" r="5" fill="#087F5B" stroke="#FFFFFF" stroke-width="2" data-delta-seconds="119.50102873892592" aria-label="M2黄土窑14.1：实际领先 00:02:00；实际 01:25:40；计划 01:27:40"><title>M2黄土窑14.1：实际领先 00:02:00；实际 01:25:40；计划 01:27:40</title></circle>
+<text x="1213.6489068965427" y="788" font-size="17" fill="#626D79" font-weight="400" text-anchor="middle">M2黄土窑14.1</text>
+<text x="1213.6489068965427" y="809" font-size="15" fill="#626D79" font-weight="400" text-anchor="middle">14.0</text>
+<circle class="delta-point" tabindex="0" cx="1379.201" cy="595.114" r="5" fill="#087F5B" stroke="#FFFFFF" stroke-width="2" data-delta-seconds="644.041186208" aria-label="M3土井子25.9：实际领先 00:10:44；实际 02:41:35；计划 02:52:19"><title>M3土井子25.9：实际领先 00:10:44；实际 02:41:35；计划 02:52:19</title></circle>
+<text x="1379.2006185943305" y="788" font-size="17" fill="#626D79" font-weight="400" text-anchor="middle">M3土井子25.9</text>
+<text x="1379.2006185943305" y="809" font-size="15" fill="#626D79" font-weight="400" text-anchor="middle">25.8</text>
+<circle class="delta-point" tabindex="0" cx="1481.218" cy="574.779" r="5" fill="#087F5B" stroke="#FFFFFF" stroke-width="2" data-delta-seconds="1019.472302572809" aria-label="M4清河村33.2：实际领先 00:16:59；实际 03:20:54；计划 03:37:53"><title>M4清河村33.2：实际领先 00:16:59；实际 03:20:54；计划 03:37:53</title></circle>
+<text x="1481.217882587292" y="788" font-size="17" fill="#626D79" font-weight="400" text-anchor="middle">M4清河村33.2</text>
+<text x="1481.217882587292" y="809" font-size="15" fill="#626D79" font-weight="400" text-anchor="middle">33.0</text>
+<circle class="delta-point" tabindex="0" cx="1613.256" cy="569.032" r="5" fill="#087F5B" stroke="#FFFFFF" stroke-width="2" data-delta-seconds="1125.5548953237521" aria-label="M5翠屏庵42.6：实际领先 00:18:46；实际 04:30:20；计划 04:49:06"><title>M5翠屏庵42.6：实际领先 00:18:46；实际 04:30:20；计划 04:49:06</title></circle>
+<text x="1613.2559271914988" y="788" font-size="17" fill="#626D79" font-weight="400" text-anchor="middle">M5翠屏庵42.6</text>
+<text x="1613.2559271914988" y="809" font-size="15" fill="#626D79" font-weight="400" text-anchor="middle">42.4</text>
+<circle class="delta-point" tabindex="0" cx="1752.000" cy="627.540" r="5" fill="#087F5B" stroke="#FFFFFF" stroke-width="2" data-delta-seconds="45.419999999998254" aria-label="起终点-大境门（终点）：实际领先 00:00:45；实际 06:14:15；计划 06:15:00"><title>起终点-大境门（终点）：实际领先 00:00:45；实际 06:14:15；计划 06:15:00</title></circle>
+<text x="1752.0" y="788" font-size="17" fill="#626D79" font-weight="400" text-anchor="middle">终点</text>
+<text x="1752.0" y="809" font-size="15" fill="#626D79" font-weight="400" text-anchor="middle">52.2</text>
+<text x="1752.0" y="834" font-size="17" fill="#626D79" font-weight="400" text-anchor="end">赛道累计距离 / km →</text>
+</g>
+<text x="964.0" y="900" font-size="24" fill="#202A35" font-weight="650" text-anchor="start">每段快 / 慢了多少</text>
+<text x="1756.0" y="900" font-size="19" fill="#626D79" font-weight="400" text-anchor="end">上方快 · 下方慢</text>
+<g data-kind="segment" data-x-min="1016.0" data-x-max="1752.0" data-y-top="940" data-y-bottom="1130" data-zero-y="1035.0" data-pixels-per-second="0.05277777777777778" data-limit-seconds="1800.0">
+<rect x="1016.0" y="940" width="736.0" height="95.0" rx="0" fill="#F3FAF6"/>
+<rect x="1016.0" y="1035.0" width="736.0" height="95.0" rx="0" fill="#FEF5F5"/>
+<path d="M1016.000 940.000 L1752.000 940.000" fill="none" stroke="#E0E6E9" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 5"/>
+<text x="1004.0" y="946.0" font-size="18" fill="#626D79" font-weight="400" text-anchor="end">+30</text>
+<path d="M1016.000 987.500 L1752.000 987.500" fill="none" stroke="#E0E6E9" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 5"/>
+<text x="1004.0" y="993.5" font-size="18" fill="#626D79" font-weight="400" text-anchor="end">+15</text>
+<path d="M1016.000 1035.000 L1752.000 1035.000" fill="none" stroke="#A1ABB5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-role="zero-line"/>
+<text x="1004.0" y="1041.0" font-size="18" fill="#626D79" font-weight="400" text-anchor="end">0</text>
+<path d="M1016.000 1082.500 L1752.000 1082.500" fill="none" stroke="#E0E6E9" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 5"/>
+<text x="1004.0" y="1088.5" font-size="18" fill="#626D79" font-weight="400" text-anchor="end">-15</text>
+<path d="M1016.000 1130.000 L1752.000 1130.000" fill="none" stroke="#E0E6E9" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 5"/>
+<text x="1004.0" y="1136.0" font-size="18" fill="#626D79" font-weight="400" text-anchor="end">-30</text>
+<text x="1016.0" y="926" font-size="17" fill="#626D79" font-weight="400" text-anchor="start">分钟</text>
+<g id="segment-1-1" class="inspectable" tabindex="0" aria-label="起终点-大境门（起点） → M1四岔村7.9：本段慢 00:00:29；实际 00:47:33；计划 00:47:04">
+<title>起终点-大境门（起点） → M1四岔村7.9：本段慢 00:00:29；实际 00:47:33；计划 00:47:04</title>
+<rect x="1058.333" y="1035.000" width="38.000" height="1.505" fill="#C23B38" data-delta-seconds="-28.511916609706986"><title>起终点-大境门（起点） → M1四岔村7.9：本段慢 00:00:29；实际 00:47:33；计划 00:47:04</title></rect>
+<text x="1077.3333333333333" y="1058.5047955988457" font-size="19" fill="#C23B38" font-weight="600" text-anchor="middle">-0.5</text>
+<text x="1077.3333333333333" y="1162" font-size="18" fill="#626D79" font-weight="400" text-anchor="middle">M1四岔村7.9</text>
+</g>
+<g id="segment-1-2" class="inspectable" tabindex="0" aria-label="M1四岔村7.9 → M2黄土窑14.1：本段快 00:02:28；实际 00:38:08；计划 00:40:36">
+<title>M1四岔村7.9 → M2黄土窑14.1：本段快 00:02:28；实际 00:38:08；计划 00:40:36</title>
+<rect x="1181.000" y="1027.188" width="38.000" height="7.812" fill="#087F5B" data-delta-seconds="148.0129453486329"><title>M1四岔村7.9 → M2黄土窑14.1：本段快 00:02:28；实际 00:38:08；计划 00:40:36</title></rect>
+<text x="1200.0" y="1017.1882056621555" font-size="19" fill="#087F5B" font-weight="600" text-anchor="middle">+2.5</text>
+<text x="1200.0" y="1162" font-size="18" fill="#626D79" font-weight="400" text-anchor="middle">M2黄土窑14.1</text>
+</g>
+<g id="segment-1-3" class="inspectable" tabindex="0" aria-label="M2黄土窑14.1 → M3土井子25.9：本段快 00:08:45；实际 01:15:55；计划 01:24:40">
+<title>M2黄土窑14.1 → M3土井子25.9：本段快 00:08:45；实际 01:15:55；计划 01:24:40</title>
+<rect x="1303.667" y="1007.316" width="38.000" height="27.684" fill="#087F5B" data-delta-seconds="524.5401574690741"><title>M2黄土窑14.1 → M3土井子25.9：本段快 00:08:45；实际 01:15:55；计划 01:24:40</title></rect>
+<text x="1322.6666666666667" y="997.3159361335767" font-size="19" fill="#087F5B" font-weight="600" text-anchor="middle">+8.7</text>
+<text x="1322.6666666666667" y="1162" font-size="18" fill="#626D79" font-weight="400" text-anchor="middle">M3土井子25.9</text>
+</g>
+<g id="segment-1-4" class="inspectable" tabindex="0" aria-label="M3土井子25.9 → M4清河村33.2：本段快 00:06:15；实际 00:39:19；计划 00:45:34">
+<title>M3土井子25.9 → M4清河村33.2：本段快 00:06:15；实际 00:39:19；计划 00:45:34</title>
+<rect x="1426.333" y="1015.186" width="38.000" height="19.814" fill="#087F5B" data-delta-seconds="375.431116364809"><title>M3土井子25.9 → M4清河村33.2：本段快 00:06:15；实际 00:39:19；计划 00:45:34</title></rect>
+<text x="1445.3333333333335" y="1005.1855799696351" font-size="19" fill="#087F5B" font-weight="600" text-anchor="middle">+6.3</text>
+<text x="1445.3333333333335" y="1162" font-size="18" fill="#626D79" font-weight="400" text-anchor="middle">M4清河村33.2</text>
+</g>
+<g id="segment-1-5" class="inspectable" tabindex="0" aria-label="M4清河村33.2 → M5翠屏庵42.6：本段快 00:01:46；实际 01:09:26；计划 01:11:12">
+<title>M4清河村33.2 → M5翠屏庵42.6：本段快 00:01:46；实际 01:09:26；计划 01:11:12</title>
+<rect x="1549.000" y="1029.401" width="38.000" height="5.599" fill="#087F5B" data-delta-seconds="106.08259275094315"><title>M4清河村33.2 → M5翠屏庵42.6：本段快 00:01:46；实际 01:09:26；计划 01:11:12</title></rect>
+<text x="1568.0" y="1019.4011964937001" font-size="19" fill="#087F5B" font-weight="600" text-anchor="middle">+1.8</text>
+<text x="1568.0" y="1162" font-size="18" fill="#626D79" font-weight="400" text-anchor="middle">M5翠屏庵42.6</text>
+</g>
+<g id="segment-1-6" class="inspectable" tabindex="0" aria-label="M5翠屏庵42.6 → 起终点-大境门（终点）：本段慢 00:18:00；实际 01:43:55；计划 01:25:54">
+<title>M5翠屏庵42.6 → 起终点-大境门（终点）：本段慢 00:18:00；实际 01:43:55；计划 01:25:54</title>
+<rect x="1671.667" y="1035.000" width="38.000" height="57.007" fill="#C23B38" data-delta-seconds="-1080.1348953237539"><title>M5翠屏庵42.6 → 起终点-大境门（终点）：本段慢 00:18:00；实际 01:43:55；计划 01:25:54</title></rect>
+<text x="1690.6666666666667" y="1114.0071194754203" font-size="19" fill="#C23B38" font-weight="600" text-anchor="middle">-18.0</text>
+<text x="1690.6666666666667" y="1162" font-size="18" fill="#626D79" font-weight="400" text-anchor="middle">终点</text>
+</g>
+</g></g>
+<g class="target-panel" data-target-seconds="23400.0" data-column="2" data-row="0">
+<rect x="1808.0" y="410" width="848.0" height="790" rx="12" fill="#FFFFFF"/>
+<text x="1836.0" y="453" font-size="26" fill="#202A35" font-weight="700" text-anchor="start">06:30 方案 · 累计差距</text>
+<text x="2628.0" y="453" font-size="19" fill="#626D79" font-weight="400" text-anchor="end">上方领先 · 下方落后</text>
+<g data-kind="cumulative" data-x-min="1888.0" data-x-max="2624.0" data-y-top="500" data-y-bottom="760" data-zero-y="630.0" data-pixels-per-second="0.05416666666666667" data-limit-seconds="2400">
+<rect x="1888.0" y="500" width="736.0" height="130.0" rx="0" fill="#F3FAF6"/>
+<rect x="1888.0" y="630.0" width="736.0" height="130.0" rx="0" fill="#FEF5F5"/>
+<path d="M1888.000 500.000 L2624.000 500.000" fill="none" stroke="#E0E6E9" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 5"/>
+<text x="1876.0" y="506.0" font-size="18" fill="#626D79" font-weight="400" text-anchor="end">+40</text>
+<path d="M1888.000 565.000 L2624.000 565.000" fill="none" stroke="#E0E6E9" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 5"/>
+<text x="1876.0" y="571.0" font-size="18" fill="#626D79" font-weight="400" text-anchor="end">+20</text>
+<path d="M1888.000 630.000 L2624.000 630.000" fill="none" stroke="#A1ABB5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-role="zero-line"/>
+<text x="1876.0" y="636.0" font-size="18" fill="#626D79" font-weight="400" text-anchor="end">0</text>
+<path d="M1888.000 695.000 L2624.000 695.000" fill="none" stroke="#E0E6E9" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 5"/>
+<text x="1876.0" y="701.0" font-size="18" fill="#626D79" font-weight="400" text-anchor="end">-20</text>
+<path d="M1888.000 760.000 L2624.000 760.000" fill="none" stroke="#E0E6E9" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 5"/>
+<text x="1876.0" y="766.0" font-size="18" fill="#626D79" font-weight="400" text-anchor="end">-40</text>
+<text x="1888.0" y="486" font-size="17" fill="#626D79" font-weight="400" text-anchor="start">分钟</text>
+<path d="M1888.000 630.000 L1888.000 630.000 L1998.388 625.425 L1998.388 630.000 Z" fill="#087F5B" opacity=".12"/>
+<path d="M1888.000 630.000 L1998.388 625.425" fill="none" stroke="#087F5B" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1998.388 630.000 L1998.388 625.425 L2085.649 612.131 L2085.649 630.000 Z" fill="#087F5B" opacity=".12"/>
+<path d="M1998.388 625.425 L2085.649 612.131" fill="none" stroke="#087F5B" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M2085.649 630.000 L2085.649 612.131 L2251.201 572.713 L2251.201 630.000 Z" fill="#087F5B" opacity=".12"/>
+<path d="M2085.649 612.131 L2251.201 572.713" fill="none" stroke="#087F5B" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M2251.201 630.000 L2251.201 572.713 L2353.218 546.453 L2353.218 630.000 Z" fill="#087F5B" opacity=".12"/>
+<path d="M2251.201 572.713 L2353.218 546.453" fill="none" stroke="#087F5B" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M2353.218 630.000 L2353.218 546.453 L2485.256 531.450 L2485.256 630.000 Z" fill="#087F5B" opacity=".12"/>
+<path d="M2353.218 546.453 L2485.256 531.450" fill="none" stroke="#087F5B" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M2485.256 630.000 L2485.256 531.450 L2624.000 578.790 L2624.000 630.000 Z" fill="#087F5B" opacity=".12"/>
+<path d="M2485.256 531.450 L2624.000 578.790" fill="none" stroke="#087F5B" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<circle class="delta-point" tabindex="0" cx="1888.000" cy="630.000" r="5" fill="#626D79" stroke="#FFFFFF" stroke-width="2" data-delta-seconds="0.0" aria-label="起终点-大境门（起点）：持平 00:00:00；实际 00:00:00；计划 00:00:00"><title>起终点-大境门（起点）：持平 00:00:00；实际 00:00:00；计划 00:00:00</title></circle>
+<text x="1888.0" y="788" font-size="17" fill="#626D79" font-weight="400" text-anchor="middle">起点</text>
+<text x="1888.0" y="809" font-size="15" fill="#626D79" font-weight="400" text-anchor="middle">0.0</text>
+<circle class="delta-point" tabindex="0" cx="1998.388" cy="625.425" r="5" fill="#087F5B" stroke="#FFFFFF" stroke-width="2" data-delta-seconds="84.45312468938346" aria-label="M1四岔村7.9：实际领先 00:01:24；实际 00:47:33；计划 00:48:57"><title>M1四岔村7.9：实际领先 00:01:24；实际 00:47:33；计划 00:48:57</title></circle>
+<text x="1998.3875880935366" y="788" font-size="17" fill="#626D79" font-weight="400" text-anchor="middle">M1四岔村7.9</text>
+<text x="1998.3875880935366" y="809" font-size="15" fill="#626D79" font-weight="400" text-anchor="middle">7.8</text>
+<circle class="delta-point" tabindex="0" cx="2085.649" cy="612.131" r="5" fill="#087F5B" stroke="#FFFFFF" stroke-width="2" data-delta-seconds="329.887632654194" aria-label="M2黄土窑14.1：实际领先 00:05:30；实际 01:25:40；计划 01:31:10"><title>M2黄土窑14.1：实际领先 00:05:30；实际 01:25:40；计划 01:31:10</title></circle>
+<text x="2085.648906896543" y="788" font-size="17" fill="#626D79" font-weight="400" text-anchor="middle">M2黄土窑14.1</text>
+<text x="2085.648906896543" y="809" font-size="15" fill="#626D79" font-weight="400" text-anchor="middle">14.0</text>
+<circle class="delta-point" tabindex="0" cx="2251.201" cy="572.713" r="5" fill="#087F5B" stroke="#FFFFFF" stroke-width="2" data-delta-seconds="1057.6092917558708" aria-label="M3土井子25.9：实际领先 00:17:38；实际 02:41:35；计划 02:59:13"><title>M3土井子25.9：实际领先 00:17:38；实际 02:41:35；计划 02:59:13</title></circle>
+<text x="2251.2006185943305" y="788" font-size="17" fill="#626D79" font-weight="400" text-anchor="middle">M3土井子25.9</text>
+<text x="2251.2006185943305" y="809" font-size="15" fill="#626D79" font-weight="400" text-anchor="middle">25.8</text>
+<circle class="delta-point" tabindex="0" cx="2353.218" cy="546.453" r="5" fill="#087F5B" stroke="#FFFFFF" stroke-width="2" data-delta-seconds="1542.411194675722" aria-label="M4清河村33.2：实际领先 00:25:42；实际 03:20:54；计划 03:46:36"><title>M4清河村33.2：实际领先 00:25:42；实际 03:20:54；计划 03:46:36</title></circle>
+<text x="2353.217882587292" y="788" font-size="17" fill="#626D79" font-weight="400" text-anchor="middle">M4清河村33.2</text>
+<text x="2353.217882587292" y="809" font-size="15" fill="#626D79" font-weight="400" text-anchor="middle">33.0</text>
+<circle class="delta-point" tabindex="0" cx="2485.256" cy="531.450" r="5" fill="#087F5B" stroke="#FFFFFF" stroke-width="2" data-delta-seconds="1819.3770911367028" aria-label="M5翠屏庵42.6：实际领先 00:30:19；实际 04:30:20；计划 05:00:39"><title>M5翠屏庵42.6：实际领先 00:30:19；实际 04:30:20；计划 05:00:39</title></circle>
+<text x="2485.255927191499" y="788" font-size="17" fill="#626D79" font-weight="400" text-anchor="middle">M5翠屏庵42.6</text>
+<text x="2485.255927191499" y="809" font-size="15" fill="#626D79" font-weight="400" text-anchor="middle">42.4</text>
+<circle class="delta-point" tabindex="0" cx="2624.000" cy="578.790" r="5" fill="#087F5B" stroke="#FFFFFF" stroke-width="2" data-delta-seconds="945.4199999999983" aria-label="起终点-大境门（终点）：实际领先 00:15:45；实际 06:14:15；计划 06:30:00"><title>起终点-大境门（终点）：实际领先 00:15:45；实际 06:14:15；计划 06:30:00</title></circle>
+<text x="2624.0" y="788" font-size="17" fill="#626D79" font-weight="400" text-anchor="middle">终点</text>
+<text x="2624.0" y="809" font-size="15" fill="#626D79" font-weight="400" text-anchor="middle">52.2</text>
+<text x="2624.0" y="834" font-size="17" fill="#626D79" font-weight="400" text-anchor="end">赛道累计距离 / km →</text>
+</g>
+<text x="1836.0" y="900" font-size="24" fill="#202A35" font-weight="650" text-anchor="start">每段快 / 慢了多少</text>
+<text x="2628.0" y="900" font-size="19" fill="#626D79" font-weight="400" text-anchor="end">上方快 · 下方慢</text>
+<g data-kind="segment" data-x-min="1888.0" data-x-max="2624.0" data-y-top="940" data-y-bottom="1130" data-zero-y="1035.0" data-pixels-per-second="0.05277777777777778" data-limit-seconds="1800.0">
+<rect x="1888.0" y="940" width="736.0" height="95.0" rx="0" fill="#F3FAF6"/>
+<rect x="1888.0" y="1035.0" width="736.0" height="95.0" rx="0" fill="#FEF5F5"/>
+<path d="M1888.000 940.000 L2624.000 940.000" fill="none" stroke="#E0E6E9" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 5"/>
+<text x="1876.0" y="946.0" font-size="18" fill="#626D79" font-weight="400" text-anchor="end">+30</text>
+<path d="M1888.000 987.500 L2624.000 987.500" fill="none" stroke="#E0E6E9" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 5"/>
+<text x="1876.0" y="993.5" font-size="18" fill="#626D79" font-weight="400" text-anchor="end">+15</text>
+<path d="M1888.000 1035.000 L2624.000 1035.000" fill="none" stroke="#A1ABB5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-role="zero-line"/>
+<text x="1876.0" y="1041.0" font-size="18" fill="#626D79" font-weight="400" text-anchor="end">0</text>
+<path d="M1888.000 1082.500 L2624.000 1082.500" fill="none" stroke="#E0E6E9" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 5"/>
+<text x="1876.0" y="1088.5" font-size="18" fill="#626D79" font-weight="400" text-anchor="end">-15</text>
+<path d="M1888.000 1130.000 L2624.000 1130.000" fill="none" stroke="#E0E6E9" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 5"/>
+<text x="1876.0" y="1136.0" font-size="18" fill="#626D79" font-weight="400" text-anchor="end">-30</text>
+<text x="1888.0" y="926" font-size="17" fill="#626D79" font-weight="400" text-anchor="start">分钟</text>
+<g id="segment-2-1" class="inspectable" tabindex="0" aria-label="起终点-大境门（起点） → M1四岔村7.9：本段快 00:01:24；实际 00:47:33；计划 00:48:57">
+<title>起终点-大境门（起点） → M1四岔村7.9：本段快 00:01:24；实际 00:47:33；计划 00:48:57</title>
+<rect x="1930.333" y="1030.543" width="38.000" height="4.457" fill="#087F5B" data-delta-seconds="84.45312468938346"><title>起终点-大境门（起点） → M1四岔村7.9：本段快 00:01:24；实际 00:47:33；计划 00:48:57</title></rect>
+<text x="1949.3333333333333" y="1020.5427517525047" font-size="19" fill="#087F5B" font-weight="600" text-anchor="middle">+1.4</text>
+<text x="1949.3333333333333" y="1162" font-size="18" fill="#626D79" font-weight="400" text-anchor="middle">M1四岔村7.9</text>
+</g>
+<g id="segment-2-2" class="inspectable" tabindex="0" aria-label="M1四岔村7.9 → M2黄土窑14.1：本段快 00:04:05；实际 00:38:08；计划 00:42:13">
+<title>M1四岔村7.9 → M2黄土窑14.1：本段快 00:04:05；实际 00:38:08；计划 00:42:13</title>
+<rect x="2053.000" y="1022.047" width="38.000" height="12.953" fill="#087F5B" data-delta-seconds="245.43450796481056"><title>M1四岔村7.9 → M2黄土窑14.1：本段快 00:04:05；实际 00:38:08；计划 00:42:13</title></rect>
+<text x="2072.0" y="1012.046512079635" font-size="19" fill="#087F5B" font-weight="600" text-anchor="middle">+4.1</text>
+<text x="2072.0" y="1162" font-size="18" fill="#626D79" font-weight="400" text-anchor="middle">M2黄土窑14.1</text>
+</g>
+<g id="segment-2-3" class="inspectable" tabindex="0" aria-label="M2黄土窑14.1 → M3土井子25.9：本段快 00:12:08；实际 01:15:55；计划 01:28:03">
+<title>M2黄土窑14.1 → M3土井子25.9：本段快 00:12:08；实际 01:15:55；计划 01:28:03</title>
+<rect x="2175.667" y="996.592" width="38.000" height="38.408" fill="#087F5B" data-delta-seconds="727.7216591016768"><title>M2黄土窑14.1 → M3土井子25.9：本段快 00:12:08；实际 01:15:55；计划 01:28:03</title></rect>
+<text x="2194.6666666666665" y="986.592467991856" font-size="19" fill="#087F5B" font-weight="600" text-anchor="middle">+12.1</text>
+<text x="2194.6666666666665" y="1162" font-size="18" fill="#626D79" font-weight="400" text-anchor="middle">M3土井子25.9</text>
+</g>
+<g id="segment-2-4" class="inspectable" tabindex="0" aria-label="M3土井子25.9 → M4清河村33.2：本段快 00:08:05；实际 00:39:19；计划 00:47:24">
+<title>M3土井子25.9 → M4清河村33.2：本段快 00:08:05；实际 00:39:19；计划 00:47:24</title>
+<rect x="2298.333" y="1009.413" width="38.000" height="25.587" fill="#087F5B" data-delta-seconds="484.8019029198513"><title>M3土井子25.9 → M4清河村33.2：本段快 00:08:05；实际 00:39:19；计划 00:47:24</title></rect>
+<text x="2317.3333333333335" y="999.4132329014523" font-size="19" fill="#087F5B" font-weight="600" text-anchor="middle">+8.1</text>
+<text x="2317.3333333333335" y="1162" font-size="18" fill="#626D79" font-weight="400" text-anchor="middle">M4清河村33.2</text>
+</g>
+<g id="segment-2-5" class="inspectable" tabindex="0" aria-label="M4清河村33.2 → M5翠屏庵42.6：本段快 00:04:37；实际 01:09:26；计划 01:14:03">
+<title>M4清河村33.2 → M5翠屏庵42.6：本段快 00:04:37；实际 01:09:26；计划 01:14:03</title>
+<rect x="2421.000" y="1020.382" width="38.000" height="14.618" fill="#087F5B" data-delta-seconds="276.96589646098073"><title>M4清河村33.2 → M5翠屏庵42.6：本段快 00:04:37；实际 01:09:26；计划 01:14:03</title></rect>
+<text x="2440.0" y="1010.3823554645594" font-size="19" fill="#087F5B" font-weight="600" text-anchor="middle">+4.6</text>
+<text x="2440.0" y="1162" font-size="18" fill="#626D79" font-weight="400" text-anchor="middle">M5翠屏庵42.6</text>
+</g>
+<g id="segment-2-6" class="inspectable" tabindex="0" aria-label="M5翠屏庵42.6 → 起终点-大境门（终点）：本段慢 00:14:34；实际 01:43:55；计划 01:29:21">
+<title>M5翠屏庵42.6 → 起终点-大境门（终点）：本段慢 00:14:34；实际 01:43:55；计划 01:29:21</title>
+<rect x="2543.667" y="1035.000" width="38.000" height="46.126" fill="#C23B38" data-delta-seconds="-873.9570911367045"><title>M5翠屏庵42.6 → 起终点-大境门（终点）：本段慢 00:14:34；实际 01:43:55；计划 01:29:21</title></rect>
+<text x="2562.666666666667" y="1103.125513143326" font-size="19" fill="#C23B38" font-weight="600" text-anchor="middle">-14.6</text>
+<text x="2562.666666666667" y="1162" font-size="18" fill="#626D79" font-weight="400" text-anchor="middle">终点</text>
+</g>
+</g></g>
+</g>
+<g id="checkpoint-times">
+<text x="64" y="1260" font-size="28" fill="#202A35" font-weight="700" text-anchor="start">各站耗时</text>
+<text x="2656" y="1260" font-size="22" fill="#626D79" font-weight="400" text-anchor="end">本段耗时（实际 − 预计）· HH:MM:SS · 含停留</text>
+<text x="64" y="1298" font-size="21" fill="#626D79" font-weight="400" text-anchor="start">红色 = 佳明实际更慢；绿色 = 更快或持平 · 差额 + 表示慢，− 表示快</text>
+<rect x="64" y="1330" width="2592" height="504" rx="12" fill="#FFFFFF"/>
+<rect x="64" y="1330" width="2592" height="72" rx="8" fill="#EDF0F4"/>
+<text x="88" y="1375" font-size="24" fill="#626D79" font-weight="600" text-anchor="start">到达站点 · 累计里程</text>
+<text x="913.0" y="1375" font-size="26" fill="#202A35" font-weight="650" text-anchor="middle">佳明实际</text>
+<text x="1411.0" y="1375" font-size="26" fill="#202A35" font-weight="500" text-anchor="middle">06:00 预计</text>
+<text x="1909.0" y="1375" font-size="26" fill="#202A35" font-weight="500" text-anchor="middle">06:15 预计</text>
+<text x="2407.0" y="1375" font-size="26" fill="#202A35" font-weight="500" text-anchor="middle">06:30 预计</text>
+<g class="time-row" data-cp-id="wpt:2">
+<rect x="64" y="1402" width="2592" height="72" rx="0" fill="#FFFFFF"/>
+<path d="M64.000 1474.000 L2656.000 1474.000" fill="none" stroke="#E4E8ED" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<g id="time-header-1" class="checkpoint-header inspectable" data-cp-id="wpt:2" data-distance-m="7828.680344130728" tabindex="0" aria-label="M1四岔村7.9：赛道累计 7.829 km；佳明累计 7.759 km">
+<title>M1四岔村7.9：赛道累计 7.829 km；佳明累计 7.759 km</title>
+<text x="88" y="1447.0" font-size="23" fill="#202A35" font-weight="400" text-anchor="start">M1四岔村7.9 · 7.8 km</text>
+</g>
+<g id="time-cell-0-1" class="time-cell inspectable" data-cp-id="wpt:2" data-series="actual" data-elapsed-seconds="2852.6379490869667" data-segment-seconds="2852.6379490869667" tabindex="0" aria-label="佳明实际 · M1四岔村7.9：累计 00:47:33；起终点-大境门（起点） → M1四岔村7.9 本段 00:47:33，含停留">
+<title>佳明实际 · M1四岔村7.9：累计 00:47:33；起终点-大境门（起点） → M1四岔村7.9 本段 00:47:33，含停留</title>
+<text x="913.0" y="1447.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#202A35">00:47:33</tspan></text>
+</g>
+<g id="time-cell-1-1" class="time-cell inspectable" data-cp-id="wpt:2" data-series="planned" data-target-seconds="21600.0" data-elapsed-seconds="2711.1609911781693" data-segment-seconds="2711.1609911781693" data-actual-minus-plan-seconds="141.47695790879743" tabindex="0" aria-label="06:00 预计 · M1四岔村7.9：累计 00:45:11；起终点-大境门（起点） → M1四岔村7.9 本段 00:45:11，含停留；实际 − 预计 +00:02:21；佳明本段更慢">
+<title>06:00 预计 · M1四岔村7.9：累计 00:45:11；起终点-大境门（起点） → M1四岔村7.9 本段 00:45:11，含停留；实际 − 预计 +00:02:21；佳明本段更慢</title>
+<text x="1411.0" y="1447.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#C23B38">00:45:11</tspan><tspan data-role="segment-difference" fill="#C23B38">（+00:02:21）</tspan></text>
+</g>
+<g id="time-cell-2-1" class="time-cell inspectable" data-cp-id="wpt:2" data-series="planned" data-target-seconds="22500.0" data-elapsed-seconds="2824.1260324772597" data-segment-seconds="2824.1260324772597" data-actual-minus-plan-seconds="28.511916609706986" tabindex="0" aria-label="06:15 预计 · M1四岔村7.9：累计 00:47:04；起终点-大境门（起点） → M1四岔村7.9 本段 00:47:04，含停留；实际 − 预计 +00:00:29；佳明本段更慢">
+<title>06:15 预计 · M1四岔村7.9：累计 00:47:04；起终点-大境门（起点） → M1四岔村7.9 本段 00:47:04，含停留；实际 − 预计 +00:00:29；佳明本段更慢</title>
+<text x="1909.0" y="1447.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#C23B38">00:47:04</tspan><tspan data-role="segment-difference" fill="#C23B38">（+00:00:29）</tspan></text>
+</g>
+<g id="time-cell-3-1" class="time-cell inspectable" data-cp-id="wpt:2" data-series="planned" data-target-seconds="23400.0" data-elapsed-seconds="2937.09107377635" data-segment-seconds="2937.09107377635" data-actual-minus-plan-seconds="-84.45312468938346" tabindex="0" aria-label="06:30 预计 · M1四岔村7.9：累计 00:48:57；起终点-大境门（起点） → M1四岔村7.9 本段 00:48:57，含停留；实际 − 预计 -00:01:24；佳明本段不慢于预计">
+<title>06:30 预计 · M1四岔村7.9：累计 00:48:57；起终点-大境门（起点） → M1四岔村7.9 本段 00:48:57，含停留；实际 − 预计 -00:01:24；佳明本段不慢于预计</title>
+<text x="2407.0" y="1447.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#087F5B">00:48:57</tspan><tspan data-role="segment-difference" fill="#087F5B">（-00:01:24）</tspan></text>
+</g>
+</g>
+<g class="time-row" data-cp-id="wpt:3">
+<rect x="64" y="1474" width="2592" height="72" rx="0" fill="#F2F4F7"/>
+<path d="M64.000 1546.000 L2656.000 1546.000" fill="none" stroke="#E4E8ED" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<g id="time-header-2" class="checkpoint-header inspectable" data-cp-id="wpt:3" data-distance-m="14017.247221207168" tabindex="0" aria-label="M2黄土窑14.1：赛道累计 14.017 km；佳明累计 14.073 km">
+<title>M2黄土窑14.1：赛道累计 14.017 km；佳明累计 14.073 km</title>
+<text x="88" y="1519.0" font-size="23" fill="#202A35" font-weight="400" text-anchor="start">M2黄土窑14.1 · 14.0 km</text>
+</g>
+<g id="time-cell-0-2" class="time-cell inspectable" data-cp-id="wpt:3" data-series="actual" data-elapsed-seconds="5140.16406914278" data-segment-seconds="2287.5261200558134" tabindex="0" aria-label="佳明实际 · M2黄土窑14.1：累计 01:25:40；M1四岔村7.9 → M2黄土窑14.1 本段 00:38:08，含停留">
+<title>佳明实际 · M2黄土窑14.1：累计 01:25:40；M1四岔村7.9 → M2黄土窑14.1 本段 00:38:08，含停留</title>
+<text x="913.0" y="1519.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#202A35">00:38:08</tspan></text>
+</g>
+<g id="time-cell-1-2" class="time-cell inspectable" data-cp-id="wpt:3" data-series="planned" data-target-seconds="21600.0" data-elapsed-seconds="5049.278493966438" data-segment-seconds="2338.1175027882687" data-actual-minus-plan-seconds="-50.59138273245526" tabindex="0" aria-label="06:00 预计 · M2黄土窑14.1：累计 01:24:09；M1四岔村7.9 → M2黄土窑14.1 本段 00:38:58，含停留；实际 − 预计 -00:00:51；佳明本段不慢于预计">
+<title>06:00 预计 · M2黄土窑14.1：累计 01:24:09；M1四岔村7.9 → M2黄土窑14.1 本段 00:38:58，含停留；实际 − 预计 -00:00:51；佳明本段不慢于预计</title>
+<text x="1411.0" y="1519.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#087F5B">00:38:58</tspan><tspan data-role="segment-difference" fill="#087F5B">（-00:00:51）</tspan></text>
+</g>
+<g id="time-cell-2-2" class="time-cell inspectable" data-cp-id="wpt:3" data-series="planned" data-target-seconds="22500.0" data-elapsed-seconds="5259.665097881706" data-segment-seconds="2435.5390654044463" data-actual-minus-plan-seconds="-148.0129453486329" tabindex="0" aria-label="06:15 预计 · M2黄土窑14.1：累计 01:27:40；M1四岔村7.9 → M2黄土窑14.1 本段 00:40:36，含停留；实际 − 预计 -00:02:28；佳明本段不慢于预计">
+<title>06:15 预计 · M2黄土窑14.1：累计 01:27:40；M1四岔村7.9 → M2黄土窑14.1 本段 00:40:36，含停留；实际 − 预计 -00:02:28；佳明本段不慢于预计</title>
+<text x="1909.0" y="1519.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#087F5B">00:40:36</tspan><tspan data-role="segment-difference" fill="#087F5B">（-00:02:28）</tspan></text>
+</g>
+<g id="time-cell-3-2" class="time-cell inspectable" data-cp-id="wpt:3" data-series="planned" data-target-seconds="23400.0" data-elapsed-seconds="5470.051701796974" data-segment-seconds="2532.960628020624" data-actual-minus-plan-seconds="-245.43450796481056" tabindex="0" aria-label="06:30 预计 · M2黄土窑14.1：累计 01:31:10；M1四岔村7.9 → M2黄土窑14.1 本段 00:42:13，含停留；实际 − 预计 -00:04:05；佳明本段不慢于预计">
+<title>06:30 预计 · M2黄土窑14.1：累计 01:31:10；M1四岔村7.9 → M2黄土窑14.1 本段 00:42:13，含停留；实际 − 预计 -00:04:05；佳明本段不慢于预计</title>
+<text x="2407.0" y="1519.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#087F5B">00:42:13</tspan><tspan data-role="segment-difference" fill="#087F5B">（-00:04:05）</tspan></text>
+</g>
+</g>
+<g class="time-row" data-cp-id="wpt:4">
+<rect x="64" y="1546" width="2592" height="72" rx="0" fill="#FFFFFF"/>
+<path d="M64.000 1618.000 L2656.000 1618.000" fill="none" stroke="#E4E8ED" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<g id="time-header-3" class="checkpoint-header inspectable" data-cp-id="wpt:4" data-distance-m="25758.163511609877" tabindex="0" aria-label="M3土井子25.9：赛道累计 25.758 km；佳明累计 26.079 km">
+<title>M3土井子25.9：赛道累计 25.758 km；佳明累计 26.079 km</title>
+<text x="88" y="1591.0" font-size="23" fill="#202A35" font-weight="400" text-anchor="start">M3土井子25.9 · 25.8 km</text>
+</g>
+<g id="time-cell-0-3" class="time-cell inspectable" data-cp-id="wpt:4" data-series="actual" data-elapsed-seconds="9695.161452488763" data-segment-seconds="4554.997383345983" tabindex="0" aria-label="佳明实际 · M3土井子25.9：累计 02:41:35；M2黄土窑14.1 → M3土井子25.9 本段 01:15:55，含停留">
+<title>佳明实际 · M3土井子25.9：累计 02:41:35；M2黄土窑14.1 → M3土井子25.9 本段 01:15:55，含停留</title>
+<text x="913.0" y="1591.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#202A35">01:15:55</tspan></text>
+</g>
+<g id="time-cell-1-3" class="time-cell inspectable" data-cp-id="wpt:4" data-series="planned" data-target-seconds="21600.0" data-elapsed-seconds="9925.634533148892" data-segment-seconds="4876.356039182454" data-actual-minus-plan-seconds="-321.35865583647137" tabindex="0" aria-label="06:00 预计 · M3土井子25.9：累计 02:45:26；M2黄土窑14.1 → M3土井子25.9 本段 01:21:16，含停留；实际 − 预计 -00:05:21；佳明本段不慢于预计">
+<title>06:00 预计 · M3土井子25.9：累计 02:45:26；M2黄土窑14.1 → M3土井子25.9 本段 01:21:16，含停留；实际 − 预计 -00:05:21；佳明本段不慢于预计</title>
+<text x="1411.0" y="1591.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#087F5B">01:21:16</tspan><tspan data-role="segment-difference" fill="#087F5B">（-00:05:21）</tspan></text>
+</g>
+<g id="time-cell-2-3" class="time-cell inspectable" data-cp-id="wpt:4" data-series="planned" data-target-seconds="22500.0" data-elapsed-seconds="10339.202638696763" data-segment-seconds="5079.537540815057" data-actual-minus-plan-seconds="-524.5401574690741" tabindex="0" aria-label="06:15 预计 · M3土井子25.9：累计 02:52:19；M2黄土窑14.1 → M3土井子25.9 本段 01:24:40，含停留；实际 − 预计 -00:08:45；佳明本段不慢于预计">
+<title>06:15 预计 · M3土井子25.9：累计 02:52:19；M2黄土窑14.1 → M3土井子25.9 本段 01:24:40，含停留；实际 − 预计 -00:08:45；佳明本段不慢于预计</title>
+<text x="1909.0" y="1591.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#087F5B">01:24:40</tspan><tspan data-role="segment-difference" fill="#087F5B">（-00:08:45）</tspan></text>
+</g>
+<g id="time-cell-3-3" class="time-cell inspectable" data-cp-id="wpt:4" data-series="planned" data-target-seconds="23400.0" data-elapsed-seconds="10752.770744244634" data-segment-seconds="5282.719042447659" data-actual-minus-plan-seconds="-727.7216591016768" tabindex="0" aria-label="06:30 预计 · M3土井子25.9：累计 02:59:13；M2黄土窑14.1 → M3土井子25.9 本段 01:28:03，含停留；实际 − 预计 -00:12:08；佳明本段不慢于预计">
+<title>06:30 预计 · M3土井子25.9：累计 02:59:13；M2黄土窑14.1 → M3土井子25.9 本段 01:28:03，含停留；实际 − 预计 -00:12:08；佳明本段不慢于预计</title>
+<text x="2407.0" y="1591.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#087F5B">01:28:03</tspan><tspan data-role="segment-difference" fill="#087F5B">（-00:12:08）</tspan></text>
+</g>
+</g>
+<g class="time-row" data-cp-id="wpt:5">
+<rect x="64" y="1618" width="2592" height="72" rx="0" fill="#F2F4F7"/>
+<path d="M64.000 1690.000 L2656.000 1690.000" fill="none" stroke="#E4E8ED" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<g id="time-header-4" class="checkpoint-header inspectable" data-cp-id="wpt:5" data-distance-m="32993.221031907815" tabindex="0" aria-label="M4清河村33.2：赛道累计 32.993 km；佳明累计 33.216 km">
+<title>M4清河村33.2：赛道累计 32.993 km；佳明累计 33.216 km</title>
+<text x="88" y="1663.0" font-size="23" fill="#202A35" font-weight="400" text-anchor="start">M4清河村33.2 · 33.0 km</text>
+</g>
+<g id="time-cell-0-4" class="time-cell inspectable" data-cp-id="wpt:5" data-series="actual" data-elapsed-seconds="12054.0" data-segment-seconds="2358.8385475112373" tabindex="0" aria-label="佳明实际 · M4清河村33.2：累计 03:20:54；M3土井子25.9 → M4清河村33.2 本段 00:39:19，含停留">
+<title>佳明实际 · M4清河村33.2：累计 03:20:54；M3土井子25.9 → M4清河村33.2 本段 00:39:19，含停留</title>
+<text x="913.0" y="1663.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#202A35">00:39:19</tspan></text>
+</g>
+<g id="time-cell-1-4" class="time-cell inspectable" data-cp-id="wpt:5" data-series="planned" data-target-seconds="21600.0" data-elapsed-seconds="12550.533410469896" data-segment-seconds="2624.898877321004" data-actual-minus-plan-seconds="-266.0603298097667" tabindex="0" aria-label="06:00 预计 · M4清河村33.2：累计 03:29:11；M3土井子25.9 → M4清河村33.2 本段 00:43:45，含停留；实际 − 预计 -00:04:26；佳明本段不慢于预计">
+<title>06:00 预计 · M4清河村33.2：累计 03:29:11；M3土井子25.9 → M4清河村33.2 本段 00:43:45，含停留；实际 − 预计 -00:04:26；佳明本段不慢于预计</title>
+<text x="1411.0" y="1663.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#087F5B">00:43:45</tspan><tspan data-role="segment-difference" fill="#087F5B">（-00:04:26）</tspan></text>
+</g>
+<g id="time-cell-2-4" class="time-cell inspectable" data-cp-id="wpt:5" data-series="planned" data-target-seconds="22500.0" data-elapsed-seconds="13073.472302572809" data-segment-seconds="2734.2696638760463" data-actual-minus-plan-seconds="-375.431116364809" tabindex="0" aria-label="06:15 预计 · M4清河村33.2：累计 03:37:53；M3土井子25.9 → M4清河村33.2 本段 00:45:34，含停留；实际 − 预计 -00:06:15；佳明本段不慢于预计">
+<title>06:15 预计 · M4清河村33.2：累计 03:37:53；M3土井子25.9 → M4清河村33.2 本段 00:45:34，含停留；实际 − 预计 -00:06:15；佳明本段不慢于预计</title>
+<text x="1909.0" y="1663.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#087F5B">00:45:34</tspan><tspan data-role="segment-difference" fill="#087F5B">（-00:06:15）</tspan></text>
+</g>
+<g id="time-cell-3-4" class="time-cell inspectable" data-cp-id="wpt:5" data-series="planned" data-target-seconds="23400.0" data-elapsed-seconds="13596.411194675722" data-segment-seconds="2843.6404504310885" data-actual-minus-plan-seconds="-484.8019029198513" tabindex="0" aria-label="06:30 预计 · M4清河村33.2：累计 03:46:36；M3土井子25.9 → M4清河村33.2 本段 00:47:24，含停留；实际 − 预计 -00:08:05；佳明本段不慢于预计">
+<title>06:30 预计 · M4清河村33.2：累计 03:46:36；M3土井子25.9 → M4清河村33.2 本段 00:47:24，含停留；实际 − 预计 -00:08:05；佳明本段不慢于预计</title>
+<text x="2407.0" y="1663.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#087F5B">00:47:24</tspan><tspan data-role="segment-difference" fill="#087F5B">（-00:08:05）</tspan></text>
+</g>
+</g>
+<g class="time-row" data-cp-id="wpt:6">
+<rect x="64" y="1690" width="2592" height="72" rx="0" fill="#FFFFFF"/>
+<path d="M64.000 1762.000 L2656.000 1762.000" fill="none" stroke="#E4E8ED" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<g id="time-header-5" class="checkpoint-header inspectable" data-cp-id="wpt:6" data-distance-m="42357.35029972478" tabindex="0" aria-label="M5翠屏庵42.6：赛道累计 42.357 km；佳明累计 42.720 km">
+<title>M5翠屏庵42.6：赛道累计 42.357 km；佳明累计 42.720 km</title>
+<text x="88" y="1735.0" font-size="23" fill="#202A35" font-weight="400" text-anchor="start">M5翠屏庵42.6 · 42.4 km</text>
+</g>
+<g id="time-cell-0-5" class="time-cell inspectable" data-cp-id="wpt:6" data-series="actual" data-elapsed-seconds="16220.0" data-segment-seconds="4166.0" tabindex="0" aria-label="佳明实际 · M5翠屏庵42.6：累计 04:30:20；M4清河村33.2 → M5翠屏庵42.6 本段 01:09:26，含停留">
+<title>佳明实际 · M5翠屏庵42.6：累计 04:30:20；M4清河村33.2 → M5翠屏庵42.6 本段 01:09:26，含停留</title>
+<text x="913.0" y="1735.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#202A35">01:09:26</tspan></text>
+</g>
+<g id="time-cell-1-5" class="time-cell inspectable" data-cp-id="wpt:6" data-series="planned" data-target-seconds="21600.0" data-elapsed-seconds="16651.7326995108" data-segment-seconds="4101.199289040906" data-actual-minus-plan-seconds="64.80071095909443" tabindex="0" aria-label="06:00 预计 · M5翠屏庵42.6：累计 04:37:32；M4清河村33.2 → M5翠屏庵42.6 本段 01:08:21，含停留；实际 − 预计 +00:01:05；佳明本段更慢">
+<title>06:00 预计 · M5翠屏庵42.6：累计 04:37:32；M4清河村33.2 → M5翠屏庵42.6 本段 01:08:21，含停留；实际 − 预计 +00:01:05；佳明本段更慢</title>
+<text x="1411.0" y="1735.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#C23B38">01:08:21</tspan><tspan data-role="segment-difference" fill="#C23B38">（+00:01:05）</tspan></text>
+</g>
+<g id="time-cell-2-5" class="time-cell inspectable" data-cp-id="wpt:6" data-series="planned" data-target-seconds="22500.0" data-elapsed-seconds="17345.554895323752" data-segment-seconds="4272.082592750943" data-actual-minus-plan-seconds="-106.08259275094315" tabindex="0" aria-label="06:15 预计 · M5翠屏庵42.6：累计 04:49:06；M4清河村33.2 → M5翠屏庵42.6 本段 01:11:12，含停留；实际 − 预计 -00:01:46；佳明本段不慢于预计">
+<title>06:15 预计 · M5翠屏庵42.6：累计 04:49:06；M4清河村33.2 → M5翠屏庵42.6 本段 01:11:12，含停留；实际 − 预计 -00:01:46；佳明本段不慢于预计</title>
+<text x="1909.0" y="1735.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#087F5B">01:11:12</tspan><tspan data-role="segment-difference" fill="#087F5B">（-00:01:46）</tspan></text>
+</g>
+<g id="time-cell-3-5" class="time-cell inspectable" data-cp-id="wpt:6" data-series="planned" data-target-seconds="23400.0" data-elapsed-seconds="18039.377091136703" data-segment-seconds="4442.965896460981" data-actual-minus-plan-seconds="-276.96589646098073" tabindex="0" aria-label="06:30 预计 · M5翠屏庵42.6：累计 05:00:39；M4清河村33.2 → M5翠屏庵42.6 本段 01:14:03，含停留；实际 − 预计 -00:04:37；佳明本段不慢于预计">
+<title>06:30 预计 · M5翠屏庵42.6：累计 05:00:39；M4清河村33.2 → M5翠屏庵42.6 本段 01:14:03，含停留；实际 − 预计 -00:04:37；佳明本段不慢于预计</title>
+<text x="2407.0" y="1735.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#087F5B">01:14:03</tspan><tspan data-role="segment-difference" fill="#087F5B">（-00:04:37）</tspan></text>
+</g>
+</g>
+<g class="time-row" data-cp-id="wpt:1:finish">
+<rect x="64" y="1762" width="2592" height="72" rx="0" fill="#F2F4F7"/>
+<path d="M64.000 1834.000 L2656.000 1834.000" fill="none" stroke="#E4E8ED" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<g id="time-header-6" class="checkpoint-header inspectable" data-cp-id="wpt:1:finish" data-distance-m="52197.07063803112" tabindex="0" aria-label="起终点-大境门（终点）：赛道累计 52.197 km；佳明累计 52.575 km">
+<title>起终点-大境门（终点）：赛道累计 52.197 km；佳明累计 52.575 km</title>
+<text x="88" y="1807.0" font-size="23" fill="#202A35" font-weight="400" text-anchor="start">起终点-大境门（终点） · 52.2 km</text>
+</g>
+<g id="time-cell-0-6" class="time-cell inspectable" data-cp-id="wpt:1:finish" data-series="actual" data-elapsed-seconds="22454.58" data-segment-seconds="6234.580000000002" tabindex="0" aria-label="佳明实际 · 起终点-大境门（终点）：累计 06:14:15；M5翠屏庵42.6 → 起终点-大境门（终点） 本段 01:43:55，含停留">
+<title>佳明实际 · 起终点-大境门（终点）：累计 06:14:15；M5翠屏庵42.6 → 起终点-大境门（终点） 本段 01:43:55，含停留</title>
+<text x="913.0" y="1807.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#202A35">01:43:55</tspan></text>
+</g>
+<g id="time-cell-1-6" class="time-cell inspectable" data-cp-id="wpt:1:finish" data-series="planned" data-target-seconds="21600.0" data-elapsed-seconds="21600.0" data-segment-seconds="4948.2673004891985" data-actual-minus-plan-seconds="1286.3126995108032" tabindex="0" aria-label="06:00 预计 · 起终点-大境门（终点）：累计 06:00:00；M5翠屏庵42.6 → 起终点-大境门（终点） 本段 01:22:28，含停留；实际 − 预计 +00:21:26；佳明本段更慢">
+<title>06:00 预计 · 起终点-大境门（终点）：累计 06:00:00；M5翠屏庵42.6 → 起终点-大境门（终点） 本段 01:22:28，含停留；实际 − 预计 +00:21:26；佳明本段更慢</title>
+<text x="1411.0" y="1807.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#C23B38">01:22:28</tspan><tspan data-role="segment-difference" fill="#C23B38">（+00:21:26）</tspan></text>
+</g>
+<g id="time-cell-2-6" class="time-cell inspectable" data-cp-id="wpt:1:finish" data-series="planned" data-target-seconds="22500.0" data-elapsed-seconds="22500.0" data-segment-seconds="5154.445104676248" data-actual-minus-plan-seconds="1080.1348953237539" tabindex="0" aria-label="06:15 预计 · 起终点-大境门（终点）：累计 06:15:00；M5翠屏庵42.6 → 起终点-大境门（终点） 本段 01:25:54，含停留；实际 − 预计 +00:18:00；佳明本段更慢">
+<title>06:15 预计 · 起终点-大境门（终点）：累计 06:15:00；M5翠屏庵42.6 → 起终点-大境门（终点） 本段 01:25:54，含停留；实际 − 预计 +00:18:00；佳明本段更慢</title>
+<text x="1909.0" y="1807.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#C23B38">01:25:54</tspan><tspan data-role="segment-difference" fill="#C23B38">（+00:18:00）</tspan></text>
+</g>
+<g id="time-cell-3-6" class="time-cell inspectable" data-cp-id="wpt:1:finish" data-series="planned" data-target-seconds="23400.0" data-elapsed-seconds="23400.0" data-segment-seconds="5360.622908863297" data-actual-minus-plan-seconds="873.9570911367045" tabindex="0" aria-label="06:30 预计 · 起终点-大境门（终点）：累计 06:30:00；M5翠屏庵42.6 → 起终点-大境门（终点） 本段 01:29:21，含停留；实际 − 预计 +00:14:34；佳明本段更慢">
+<title>06:30 预计 · 起终点-大境门（终点）：累计 06:30:00；M5翠屏庵42.6 → 起终点-大境门（终点） 本段 01:29:21，含停留；实际 − 预计 +00:14:34；佳明本段更慢</title>
+<text x="2407.0" y="1807.0" font-size="26" fill="#202A35" font-weight="700" text-anchor="middle" data-role="time-values"><tspan data-role="segment-time" fill="#C23B38">01:29:21</tspan><tspan data-role="segment-difference" fill="#C23B38">（+00:14:34）</tspan></text>
+</g>
+</g>
+<path d="M664.000 1330.000 L664.000 1834.000" fill="none" stroke="#E4E8ED" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1162.000 1330.000 L1162.000 1834.000" fill="none" stroke="#E4E8ED" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1660.000 1330.000 L1660.000 1834.000" fill="none" stroke="#E4E8ED" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M2158.000 1330.000 L2158.000 1834.000" fill="none" stroke="#E4E8ED" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<g id="terrain">
+<text x="64" y="1882" font-size="30" fill="#202A35" font-weight="700" text-anchor="start">02  赛道数据对比</text>
+<text x="2656" y="1882" font-size="22" fill="#626D79" font-weight="400" text-anchor="end">深灰 = 佳明 · 蓝色 = 仓库 · 爬升 / 下降按相邻 CP 区间比较</text>
+<g id="terrain-summary">
+<rect x="64.0" y="1906" width="848.0" height="110" rx="10" fill="#ffffff"/>
+<text x="88.0" y="1940" font-size="21" fill="#626D79" font-weight="400" text-anchor="start">全程距离 · 佳明 / 仓库</text>
+<text x="88.0" y="1987" font-size="30" fill="#202A35" font-weight="650" text-anchor="start">52.57 / 52.20 km</text>
+<text x="888.0" y="1987" font-size="22" fill="#626D79" font-weight="400" text-anchor="end">仓库少 377 m</text>
+<rect x="936.0" y="1906" width="848.0" height="110" rx="10" fill="#ffffff"/>
+<text x="960.0" y="1940" font-size="21" fill="#626D79" font-weight="400" text-anchor="start">累计爬升 · 佳明 / 仓库</text>
+<text x="960.0" y="1987" font-size="30" fill="#202A35" font-weight="650" text-anchor="start">2205 / 1960 m</text>
+<text x="1760.0" y="1987" font-size="22" fill="#626D79" font-weight="400" text-anchor="end">仓库少 245 m</text>
+<rect x="1808.0" y="1906" width="848.0" height="110" rx="10" fill="#ffffff"/>
+<text x="1832.0" y="1940" font-size="21" fill="#626D79" font-weight="400" text-anchor="start">累计下降 · 佳明 / 仓库</text>
+<text x="1832.0" y="1987" font-size="30" fill="#202A35" font-weight="650" text-anchor="start">2216 / 1996 m</text>
+<text x="2632.0" y="1987" font-size="22" fill="#626D79" font-weight="400" text-anchor="end">仓库少 220 m</text>
+</g>
+<g id="ascent_m-chart" data-kind="ascent_m" data-zero-y="2524" data-pixels-per-meter="0.4125">
+<rect x="64.0" y="2044" width="1284.0" height="550" rx="12" fill="#FFFFFF"/>
+<text x="92.0" y="2088" font-size="27" fill="#202A35" font-weight="700" text-anchor="start">分段爬升</text>
+<text x="92.0" y="2126" font-size="20" fill="#626D79" font-weight="400" text-anchor="start">按相邻 CP 区间比较 · 两张图共用刻度</text>
+<rect x="1086.0" y="2071" width="22" height="14" rx="2" fill="#475569"/>
+<text x="1118.0" y="2085" font-size="21" fill="#626D79" font-weight="400" text-anchor="start">佳明</text>
+<rect x="1206.0" y="2071" width="22" height="14" rx="2" fill="#3274AC"/>
+<text x="1238.0" y="2085" font-size="21" fill="#626D79" font-weight="400" text-anchor="start">仓库</text>
+<text x="134.0" y="2172" font-size="18" fill="#626D79" font-weight="400" text-anchor="end">米</text>
+<path d="M152.000 2524.000 L1306.000 2524.000" fill="none" stroke="#A1ABB5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="136.0" y="2530.0" font-size="18" fill="#626D79" font-weight="400" text-anchor="end">0</text>
+<path d="M152.000 2414.000 L1306.000 2414.000" fill="none" stroke="#E2E7ED" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 5"/>
+<text x="136.0" y="2420.0" font-size="18" fill="#626D79" font-weight="400" text-anchor="end">267</text>
+<path d="M152.000 2304.000 L1306.000 2304.000" fill="none" stroke="#E2E7ED" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 5"/>
+<text x="136.0" y="2310.0" font-size="18" fill="#626D79" font-weight="400" text-anchor="end">533</text>
+<path d="M152.000 2194.000 L1306.000 2194.000" fill="none" stroke="#E2E7ED" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 5"/>
+<text x="136.0" y="2200.0" font-size="18" fill="#626D79" font-weight="400" text-anchor="end">800</text>
+<g id="ascent_m-cp-1" class="inspectable" data-actual-available="true" tabindex="0" aria-label="起终点-大境门（起点） → M1四岔村7.9：分段爬升；佳明 344 m；仓库 326 m；仓库少 18 m">
+<title>起终点-大境门（起点） → M1四岔村7.9：分段爬升；佳明 344 m；仓库 326 m；仓库少 18 m</title>
+<rect x="220.567" y="2381.926" width="23.000" height="142.074" rx="2" fill="#475569" data-series="actual" data-value-m="344.42221785976267"><title>起终点-大境门（起点） → M1四岔村7.9：分段爬升；佳明 344 m；仓库 326 m；仓库少 18 m</title></rect>
+<text x="232.0666666666667" y="2369.925835132848" font-size="21" fill="#475569" font-weight="600" text-anchor="middle">344</text>
+<rect x="252.767" y="2389.525" width="23.000" height="134.475" rx="2" fill="#3274AC" data-series="planned" data-value-m="326.0"><title>起终点-大境门（起点） → M1四岔村7.9：分段爬升；佳明 344 m；仓库 326 m；仓库少 18 m</title></rect>
+<text x="264.2666666666667" y="2341.925835132848" font-size="21" fill="#3274AC" font-weight="600" text-anchor="middle">326</text>
+<text x="248.16666666666669" y="2560" font-size="21" fill="#626D79" font-weight="400" text-anchor="middle">M1四岔村7.9</text>
+</g>
+<g id="ascent_m-cp-2" class="inspectable" data-actual-available="true" tabindex="0" aria-label="M1四岔村7.9 → M2黄土窑14.1：分段爬升；佳明 239 m；仓库 213 m；仓库少 26 m">
+<title>M1四岔村7.9 → M2黄土窑14.1：分段爬升；佳明 239 m；仓库 213 m；仓库少 26 m</title>
+<rect x="412.900" y="2425.587" width="23.000" height="98.413" rx="2" fill="#475569" data-series="actual" data-value-m="238.57778214023733"><title>M1四岔村7.9 → M2黄土窑14.1：分段爬升；佳明 239 m；仓库 213 m；仓库少 26 m</title></rect>
+<text x="424.4" y="2413.586664867152" font-size="21" fill="#475569" font-weight="600" text-anchor="middle">239</text>
+<rect x="445.100" y="2436.137" width="23.000" height="87.862" rx="2" fill="#3274AC" data-series="planned" data-value-m="213.0"><title>M1四岔村7.9 → M2黄土窑14.1：分段爬升；佳明 239 m；仓库 213 m；仓库少 26 m</title></rect>
+<text x="456.6" y="2385.586664867152" font-size="21" fill="#3274AC" font-weight="600" text-anchor="middle">213</text>
+<text x="440.5" y="2560" font-size="21" fill="#626D79" font-weight="400" text-anchor="middle">M2黄土窑14.1</text>
+</g>
+<g id="ascent_m-cp-3" class="inspectable" data-actual-available="true" tabindex="0" aria-label="M2黄土窑14.1 → M3土井子25.9：分段爬升；佳明 483 m；仓库 451 m；仓库少 32 m">
+<title>M2黄土窑14.1 → M3土井子25.9：分段爬升；佳明 483 m；仓库 451 m；仓库少 32 m</title>
+<rect x="605.233" y="2324.653" width="23.000" height="199.347" rx="2" fill="#475569" data-series="actual" data-value-m="483.26640570211816"><title>M2黄土窑14.1 → M3土井子25.9：分段爬升；佳明 483 m；仓库 451 m；仓库少 32 m</title></rect>
+<text x="616.7333333333333" y="2312.6526076478763" font-size="21" fill="#475569" font-weight="600" text-anchor="middle">483</text>
+<rect x="637.433" y="2337.963" width="23.000" height="186.037" rx="2" fill="#3274AC" data-series="planned" data-value-m="451.0"><title>M2黄土窑14.1 → M3土井子25.9：分段爬升；佳明 483 m；仓库 451 m；仓库少 32 m</title></rect>
+<text x="648.9333333333334" y="2284.6526076478763" font-size="21" fill="#3274AC" font-weight="600" text-anchor="middle">451</text>
+<text x="632.8333333333334" y="2560" font-size="21" fill="#626D79" font-weight="400" text-anchor="middle">M3土井子25.9</text>
+</g>
+<g id="ascent_m-cp-4" class="inspectable" data-actual-available="true" tabindex="0" aria-label="M3土井子25.9 → M4清河村33.2：分段爬升；佳明 150 m；仓库 115 m；仓库少 35 m">
+<title>M3土井子25.9 → M4清河村33.2：分段爬升；佳明 150 m；仓库 115 m；仓库少 35 m</title>
+<rect x="797.567" y="2461.950" width="23.000" height="62.050" rx="2" fill="#475569" data-series="actual" data-value-m="150.42313713277167"><title>M3土井子25.9 → M4清河村33.2：分段爬升；佳明 150 m；仓库 115 m；仓库少 35 m</title></rect>
+<text x="809.0666666666667" y="2449.9504559327315" font-size="21" fill="#475569" font-weight="600" text-anchor="middle">150</text>
+<rect x="829.767" y="2476.562" width="23.000" height="47.438" rx="2" fill="#3274AC" data-series="planned" data-value-m="115.0"><title>M3土井子25.9 → M4清河村33.2：分段爬升；佳明 150 m；仓库 115 m；仓库少 35 m</title></rect>
+<text x="841.2666666666668" y="2421.9504559327315" font-size="21" fill="#3274AC" font-weight="600" text-anchor="middle">115</text>
+<text x="825.1666666666667" y="2560" font-size="21" fill="#626D79" font-weight="400" text-anchor="middle">M4清河村33.2</text>
+</g>
+<g id="ascent_m-cp-5" class="inspectable" data-actual-available="true" tabindex="0" aria-label="M4清河村33.2 → M5翠屏庵42.6：分段爬升；佳明 392 m；仓库 340 m；仓库少 52 m">
+<title>M4清河村33.2 → M5翠屏庵42.6：分段爬升；佳明 392 m；仓库 340 m；仓库少 52 m</title>
+<rect x="989.900" y="2362.251" width="23.000" height="161.749" rx="2" fill="#475569" data-series="actual" data-value-m="392.11762079645564"><title>M4清河村33.2 → M5翠屏庵42.6：分段爬升；佳明 392 m；仓库 340 m；仓库少 52 m</title></rect>
+<text x="1001.4" y="2350.251481421462" font-size="21" fill="#475569" font-weight="600" text-anchor="middle">392</text>
+<rect x="1022.100" y="2383.750" width="23.000" height="140.250" rx="2" fill="#3274AC" data-series="planned" data-value-m="340.0"><title>M4清河村33.2 → M5翠屏庵42.6：分段爬升；佳明 392 m；仓库 340 m；仓库少 52 m</title></rect>
+<text x="1033.6" y="2322.251481421462" font-size="21" fill="#3274AC" font-weight="600" text-anchor="middle">340</text>
+<text x="1017.5" y="2560" font-size="21" fill="#626D79" font-weight="400" text-anchor="middle">M5翠屏庵42.6</text>
+</g>
+<g id="ascent_m-cp-6" class="inspectable" data-actual-available="true" tabindex="0" aria-label="M5翠屏庵42.6 → 起终点-大境门（终点）：分段爬升；佳明 596 m；仓库 515 m；仓库少 81 m">
+<title>M5翠屏庵42.6 → 起终点-大境门（终点）：分段爬升；佳明 596 m；仓库 515 m；仓库少 81 m</title>
+<rect x="1182.233" y="2278.070" width="23.000" height="245.930" rx="2" fill="#475569" data-series="actual" data-value-m="596.1928363686545"><title>M5翠屏庵42.6 → 起终点-大境门（终点）：分段爬升；佳明 596 m；仓库 515 m；仓库少 81 m</title></rect>
+<text x="1193.7333333333336" y="2266.07045499793" font-size="21" fill="#475569" font-weight="600" text-anchor="middle">596</text>
+<rect x="1214.433" y="2311.562" width="23.000" height="212.438" rx="2" fill="#3274AC" data-series="planned" data-value-m="515.0"><title>M5翠屏庵42.6 → 起终点-大境门（终点）：分段爬升；佳明 596 m；仓库 515 m；仓库少 81 m</title></rect>
+<text x="1225.9333333333334" y="2299.5625" font-size="21" fill="#3274AC" font-weight="600" text-anchor="middle">515</text>
+<text x="1209.8333333333335" y="2560" font-size="21" fill="#626D79" font-weight="400" text-anchor="middle">终点</text>
+</g>
+</g>
+<g id="descent_m-chart" data-kind="descent_m" data-zero-y="2524" data-pixels-per-meter="0.4125">
+<rect x="1372.0" y="2044" width="1284.0" height="550" rx="12" fill="#FFFFFF"/>
+<text x="1400.0" y="2088" font-size="27" fill="#202A35" font-weight="700" text-anchor="start">分段下降</text>
+<text x="1400.0" y="2126" font-size="20" fill="#626D79" font-weight="400" text-anchor="start">按相邻 CP 区间比较 · 两张图共用刻度</text>
+<rect x="2394.0" y="2071" width="22" height="14" rx="2" fill="#475569"/>
+<text x="2426.0" y="2085" font-size="21" fill="#626D79" font-weight="400" text-anchor="start">佳明</text>
+<rect x="2514.0" y="2071" width="22" height="14" rx="2" fill="#3274AC"/>
+<text x="2546.0" y="2085" font-size="21" fill="#626D79" font-weight="400" text-anchor="start">仓库</text>
+<text x="1442.0" y="2172" font-size="18" fill="#626D79" font-weight="400" text-anchor="end">米</text>
+<path d="M1460.000 2524.000 L2614.000 2524.000" fill="none" stroke="#A1ABB5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="1444.0" y="2530.0" font-size="18" fill="#626D79" font-weight="400" text-anchor="end">0</text>
+<path d="M1460.000 2414.000 L2614.000 2414.000" fill="none" stroke="#E2E7ED" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 5"/>
+<text x="1444.0" y="2420.0" font-size="18" fill="#626D79" font-weight="400" text-anchor="end">267</text>
+<path d="M1460.000 2304.000 L2614.000 2304.000" fill="none" stroke="#E2E7ED" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 5"/>
+<text x="1444.0" y="2310.0" font-size="18" fill="#626D79" font-weight="400" text-anchor="end">533</text>
+<path d="M1460.000 2194.000 L2614.000 2194.000" fill="none" stroke="#E2E7ED" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 5"/>
+<text x="1444.0" y="2200.0" font-size="18" fill="#626D79" font-weight="400" text-anchor="end">800</text>
+<g id="descent_m-cp-1" class="inspectable" data-actual-available="true" tabindex="0" aria-label="起终点-大境门（起点） → M1四岔村7.9：分段下降；佳明 140 m；仓库 164 m；仓库多 24 m">
+<title>起终点-大境门（起点） → M1四岔村7.9：分段下降；佳明 140 m；仓库 164 m；仓库多 24 m</title>
+<rect x="1528.567" y="2466.250" width="23.000" height="57.750" rx="2" fill="#475569" data-series="actual" data-value-m="140.0"><title>起终点-大境门（起点） → M1四岔村7.9：分段下降；佳明 140 m；仓库 164 m；仓库多 24 m</title></rect>
+<text x="1540.0666666666668" y="2454.25" font-size="21" fill="#475569" font-weight="600" text-anchor="middle">140</text>
+<rect x="1560.767" y="2456.350" width="23.000" height="67.650" rx="2" fill="#3274AC" data-series="planned" data-value-m="164.0"><title>起终点-大境门（起点） → M1四岔村7.9：分段下降；佳明 140 m；仓库 164 m；仓库多 24 m</title></rect>
+<text x="1572.2666666666667" y="2416.35" font-size="21" fill="#3274AC" font-weight="600" text-anchor="middle">164</text>
+<text x="1556.1666666666667" y="2560" font-size="21" fill="#626D79" font-weight="400" text-anchor="middle">M1四岔村7.9</text>
+</g>
+<g id="descent_m-cp-2" class="inspectable" data-actual-available="true" tabindex="0" aria-label="M1四岔村7.9 → M2黄土窑14.1：分段下降；佳明 278 m；仓库 256 m；仓库少 22 m">
+<title>M1四岔村7.9 → M2黄土窑14.1：分段下降；佳明 278 m；仓库 256 m；仓库少 22 m</title>
+<rect x="1720.900" y="2409.325" width="23.000" height="114.675" rx="2" fill="#475569" data-series="actual" data-value-m="278.0"><title>M1四岔村7.9 → M2黄土窑14.1：分段下降；佳明 278 m；仓库 256 m；仓库少 22 m</title></rect>
+<text x="1732.4" y="2397.325" font-size="21" fill="#475569" font-weight="600" text-anchor="middle">278</text>
+<rect x="1753.100" y="2418.400" width="23.000" height="105.600" rx="2" fill="#3274AC" data-series="planned" data-value-m="256.0"><title>M1四岔村7.9 → M2黄土窑14.1：分段下降；佳明 278 m；仓库 256 m；仓库少 22 m</title></rect>
+<text x="1764.6" y="2369.325" font-size="21" fill="#3274AC" font-weight="600" text-anchor="middle">256</text>
+<text x="1748.5" y="2560" font-size="21" fill="#626D79" font-weight="400" text-anchor="middle">M2黄土窑14.1</text>
+</g>
+<g id="descent_m-cp-3" class="inspectable" data-actual-available="true" tabindex="0" aria-label="M2黄土窑14.1 → M3土井子25.9：分段下降；佳明 260 m；仓库 216 m；仓库少 44 m">
+<title>M2黄土窑14.1 → M3土井子25.9：分段下降；佳明 260 m；仓库 216 m；仓库少 44 m</title>
+<rect x="1913.233" y="2416.558" width="23.000" height="107.442" rx="2" fill="#475569" data-series="actual" data-value-m="260.46576890966355"><title>M2黄土窑14.1 → M3土井子25.9：分段下降；佳明 260 m；仓库 216 m；仓库少 44 m</title></rect>
+<text x="1924.7333333333336" y="2404.557870324764" font-size="21" fill="#475569" font-weight="600" text-anchor="middle">260</text>
+<rect x="1945.433" y="2434.888" width="23.000" height="89.112" rx="2" fill="#3274AC" data-series="planned" data-value-m="216.0279481414873"><title>M2黄土窑14.1 → M3土井子25.9：分段下降；佳明 260 m；仓库 216 m；仓库少 44 m</title></rect>
+<text x="1956.9333333333334" y="2376.557870324764" font-size="21" fill="#3274AC" font-weight="600" text-anchor="middle">216</text>
+<text x="1940.8333333333335" y="2560" font-size="21" fill="#626D79" font-weight="400" text-anchor="middle">M3土井子25.9</text>
+</g>
+<g id="descent_m-cp-4" class="inspectable" data-actual-available="true" tabindex="0" aria-label="M3土井子25.9 → M4清河村33.2：分段下降；佳明 263 m；仓库 222 m；仓库少 41 m">
+<title>M3土井子25.9 → M4清河村33.2：分段下降；佳明 263 m；仓库 222 m；仓库少 41 m</title>
+<rect x="2105.567" y="2415.516" width="23.000" height="108.484" rx="2" fill="#475569" data-series="actual" data-value-m="262.99144505332265"><title>M3土井子25.9 → M4清河村33.2：分段下降；佳明 263 m；仓库 222 m；仓库少 41 m</title></rect>
+<text x="2117.066666666667" y="2403.516028915504" font-size="21" fill="#475569" font-weight="600" text-anchor="middle">263</text>
+<rect x="2137.767" y="2432.437" width="23.000" height="91.563" rx="2" fill="#3274AC" data-series="planned" data-value-m="221.9720518585127"><title>M3土井子25.9 → M4清河村33.2：分段下降；佳明 263 m；仓库 222 m；仓库少 41 m</title></rect>
+<text x="2149.266666666667" y="2375.516028915504" font-size="21" fill="#3274AC" font-weight="600" text-anchor="middle">222</text>
+<text x="2133.166666666667" y="2560" font-size="21" fill="#626D79" font-weight="400" text-anchor="middle">M4清河村33.2</text>
+</g>
+<g id="descent_m-cp-5" class="inspectable" data-actual-available="true" tabindex="0" aria-label="M4清河村33.2 → M5翠屏庵42.6：分段下降；佳明 511 m；仓库 448 m；仓库少 64 m">
+<title>M4清河村33.2 → M5翠屏庵42.6：分段下降；佳明 511 m；仓库 448 m；仓库少 64 m</title>
+<rect x="2297.900" y="2313.092" width="23.000" height="210.908" rx="2" fill="#475569" data-series="actual" data-value-m="511.29141005644635"><title>M4清河村33.2 → M5翠屏庵42.6：分段下降；佳明 511 m；仓库 448 m；仓库少 64 m</title></rect>
+<text x="2309.4" y="2301.092293351716" font-size="21" fill="#475569" font-weight="600" text-anchor="middle">511</text>
+<rect x="2330.100" y="2339.389" width="23.000" height="184.611" rx="2" fill="#3274AC" data-series="planned" data-value-m="447.5420466838319"><title>M4清河村33.2 → M5翠屏庵42.6：分段下降；佳明 511 m；仓库 448 m；仓库少 64 m</title></rect>
+<text x="2341.6" y="2273.092293351716" font-size="21" fill="#3274AC" font-weight="600" text-anchor="middle">448</text>
+<text x="2325.5" y="2560" font-size="21" fill="#626D79" font-weight="400" text-anchor="middle">M5翠屏庵42.6</text>
+</g>
+<g id="descent_m-cp-6" class="inspectable" data-actual-available="true" tabindex="0" aria-label="M5翠屏庵42.6 → 起终点-大境门（终点）：分段下降；佳明 763 m；仓库 690 m；仓库少 73 m">
+<title>M5翠屏庵42.6 → 起终点-大境门（终点）：分段下降；佳明 763 m；仓库 690 m；仓库少 73 m</title>
+<rect x="2490.233" y="2209.159" width="23.000" height="314.841" rx="2" fill="#475569" data-series="actual" data-value-m="763.2513759805674"><title>M5翠屏庵42.6 → 起终点-大境门（终点）：分段下降；佳明 763 m；仓库 690 m；仓库少 73 m</title></rect>
+<text x="2501.7333333333336" y="2197.158807408016" font-size="21" fill="#475569" font-weight="600" text-anchor="middle">763</text>
+<rect x="2522.433" y="2239.186" width="23.000" height="284.814" rx="2" fill="#3274AC" data-series="planned" data-value-m="690.4579533161681"><title>M5翠屏庵42.6 → 起终点-大境门（终点）：分段下降；佳明 763 m；仓库 690 m；仓库少 73 m</title></rect>
+<text x="2533.9333333333334" y="2227.1860942570806" font-size="21" fill="#3274AC" font-weight="600" text-anchor="middle">690</text>
+<text x="2517.8333333333335" y="2560" font-size="21" fill="#626D79" font-weight="400" text-anchor="middle">终点</text>
+</g>
+</g>
+</g>
+<g id="data-notes" class="inspectable" tabindex="0" aria-label="来源：路线与现有配速模型；实际活动 2026-09-12「张家口市 越野跑」。汇总来源：Garmin platform + FIT session fallback。
+CP 经过时间由原始 FIT 轨迹投影或明确指定的实际耗时得到，包含停留，非官方打卡；无法可靠拆分站内停留。
+佳明分站累计爬升、下降按 FIT 逐圈距离插值；本段值为相邻站累计值之差。终点使用活动汇总，未按比例调整。
+FIT 逐圈爬升 / 下降：2204 / 2216 m；汇总：2205 / 2216 m。差值使用未取整原值；分段显示值之和可能有取整误差；缺失值为 —。
+数据提示：ascent_m: FIT laps 2204.0, finish 2205.0; no rescaling.">
+<title>来源：路线与现有配速模型；实际活动 2026-09-12「张家口市 越野跑」。汇总来源：Garmin platform + FIT session fallback。
+CP 经过时间由原始 FIT 轨迹投影或明确指定的实际耗时得到，包含停留，非官方打卡；无法可靠拆分站内停留。
+佳明分站累计爬升、下降按 FIT 逐圈距离插值；本段值为相邻站累计值之差。终点使用活动汇总，未按比例调整。
+FIT 逐圈爬升 / 下降：2204 / 2216 m；汇总：2205 / 2216 m。差值使用未取整原值；分段显示值之和可能有取整误差；缺失值为 —。
+数据提示：ascent_m: FIT laps 2204.0, finish 2205.0; no rescaling.</title>
+<text x="64" y="2664" font-size="20" fill="#626D79" font-weight="400" text-anchor="start">口径：时间包含停留，CP 非官方打卡；佳明本段爬升 / 下降由 FIT 逐圈累计估算值相减，未知为 —。</text>
+<text x="64" y="2696" font-size="20" fill="#626D79" font-weight="400" text-anchor="start">差值先计算再取整；方案停留计入下一段。数据来源与匹配详情可悬停此处查看，也保存在 SVG 元数据中。</text>
+</g>
+</svg>
