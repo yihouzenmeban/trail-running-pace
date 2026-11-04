@@ -189,7 +189,7 @@ Horizontal simplification requires an explicit value such as `"distance_toleranc
 | `"equivalent_pace"` | 区间等强配速 | Segment moving seconds / equivalent segment kilometres |
 | `"arrival_time"` | 到达时间 | `start_time` + cumulative arrival duration, before this station's rest |
 
-![Three parenthesized displays for the same 03:10 elapsed arrival: pace 08:00, equivalent pace 05:00, or arrival clock 09:10](assets/secondary-display.en.svg)
+![Three parenthesized displays for the same 03:10 elapsed arrival: pace 08:00, equivalent pace 05:00, or arrival clock 09:10](secondary-display.en.svg)
 
 Both pace modes show `MM:SS` rounded to seconds. The start has no incoming leg and therefore no parenthesized pace. Arrival clock mode shows `HH:MM` truncated to minutes, including the gun time at the start. After midnight relative to the start day, it labels the next day “次日” and later days “+N天”, for example `(次日 01:20)` and `(+2天 00:30)`. Times use local race time without time-zone or daylight-saving conversion. Omitted `start_time` defaults to 06:00 without assuming a race date; an explicit time takes precedence. JSON `parameters.start_time` records the effective value.
 

@@ -55,7 +55,7 @@ Defaults are `ascent_method: "hysteresis"`, `ascent_threshold_m: 10`, and `ascen
 4. Retain both endpoint heights and the initial/terminal extrema participating in a confirmed threshold span. Boundary fragments may therefore include subthreshold ascent/descent, but confirmed terrain is not erased and net elevation change is preserved. If the whole profile varies by less than the threshold, only its net start-to-end change remains.
 5. Insert CP boundary heights into this curve and accumulate positive/negative changes. Filter globally before splitting; adding CPs does not reset the algorithm or change total ascent/descent.
 
-![10 m threshold illustration: a drop from 112 to 108 m does not confirm a turn; the drop from 116 to 106 m confirms a peak; source profile and filtered envelope](assets/ascent-threshold.en.svg)
+![10 m threshold illustration: a drop from 112 to 108 m does not confirm a turn; the drop from 116 to 106 m confirms a peak; source profile and filtered envelope](ascent-threshold.en.svg)
 
 No averaging and a 10 m threshold are an engineering tradeoff that retains source extrema while suppressing small reversals, not an accuracy guarantee or a community standard. Subthreshold round-trip undulations may be ignored, while elevation noise exceeding the threshold may still count as ascent. Do not infer elevation provenance or adjust filters automatically from file format, point density, or exporting software.
 
