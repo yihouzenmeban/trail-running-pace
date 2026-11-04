@@ -1,6 +1,10 @@
 ---
 name: even-effort-pace-chart
+display_name: 耐力学社体感一致配速表
+display_name_en: Even-Effort Pace Chart
 description: Convert GPX/KML routes or recorded FIT tracks into even-effort trail running pace charts, or compare FIT activities with checkpoint plans and segment elapsed times. Use for race pacing, SVG pace tables, or post-race actual-versus-plan comparisons.
+description_zh: 把 GPX/KML 路线或 FIT 轨迹转换成按检查点分段的体感一致越野配速表，或把 FIT 活动与检查点方案对照，查看累计差距、分段耗时与地形差异。适用于赛前配速规划、SVG 配速表输出与赛后实际对照。
+description_en: Convert GPX/KML routes or recorded FIT tracks into even-effort trail running pace charts, or compare FIT activities with checkpoint plans and segment elapsed times. Use for race pacing, SVG pace tables, or post-race actual-versus-plan comparisons.
 version: 1.0.0
 agent_created: true
 ---
