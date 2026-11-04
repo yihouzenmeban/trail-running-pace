@@ -1,6 +1,8 @@
 ---
 name: even-effort-pace-chart
 description: Convert GPX/KML routes or recorded FIT tracks into even-effort trail running pace charts, or compare FIT activities with checkpoint plans and segment elapsed times. Use for race pacing, SVG pace tables, or post-race actual-versus-plan comparisons.
+version: 1.0.0
+agent_created: true
 ---
 
 # 耐力学社 Even-Effort Pace Chart Skills
