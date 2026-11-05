@@ -32,6 +32,11 @@ npx skills add yihouzenmeban/trail-running-pace --skill even-effort-pace-chart
 
 也可从 [GitHub Releases](https://github.com/yihouzenmeban/trail-running-pace/releases) 下载带版本号的 ZIP，解压后将 `even-effort-pace-chart/` 目录复制到助手的技能目录。
 
+在 WorkBuddy 中安装：
+
+1. 打开 [WorkBuddy 技能分享页](https://www.workbuddy.cn/share/asset?shareCode=VxFVK8iJONQ7o2r3K9ffpU&sig=q3nO3wLULv--gGj0)，按提示在 WorkBuddy 客户端安装。
+2. 在「专家·技能·连接器 → 技能 → 已安装」中确认该技能已启用。
+
 向助手提供轨迹路径和目标时间。在支持 `$名称` 调用的助手中，可以使用：
 
 ```text
@@ -40,19 +45,6 @@ $even-effort-pace-chart
 ```
 
 也可在自然语言请求中指定使用 `even-effort-pace-chart`。默认展开五组方案，相邻间隔 30 分钟；06:00 出发，仅输出 SVG，括号内显示区间配速。指定出发时间不会切换括号内容。优先读取轨迹内 CP，缺少可用站点时再补充人工 CP；FIT 路线使用人工 CP。图表标签为中文。
-
-### WorkBuddy 使用流程
-
-1. 打开 [WorkBuddy 技能分享页](https://www.workbuddy.cn/share/asset?shareCode=VxFVK8iJONQ7o2r3K9ffpU&sig=q3nO3wLULv--gGj0)，按提示在 WorkBuddy 客户端安装技能，并在「专家·技能·连接器 → 技能 → 已安装」中确认已启用。
-2. 将 GPX、KML 或 FIT 赛道文件放入本地文件夹。在 WorkBuddy 中新建任务，选择该文件夹作为工作空间，并在对话框中选择已安装的 `even-effort-pace-chart`。
-3. 发送赛道文件名和目标完赛时间，例如将下面的 `race.gpx` 换成实际文件名：
-
-   ```text
-   用 even-effort-pace-chart 根据工作空间中的 race.gpx 生成体感一致配速表，
-   目标完赛时间 14 小时，结果输出到 output/my-race/。
-   ```
-
-4. 如果轨迹缺少可用 CP，或使用 FIT 路线，按提示提供 CP 名称和累计距离；遇到路线歧义时按实际情况确认。完成后，在右侧「产物」或工作空间的 `output/my-race/pace-chart.svg` 查看配速表。
 
 ### 命令行快速开始
 

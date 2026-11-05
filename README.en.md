@@ -32,6 +32,11 @@ Follow the prompts to select your AI assistant; add `-g` for a user-level instal
 
 You can also download a versioned ZIP from [GitHub Releases](https://github.com/yihouzenmeban/trail-running-pace/releases), extract it, and copy the `even-effort-pace-chart/` directory into your assistant's skills directory.
 
+To install in WorkBuddy:
+
+1. Open the [WorkBuddy Skill sharing page](https://www.workbuddy.cn/share/asset?shareCode=VxFVK8iJONQ7o2r3K9ffpU&sig=q3nO3wLULv--gGj0), then follow the prompts to install it in the WorkBuddy client.
+2. Confirm that the Skill is enabled in the installed skills list.
+
 Provide your route path and finish target. In assistants that support `$name` invocation, use:
 
 ```text
@@ -41,19 +46,6 @@ writing to output/my-race/.
 ```
 
 You can also name `even-effort-pace-chart` in a natural-language request. Defaults are five plans, 30 minutes apart, a 06:00 start, SVG-only output, and segment pace in parentheses. Specifying a start time does not change the parenthesized display. Embedded CPs are preferred; supply manual CPs when usable stations are missing. FIT routes require manual CPs. Chart labels are Chinese.
-
-### Using WorkBuddy
-
-1. Open the [WorkBuddy Skill sharing page](https://www.workbuddy.cn/share/asset?shareCode=VxFVK8iJONQ7o2r3K9ffpU&sig=q3nO3wLULv--gGj0), follow the prompts to install the Skill in the WorkBuddy client, and confirm it is enabled in the installed skills list.
-2. Place your GPX, KML, or FIT route in a local folder. Start a new WorkBuddy task, select that folder as the workspace, and choose the installed `even-effort-pace-chart` Skill in the conversation.
-3. Send the route filename and finish target. For example, replace `race.gpx` below with your actual filename:
-
-   ```text
-   Use even-effort-pace-chart to create a pace chart from race.gpx in the workspace,
-   with a 14-hour finish target, and write the result to output/my-race/.
-   ```
-
-4. If the route lacks usable CPs or uses FIT, provide CP names and cumulative distances when prompted; resolve any route ambiguities. Find the chart in the results pane or at `output/my-race/pace-chart.svg` in the workspace.
 
 ### CLI quick start
 
