@@ -47,23 +47,7 @@ writing to output/my-race/.
 
 You can also name `even-effort-pace-chart` in a natural-language request. Defaults are five plans, 30 minutes apart, a 06:00 start, SVG-only output, and segment pace in parentheses. Specifying a start time does not change the parenthesized display. Embedded CPs are preferred; supply manual CPs when usable stations are missing. FIT routes require manual CPs. Chart labels are Chinese.
 
-### Customize water with an AI assistant
-
-Replace the route path, date, and values with your own, then ask your assistant:
-
-```text
-Use even-effort-pace-chart to generate a pace chart from race.gpx.
-Use the 14-hour plan as the water reference and write to output/my-race/.
-
-The race starts at 06:00 on [race date] in the Asia/Shanghai time zone.
-Check the weather for each leg and ask me to confirm it before generating.
-
-Use a drinking rate of 500 ml/hour with an extra 15 minutes per leg.
-For the leg from CP2 to the next station, use 700 ml/hour.
-Show the water to carry when leaving each station on the chart.
-```
-
-Weather helps you confirm the drinking rate; the program does not adjust it automatically. If the forecast is unavailable, you can provide confirmed manual conditions. This example calculates next-leg water from rates and buffers; see [time-based water planning](skills/even-effort-pace-chart/references/configuration.en.md#time-based-water-planning) for the full workflow.
+Default water amounts are only for comparing legs. To plan water around the weather and your personal needs, ask your assistant; it will request missing details such as race time, drinking experience, carrying capacity, and station water availability, then calculate from your confirmed drinking rate and leg times. Weather helps you confirm the rate; the program does not adjust it automatically. See [water and weather](skills/even-effort-pace-chart/references/configuration.en.md#time-based-water-planning).
 
 ### All parameters
 
@@ -125,6 +109,7 @@ The default output is `garmin-comparison.svg`. FIT and single-activity FIT ZIP a
 | --- | --- |
 | All pace-chart parameters, defaults, and value descriptions | [Complete parameter table](skills/even-effort-pace-chart/references/configuration.en.md#parameters) |
 | Exact targets, manual CPs, rests, cutoffs, and exports | [Configuration and CLI](skills/even-effort-pace-chart/references/configuration.en.md) |
+| Water amounts, personal rates, and weather forecasts | [Water and weather](skills/even-effort-pace-chart/references/configuration.en.md#time-based-water-planning) |
 | KML heights, FIT device distance, and checkpoint requirements | [KML input](skills/even-effort-pace-chart/references/configuration.en.md#kml-input) / [FIT route input](skills/even-effort-pace-chart/references/configuration.en.md#fit-route-input) |
 | Activity comparisons, delta signs, passage matching, and Garmin retrieval | [Activity comparison](skills/even-effort-pace-chart/references/comparison.en.md) |
 | Equivalent distance, fatigue curves, distance, and elevation processing | [Model and limitations](skills/even-effort-pace-chart/references/model.en.md) |
