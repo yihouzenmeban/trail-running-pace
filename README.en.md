@@ -30,6 +30,8 @@ npx skills add yihouzenmeban/trail-running-pace --skill even-effort-pace-chart
 
 Follow the prompts to select your AI assistant; add `-g` for a user-level installation. Alternatively, copy the entire `skills/even-effort-pace-chart/` directory into your assistant's skills directory. Runtime use does not depend on repository examples or the archived article.
 
+You can also download a versioned ZIP from [GitHub Releases](https://github.com/yihouzenmeban/trail-running-pace/releases), extract it, and copy the `even-effort-pace-chart/` directory into your assistant's skills directory.
+
 Provide your route path and finish target. In assistants that support `$name` invocation, use:
 
 ```text

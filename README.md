@@ -30,6 +30,8 @@ npx skills add yihouzenmeban/trail-running-pace --skill even-effort-pace-chart
 
 按提示选择 AI 助手；添加 `-g` 可安装到用户级技能目录。也可将 `skills/even-effort-pace-chart/` 整个目录复制到助手的技能目录，运行时不依赖仓库示例或参考文章。
 
+也可从 [GitHub Releases](https://github.com/yihouzenmeban/trail-running-pace/releases) 下载带版本号的 ZIP，解压后将 `even-effort-pace-chart/` 目录复制到助手的技能目录。
+
 向助手提供轨迹路径和目标时间。在支持 `$名称` 调用的助手中，可以使用：
 
 ```text

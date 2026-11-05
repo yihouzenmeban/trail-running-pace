@@ -1,0 +1,29 @@
+name: Release skill
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'skills/even-effort-pace-chart/**'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-even-effort-pace-chart
+  queue: max
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: Test release script
+        run: python3 -m unittest discover -s .github/tests -v
+      - name: Publish skill
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 .github/scripts/release_skill.py "$GITHUB_SHA" "$RUNNER_TEMP"
