@@ -4,6 +4,8 @@
 
 This example generates 10–24 hour pace charts from a race KML track. The route and configuration are both included in this directory.
 
+The `15h/` plan centers on 15 hours and supports entering departure water amounts in HTML; see `15h/README.md`.
+
 ## Inputs and results
 
 | File | Contents |

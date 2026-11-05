@@ -5,6 +5,9 @@ from html.parser import HTMLParser
 import io
 import json
 from pathlib import Path
+import shutil
+import subprocess
+import unittest
 from unittest import mock
 from urllib.error import URLError
 from urllib.parse import parse_qs, urlsplit
@@ -43,6 +46,126 @@ class TableCells(HTMLParser):
             self.row = None
         elif tag == "tbody":
             self.in_body = False
+
+
+class ManualWaterTests(Fixture):
+    def setUp(self):
+        super().setUp()
+        self.write(points=[(0, 0, 0), (0, 0.01, 0), (0, 0.02, 0)])
+
+    def test_manual_water_leaves_unknown_values_empty_without_changing_pacing(self):
+        baseline = self.plan()
+        plan = self.plan(water_mode="manual")
+        self.assertEqual(plan["parameters"]["water_mode"], "manual")
+        self.assertEqual(plan["schedules"], baseline["schedules"])
+        self.assertEqual([cp["water_ml"] for cp in plan["checkpoints"]], [None, None, 0])
+        self.assertEqual([cp["segment_water_ml"] for cp in plan["checkpoints"]], [0, None, None])
+        self.assertNotIn("水量仅供比较赛段差异，并非个人饮水建议。", plan["warnings"])
+        self.assertTrue(any("手动填写" in warning for warning in plan["warnings"]))
+
+    def test_manual_water_exports_blank_cells_and_editable_html(self):
+        plan = self.plan(water_mode="manual")
+        rows = list(csv.DictReader(io.StringIO(pace.csv_text(plan))))
+        self.assertEqual([row["water_ml"] for row in rows[:3]], ["", "", "0.0"])
+        self.assertEqual([row["segment_water_ml"] for row in rows[:3]], ["0.0", "", ""])
+        self.assertIsNone(json.loads(json.dumps(plan))["checkpoints"][0]["water_ml"])
+
+        svg = list(ET.fromstring(pace.render_svg(plan)))
+        svg_cells = []
+        for index, element in enumerate(svg):
+            if element.get("data-column") != "water":
+                continue
+            texts = []
+            for sibling in svg[index + 1:]:
+                if sibling.tag.endswith("}rect"):
+                    break
+                texts.extend(sibling.itertext())
+            svg_cells.append(" ".join(texts))
+        self.assertEqual([text.strip() for text in svg_cells], ["", "", "0"])
+
+        class Inputs(HTMLParser):
+            def __init__(self):
+                super().__init__()
+                self.inputs = []
+                self.buttons = []
+
+            def handle_starttag(self, tag, attrs):
+                if tag == "input":
+                    self.inputs.append(dict(attrs))
+                elif tag == "button":
+                    self.buttons.append(dict(attrs))
+
+        html = pace.render_html(plan)
+        parsed = Inputs()
+        parsed.feed(html)
+        self.assertEqual(len(parsed.inputs), 2)
+        self.assertTrue(all(field["type"] == "number" and field["min"] == "0"
+                            and "value" not in field and field.get("aria-label")
+                            for field in parsed.inputs))
+        self.assertIn("save-water-html", [button.get("id") for button in parsed.buttons])
+        self.assertIn("手动填写", html)
+        self.assertIn("不会自动保存", html)
+
+    def test_manual_water_rejects_calculated_water_settings(self):
+        for option in ({"water_ml_per_10km": 500}, {"water_ml_per_hour": 500}):
+            with self.subTest(option=option), self.assertRaisesRegex(pace.InputError, "water_mode"):
+                self.plan(water_mode="manual", **option)
+
+    @unittest.skipUnless(shutil.which("node"), "Node is required to check the HTML save control")
+    def test_filled_html_download_preserves_values_and_rejects_invalid_input(self):
+        script = r"""
+const assert = require("assert").strict;
+const fs = require("fs");
+const vm = require("vm");
+const html = fs.readFileSync(0, "utf8");
+const source = html.match(/<script>([\s\S]*?)<\/script>/)[1];
+let handler, blob, downloaded, validationShown = false;
+const inputs = ["800", "", "0", "1250.5"].map(value => ({
+  value, valid: true, checkValidity() { return this.valid; },
+  reportValidity() { validationShown = true; }
+}));
+const copies = inputs.map(() => ({
+  attrs: {value: "old"}, setAttribute(key, value) { this.attrs[key] = value; },
+  removeAttribute(key) { delete this.attrs[key]; }
+}));
+const document = {
+  getElementById() { return {addEventListener(event, callback) { handler = callback; }}; },
+  querySelectorAll() { return inputs; },
+  documentElement: {cloneNode() {
+    return {querySelectorAll() { return copies; }, get outerHTML() {
+      return JSON.stringify(copies.map(item => item.attrs));
+    }};
+  }},
+  createElement() { return {click() { downloaded = this.download; }}; }
+};
+class Blob {
+  constructor(parts) { this.parts = parts; }
+  text() { return Promise.resolve(this.parts.join("")); }
+}
+vm.runInNewContext(source, {
+  document, Blob, URL: {createObjectURL(value) { blob = value; return "blob:test"; },
+                        revokeObjectURL() {}},
+  setTimeout(callback) { callback(); }
+});
+inputs[0].valid = false;
+handler();
+assert.equal(validationShown, true);
+assert.equal(downloaded, undefined);
+inputs[0].valid = true;
+handler();
+assert.equal(downloaded, "pace-chart-filled.html");
+blob.text().then(text => {
+  const prefix = "<!doctype html>\n";
+  assert.ok(text.startsWith(prefix));
+  assert.deepEqual(JSON.parse(text.slice(prefix.length)),
+                   [{value: "800"}, {}, {value: "0"}, {value: "1250.5"}]);
+}).catch(error => { console.error(error); process.exitCode = 1; });
+"""
+        result = subprocess.run(
+            ["node", "-e", script], input=pace.render_html(self.plan(water_mode="manual")),
+            text=True, capture_output=True,
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
 
 
 class TimeWaterTests(Fixture):
