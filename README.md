@@ -46,23 +46,26 @@
    1. 打开 [WorkBuddy 技能分享页](https://www.workbuddy.cn/share/asset?shareCode=VxFVK8iJONQ7o2r3K9ffpU&sig=q3nO3wLULv--gGj0)，按提示在 WorkBuddy 客户端安装。
    2. 在「专家·技能·连接器 → 技能 → 已安装」中确认该技能已启用。
 
-4. **Claude Code 插件市场**：在 Claude Code 里先添加市场，再安装插件：
+4. **ClawHub**：如果你使用 OpenClaw，用 ClawHub CLI 安装，需要 Node.js：
 
-   ```text
-   /plugin marketplace add yihouzenmeban/trail-running-pace
-   /plugin install trail-running-pace@trail-running-pace
+   ```bash
+   npx -y clawhub install @yihouzenmeban/even-effort-pace-chart
    ```
+
+   装到 `skills/@yihouzenmeban/even-effort-pace-chart/`，内容完整（脚本、参考文档都在里面）。也可以在 [ClawHub 页面](https://clawhub.ai/yihouzenmeban/skills/even-effort-pace-chart)查看。
 
 #### 首次使用
 
-安装完成后，准备一份 GPX、KML 或 FIT 轨迹（也可以先用[公开示例](examples/huizhou-gucheng-100k/README.md)），向助手提供轨迹路径和目标时间。在支持 `$名称` 调用的助手中，可以使用：
+安装完成后，准备一份 GPX、KML 或 FIT 轨迹（也可以先用[公开示例](examples/huizhou-gucheng-100k/README.md)），向助手提供轨迹路径和目标时间。
 
-```text
-$even-effort-pace-chart
-用 race.gpx 生成体感一致配速表，目标完赛时间 14 小时，输出到 output/my-race/。
-```
+- **Claude Code**：用斜杠命令调用：
 
-也可在自然语言请求中直接指定 `even-effort-pace-chart`。
+  ```text
+  /even-effort-pace-chart
+  用 race.gpx 生成体感一致配速表，目标完赛时间 14 小时，输出到 output/my-race/。
+  ```
+
+- **其他助手**：在支持 `$名称` 调用的助手中用 `$even-effort-pace-chart`；也可以在自然语言请求中直接指定 `even-effort-pace-chart`，让助手自行加载。
 
 默认行为：
 

@@ -46,24 +46,27 @@ Choose one of two usage modes:
    1. Open the [WorkBuddy Skill sharing page](https://www.workbuddy.cn/share/asset?shareCode=VxFVK8iJONQ7o2r3K9ffpU&sig=q3nO3wLULv--gGj0), then follow the prompts to install it in the WorkBuddy client.
    2. Confirm that the Skill is enabled in the installed skills list.
 
-4. **Claude Code plugin marketplace**: in Claude Code, add the marketplace first, then install the plugin:
+4. **ClawHub**: if you use OpenClaw, install it with the ClawHub CLI; requires Node.js:
 
-   ```text
-   /plugin marketplace add yihouzenmeban/trail-running-pace
-   /plugin install trail-running-pace@trail-running-pace
+   ```bash
+   npx -y clawhub install @yihouzenmeban/even-effort-pace-chart
    ```
+
+   Installs the complete skill to `skills/@yihouzenmeban/even-effort-pace-chart/`, scripts and references included. You can also view it on [ClawHub](https://clawhub.ai/yihouzenmeban/skills/even-effort-pace-chart).
 
 #### First use
 
-After installation, prepare a GPX, KML, or FIT route (or start with the [public example](examples/huizhou-gucheng-100k/README.en.md)), then give your assistant the route path and finish target. In assistants that support `$name` invocation, use:
+After installation, prepare a GPX, KML, or FIT route (or start with the [public example](examples/huizhou-gucheng-100k/README.en.md)), then give your assistant the route path and finish target.
 
-```text
-$even-effort-pace-chart
-Generate an even-effort pace chart from race.gpx with a 14-hour finish target,
-writing to output/my-race/.
-```
+- **Claude Code**: invoke the skill with its slash command:
 
-You can also name `even-effort-pace-chart` in a natural-language request.
+  ```text
+  /even-effort-pace-chart
+  Generate an even-effort pace chart from race.gpx with a 14-hour finish target,
+  writing to output/my-race/.
+  ```
+
+- **Other assistants**: in assistants that support `$name` invocation, use `$even-effort-pace-chart`; you can also name `even-effort-pace-chart` in a natural-language request and let the assistant load it.
 
 Defaults:
 
