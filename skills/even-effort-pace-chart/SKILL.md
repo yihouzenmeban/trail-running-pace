@@ -46,9 +46,9 @@ Resolve ambiguous inputs before generation:
 
 ### Set targets and assumptions
 
-Obtain the finish target if missing. A `target` expands to five columns with 30-minute spacing; `target_step_minutes` changes the interval. Use `targets` for an exact list, including a single column. When replacing a selected configuration's list with a new central target, remove old `targets`; otherwise the script keeps list precedence and warns. If expansion gives nonpositive durations, obtain an explicit list or interval.
+Obtain the finish target if missing. Interpret equivalent duration expressions consistently (for example, 300 minutes is `05:00`). A `target` expands to five columns with 30-minute spacing; `target_step_minutes` changes the interval. Use `targets` for an exact list, including a request for only one column. Ask when the requested targets or number of columns conflict. When replacing a selected configuration's list with a new central target, remove old `targets`; otherwise the script keeps list precedence and warns. If expansion gives nonpositive durations, obtain an explicit list or interval.
 
-Targets include station rests, which default to zero. Do not invent cutoffs or a race date. Cutoffs are elapsed durations; confirm start/date/rollover when converting clock cutoffs. Missing cutoffs stay unchecked and are omitted from station cells. For manual official-distance mismatches, confirm before using `distance_alignment: "scale"`; see configuration for the threshold and schema.
+Targets include station rests, which default to zero. Map a requested station's rest or cutoff to its inspected candidate ID in `checkpoint_overrides`. Do not invent cutoffs or a race date. Cutoffs are elapsed durations; confirm start/date/rollover when converting clock cutoffs. Missing cutoffs stay unchecked and are omitted from station cells. For manual official-distance mismatches, confirm before using `distance_alignment: "scale"`; see configuration for the threshold and schema.
 
 For example, “生成体感一致配速表，目标完赛时间 5 小时，相邻方案间隔 30 分钟，出发时间早上六点” maps to:
 
@@ -85,6 +85,6 @@ python3 <skill-dir>/scripts/pace_chart.py generate <route-file> \
 
 When the user specifies exports (`svg`, `html`, `csv`, `json`), set `output_formats` to exactly those formats, overriding any different selection in an existing configuration. Otherwise preserve the selected configuration or default to SVG. Existing selected files require another directory or authorized `--overwrite`. Use the script's native renderers; they implement the table style, cutoff visibility, and metadata.
 
-Before running, compare the configuration with the request. After success, read stdout `summary`: effective `parameters`, `target_source`, `targets_seconds`, route statistics, ordered `checkpoints`, and `verification`. Confirm finish targets/rest checks, review cutoff failures and warnings, and compare exported files with the request. For presentation-sensitive changes, render locally and inspect station names and target columns.
+Before running, compare the configuration with the request. If the user asks to review or approve it first, present the intended parameters and wait for confirmation before running `generate` or writing outputs. After success, read stdout `summary`: effective `parameters`, `target_source`, `targets_seconds`, route statistics, ordered `checkpoints`, and `verification`. Confirm finish targets/rest checks, review cutoff failures and warnings, and compare exported files with the request. For presentation-sensitive changes, render locally and inspect station names and target columns.
 
 Deliver output paths, route statistics, targets, and material assumptions in the user's language; chart labels remain Chinese. Explain whether next-leg water is an equivalent-distance comparison or a time estimate based on the user's confirmed rate and weather. Do not assess fitness from a route alone.
