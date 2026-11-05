@@ -6,7 +6,7 @@ This guide is for Skills maintainers. Normal chart generation does not require t
 
 ## Cases and inputs
 
-[cases.json](cases.json) provides seven `cases` with Chinese and English prompts. They cover defaults, start time independent of parenthesized display, explicit arrival display, replacing an old target list, retaining `0/false`, time-based water, and SVG-only export. `manual_review_cases` adds an interactive weather-preview and confirmation scenario. All cases use the synthetic [course.gpx](course.gpx) in the same directory.
+[cases.json](cases.json) provides seven `cases` with Chinese and English prompts. They cover defaults, start time independent of parenthesized display, explicit arrival display, replacing an old target list, retaining `0/false`, time-based water, and SVG-only export. `manual_review_cases` adds interactive scenarios for customized water, missing personal details, and weather-preview confirmation. All cases use the synthetic [course.gpx](course.gpx) in the same directory.
 
 ## Procedure
 
@@ -25,6 +25,11 @@ Set `--case` to the case ID and `--config` to the configuration actually produce
 
 Review the trace for route inspection, unnecessary questions about defaults, the requested files actually being generated, and the verification summary being read. For the manual-weather case, also check that the description matches the user's confirmed conditions; the checker validates the source, confirmation, and a non-empty description, but not its meaning. Record the model version, language, case ID, checker result, and manual review outcome.
 
-Run `manual_review_cases` in separate sessions and review them manually; do not pass them to the configuration checker. For the weather preview, verify the date, time zone, and reference target. If the forecast succeeds, check that the agent presents it and waits for the user's confirmation of the weather and personal rate, without generating files or inventing values first. After the evaluator confirms them, check that the agent reuses the complete forecast snapshot and generates the chart. If the forecast is unavailable, the agent should explain that and wait for user-confirmed manual conditions.
+Run `manual_review_cases` in separate sessions and review them manually; do not pass them to the configuration checker:
+
+- For customized water, check that the agent asks what the user wants before generating default amounts or delivering a blank chart. After the user requests a plan based on weather and personal needs, it should follow the time-based workflow.
+- For missing personal details, check that the agent asks for the missing date, start time, drinking experience, carrying capacity, and station water availability instead of adopting default amounts. If the user does not know their personal rate, check that the agent asks about training records or sweat rate, explains the limitation, and avoids presenting personalized amounts before confirmation.
+- In both scenarios, supply user-confirmed manual weather, personal rate, carrying capacity, and station water availability, then check that the agent generates with `water_mode: "time"` and the appropriate target. It should not ask again for information already provided.
+- For the weather preview, verify the date, time zone, and reference target. If the forecast succeeds, check that the agent presents it and waits for the user's confirmation of the weather and personal rate, without generating files or inventing values first. After the evaluator confirms them, check that the agent reuses the complete forecast snapshot and generates the chart. If the forecast is unavailable, the agent should explain that and wait for user-confirmed manual conditions.
 
 The checker runs offline without calling an agent. It does not verify execution traces or actual files. Unit tests establish that the checker accepts correct configurations and rejects incorrect ones, not that natural-language evaluations have passed.

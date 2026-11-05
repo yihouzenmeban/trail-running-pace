@@ -74,6 +74,16 @@
   ],
   "manual_review_cases": [
     {
+      "id": "custom_water_needs_clarification",
+      "prompt_zh": "用提供的 course.gpx 生成体感一致配速表，目标完赛 5 小时，我要自定义带水量。",
+      "prompt_en": "Generate an even-effort pace chart from the supplied course.gpx with a 5-hour finish target. I want to customize my water plan."
+    },
+    {
+      "id": "personalized_water_missing_details",
+      "prompt_zh": "用提供的 course.gpx 生成 5 小时配速表，请根据比赛天气和我的个人情况给我安排各站带水量。",
+      "prompt_en": "Generate a 5-hour pace chart from the supplied course.gpx and plan my departure water at each station based on the race weather and my personal needs."
+    },
+    {
       "id": "weather_preview_confirmation",
       "prompt_zh": "用提供的 course.gpx 制作 5 小时配速表并按耗时规划携水。比赛于当前日期后第 7 天当地 06:00 发枪，时区 Asia/Shanghai。请先查询赛段天气，等我确认天气和个人饮水速率后再生成。",
       "prompt_en": "Use the supplied course.gpx for a 5-hour chart with time-based water. The race starts at 06:00 local time seven days from today in Asia/Shanghai. Check the weather for each leg first, then wait for me to confirm the forecast and my personal drinking rate before generating."

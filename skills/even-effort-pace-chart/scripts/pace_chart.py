@@ -1312,6 +1312,10 @@ def table_metadata(plan) -> str:
 
 def water_metadata(plan) -> str:
     parameters = plan["parameters"]
+    if parameters.get("water_mode") != "time":
+        rate = str(parameters["water_ml_per_10km"]).removesuffix(".0")
+        return (f"水量（ml）：{rate} ml/10 等效公里，"
+                "仅供赛段比较，非个人饮水建议")
     override = "（含分段覆盖）" if parameters["water_rate_overrides"] else ""
     weather = "Open-Meteo" if parameters["water_weather_source"] == "open-meteo" else "手动"
     return (f'饮水率：{parameters["water_ml_per_hour"]:g} ml/h{override}'
@@ -1382,9 +1386,7 @@ def render_svg(plan: dict) -> str:
     widths = [width for _, width in BASE_COLUMNS] + [target_width] * len(plan["schedules"])
     width, margin = sum(widths) + 2, 1
     parts = [f'<rect width="{width}" height="100%" fill="#ffffff"/>']
-    metadata = [table_metadata(plan)]
-    if plan["parameters"].get("water_mode") == "time":
-        metadata.append(water_metadata(plan))
+    metadata = [table_metadata(plan), water_metadata(plan)]
     parts.append(svg_text(6, 30, metadata, size=23))
     y = 50 + (34 if len(metadata) > 1 else 0)
     headers = [name.split("\n") for name, _ in BASE_COLUMNS]
@@ -1447,7 +1449,7 @@ def render_svg(plan: dict) -> str:
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{y + 1:.0f}" '
         f'viewBox="0 0 {width} {y + 1:.0f}" role="img">'
         f'<title>{escape(plan["name"])} 体感一致配速表</title>'
-        f'<desc>{escape(table_metadata(plan))}；累计出站时间，图示和文字均在此文件内。</desc>'
+        f'<desc>{escape("；".join(metadata))}；累计出站时间，图示和文字均在此文件内。</desc>'
         f'<metadata>{escape(json.dumps(plan["article"], ensure_ascii=False))}</metadata>'
         + "".join(parts) + "</svg>\n"
     )
@@ -1461,9 +1463,7 @@ def render_html(plan: dict) -> str:
     widths = [width for _, width in BASE_COLUMNS] + [target_width] * len(plan["schedules"])
     columns = "".join(f'<col style="width:{100 * width / sum(widths):.5f}%">' for width in widths)
     limits = heat_limits(plan)
-    metadata = [table_metadata(plan)]
-    if plan["parameters"].get("water_mode") == "time":
-        metadata.append(water_metadata(plan))
+    metadata = [table_metadata(plan), water_metadata(plan)]
     metadata_html = "<br>".join(escape(line) for line in metadata)
     rows = []
     for index, cp in enumerate(plan["checkpoints"]):

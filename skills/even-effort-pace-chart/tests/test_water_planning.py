@@ -51,6 +51,18 @@ class DistanceWaterTests(Fixture):
         super().setUp()
         self.write(points=[(0, 0, 0), (0, 0.01, 0), (0, 0.02, 0)])
 
+    def test_distance_water_metadata_identifies_comparison_and_actual_rate(self):
+        for rate, displayed in ((700, "700"), (900.25, "900.25"), (900.234567, "900.234567"), (0, "0")):
+            with self.subTest(rate=rate):
+                plan = self.plan(water_ml_per_10km=rate)
+                svg = ET.fromstring(pace.render_svg(plan))
+                visible_svg = " ".join("".join(text.itertext()) for text in svg.findall("{*}text"))
+                html = pace.render_html(plan)
+                visible_html = html.split("<header>", 1)[1].split("</header>", 1)[0]
+                for name, content in (("SVG", visible_svg), ("HTML", visible_html)):
+                    for expected in (f"{displayed} ml/10 等效公里", "仅供赛段比较", "非个人饮水建议"):
+                        self.assertTrue(expected in content, f"{name}: missing {expected}")
+
     def test_distance_water_matches_next_leg_and_exports(self):
         plan = self.plan(water_mode="distance", water_ml_per_10km=900)
         checkpoints = plan["checkpoints"]
@@ -140,6 +152,7 @@ class TimeWaterTests(Fixture):
             self.assertIn("600", document)
             self.assertIn("15", document)
             self.assertIn("分段", document)
+            self.assertNotIn("仅供赛段比较", document)
 
     def test_chart_water_cells_show_each_departure_rate(self):
         plan = self.plan(**self.time_config())
