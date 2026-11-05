@@ -1,15 +1,15 @@
 ---
 name: even-effort-pace-chart
-display_name: 耐力学社体感一致配速表
+display_name: 体感一致配速表
 display_name_en: Even-Effort Pace Chart
-description: Convert GPX/KML routes or recorded FIT tracks into even-effort trail running pace charts, or compare FIT activities with checkpoint plans and segment elapsed times. Use for race pacing, SVG pace tables, or post-race actual-versus-plan comparisons.
-description_zh: 把 GPX/KML 路线或 FIT 轨迹转换成按检查点分段的体感一致越野配速表，或把 FIT 活动与检查点方案对照，查看累计差距、分段耗时与地形差异。适用于赛前配速规划、SVG 配速表输出与赛后实际对照。
-description_en: Convert GPX/KML routes or recorded FIT tracks into even-effort trail running pace charts, or compare FIT activities with checkpoint plans and segment elapsed times. Use for race pacing, SVG pace tables, or post-race actual-versus-plan comparisons.
+description: Convert GPX/KML routes or recorded FIT tracks into even-effort trail running pace charts, or compare FIT activities with checkpoint plans and segment elapsed times. Use for race pacing, SVG pace tables, or post-race actual-versus-plan comparisons. Independent implementation inspired by the even-effort pacing approach from 耐力学社.
+description_zh: 基于耐力学社体感一致配速思路的独立实现。把 GPX/KML 路线或 FIT 轨迹转换成按检查点分段的体感一致越野配速表，或把 FIT 活动与检查点方案对照，查看累计差距、分段耗时与地形差异。适用于赛前配速规划、SVG 配速表输出与赛后实际对照。
+description_en: Convert GPX/KML routes or recorded FIT tracks into even-effort trail running pace charts, or compare FIT activities with checkpoint plans and segment elapsed times. Use for race pacing, SVG pace tables, or post-race actual-versus-plan comparisons. Independent implementation inspired by the even-effort pacing approach from 耐力学社.
 version: 1.0.0
 agent_created: true
 ---
 
-# 耐力学社 Even-Effort Pace Chart Skills
+# Even-Effort Pace Chart Skills
 
 Resolve script paths relative to this file's directory, regardless of the user's working directory. Both workflows share the existing route processing and pacing model; do not duplicate or retune the model for an activity comparison.
 

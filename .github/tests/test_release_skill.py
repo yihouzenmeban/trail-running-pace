@@ -1,7 +1,9 @@
+import hashlib
 import importlib.util
 import os
 from pathlib import Path
 import subprocess
+import sys
 import tempfile
 import unittest
 from unittest import mock
@@ -163,6 +165,55 @@ class ReleaseSkillTests(unittest.TestCase):
             self.git("ls-remote", "origin", "refs/tags/v1.0.0").split()[0],
             self.first_commit,
         )
+
+    def test_cli_passes_a_long_stateless_token_to_github_commands(self):
+        bin_dir = self.root / "bin"
+        bin_dir.mkdir()
+        fake_gh = bin_dir / "gh"
+        fake_gh.write_text(
+            "\n".join(
+                [
+                    f"#!{sys.executable}",
+                    "import hashlib, os, sys",
+                    "from pathlib import Path",
+                    "digest = hashlib.sha256(os.environ['GH_TOKEN'].encode()).hexdigest()",
+                    "if digest != os.environ['EXPECTED_TOKEN_DIGEST']:",
+                    "    raise SystemExit('Token was altered')",
+                    "if sys.argv[1] == 'api':",
+                    "    print('gh: Not Found (HTTP 404)', file=sys.stderr)",
+                    "    raise SystemExit(1)",
+                    "if sys.argv[1:3] != ['release', 'create']:",
+                    "    raise SystemExit('Unexpected GitHub command')",
+                    "Path(os.environ['GH_CALL_MARKER']).write_text('created')",
+                ]
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+        fake_gh.chmod(0o755)
+        token = "ghs_42_" + ".".join(part * 180 for part in ("a", "b", "c"))
+        marker = self.root / "release-created"
+        environment = os.environ.copy()
+        environment.update(
+            {
+                "PATH": str(bin_dir) + os.pathsep + environment["PATH"],
+                "GITHUB_REPOSITORY": "example/pace",
+                "GH_TOKEN": token,
+                "EXPECTED_TOKEN_DIGEST": hashlib.sha256(token.encode()).hexdigest(),
+                "GH_CALL_MARKER": str(marker),
+            }
+        )
+
+        result = subprocess.run(
+            [sys.executable, str(SCRIPT), self.first_commit, str(self.artifacts)],
+            cwd=self.repo,
+            env=environment,
+            capture_output=True,
+            text=True,
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(marker.read_text(encoding="utf-8"), "created")
+        self.assertTrue((self.artifacts / "even-effort-pace-chart-v1.0.0.zip").is_file())
 
     def test_api_failure_stops_release_and_rerun_reuses_pushed_tag(self):
         self.github.api_error = "gh: Forbidden (HTTP 403)\n"

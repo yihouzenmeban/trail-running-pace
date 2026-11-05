@@ -1,4 +1,4 @@
-# 耐力学社体感一致配速表 Skills
+# 体感一致配速表 Skills
 
 [简体中文](README.md) | [English](README.en.md)
 
