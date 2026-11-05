@@ -11,6 +11,15 @@ sys.path.insert(0, str(EVALS))
 import evaluate
 
 
+def time_water_candidate():
+    return {
+        "target": "05:00", "water_mode": "time", "water_target": "05:00",
+        "water_ml_per_hour": 600, "water_buffer_minutes": 15,
+        "water_rate_overrides": {"wpt:1": 700},
+        "water_weather": {"source": "manual", "confirmed": True, "description": "晴"},
+    }
+
+
 class BehaviorCheckerTests(unittest.TestCase):
     def test_accepts_valid_candidate_configurations(self):
         candidates = {
@@ -24,6 +33,8 @@ class BehaviorCheckerTests(unittest.TestCase):
                 "target": "05:00", "smoothing_m": 0, "ascent_smoothing_m": 0, "fatigue_rate": 0,
                 "water_ml_per_10km": 0, "use_kml_altitudes": False,
             },
+            "time_water_manual_conditions": time_water_candidate(),
+            "explicit_svg_only": {"target": "05:00", "output_formats": ["svg"]},
         }
         self.assertEqual(set(candidates), {case["id"] for case in evaluate.SUITE["cases"]})
         for case_id, config in candidates.items():
@@ -43,6 +54,29 @@ class BehaviorCheckerTests(unittest.TestCase):
         ):
             with self.subTest(override=override):
                 self.assertFalse(evaluate.evaluate("target_only", {"target": "05:00", **override})["passed"])
+
+    def test_rejects_unconfirmed_weather_and_incorrect_time_water_settings(self):
+        for override in (
+            {"water_weather": {"source": "manual", "confirmed": False, "description": "晴"}},
+            {"water_weather": {"source": "manual", "confirmed": True, "description": ""}},
+            {"water_target": "04:30"},
+            {"water_ml_per_hour": 700},
+            {"water_buffer_minutes": 0},
+            {"water_rate_overrides": {"wpt:1": 600}},
+        ):
+            with self.subTest(override=override):
+                result = evaluate.evaluate("time_water_manual_conditions", {
+                    **time_water_candidate(), **override,
+                })
+                self.assertFalse(result["passed"])
+
+    def test_explicit_svg_only_overrides_selected_exports(self):
+        for formats in (["svg", "html"], ["json"]):
+            with self.subTest(formats=formats):
+                result = evaluate.evaluate("explicit_svg_only", {
+                    "target": "05:00", "output_formats": formats,
+                })
+                self.assertFalse(result["passed"])
 
     def test_rejects_stale_target_list_even_when_new_target_is_present(self):
         result = evaluate.evaluate("replace_target_list", {

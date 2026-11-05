@@ -157,7 +157,7 @@ Default `distance_alignment` is `"confirm"`: a manual finish distance differing 
 | `distance_tolerance_m` | 0 | Horizontal simplification tolerance in metres; 0 disables it; positive values can shorten real small turns |
 | `ascent_km_per_100m` | 1 | Equivalent kilometres per 100 m ascent; nonnegative |
 | `fatigue_rate` | 0.08 | Pace multiplier minus one per doubling; range 0 to 1 |
-| `water_mode` | `"distance"` | `"distance"` compares water by equivalent distance; `"time"` estimates it from moving time and confirmed personal rates; `"manual"` leaves it blank for entry |
+| `water_mode` | `"distance"` | `"distance"` compares water by equivalent distance; `"time"` estimates it from moving time and confirmed personal rates |
 | `water_ml_per_10km` | 700 | Comparative water per 10 equivalent km in distance mode; nonnegative, in millilitres |
 | `water_target` | Selected automatically for one target | Reference target for time-based water; required for multiple targets and must match a displayed target |
 | `water_ml_per_hour` | Required to generate in time mode | User-confirmed default drinking rate; finite and positive, in ml/h |
@@ -171,15 +171,11 @@ Unknown configuration and station fields are errors. Numbers must be finite. No 
 
 See the [model and limitations](model.en.md) for elevation filtering and timing equations.
 
-## Manual water amounts
-
-Set `"water_mode": "manual"` and include `"html"` in `output_formats` to enter the amount carried from each station to the next, in millilitres. Entries are not saved automatically: use the download button to save a filled HTML copy, or print directly. SVG cells are blank for handwriting; the finish shows `0` because there is no next leg.
-
-Unfilled values are `null` in JSON and empty in CSV. Do not combine manual mode with calculated-water options. Edits appear only in the downloaded HTML copy and do not modify the original SVG, CSV, JSON, or configuration. Check container capacity and whether the next station supplies water.
-
 ## Time-based water planning
 
 The default `"water_mode": "distance"` compares water by equivalent distance and requires no network. In `"time"` mode, next-leg water is `(next-leg moving seconds / 3600 + buffer minutes / 60) * departure drinking rate`; station rest is excluded. The user confirms the rate using personal experience, weather, and station conditions. The program does not apply an automatic weather multiplier.
+
+The former `"water_mode": "manual"` is no longer supported. Remove it to use the default distance mode, or switch to `"time"` and supply the rate and weather as described below. Manual weather remains available.
 
 This configuration starts an automatic weather preview. Replace the date, time, time zone, and target with the actual race details:
 

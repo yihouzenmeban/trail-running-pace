@@ -2,7 +2,6 @@
   "name": "大境门 DGW100K · 15 小时",
   "target": "15:00",
   "use_kml_altitudes": true,
-  "water_mode": "manual",
   "output_formats": ["svg", "html"],
   "cp_selection": [
     "placemark:13:point:1",

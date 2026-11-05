@@ -64,7 +64,7 @@ This keeps the default pace display and SVG export. Ascent defaults to no window
 
 ### Plan water when requested
 
-The default `water_mode: "distance"` is offline and compares equivalent-distance demand. If the user wants to enter each departure amount themselves, select `water_mode: "manual"` and include `html` in `output_formats` alongside the default SVG. Amounts are blank until entered; the HTML can download a filled copy or be printed, while SVG leaves space for handwriting. HTML edits do not update the original SVG, CSV or JSON.
+The default `water_mode: "distance"` is offline and compares equivalent-distance demand.
 
 Select `water_mode: "time"` only when requested or present in the selected configuration. Its outgoing-leg water is `(moving hours + buffer minutes / 60) * confirmed personal rate in ml/h`; station rest is excluded, the buffer applies to each leg, and the finish is zero. For multiple displayed targets, obtain `water_target` matching one of them; an explicit one-element `targets` list needs no separate selection. Do not invent the personal rate, per-leg overrides, or buffer.
 
@@ -81,8 +81,8 @@ python3 <skill-dir>/scripts/pace_chart.py generate <route-file> \
   --config <race.json> --output-dir <output-dir>
 ```
 
-Set `output_formats` only for explicitly selected exports (`svg`, `html`, `csv`, `json`). Existing selected files require another directory or authorized `--overwrite`. Use the script's native renderers; they implement the table style, cutoff visibility, and metadata.
+When the user specifies exports (`svg`, `html`, `csv`, `json`), set `output_formats` to exactly those formats, overriding any different selection in an existing configuration. Otherwise preserve the selected configuration or default to SVG. Existing selected files require another directory or authorized `--overwrite`. Use the script's native renderers; they implement the table style, cutoff visibility, and metadata.
 
 Before running, compare the configuration with the request. After success, read stdout `summary`: effective `parameters`, `target_source`, `targets_seconds`, route statistics, ordered `checkpoints`, and `verification`. Confirm finish targets/rest checks, review cutoff failures and warnings, and compare exported files with the request. For presentation-sensitive changes, render locally and inspect station names and target columns.
 
-Deliver output paths, route statistics, targets, and material assumptions in the user's language; chart labels remain Chinese. Explain whether next-leg water is manually entered, an equivalent-distance comparison, or a time estimate based on the user's confirmed rate and weather. Do not assess fitness from a route alone.
+Deliver output paths, route statistics, targets, and material assumptions in the user's language; chart labels remain Chinese. Explain whether next-leg water is an equivalent-distance comparison or a time estimate based on the user's confirmed rate and weather. Do not assess fitness from a route alone.

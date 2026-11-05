@@ -157,7 +157,7 @@ python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate activity-or
 | `distance_tolerance_m` | 0 | 水平几何简化容差，单位米；0 不简化，正值显式启用并可能缩短真实小弯道 |
 | `ascent_km_per_100m` | 1 | 每爬升 100 米增加的等效公里数，非负 |
 | `fatigue_rate` | 0.08 | 等效距离翻倍时的平均配速倍率减一，范围 0–1 |
-| `water_mode` | `"distance"` | `"distance"` 按等效距离比较水量；`"time"` 按移动耗时和确认的个人速率估算；`"manual"` 留空供手动填写 |
+| `water_mode` | `"distance"` | `"distance"` 按等效距离比较水量；`"time"` 按移动耗时和确认的个人速率估算 |
 | `water_ml_per_10km` | 700 | 距离模式下每 10 等效公里的比较用水量，非负，单位毫升 |
 | `water_target` | 单目标时自动选中 | 耗时模式的水量参考目标；多目标时必填，须与某个展示目标一致 |
 | `water_ml_per_hour` | 耗时模式生成时必填 | 用户确认的默认饮水速率，有限正数，单位毫升/小时 |
@@ -171,15 +171,11 @@ python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate activity-or
 
 海拔处理和时间分配公式见[模型与限制](model.md)。
 
-## 手动填写携水量
-
-使用 `"water_mode": "manual"` 并将 `"html"` 加入 `output_formats`，即可在 HTML 配速表逐站填写出发时携带至下一站的水量，单位为毫升。填写后不会自动保存：点击“下载填写版 HTML”保存可再次打开的副本，也可直接打印。SVG 中对应单元格留白供手写；终点没有下一段，显示 `0`。
-
-未填写的值在 JSON 中为 `null`、CSV 中为空，不能与饮水速率等计算参数同时配置。HTML 中的修改只保存在下载的 HTML 副本，不会修改原始 SVG、CSV、JSON 或配置。请核实容器容量及下一站是否供水。
-
 ## 按耗时规划携水
 
 默认 `"water_mode": "distance"` 按等效距离计算比较用水量，无需联网。切换为 `"time"` 后，下一段携水量为 `(下一段移动秒数 / 3600 + 每段余量分钟 / 60) * 本站出发饮水速率`；不包含站内停留。饮水速率由用户结合个人经验、天气和补给条件确认，程序不会根据天气自动套用倍率。
+
+旧配置中的 `"water_mode": "manual"` 已不再支持：删除该项可使用默认距离模式，或改为 `"time"` 并按以下步骤补全速率和天气。手动天气来源仍可使用。
 
 自动天气的示例配置如下，将日期、时间、时区和目标替换为实际比赛信息：
 

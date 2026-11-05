@@ -13,7 +13,7 @@
 | 示例与说明 | 配速表 | 活动对比 |
 | --- | --- | --- |
 | [徽州古城 100K](examples/huizhou-gucheng-100k/README.md)：GPX 制表与 FIT 赛后复盘 | [GPX 方案](examples/huizhou-gucheng-100k/pace-chart.svg) / [FIT 路线方案](examples/huizhou-gucheng-100k/pace-chart-fit.svg) | [按赛前 GPX](examples/huizhou-gucheng-100k/garmin-comparison.svg) / [按实际 FIT](examples/huizhou-gucheng-100k/garmin-comparison2.svg) |
-| [大境门 DGW100K](examples/大境门/DGW100K/README.md)：公开 KML 可复现 | [10–24 小时](examples/大境门/DGW100K/pace-chart.svg) | — |
+| [大境门 DGW100K](examples/大境门/DGW100K/README.md)：公开 KML 可复现 | [10–24 小时](examples/大境门/DGW100K/pace-chart.svg) / [15 小时方案](examples/大境门/DGW100K/15h/README.md) | — |
 | [大境门 MGW50K](examples/大境门/DGW50K/README.md)：使用公开的海拔补全副本生成配速表，含赛前 GPX 与实际 FIT 两版赛后对比 | [5–12.5 小时](examples/大境门/DGW50K/pace-chart.svg) / [6:15 单列](examples/大境门/DGW50K/pace-chart-6h15m.svg) / [FIT 路线方案](examples/大境门/DGW50K/pace-chart-fit.svg) | [按赛前 GPX](examples/大境门/DGW50K/garmin-comparison.svg) / [按实际 FIT](examples/大境门/DGW50K/garmin-comparison2.svg) |
 
 各示例说明包含输入来源、配置、复现所需文件、命令和结果口径。
@@ -129,7 +129,7 @@ python3 skills/even-effort-pace-chart/scripts/compare_activity.py generate race.
 | 为什么默认不平滑＋10 米阈值，如何切换 | [爬升方案与历史实验](skills/even-effort-pace-chart/references/ascent-options.md) |
 | AI 助手的执行流程 | [SKILL.md](skills/even-effort-pace-chart/SKILL.md) |
 
-爬升统计和图示平滑各自独立；结果依赖输入海拔与处理参数，可能与赛事或其他平台统计不同。默认水量按等效距离比较赛段需求；也可选择按目标耗时及个人饮水速率估算携水量，自动天气预览需要联网和用户确认。完整流程见[按耗时规划携水](skills/even-effort-pace-chart/references/configuration.md#按耗时规划携水)。
+爬升统计和图示平滑各自独立；结果依赖输入海拔与处理参数，可能与赛事或其他平台统计不同。
 
 ## 开发与测试
 

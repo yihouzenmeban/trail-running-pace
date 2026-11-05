@@ -13,7 +13,7 @@ The approach draws on [《耐力科学｜体感一致配速表全面指南》](h
 | Example and notes | Pace charts | Activity comparisons |
 | --- | --- | --- |
 | [Huizhou Ancient City 100K](examples/huizhou-gucheng-100k/README.en.md): GPX planning and post-race FIT review | [GPX plans](examples/huizhou-gucheng-100k/pace-chart.svg) / [FIT-route plans](examples/huizhou-gucheng-100k/pace-chart-fit.svg) | [On the pre-race GPX](examples/huizhou-gucheng-100k/garmin-comparison.svg) / [On the recorded FIT](examples/huizhou-gucheng-100k/garmin-comparison2.svg) |
-| [Dajingmen DGW100K](examples/大境门/DGW100K/README.en.md): reproducible from the public KML | [10–24 hours](examples/大境门/DGW100K/pace-chart.svg) | — |
+| [Dajingmen DGW100K](examples/大境门/DGW100K/README.en.md): reproducible from the public KML | [10–24 hours](examples/大境门/DGW100K/pace-chart.svg) / [15-hour plan](examples/大境门/DGW100K/15h/README.en.md) | — |
 | [Dajingmen MGW50K](examples/大境门/DGW50K/README.en.md): plans use the public elevation-filled copy; includes pre-race-GPX and recorded-FIT post-race comparisons | [5–12.5 hours](examples/大境门/DGW50K/pace-chart.svg) / [Single 6:15 plan](examples/大境门/DGW50K/pace-chart-6h15m.svg) / [FIT-route plans](examples/大境门/DGW50K/pace-chart-fit.svg) | [On the pre-race GPX](examples/大境门/DGW50K/garmin-comparison.svg) / [On the recorded FIT](examples/大境门/DGW50K/garmin-comparison2.svg) |
 
 Example notes include input provenance, configurations, files needed for reproduction, commands, and metric definitions.
@@ -131,7 +131,7 @@ The default output is `garmin-comparison.svg`. FIT and single-activity FIT ZIP a
 | Why no averaging + 10 m is the default, and how to switch | [Ascent methods and historical experiments](skills/even-effort-pace-chart/references/ascent-options.en.md) |
 | AI assistant workflow | [SKILL.md](skills/even-effort-pace-chart/SKILL.md) |
 
-Ascent statistics and display smoothing are independent. Results depend on source elevations and processing parameters and may differ from event or other platform statistics. Default water values compare equivalent-distance demand; an optional time-based mode estimates carry amounts from a target schedule and personal drinking rate. Automatic weather previews require network access and user confirmation. See [time-based water planning](skills/even-effort-pace-chart/references/configuration.en.md#time-based-water-planning).
+Ascent statistics and display smoothing are independent. Results depend on source elevations and processing parameters and may differ from event or other platform statistics.
 
 ## Development and tests
 

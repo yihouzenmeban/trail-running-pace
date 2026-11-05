@@ -1032,14 +1032,12 @@ def apply_time_water(plan: dict, route: Route, config: dict) -> None:
 def build_plan(path: Path, config: dict, *, defer_water=False) -> dict:
     keys(config, CONFIG_KEYS, "configuration")
     water_mode = config.get("water_mode", "distance")
-    if water_mode not in ("distance", "time", "manual"):
-        raise InputError("water_mode must be distance, time or manual")
+    if water_mode not in ("distance", "time"):
+        raise InputError("water_mode must be distance or time")
     time_options = {"water_target", "water_ml_per_hour", "water_buffer_minutes",
                     "water_rate_overrides", "water_timezone", "water_weather"}
     if water_mode != "time" and time_options.intersection(config):
         raise InputError("water_mode must be time when time-based water options are supplied")
-    if water_mode == "manual" and "water_ml_per_10km" in config:
-        raise InputError("water_mode must be distance when water_ml_per_10km is supplied")
     output_formats = config.get("output_formats", ["svg"])
     if (not isinstance(output_formats, list) or not output_formats
             or any(fmt not in ("svg", "html", "csv", "json") for fmt in output_formats)
@@ -1161,13 +1159,6 @@ def build_plan(path: Path, config: dict, *, defer_water=False) -> dict:
     }
     if water_mode == "time" and not defer_water:
         apply_time_water(plan, route, config)
-    elif water_mode == "manual":
-        plan["parameters"]["water_mode"] = "manual"
-        for index, cp in enumerate(cps):
-            cp["water_ml"] = None if index < len(cps) - 1 else 0.0
-            cp["segment_water_ml"] = None if index else 0.0
-        plan["warnings"].remove("水量仅供比较赛段差异，并非个人饮水建议。")
-        plan["warnings"].append("携水量需手动填写；请核实个人需要、容器容量和下一站补水条件。")
     return plan
 
 
@@ -1277,7 +1268,7 @@ def numeric_cells(cp) -> dict[int, str]:
         0: f'{cp["distance_m"] / 1000:.2f}' if cp["distance_m"] else "0",
         3: f'{cp["segment_distance_m"] / 1000:.1f}',
         4: f'{cp["ascent_m"]:.0f}', 5: f'{cp["descent_m"]:.0f}',
-        6: f'{cp["water_ml"]:.0f}' if cp["water_ml"] is not None else "",
+        6: f'{cp["water_ml"]:.0f}',
     }
 
 
@@ -1345,7 +1336,7 @@ HEAT_COLUMNS = {
 
 
 def heat_limits(plan) -> dict[str, float]:
-    return {field: max(cp[field] or 0.0 for cp in plan["checkpoints"])
+    return {field: max(cp[field] for cp in plan["checkpoints"])
             for _, field, _ in HEAT_COLUMNS.values()}
 
 
@@ -1353,7 +1344,7 @@ def cell_fill(cp, column, limits) -> str:
     if column not in HEAT_COLUMNS:
         return "#ffffff"
     _, field, color = HEAT_COLUMNS[column]
-    if cp[field] is None or cp[field] == 0:
+    if cp[field] == 0:
         return "#ffffff"
     strength = 0.18 + 0.72 * cp[field] / limits[field]
     rgb = [int(color[i:i + 2], 16) for i in (1, 3, 5)]
@@ -1394,8 +1385,6 @@ def render_svg(plan: dict) -> str:
     metadata = [table_metadata(plan)]
     if plan["parameters"].get("water_mode") == "time":
         metadata.append(water_metadata(plan))
-    elif plan["parameters"].get("water_mode") == "manual":
-        metadata.append("水量：手动填写本站出发至下一站的携水量（ml）")
     parts.append(svg_text(6, 30, metadata, size=23))
     y = 50 + (34 if len(metadata) > 1 else 0)
     headers = [name.split("\n") for name, _ in BASE_COLUMNS]
@@ -1465,7 +1454,6 @@ def render_svg(plan: dict) -> str:
 
 
 def render_html(plan: dict) -> str:
-    manual_water = plan["parameters"].get("water_mode") == "manual"
     headers = "".join("<th>" + "<br>".join(escape(line) for line in name.split("\n")) + "</th>"
                       for name, _ in BASE_COLUMNS)
     headers += "".join("<th>" + "<br>".join(target_header(t)) + "</th>" for t in plan["targets_seconds"])
@@ -1476,52 +1464,13 @@ def render_html(plan: dict) -> str:
     metadata = [table_metadata(plan)]
     if plan["parameters"].get("water_mode") == "time":
         metadata.append(water_metadata(plan))
-    elif manual_water:
-        metadata.append("水量：手动填写本站出发至下一站的携水量（ml）")
     metadata_html = "<br>".join(escape(line) for line in metadata)
-    water_tools = ""
-    water_script = ""
-    if manual_water:
-        water_tools = (
-            '<div class="water-tools"><p>填写后不会自动保存；请下载填写版 HTML，'
-            '或直接打印。请核实容器容量及下一站是否供水。</p>'
-            '<button type="button" id="save-water-html">下载填写版 HTML</button></div>'
-        )
-        water_script = """<script>
-document.getElementById("save-water-html").addEventListener("click", () => {
-  const inputs = Array.from(document.querySelectorAll(".water-input"));
-  for (const input of inputs) {
-    if (!input.checkValidity()) {
-      input.reportValidity();
-      return;
-    }
-  }
-  const copy = document.documentElement.cloneNode(true);
-  const copiedInputs = copy.querySelectorAll(".water-input");
-  inputs.forEach((input, index) => {
-    if (input.value !== "") copiedInputs[index].setAttribute("value", input.value);
-    else copiedInputs[index].removeAttribute("value");
-  });
-  const url = URL.createObjectURL(new Blob(["<!doctype html>\\n", copy.outerHTML], {
-    type: "text/html;charset=utf-8"
-  }));
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = "pace-chart-filled.html";
-  link.click();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-});
-</script>"""
     rows = []
     for index, cp in enumerate(plan["checkpoints"]):
         cells = ""
         for column in range(len(BASE_COLUMNS)):
             if column in numeric_cells(cp):
                 content = numeric_cells(cp)[column]
-                if manual_water and column == 6 and index < len(plan["checkpoints"]) - 1:
-                    label = escape(f'{display_station_name(cp)}出发携水量（毫升）', quote=True)
-                    content = (f'<input class="water-input" type="number" min="0" step="any" '
-                               f'inputmode="decimal" aria-label="{label}" placeholder="填写">')
                 rate = cp.get("water_rate_ml_per_hour") if column == 6 else None
                 if rate is not None:
                     content += f"<small>{rate:g} ml/h</small>"
@@ -1554,9 +1503,6 @@ document.getElementById("save-water-html").addEventListener("click", () => {
 * {{ box-sizing:border-box; }}
 body {{ margin:0; color:var(--ink); background:var(--paper); font-family:"PingFang SC","Microsoft YaHei",sans-serif; }}
 main {{ padding:6px; }} header p {{ margin:0 0 12px; font-size:23px; }}
-.water-tools {{ margin:0 0 12px; font-size:16px; }} .water-tools p {{ margin:0 0 8px; }}
-.water-tools button {{ padding:8px 12px; font:inherit; cursor:pointer; }}
-.water-input {{ width:100%; min-width:0; padding:4px; border:1px solid #4777c5; border-radius:4px; text-align:center; font:inherit; }}
 .scroll {{ overflow-x:auto; }}
 table {{ width:100%; min-width:{sum(widths)}px; table-layout:fixed; border-collapse:collapse; font-size:23px; font-variant-numeric:tabular-nums; }}
 th {{ height:84px; padding:8px 4px; font-weight:600; line-height:1.35; }}
@@ -1571,7 +1517,6 @@ td svg {{ display:block; max-width:100%; margin:auto; }}
 @media print {{
 * {{ print-color-adjust:exact; -webkit-print-color-adjust:exact; }} main {{ padding:0; }}
 header p {{ font-size:11px; margin-bottom:6px; }} .scroll {{ overflow:visible; }}
-.water-tools {{ display:none; }} .water-input {{ padding:0; border:0; font:inherit; }} .water-input::placeholder {{ color:transparent; }}
 table {{ min-width:0; font-size:10px; }} th {{ height:31px; }} td {{ height:35px; }}
 th,td {{ padding:3px 2px; }}
 thead {{ display:table-header-group; }} tr {{ break-inside:avoid; page-break-inside:avoid; }}
@@ -1580,10 +1525,9 @@ td svg {{ width:100%; height:28px; }} th {{ white-space:normal; }}
 }}
 </style></head><body><main>
 <header><p>{metadata_html}</p></header>
-{water_tools}
 <div class="scroll"><table aria-label="{escape(plan["name"])} 体感一致配速表"><colgroup>{columns}</colgroup>
 <thead><tr>{headers}</tr></thead><tbody>{"".join(rows)}</tbody></table></div>
-</main>{water_script}</body></html>
+</main></body></html>
 """
 
 
