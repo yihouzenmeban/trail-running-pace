@@ -1,4 +1,4 @@
-# 耐力学社 Even-Effort Pace Chart Skills
+# Even-Effort Pace Chart Skills
 
 [简体中文](README.md) | [English](README.en.md)
 
@@ -112,11 +112,16 @@ Ascent statistics and display smoothing are independent. Results depend on sourc
 
 ## Development and tests
 
+Run the Skill functionality tests and release workflow tests respectively:
+
 ```bash
 python3 -m unittest discover -s skills/even-effort-pace-chart/tests -v
+python3 -m unittest discover -s .github/tests -v
 ```
 
-Tests cover route processing, pacing, and activity comparisons. Real-course tests are skipped when the Skills package is copied without `examples/`. See the [behavior evaluation guide](skills/even-effort-pace-chart/evals/guide.en.md) for natural-language cases and manual review, or the [development article](docs/articles/从配速表到百公里复盘.md) for the project story in Chinese.
+Skill tests cover route processing, pacing, and activity comparisons. Real-course tests are skipped when the Skills package is copied without `examples/`. See the [behavior evaluation guide](skills/even-effort-pace-chart/evals/guide.en.md) for natural-language cases and manual review, or the [development article](docs/articles/从配速表到百公里复盘.md) for the project story in Chinese.
+
+When a commit affecting `skills/even-effort-pace-chart/` is pushed to `main`, the [release workflow](.github/workflows/release-skill.yml) runs the release tests, increments the patch version in both metadata files, and creates a version commit on `main`, a tag, and a GitHub Release with a ZIP containing only the Skill directory. Changes to Skill reference documents also trigger this workflow; sync the generated version commit before continuing development.
 
 ## Sources and copyright
 

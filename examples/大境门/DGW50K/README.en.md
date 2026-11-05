@@ -45,11 +45,10 @@ Results go into Git-ignored `output/`; add `--overwrite` to replace existing fil
 
 Both post-race comparison charts use the same Garmin activity from September 12, 2026; only the route input differs:
 
-| Chart / config | Route input | Notes |
+| Chart | Route input | Notes |
 | --- | --- | --- |
 | [garmin-comparison.svg](garmin-comparison.svg) | Pre-race GPX route (elevation-filled copy) | Compares 6:00, 6:15, and 6:30 plans; does not rewrite `config-6h15m.json` |
 | [garmin-comparison2.svg](garmin-comparison2.svg) | Recorded FIT route (device distance and point elevations) | Recalculates the same targets on the recorded FIT route |
-| [config-fit.json](config-fit.json) / [pace-chart-fit.svg](pace-chart-fit.svg) | Recorded FIT route | 6:00, 6:15, and 6:30 plans; manual CPs apply only to this recording |
 
 | Metric | Pre-race GPX route | Recorded FIT route | Garmin activity statistics |
 | --- | ---: | ---: | ---: |
@@ -65,31 +64,52 @@ The recorded finish was 6:14:15, 45 seconds ahead of the 6:15 plan; the first 42
 | 6:15 | 18:46 | 17:51 | 0:45 ahead |
 | 6:30 | 30:19 | 29:23 | 15:45 ahead |
 
-The raw personal FIT is not published; checkpoint times are projected from the track, not official timing. To reproduce with your own FIT:
+Checkpoint times are projected from the track, not official timing. To compare your own FIT on the same course with the pre-race GPX, use this directory's GPX configuration; for a different course, replace both route and configuration. Install the dependency and inspect matches first:
 
 ```bash
 python3 -m pip install -r skills/even-effort-pace-chart/scripts/requirements-comparison.txt
 
-# Pre-race GPX route comparison
+python3 skills/even-effort-pace-chart/scripts/compare_activity.py inspect \
+  'examples/大境门/DGW50K/MGW50K-elevation-filled.gpx' \
+  --config 'examples/大境门/DGW50K/config-6h15m.json' \
+  --fit activity.fit --targets 06:00 06:15 06:30
+```
+
+`--targets` selects this example's three reference targets; adjust them as needed. Review the matches and resolve ambiguous passages before generating:
+
+```bash
 python3 skills/even-effort-pace-chart/scripts/compare_activity.py generate \
   'examples/大境门/DGW50K/MGW50K-elevation-filled.gpx' \
   --config 'examples/大境门/DGW50K/config-6h15m.json' \
   --fit activity.fit \
   --targets 06:00 06:15 06:30 --output-dir output/dgw50k-comparison
-
-# Recorded FIT route plans and comparison with the same activity
-python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate \
-  activity.fit \
-  --config 'examples/大境门/DGW50K/config-fit.json' \
-  --output-dir output/dgw50k-fit
-
-python3 skills/even-effort-pace-chart/scripts/compare_activity.py generate \
-  activity.fit \
-  --config 'examples/大境门/DGW50K/config-fit.json' \
-  --fit activity.fit \
-  --targets 06:00 06:15 06:30 --output-dir output/dgw50k-fit-comparison
 ```
 
-Add `--summary activity-details.json` when platform details are available; finish totals then prefer the platform data. When recalculating on the recorded FIT, define CPs on that activity's device-distance axis; `config-fit.json` applies only to this recording. Elapsed times include stops. See the [activity comparison reference](../../../skills/even-effort-pace-chart/references/comparison.en.md) for delta signs and reading the charts.
+Before rebuilding plans on the recorded FIT route, inspect that recording's route distance:
 
-Both post-race comparison charts use the personal FIT, which is not published.
+```bash
+python3 skills/even-effort-pace-chart/scripts/pace_chart.py inspect activity.fit
+```
+
+In `race-fit.json`, enter each CP's name and cumulative device kilometres for that activity, and convert the inspected `distance_m` to kilometres for the finish. You can use this directory's `config-fit.json` as a format reference, but recheck every CP distance, start time, and target; its distances apply only to the example activity. See [FIT route input](../../../skills/even-effort-pace-chart/references/configuration.en.md#fit-route-input).
+
+Generate plans with the new configuration and inspect the activity matches first:
+
+```bash
+python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate \
+  activity.fit --config race-fit.json \
+  --output-dir output/dgw50k-fit
+
+python3 skills/even-effort-pace-chart/scripts/compare_activity.py inspect \
+  activity.fit --config race-fit.json --fit activity.fit
+```
+
+Once the matches are confirmed, generate the comparison using the targets in `race-fit.json`:
+
+```bash
+python3 skills/even-effort-pace-chart/scripts/compare_activity.py generate \
+  activity.fit --config race-fit.json --fit activity.fit \
+  --output-dir output/dgw50k-fit-comparison
+```
+
+If inspection reports ambiguous passages, follow the [activity comparison reference](../../../skills/even-effort-pace-chart/references/comparison.en.md) and add the same `--passage-overrides passage-overrides.json` to both the `inspect` and `generate` commands. Add `--summary activity-details.json` when platform details are available; finish totals then prefer the platform data. Elapsed times include stops; the reference also explains delta signs and reading the charts.

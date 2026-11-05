@@ -26,7 +26,7 @@ Ascent for three race routes is shown below in metres. All five methods used the
 
 These are historical experiment snapshots: `28270dc` for legacy, `461ace7` for no averaging, and `dd4b95e` for the 40/20/10 m windows. They are not recalculated after every update. The current default remains no averaging + 10 m. Only aggregates from the twenty personal activities are published; without the raw FIT files, that set of statistics cannot be reproduced from the public repository alone.
 
-The full repository now includes the MGW50K [original GPX](../../../examples/大境门/DGW50K/2026京东大境门古长城越野赛by%20UTMB®MGW50K.gpx), [elevation-filled copy](../../../examples/大境门/DGW50K/MGW50K-elevation-filled.gpx), and [repair report](../../../examples/大境门/DGW50K/elevation-repair.json). All methods in the table used that same distance-interpolated copy, filling 59 missing elevations across gaps of approximately 835 m and 34 m. Missing terrain cannot be recovered. Public-route reproduction commands are in the example notes; independently installed Skills do not need these case files.
+The full repository now includes the MGW50K [original GPX](https://github.com/yihouzenmeban/trail-running-pace/blob/main/examples/大境门/DGW50K/2026京东大境门古长城越野赛by%20UTMB®MGW50K.gpx), [elevation-filled copy](https://github.com/yihouzenmeban/trail-running-pace/blob/main/examples/大境门/DGW50K/MGW50K-elevation-filled.gpx), and [repair report](https://github.com/yihouzenmeban/trail-running-pace/blob/main/examples/大境门/DGW50K/elevation-repair.json). All methods in the table used that same distance-interpolated copy, filling 59 missing elevations across gaps of approximately 835 m and 34 m. Missing terrain cannot be recovered. Public-route reproduction commands are in the example notes; independently installed Skills do not need these case files.
 
 ## Huizhou Ancient City before and after the race
 
@@ -44,7 +44,7 @@ After the October 31, 2026 race, recomputing the route from recorded FIT device 
 
 With the same no-averaging + 10 m algorithm, CP3→CP4 ascent changed from 844.8 m on the GPX to 635.2 m on the FIT, and CP5→CP6 changed from 722.6 m to 273.0 m. Position comparisons show multi-point oscillations on the original GPX with smaller fluctuations at corresponding FIT locations. Continuous oscillations above the threshold still count; no isolated spikes does not imply error-free input.
 
-This adds comparative evidence, not surveyed elevation validation or an automatic change to defaults. See the [Huizhou Ancient City example](../../../examples/huizhou-gucheng-100k/README.en.md#post-race-activity-comparison) for full segment ascent/descent and pacing effects. The personal FIT is not published, so that part is available for viewing and understanding metric definitions only.
+This adds comparative evidence, not surveyed elevation validation or an automatic change to defaults. See the [Huizhou Ancient City example](https://github.com/yihouzenmeban/trail-running-pace/blob/main/examples/huizhou-gucheng-100k/README.en.md#post-race-activity-comparison) for full segment ascent/descent and pacing effects. The personal FIT is not published, so that part is available for viewing and understanding metric definitions only.
 
 ## Selecting a method
 
@@ -60,6 +60,6 @@ No additional settings are needed for the default, which is equivalent to:
 
 - **No averaging + 10 m threshold:** retains extrema from cleaned source elevations; noise exceeding the threshold may still count as ascent.
 - **Explicit averaging:** set `ascent_smoothing_m` to a positive value such as 10, 20, or 40. Averaging can suppress real short hills. Windows are full width: 40 m means 20 m on each side.
-- **Window method:** select `ascent_method: "window"` and `ascent_smoothing_m: 100`, without reversal filtering. The current implementation includes boundary fixes and need not reproduce the legacy figures in the tables.
+- **Window method:** does not use reversal filtering. See [configuration](configuration.en.md#previous-window-method-and-explicit-filtering) for settings and legacy compatibility.
 
-The 10 m threshold applies to cumulative reversal, not adjacent-point elevation differences. Display profiles independently use 5 m sampling and 20 m averaging; duplicate handling and isolated spike correction remain enabled by default. See the [model](model.en.md#ascent-and-descent) for details and [configuration](configuration.en.md#previous-window-method-and-explicit-filtering) for settings.
+The 10 m threshold applies to cumulative reversal, not adjacent-point elevation differences. Display profiles independently use 5 m sampling and 20 m averaging; duplicate handling and isolated spike correction remain enabled by default. See the [model](model.en.md#ascent-and-descent) for details and [configuration](configuration.en.md#parameters) for settings.

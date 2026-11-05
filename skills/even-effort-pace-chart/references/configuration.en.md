@@ -18,7 +18,7 @@ Valid `0` and `false` values take effect as configured; for example, `fatigue_ra
 python3 skills/even-effort-pace-chart/scripts/pace_chart.py inspect race.gpx
 ```
 
-Optional flags: `--track-index 1`, `--sample-m 5`, `--smoothing-m 20`, `--ascent-method hysteresis`, `--ascent-threshold-m 10`, `--ascent-smoothing-m 0`, `--elevation-spike-m 30`, and `--distance-tolerance-m 0`. The 20 m window controls graphics/slope bins. Default ascent uses no window averaging and applies a 10 m peak/valley reversal threshold directly to cleaned source elevation vertices. Output includes horizontal distance, ascent/descent, parameters, `diagnostics`, warnings, and `cp_candidates` with IDs, names, recognition flags, and possible route projections in metres. A multiple-track error lists available track indices; repeat with the selected index.
+Optional flags: `--track-index 1`, `--sample-m 5`, `--smoothing-m 20`, `--ascent-method hysteresis`, `--ascent-threshold-m 10`, `--ascent-smoothing-m 0`, `--elevation-spike-m 30`, and `--distance-tolerance-m 0`. The 20 m window controls graphics/slope bins. Default ascent uses no window averaging and applies a 10 m peak/valley reversal threshold directly to cleaned source elevation vertices. Output includes route distance, ascent/descent, parameters, `diagnostics`, warnings, and `cp_candidates` with IDs, names, recognition flags, and possible route projections in metres. GPX/KML use coordinate-derived horizontal distance; FIT uses recorded device distance. A multiple-track error lists available track indices; repeat with the selected index.
 
 Use the same processing parameters for inspection and generation. `diagnostics` includes original/processed distance, raw/cleaned sums of positive elevation changes, minimum/median/maximum point spacing, quality flags, spike correction counts/indices, and trial distance simplification. Final filtered ascent is the top-level `ascent_m`. Trial simplification is diagnostic, not proof of GPS drift; the horizontal path is unchanged by default.
 
@@ -111,7 +111,9 @@ Cutoffs are elapsed durations since the race start. Arrival after cutoff yields 
 
 ## Manual CP list
 
-Use only when embedded CPs are absent or unsuitable. Include a final finish with a cumulative official distance. A zero-distance start is optional.
+Use only when embedded CPs are absent or unsuitable. Include a final finish with a cumulative distance. A zero-distance start is optional. GPX/KML can use official cumulative distances; a FIT route uses the device distances from that recording.
+
+This example maps confirmed official GPX/KML distances onto the route:
 
 ```json
 {
@@ -128,7 +130,7 @@ Use only when embedded CPs are absent or unsuitable. Include a final finish with
 
 Distances must increase strictly. `checkpoints` cannot be mixed with GPX selections or overrides. Start/finish rests must be zero.
 
-Default `distance_alignment` is `"confirm"`: differences over `max(100 m, 0.5% of route total)` stop generation. After the user confirms scaling, `"scale"` maps every official distance proportionally onto the route total. Within the tolerance, `"confirm"` preserves intermediate kilometre positions and snaps only the finish to the route endpoint. The output retains official distances and records the scale; course statistics use the processed input geometry.
+Default `distance_alignment` is `"confirm"`: a manual finish distance differing from the route total by more than `max(100 m, 0.5% of route total)` stops generation. After confirmation, `"scale"` maps manual station distances proportionally onto the route total without rescaling the route itself. Within the tolerance, `"confirm"` preserves intermediate kilometre positions and snaps only the finish to the route endpoint. The output records the scale; GPX/KML retain the supplied official distances, while FIT has an empty `official_distance_km` and should use that recording's device distances.
 
 ## Parameters
 
@@ -140,11 +142,11 @@ Default `distance_alignment` is `"confirm"`: differences over `max(100 m, 0.5% o
 | `secondary_display` | `"pace"` | Parenthesized value: `"pace"` for segment pace, `"equivalent_pace"` for equivalent segment pace, or `"arrival_time"` for arrival clock time |
 | `output_formats` | `["svg"]` | Non-empty list of unique export formats: `"svg"`, `"html"`, `"csv"`, and `"json"` |
 | `pace_basis` | `"distance"` | Legacy option: `"equivalent"` selects equivalent pace; explicit `secondary_display` takes precedence |
-| `track_index` | Only available track | 1-based GPX track/route or KML line/track selection |
+| `track_index` | Only available track | 1-based GPX track/route or KML line/track selection; FIT accepts only 1 or omission |
 | `checkpoints` | Embedded CPs | Manual list when usable embedded CPs are missing; incompatible with candidate selections or overrides |
 | `cp_selection` | Recognized stations | Explicit candidate IDs from `inspect` |
 | `checkpoint_overrides` | `{}` | Override selected station names, rests, cutoffs, positions, and related fields |
-| `distance_alignment` | `"confirm"` | Require confirmation for a distance mismatch; only explicit `"scale"` enables proportional mapping |
+| `distance_alignment` | `"confirm"` | Require confirmation for a manual finish distance mismatch; only explicit `"scale"` enables proportional mapping |
 | `use_kml_altitudes` | `false` | Boolean opt-in to supplied KML heights when mode is omitted or clampToGround; no effect on GPX |
 | `sample_m` | 5 | Positive step in metres for display and enabled window averaging; disabling ascent averaging retains source elevation vertices |
 | `smoothing_m` | 20 | Full centered averaging window for graphics and slope bins; 0 disables this smoothing |
@@ -185,7 +187,7 @@ Horizontal simplification requires an explicit value such as `"distance_toleranc
 
 | Value | Chinese label | Calculation |
 | --- | --- | --- |
-| `"pace"` | 区间配速 | Segment moving seconds / horizontal segment kilometres; default |
+| `"pace"` | 区间配速 | Segment moving seconds / route segment kilometres; default |
 | `"equivalent_pace"` | 区间等强配速 | Segment moving seconds / equivalent segment kilometres |
 | `"arrival_time"` | 到达时间 | `start_time` + cumulative arrival duration, before this station's rest |
 
@@ -247,4 +249,4 @@ Visible HTML/SVG content ends with the table, without explanatory footer text. C
 
 The water column is a station supply reference for the **next** leg: the start contains the first leg's value, each intermediate station contains the following leg's value, and the finish contains 0. Terrain statistics and parenthesized pace describe the leg just completed. Segment equivalent distance remains in CSV/JSON rather than consuming an extra visual column.
 
-The legacy CSV column `gpx_distance_km` contains cumulative horizontal distance from the selected input geometry for **both GPX and KML**. The distance-mismatch error's legacy `gpx_m` field likewise refers to the input route total in metres. These names are retained for compatibility. Chart labels remain Chinese; bilingual documentation does not change output labels.
+The legacy CSV column `gpx_distance_km` contains cumulative distance on the selected route: coordinate-derived horizontal distance for GPX/KML, or recorded device distance for FIT. The distance-mismatch error's legacy `gpx_m` field likewise refers to the selected route total in metres. These names are retained for compatibility. Chart labels remain Chinese; bilingual documentation does not change output labels.

@@ -110,11 +110,16 @@ python3 skills/even-effort-pace-chart/scripts/compare_activity.py generate race.
 
 ## 开发与测试
 
+分别运行技能功能测试和发布流程测试：
+
 ```bash
 python3 -m unittest discover -s skills/even-effort-pace-chart/tests -v
+python3 -m unittest discover -s .github/tests -v
 ```
 
-测试覆盖路线处理、配速和活动对比。独立复制 Skills、未携带 `examples/` 时，真实赛道测试会跳过。自然语言用例及人工复核步骤见[行为评测指南](skills/even-effort-pace-chart/evals/guide.md)；开发经历见[投稿文章](docs/articles/从配速表到百公里复盘.md)。
+技能测试覆盖路线处理、配速和活动对比。独立复制 Skills、未携带 `examples/` 时，真实赛道测试会跳过。自然语言用例及人工复核步骤见[行为评测指南](skills/even-effort-pace-chart/evals/guide.md)；开发经历见[投稿文章](docs/articles/从配速表到百公里复盘.md)。
+
+推送涉及 `skills/even-effort-pace-chart/` 的提交到 `main` 后，[发布工作流](.github/workflows/release-skill.yml)会运行发布测试、递增补丁版本并同步两个版本字段，再向 `main` 写入版本提交、创建标签和 GitHub Release，上传仅包含技能目录的 ZIP。技能参考文档的修改也会触发该流程；继续开发前请同步自动生成的版本提交。
 
 ## 来源与版权
 

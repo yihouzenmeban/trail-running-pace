@@ -35,11 +35,11 @@ With simplification disabled, a 5 m tolerance trial still diagnoses sensitivity.
 `elevation_spike_m` defaults to 30 m; 0 disables correction. An isolated interior point is corrected only when all of these conditions hold:
 
 - Its residual from linear prediction between its neighbors reaches the configured threshold.
-- The neighbors are at most 50 m apart, and both absolute adjacent grades exceed 200%.
+- The neighbors are at most 50 m apart on the route distance axis, and both absolute adjacent grades exceed 200%.
 - It is above both or below both neighbors, whose elevations differ by less than half the threshold.
 - Neither adjacent point is also flagged as a potential spike.
 
-Replace that elevation with the neighbors' linear prediction, recording indices, count, and a warning. This is conservative anomaly detection, not surveyed correction: endpoints, sustained steps, multi-point corruption, and low-amplitude noise are not automatically corrected. Very narrow real terrain may also satisfy the rule. Indices are zero-based within the sequence after consecutive duplicate coordinates are removed. Source files remain unchanged and their SHA is retained.
+Replace that elevation with the neighbors' linear prediction, recording indices, count, and a warning. This is conservative anomaly detection, not surveyed correction: endpoints, sustained steps, multi-point corruption, and low-amplitude noise are not automatically corrected. Very narrow real terrain may also satisfy the rule. Indices are zero-based after input deduplication: consecutive duplicate coordinates are removed for GPX/KML, and consecutive duplicate distances are merged for FIT. Source files remain unchanged and their SHA is retained.
 
 ### Display curve and boundaries
 
@@ -61,7 +61,7 @@ No averaging and a 10 m threshold are an engineering tradeoff that retains sourc
 
 An explicit positive `ascent_smoothing_m` enables an independent full-width centered average; for example, 40 m means 20 m on each side. Average by distance and emit samples every 5 m before applying the reversal threshold, using the same integration and endpoint rules as the display curve. Averaging can suppress real short hills. An explicit `ascent_threshold_m: 0` disables only peak/valley filtering: with the default `ascent_smoothing_m: 0`, changes are summed directly at cleaned source vertices; explicitly enabled averaging remains active. Positive changes in the display curve need not sum to reported ascent.
 
-Select the window method explicitly with `"ascent_method": "window", "ascent_smoothing_m": 100`; it ignores the peak/valley threshold. It retains the previous statistical approach while applying the new integration and boundary fixes, so it is not bit-for-bit legacy output. An old configuration containing only `ascent_smoothing_m: 100` now applies the default peak/valley filter after that window; add `ascent_method: "window"` to select the previous method.
+The window method sums changes on the ascent curve without applying the peak/valley reversal threshold. See [configuration](configuration.en.md#previous-window-method-and-explicit-filtering) for settings and legacy compatibility.
 
 ### Examples and limitations
 
@@ -71,7 +71,7 @@ For methodological comparisons, see [GPS Visualizer's elevation thresholds](http
 
 Interpolation cannot recover missing terrain detail; original point gaps over 100 m produce a warning. No external DEM, road matching, or surveyed elevation correction is used. Filtering cannot establish true distance or ascent from the track alone; retain input provenance and parameters with the results.
 
-Each segment's seven slope bins are weighted by horizontal distance. Boundaries, in percent, are `(-inf, -15]`, `(-15, -10]`, `(-10, -5]`, `(-5, 5)`, `[5, 10)`, `[10, 15)`, `[15, inf)`. The center bar is white; descent is on the left and ascent on the right. Segment profile thumbnails use independent horizontal and vertical scales and must not be compared as equal-scale maps.
+Each segment's seven slope bins are weighted by the selected route distance. Boundaries, in percent, are `(-inf, -15]`, `(-15, -10]`, `(-10, -5]`, `(-5, 5)`, `[5, 10)`, `[10, 15)`, `[15, inf)`. The center bar is white; descent is on the left and ascent on the right. Segment profile thumbnails use independent horizontal and vertical scales and must not be compared as equal-scale maps.
 
 ## Equivalent distance
 
@@ -93,7 +93,7 @@ T_move = T_finish - sum(station_rest_seconds)
 M_i = T_move * (E_i / E_total)^b
 segment_moving_i = M_i - M_(i-1)
 segment_eq_pace_i = segment_moving_i / segment_equivalent_km
-segment_distance_pace_i = segment_moving_i / segment_horizontal_km
+segment_distance_pace_i = segment_moving_i / segment_route_km
 arrival_i = M_i + sum(rest before station i)
 departure_i = arrival_i + rest_i
 ```

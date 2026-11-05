@@ -18,7 +18,7 @@
 python3 skills/even-effort-pace-chart/scripts/pace_chart.py inspect race.gpx
 ```
 
-可选参数：`--track-index 1`、`--sample-m 5`、`--smoothing-m 20`、`--ascent-method hysteresis`、`--ascent-threshold-m 10`、`--ascent-smoothing-m 0`、`--elevation-spike-m 30`、`--distance-tolerance-m 0`。20 米窗口用于细节图示和坡度分布；爬升默认不做窗口平均，直接在清理后的原始海拔顶点上使用 10 米峰谷反转阈值。输出包括水平距离、爬升下降、处理参数、`diagnostics`、告警和 `cp_candidates`；候选点包含 ID、名称、识别标记及可能的轨迹投影位置，距离单位为米。存在多条轨迹时，错误信息会列出序号，请选择后重新执行。
+可选参数：`--track-index 1`、`--sample-m 5`、`--smoothing-m 20`、`--ascent-method hysteresis`、`--ascent-threshold-m 10`、`--ascent-smoothing-m 0`、`--elevation-spike-m 30`、`--distance-tolerance-m 0`。20 米窗口用于细节图示和坡度分布；爬升默认不做窗口平均，直接在清理后的原始海拔顶点上使用 10 米峰谷反转阈值。输出包括路线距离、爬升下降、处理参数、`diagnostics`、告警和 `cp_candidates`；候选点包含 ID、名称、识别标记及可能的轨迹投影位置，距离单位为米。GPX/KML 使用坐标计算的水平距离，FIT 使用设备记录距离。存在多条轨迹时，错误信息会列出序号，请选择后重新执行。
 
 检查与生成必须使用同一组处理参数。`diagnostics` 包含原始及处理后距离、原始与清理后直接累计爬升、点距最小/中位/最大值、质量标记数量、尖峰修正数量与索引，以及距离简化试算结果。最终过滤后的爬升在顶层 `ascent_m`。距离试算仅诊断，不能证明 GPS 漂移；默认不会修改水平路径。
 
@@ -111,7 +111,9 @@ python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate activity-or
 
 ## 手工 CP 列表
 
-仅在内嵌 CP 缺失或不可用时使用。必须包含带累计官方里程的终点，零公里起点可省略。
+仅在内嵌 CP 缺失或不可用时使用。必须包含带累计距离的终点，零公里起点可省略。GPX/KML 可使用官方累计里程；FIT 路线使用该次记录的设备累计距离。
+
+以下是 GPX/KML 官方里程需要确认后映射的示例：
 
 ```json
 {
@@ -128,7 +130,7 @@ python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate activity-or
 
 距离必须严格递增；`checkpoints` 不能与 GPX/KML 候选点选择或覆盖混用。起终点停留必须为零。
 
-`distance_alignment` 默认为 `"confirm"`：官方总里程与轨迹差异超过 `max(100 米, 轨迹总长的 0.5%)` 时停止。确认后设置 `"scale"`，可将官方各站里程按比例映射到轨迹总长。容差内使用 `"confirm"` 时保留中间站公里位置，仅将终点吸附至轨迹末端。输出保留官方里程和映射比例，路线统计使用处理后的输入轨迹几何。
+`distance_alignment` 默认为 `"confirm"`：手工终点距离与路线总长的差异超过 `max(100 米, 路线总长的 0.5%)` 时停止。确认后设置 `"scale"`，可将手工各站里程按比例映射到路线总长；路线本身不会缩放。容差内使用 `"confirm"` 时保留中间站公里位置，仅将终点吸附至路线末端。输出记录映射比例；GPX/KML 保留输入的官方里程，FIT 的 `official_distance_km` 为空，应使用该次记录的设备距离。
 
 ## 参数
 
@@ -140,11 +142,11 @@ python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate activity-or
 | `secondary_display` | `"pace"` | 括号内显示：`"pace"` 区间配速、`"equivalent_pace"` 区间等强配速、`"arrival_time"` 到达钟点 |
 | `output_formats` | `["svg"]` | 非空且无重复的输出格式列表，可选 `"svg"`、`"html"`、`"csv"`、`"json"` |
 | `pace_basis` | `"distance"` | 兼容旧配置，`"equivalent"` 选择等强配速；显式设置 `secondary_display` 优先 |
-| `track_index` | 唯一的轨迹 | 从 1 开始的 GPX track/route 或 KML 线/track 序号 |
+| `track_index` | 唯一的轨迹 | 从 1 开始的 GPX track/route 或 KML 线/track 序号；FIT 只能省略或设为 1 |
 | `checkpoints` | 使用轨迹内 CP | 缺少可用内嵌 CP 时提供手工列表，不能与候选点选择或覆盖混用 |
 | `cp_selection` | 自动识别的站点 | 显式选择 `inspect` 返回的候选点 ID |
 | `checkpoint_overrides` | `{}` | 覆盖选定站点的名称、停留、关门或定位等字段 |
-| `distance_alignment` | `"confirm"` | 官方距离不匹配时要求确认；明确设置 `"scale"` 才按比例映射 |
+| `distance_alignment` | `"confirm"` | 手工终点距离不匹配时要求确认；明确设置 `"scale"` 才按比例映射 |
 | `use_kml_altitudes` | `false` | 布尔值；显式采用未声明模式或 clampToGround 的 KML 坐标高度，对 GPX 无影响 |
 | `sample_m` | 5 | 显示及启用窗口平滑时的沿距离插值间隔，单位米，必须大于零；关闭爬升平滑时保留原始海拔顶点 |
 | `smoothing_m` | 20 | 图示与坡度分布的完整居中平均窗口，单位米；0 关闭 |
@@ -185,7 +187,7 @@ python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate activity-or
 
 | 值 | 标注 | 计算方式 |
 | --- | --- | --- |
-| `"pace"` | 区间配速 | 本段移动秒数 / 本段水平公里数，默认值 |
+| `"pace"` | 区间配速 | 本段移动秒数 / 本段路线公里数，默认值 |
 | `"equivalent_pace"` | 区间等强配速 | 本段移动秒数 / 本段等效公里数 |
 | `"arrival_time"` | 到达时间 | `start_time` + 本站累计到站时长，使用本站停留前的时间 |
 
@@ -247,4 +249,4 @@ HTML/SVG 的可见内容到表格结束，不附加说明页脚；计算参数�
 
 水量列是从本站出发去**下一站**的参考量：起点显示首段、中间站显示下一段、终点为零。地形统计和括号内配速描述刚完成的上一段；等效距离保留在 CSV/JSON，不额外占用可见表格列。
 
-历史 CSV 字段 `gpx_distance_km` 在 **GPX 和 KML** 输入下都表示所选轨迹的累计水平距离；里程不匹配错误中的历史字段 `gpx_m` 同样表示输入轨迹总长，单位米。这些名称保留以兼容现有使用者。图表标签仍为中文，文档双语不改变输出文字。
+历史 CSV 字段 `gpx_distance_km` 表示所选路线的累计距离：GPX/KML 为坐标计算的水平距离，FIT 为设备记录距离。里程不匹配错误中的历史字段 `gpx_m` 同样表示所选路线总长，单位米。这些名称保留以兼容现有使用者。图表标签仍为中文，文档双语不改变输出文字。

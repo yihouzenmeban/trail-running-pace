@@ -26,7 +26,7 @@
 
 以上为历史实验快照：旧版为 `28270dc`，不平滑为 `461ace7`，40/20/10米方案基于 `dd4b95e`；不代表每次更新后重新跑出的结果。当前默认仍为不平滑＋10米阈值。二十次个人活动只公开汇总，原始 FIT 未公开，因此该组统计不能仅用公开仓库复现。
 
-完整仓库现已包含 MGW50K 的[原始 GPX](../../../examples/大境门/DGW50K/2026京东大境门古长城越野赛by%20UTMB®MGW50K.gpx)、[海拔补全副本](../../../examples/大境门/DGW50K/MGW50K-elevation-filled.gpx)与[修复记录](../../../examples/大境门/DGW50K/elevation-repair.json)。表中各方案使用同一份距离线性插值副本，补全59点，涉及约835米和34米两个区间，无法还原缺失地形。公开赛道的复现命令见各示例说明；独立安装 Skills 无需携带这些案例文件。
+完整仓库现已包含 MGW50K 的[原始 GPX](https://github.com/yihouzenmeban/trail-running-pace/blob/main/examples/大境门/DGW50K/2026京东大境门古长城越野赛by%20UTMB®MGW50K.gpx)、[海拔补全副本](https://github.com/yihouzenmeban/trail-running-pace/blob/main/examples/大境门/DGW50K/MGW50K-elevation-filled.gpx)与[修复记录](https://github.com/yihouzenmeban/trail-running-pace/blob/main/examples/大境门/DGW50K/elevation-repair.json)。表中各方案使用同一份距离线性插值副本，补全59点，涉及约835米和34米两个区间，无法还原缺失地形。公开赛道的复现命令见各示例说明；独立安装 Skills 无需携带这些案例文件。
 
 ## 徽州古城的赛前检查与赛后对照
 
@@ -44,7 +44,7 @@
 
 同一套不平滑＋10米算法下，CP3→CP4 的爬升从 GPX 的844.8米变为 FIT 的635.2米，CP5→CP6 从722.6米变为273.0米。对照位置可见原 GPX 有多点连续起伏，FIT 对应位置波动较小。连续起伏超过阈值仍会被计入，不能用“没有孤立尖峰”推导出输入无误。
 
-这些结果是新的对照证据，不是实测高程验证，也不据此自动改变默认参数。完整区间爬升、下降和配速影响见[徽州古城示例](../../../examples/huizhou-gucheng-100k/README.md#赛后活动对比)；个人 FIT 未公开，该部分仅供查看和理解口径。
+这些结果是新的对照证据，不是实测高程验证，也不据此自动改变默认参数。完整区间爬升、下降和配速影响见[徽州古城示例](https://github.com/yihouzenmeban/trail-running-pace/blob/main/examples/huizhou-gucheng-100k/README.md#赛后活动对比)；个人 FIT 未公开，该部分仅供查看和理解口径。
 
 ## 如何选择
 
@@ -60,6 +60,6 @@
 
 - **不平滑＋10米阈值**：保留清理后原始海拔的峰谷；超过阈值的噪声仍可能计入爬升。
 - **显式平滑**：将 `ascent_smoothing_m` 设为10、20、40等正数；窗口平均可能削弱真实短坡。窗口为完整宽度，如40米表示前后各20米。
-- **窗口法**：选择 `ascent_method: "window"` 和 `ascent_smoothing_m: 100`，不使用反转阈值；当前实现包含边界修复，不保证复现表中旧版数值。
+- **窗口法**：不使用反转阈值；设置和旧版兼容说明见[配置文档](configuration.md#旧窗口口径与显式过滤)。
 
-10米阈值针对累计反向变化，不是相邻点高差。显示曲线独立使用5米采样、20米平滑；默认保留重复点处理和孤立尖峰修正。详细规则见[模型](model.md#累计爬升与下降)，参数见[配置](configuration.md#旧窗口口径与显式过滤)。
+10米阈值针对累计反向变化，不是相邻点高差。显示曲线独立使用5米采样、20米平滑；默认保留重复点处理和孤立尖峰修正。详细规则见[模型](model.md#累计爬升与下降)，参数见[配置](configuration.md#参数)。

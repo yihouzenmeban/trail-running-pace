@@ -45,11 +45,10 @@ python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate \
 
 两张赛后对比图使用同一次 2026-09-12 佳明活动，差别只在路线输入：
 
-| 图表 / 配置 | 路线输入 | 说明 |
+| 图表 | 路线输入 | 说明 |
 | --- | --- | --- |
 | [garmin-comparison.svg](garmin-comparison.svg) | 赛前 GPX 路线（海拔补全副本） | 对照 6:00、6:15、6:30；不改写 `config-6h15m.json` |
 | [garmin-comparison2.svg](garmin-comparison2.svg) | 实际 FIT 路线（设备距离与逐点海拔） | 同一批目标，按实际 FIT 路线重算方案 |
-| [config-fit.json](config-fit.json) / [pace-chart-fit.svg](pace-chart-fit.svg) | 实际 FIT 路线 | 6:00、6:15、6:30 方案；人工 CP 仅适用于该次记录 |
 
 | 口径 | 赛前 GPX 路线 | 实际 FIT 路线 | 佳明实际统计 |
 | --- | ---: | ---: | ---: |
@@ -65,31 +64,52 @@ python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate \
 | 6:15 | 18:46 | 17:51 | 领先 0:45 |
 | 6:30 | 30:19 | 29:23 | 领先 15:45 |
 
-个人原始 FIT 未公开；CP 时刻为轨迹投影，不是官方打卡。用自己的 FIT 复现同类对比：
+CP 时刻为轨迹投影，不是官方打卡。使用自己在同一赛道上的 FIT 对照赛前 GPX 时，可沿用本目录的 GPX 配置；使用其他赛道时需替换路线和配置。先安装依赖并检查匹配结果：
 
 ```bash
 python3 -m pip install -r skills/even-effort-pace-chart/scripts/requirements-comparison.txt
 
-# 赛前 GPX 路线对比
+python3 skills/even-effort-pace-chart/scripts/compare_activity.py inspect \
+  'examples/大境门/DGW50K/MGW50K-elevation-filled.gpx' \
+  --config 'examples/大境门/DGW50K/config-6h15m.json' \
+  --fit activity.fit --targets 06:00 06:15 06:30
+```
+
+`--targets` 指定本例的三个参考目标，可按需要调整。确认匹配结果并处理站点歧义后，再生成：
+
+```bash
 python3 skills/even-effort-pace-chart/scripts/compare_activity.py generate \
   'examples/大境门/DGW50K/MGW50K-elevation-filled.gpx' \
   --config 'examples/大境门/DGW50K/config-6h15m.json' \
   --fit activity.fit \
   --targets 06:00 06:15 06:30 --output-dir output/dgw50k-comparison
-
-# 实际 FIT 路线方案与同一次活动对比
-python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate \
-  activity.fit \
-  --config 'examples/大境门/DGW50K/config-fit.json' \
-  --output-dir output/dgw50k-fit
-
-python3 skills/even-effort-pace-chart/scripts/compare_activity.py generate \
-  activity.fit \
-  --config 'examples/大境门/DGW50K/config-fit.json' \
-  --fit activity.fit \
-  --targets 06:00 06:15 06:30 --output-dir output/dgw50k-fit-comparison
 ```
 
-有佳明活动详情时可加 `--summary activity-details.json`，终点汇总优先采用平台数据。按实际 FIT 重算时，需要在该次活动的设备距离轴上重新定义 CP；`config-fit.json` 仅适用于这次记录，不能直接套用到其他活动。图中经过时间包含停留；差值方向和读图方式见[活动对比文档](../../../skills/even-effort-pace-chart/references/comparison.md)。
+按实际 FIT 路线重算前，先检查该次记录的路线距离：
 
-两张赛后对比图使用个人 FIT 生成，原始 FIT 未公开。
+```bash
+python3 skills/even-effort-pace-chart/scripts/pace_chart.py inspect activity.fit
+```
+
+在 `race-fit.json` 中填写该次活动各 CP 的名称和设备累计公里数，并将 `inspect` 输出的 `distance_m` 换算为终点公里数。可参考本目录 `config-fit.json` 的格式，但必须重新核对所有 CP 距离、出发时间和目标；该文件中的里程仅适用于示例活动。详见[FIT 路线输入](../../../skills/even-effort-pace-chart/references/configuration.md#fit-作为路线输入)。
+
+使用新配置生成方案，并先检查活动匹配：
+
+```bash
+python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate \
+  activity.fit --config race-fit.json \
+  --output-dir output/dgw50k-fit
+
+python3 skills/even-effort-pace-chart/scripts/compare_activity.py inspect \
+  activity.fit --config race-fit.json --fit activity.fit
+```
+
+确认匹配结果后生成对比图；目标使用 `race-fit.json` 中的配置：
+
+```bash
+python3 skills/even-effort-pace-chart/scripts/compare_activity.py generate \
+  activity.fit --config race-fit.json --fit activity.fit \
+  --output-dir output/dgw50k-fit-comparison
+```
+
+检查发现站点歧义时，先按[活动对比文档](../../../skills/even-effort-pace-chart/references/comparison.md)核对，再将同一个 `--passage-overrides passage-overrides.json` 参数加到 `inspect` 和 `generate` 命令。有佳明活动详情时可加 `--summary activity-details.json`，终点汇总优先采用平台数据。图中经过时间包含停留；差值方向和读图方式也见该文档。
