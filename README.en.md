@@ -46,6 +46,13 @@ Choose one of two usage modes:
    1. Open the [WorkBuddy Skill sharing page](https://www.workbuddy.cn/share/asset?shareCode=VxFVK8iJONQ7o2r3K9ffpU&sig=q3nO3wLULv--gGj0), then follow the prompts to install it in the WorkBuddy client.
    2. Confirm that the Skill is enabled in the installed skills list.
 
+4. **Claude Code plugin marketplace**: in Claude Code, add the marketplace first, then install the plugin:
+
+   ```text
+   /plugin marketplace add yihouzenmeban/trail-running-pace
+   /plugin install trail-running-pace@trail-running-pace
+   ```
+
 #### First use
 
 After installation, prepare a GPX, KML, or FIT route (or start with the [public example](examples/huizhou-gucheng-100k/README.en.md)), then give your assistant the route path and finish target. In assistants that support `$name` invocation, use:

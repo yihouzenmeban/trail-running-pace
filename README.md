@@ -46,6 +46,13 @@
    1. 打开 [WorkBuddy 技能分享页](https://www.workbuddy.cn/share/asset?shareCode=VxFVK8iJONQ7o2r3K9ffpU&sig=q3nO3wLULv--gGj0)，按提示在 WorkBuddy 客户端安装。
    2. 在「专家·技能·连接器 → 技能 → 已安装」中确认该技能已启用。
 
+4. **Claude Code 插件市场**：在 Claude Code 里先添加市场，再安装插件：
+
+   ```text
+   /plugin marketplace add yihouzenmeban/trail-running-pace
+   /plugin install trail-running-pace@trail-running-pace
+   ```
+
 #### 首次使用
 
 安装完成后，准备一份 GPX、KML 或 FIT 轨迹（也可以先用[公开示例](examples/huizhou-gucheng-100k/README.md)），向助手提供轨迹路径和目标时间。在支持 `$名称` 调用的助手中，可以使用：
