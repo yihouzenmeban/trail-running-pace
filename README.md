@@ -46,6 +46,28 @@ $even-effort-pace-chart
 
 也可在自然语言请求中指定使用 `even-effort-pace-chart`。默认展开五组方案，相邻间隔 30 分钟；06:00 出发，仅输出 SVG，括号内显示区间配速。指定出发时间不会切换括号内容。优先读取轨迹内 CP，缺少可用站点时再补充人工 CP；FIT 路线使用人工 CP。图表标签为中文。
 
+### 与 AI 自定义携水
+
+将轨迹路径、日期和数值替换为实际情况后，可以直接向 AI 助手说：
+
+```text
+请使用 even-effort-pace-chart，根据 race.gpx 生成配速表，
+以 14 小时方案作为携水参考，输出到 output/my-race/。
+
+比赛于【比赛日期】早上 6:00 发枪，时区为 Asia/Shanghai。
+请先查询各赛段天气，给我确认后再生成。
+
+我的饮水速率按 500 毫升/小时计算，每段额外预留 15 分钟。
+从 CP2 出发到下一站，饮水速率改为 700 毫升/小时。
+请在配速表中标出每站出发时的携水量。
+```
+
+天气供确认饮水速率时参考，程序不会自动调整速率；预报不可用时可以提供确认过的手动天气。此示例按速率和余量计算下一站携水量，详细步骤见[按耗时规划携水](skills/even-effort-pace-chart/references/configuration.md#按耗时规划携水)。
+
+### 完整参数
+
+配速表的所有配置项、默认值和取值说明见[完整参数表](skills/even-effort-pace-chart/references/configuration.md#参数)，包括目标、站点、爬升处理、输出格式、携水和天气。可以用自然语言向助手指定，也可以写入 `race.json`；活动对比的命令参数见[活动对比文档](skills/even-effort-pace-chart/references/comparison.md)。
+
 ### 命令行快速开始
 
 以下命令在克隆后的仓库根目录执行。将下面内容保存为 `race.json`：
@@ -99,7 +121,8 @@ python3 skills/even-effort-pace-chart/scripts/compare_activity.py generate race.
 
 | 需要了解什么 | 文档 |
 | --- | --- |
-| 完整参数、目标列表、人工 CP、停留、关门和导出格式 | [配置与命令行](skills/even-effort-pace-chart/references/configuration.md) |
+| 配速表完整参数、默认值和取值说明 | [完整参数表](skills/even-effort-pace-chart/references/configuration.md#参数) |
+| 目标列表、人工 CP、停留、关门和导出格式 | [配置与命令行](skills/even-effort-pace-chart/references/configuration.md) |
 | KML 高度、FIT 设备距离与 CP 要求 | [KML 输入](skills/even-effort-pace-chart/references/configuration.md#kml-输入) / [FIT 路线输入](skills/even-effort-pace-chart/references/configuration.md#fit-作为路线输入) |
 | 活动对比、差值方向、CP 匹配和佳明读取 | [活动对比](skills/even-effort-pace-chart/references/comparison.md) |
 | 等效距离、疲劳曲线、距离与海拔处理 | [模型与限制](skills/even-effort-pace-chart/references/model.md) |
