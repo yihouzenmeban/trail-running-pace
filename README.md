@@ -18,43 +18,64 @@
 
 各示例说明包含输入来源、配置、复现所需文件、命令和结果口径。
 
-## 安装与首次使用
+## 安装与使用
 
-需要 **Python 3.10+**。GPX/KML 配速表仅使用标准库；FIT 输入和活动对比需要[可选依赖](skills/even-effort-pace-chart/references/comparison.md#准备输入)。快捷安装还需要 Node.js、npm 和 Git。
+所有方式都需要 **Python 3.10+**。GPX/KML 配速表仅使用标准库；FIT 输入和活动对比需要[可选依赖](skills/even-effort-pace-chart/references/comparison.md#准备输入)。
 
-在需要使用 Skills 的项目目录执行：
+有两种方式，按需选择：
 
-```bash
-npx skills add yihouzenmeban/trail-running-pace --skill even-effort-pace-chart
-```
+- **在 AI 助手中使用**：先安装 Skill，再用自然语言调用。适合让助手检查路线、处理歧义并生成图表。
+- **直接使用命令行**：不需要安装 Skill，克隆仓库后运行脚本；见[命令行使用](#命令行使用)。
 
-按提示选择 AI 助手；添加 `-g` 可安装到用户级技能目录。也可将 `skills/even-effort-pace-chart/` 整个目录复制到助手的技能目录，运行时不依赖仓库示例或参考文章。
+### 在 AI 助手中使用
 
-也可从 [GitHub Releases](https://github.com/yihouzenmeban/trail-running-pace/releases) 下载带版本号的 ZIP，解压后将 `even-effort-pace-chart/` 目录复制到助手的技能目录。
+#### 安装 Skill（任选一种）
 
-在 WorkBuddy 中安装：
+1. **npx（推荐）**：需要 Node.js、npm 和 Git。在项目目录执行：
 
-1. 打开 [WorkBuddy 技能分享页](https://www.workbuddy.cn/share/asset?shareCode=VxFVK8iJONQ7o2r3K9ffpU&sig=q3nO3wLULv--gGj0)，按提示在 WorkBuddy 客户端安装。
-2. 在「专家·技能·连接器 → 技能 → 已安装」中确认该技能已启用。
+   ```bash
+   npx skills add yihouzenmeban/trail-running-pace --skill even-effort-pace-chart
+   ```
 
-向助手提供轨迹路径和目标时间。在支持 `$名称` 调用的助手中，可以使用：
+   按提示选择 AI 助手。默认安装到当前项目；加 `-g` 安装到用户级技能目录，此时可在任意目录执行。
+
+2. **手动安装**：不需要 Node.js。从 [GitHub Releases](https://github.com/yihouzenmeban/trail-running-pace/releases) 下载带版本号的 ZIP，解压后得到 `even-effort-pace-chart/`；如果已克隆仓库，也可以直接复制 `skills/even-effort-pace-chart/`。将 `even-effort-pace-chart/` 整个目录放入助手的技能目录即可。技能目录已包含运行所需文件，不依赖仓库示例或来源文章。
+
+3. **WorkBuddy**：如果你使用 WorkBuddy，用分享页安装，不需要执行上面的 npx 或手动复制：
+
+   1. 打开 [WorkBuddy 技能分享页](https://www.workbuddy.cn/share/asset?shareCode=VxFVK8iJONQ7o2r3K9ffpU&sig=q3nO3wLULv--gGj0)，按提示在 WorkBuddy 客户端安装。
+   2. 在「专家·技能·连接器 → 技能 → 已安装」中确认该技能已启用。
+
+#### 首次使用
+
+安装完成后，准备一份 GPX、KML 或 FIT 轨迹（也可以先用[公开示例](examples/huizhou-gucheng-100k/README.md)），向助手提供轨迹路径和目标时间。在支持 `$名称` 调用的助手中，可以使用：
 
 ```text
 $even-effort-pace-chart
 用 race.gpx 生成体感一致配速表，目标完赛时间 14 小时，输出到 output/my-race/。
 ```
 
-也可在自然语言请求中指定使用 `even-effort-pace-chart`。默认展开五组方案，相邻间隔 30 分钟；06:00 出发，仅输出 SVG，括号内显示区间配速。指定出发时间不会切换括号内容。优先读取轨迹内 CP，缺少可用站点时再补充人工 CP；FIT 路线使用人工 CP。图表标签为中文。
+也可在自然语言请求中直接指定 `even-effort-pace-chart`。
 
-默认水量仅供赛段比较。需要结合天气和个人情况规划携水时，直接告诉助手；它会按需询问比赛时间、饮水经验、携水容量和站点供水情况，确认个人饮水速率后按赛段耗时计算。天气供确认速率时参考，程序不会自动调整速率。详见[携水与天气](skills/even-effort-pace-chart/references/configuration.md#按耗时规划携水)。
+默认行为：
 
-### 完整参数
+- 以目标时间为中心，向前、向后各展开两档，共五组方案，相邻间隔 30 分钟。例如目标 14:00 生成 13:00、13:30、14:00、14:30、15:00 五组完赛目标；这些是完赛用时，不是钟点。
+- 默认 06:00 发枪。指定出发时间只影响钟点换算，不会把括号内容从区间配速改为到达钟点。
+- 仅输出 SVG，括号内显示刚完成区间的配速，图表标签为中文。
+- 优先使用轨迹内可识别的 CP；内嵌 CP 缺失或不可用时，改用人工 CP 列表（不能与内嵌 CP 混用）；FIT 路线必须使用人工 CP。
 
-配速表的所有配置项、默认值和取值说明见[完整参数表](skills/even-effort-pace-chart/references/configuration.md#参数)，包括目标、站点、爬升处理、输出格式、携水和天气。可以用自然语言向助手指定，也可以写入 `race.json`；活动对比的命令参数见[活动对比文档](skills/even-effort-pace-chart/references/comparison.md)。
+默认水量按等效距离计算，仅供赛段比较，并非个人饮水建议。需要结合天气和个人情况规划携水时，直接告诉助手；它会按需询问比赛日期与出发时间、饮水经验、携水容量和站点供水情况，确认个人饮水速率后按赛段耗时计算。天气只用于辅助确认速率，程序不会自动调整。详见[携水与天气](skills/even-effort-pace-chart/references/configuration.md#按耗时规划携水)。
 
-### 命令行快速开始
+### 命令行使用
 
-以下命令在克隆后的仓库根目录执行。将下面内容保存为 `race.json`：
+不需要安装 Skill。先克隆仓库：
+
+```bash
+git clone https://github.com/yihouzenmeban/trail-running-pace.git
+cd trail-running-pace
+```
+
+以下命令在仓库根目录执行。将下面内容保存为 `race.json`：
 
 ```json
 {
@@ -63,7 +84,9 @@ $even-effort-pace-chart
 }
 ```
 
-先检查公开示例轨迹，再生成配速表：
+`target` 是完赛用时（这里为 14 小时），不是出发钟点。
+
+先用 `inspect` 检查公开示例轨迹，再生成配速表：
 
 ```bash
 python3 skills/even-effort-pace-chart/scripts/pace_chart.py inspect \
@@ -74,7 +97,11 @@ python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate \
   --config race.json --output-dir output/my-race
 ```
 
-生成 13:00、13:30、14:00、14:30、15:00 五组方案，结果为 `output/my-race/pace-chart.svg`。`output/` 已被 Git 忽略；替换已有结果时使用 `--overwrite`。换用自己的轨迹后，请先处理检查结果中的路线与 CP 歧义。
+生成 13:00、13:30、14:00、14:30、15:00 五组完赛目标（均为完赛用时），结果为 `output/my-race/pace-chart.svg`。`output/` 已被 Git 忽略；替换已有结果时使用 `--overwrite`。
+
+`inspect` 只输出检查结果，不写文件；`generate` 会重新读取轨迹。换成自己的轨迹时，先对该文件运行 `inspect`，处理完路线与 CP 歧义后再运行 `generate`。
+
+两种方式共用同一套配置。配速表的所有配置项、默认值和取值说明见[完整参数表](skills/even-effort-pace-chart/references/configuration.md#参数)，包括目标、站点、爬升处理、输出格式、携水和天气。可以用自然语言向助手指定，也可以写入 `race.json`；活动对比的命令参数见[活动对比文档](skills/even-effort-pace-chart/references/comparison.md)。
 
 ## 赛后活动对比
 
@@ -82,24 +109,30 @@ python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate \
 
 上图截取基于实际 FIT 路线的 16 小时方案；[完整对比图](examples/huizhou-gucheng-100k/garmin-comparison2.svg)包含 15、16、17 小时方案及各段爬升、下降。大境门 MGW50K 的[示例说明](examples/大境门/DGW50K/README.md#赛后活动对比)同时提供赛前 GPX 与实际 FIT 两版对比，可对照路线输入带来的差异。
 
-向助手提供比赛轨迹、配速配置和活动 FIT，例如：
+有两种方式：
+
+**在 AI 助手中使用**：向助手提供比赛轨迹、配速配置和活动 FIT，例如：
 
 ```text
 用 even-effort-pace-chart 将 activity.fit 与 race.gpx、race.json 对比，
 参照目标为 15、16、17 小时，包含每两个站之间的耗时，输出到 output/comparison/。
 ```
 
-命令行用户先安装 FIT 依赖，再离线生成：
+**使用命令行**：先安装 FIT 依赖，再离线检查并生成（以下命令在克隆后的仓库根目录执行）：
 
 ```bash
 python3 -m pip install -r skills/even-effort-pace-chart/scripts/requirements-comparison.txt
+
+python3 skills/even-effort-pace-chart/scripts/compare_activity.py inspect race.gpx \
+  --config race.json --fit activity.fit \
+  --targets 15:00 16:00 17:00
 
 python3 skills/even-effort-pace-chart/scripts/compare_activity.py generate race.gpx \
   --config race.json --fit activity.fit \
   --targets 15:00 16:00 17:00 --output-dir output/comparison
 ```
 
-默认输出 `garmin-comparison.svg`，支持 FIT 或单活动 FIT ZIP，无需在线凭据。CP 匹配有歧义时需先核对。读图、平台汇总、按实际 FIT 重算路线及可选佳明下载，见[活动对比文档](skills/even-effort-pace-chart/references/comparison.md)。
+默认输出 `garmin-comparison.svg`，支持 FIT 或单活动 FIT ZIP，无需在线凭据。`inspect` 只输出活动汇总、站点匹配和诊断信息，不写文件；CP 匹配有歧义时按提示核对后再运行 `generate`。替换已有结果时使用 `--overwrite`。读图、平台汇总、按实际 FIT 重算路线及可选佳明下载，见[活动对比文档](skills/even-effort-pace-chart/references/comparison.md)。
 
 ## 文档导航
 
@@ -118,7 +151,7 @@ python3 skills/even-effort-pace-chart/scripts/compare_activity.py generate race.
 
 ## 开发与测试
 
-分别运行技能功能测试和发布流程测试：
+在仓库根目录分别运行技能功能测试和发布流程测试：
 
 ```bash
 python3 -m unittest discover -s skills/even-effort-pace-chart/tests -v

@@ -18,26 +18,37 @@ The approach draws on [《耐力科学｜体感一致配速表全面指南》](h
 
 Example notes include input provenance, configurations, files needed for reproduction, commands, and metric definitions.
 
-## Installation and first use
+## Installation and use
 
-Requires **Python 3.10+**. GPX/KML pace charts use only the standard library; FIT inputs and activity comparisons need an [optional dependency](skills/even-effort-pace-chart/references/comparison.en.md#prepare-inputs). Quick installation also requires Node.js, npm, and Git.
+Every method requires **Python 3.10+**. GPX/KML pace charts use only the standard library; FIT inputs and activity comparisons need an [optional dependency](skills/even-effort-pace-chart/references/comparison.en.md#prepare-inputs).
 
-Run this from the project where you want to use the Skills package:
+Choose one of two usage modes:
 
-```bash
-npx skills add yihouzenmeban/trail-running-pace --skill even-effort-pace-chart
-```
+- **Use it in an AI assistant**: install the Skill, then invoke it in natural language. This is the best fit when you want the assistant to inspect the route, resolve ambiguities, and generate the chart.
+- **Use the command line directly**: no Skill installation is needed. Clone the repository and run the scripts; see [command line use](#command-line-use).
 
-Follow the prompts to select your AI assistant; add `-g` for a user-level installation. Alternatively, copy the entire `skills/even-effort-pace-chart/` directory into your assistant's skills directory. Runtime use does not depend on repository examples or the archived article.
+### Use it in an AI assistant
 
-You can also download a versioned ZIP from [GitHub Releases](https://github.com/yihouzenmeban/trail-running-pace/releases), extract it, and copy the `even-effort-pace-chart/` directory into your assistant's skills directory.
+#### Install the Skill (choose one)
 
-To install in WorkBuddy:
+1. **npx (recommended)**: requires Node.js, npm, and Git. Run this in your project directory:
 
-1. Open the [WorkBuddy Skill sharing page](https://www.workbuddy.cn/share/asset?shareCode=VxFVK8iJONQ7o2r3K9ffpU&sig=q3nO3wLULv--gGj0), then follow the prompts to install it in the WorkBuddy client.
-2. Confirm that the Skill is enabled in the installed skills list.
+   ```bash
+   npx skills add yihouzenmeban/trail-running-pace --skill even-effort-pace-chart
+   ```
 
-Provide your route path and finish target. In assistants that support `$name` invocation, use:
+   Follow the prompts to select your AI assistant. The default installation is project-level; add `-g` for a user-level installation, which can be run from any directory.
+
+2. **Manual installation**: does not require Node.js. Download the versioned ZIP from [GitHub Releases](https://github.com/yihouzenmeban/trail-running-pace/releases) and extract `even-effort-pace-chart/`; if you already cloned the repository, you can copy `skills/even-effort-pace-chart/` instead. Copy the entire `even-effort-pace-chart/` directory into your assistant's skills directory. The directory contains everything needed at runtime; it does not depend on repository examples or the source article.
+
+3. **WorkBuddy**: if you use WorkBuddy, install it from the sharing page instead; you do not need the npx or manual steps above.
+
+   1. Open the [WorkBuddy Skill sharing page](https://www.workbuddy.cn/share/asset?shareCode=VxFVK8iJONQ7o2r3K9ffpU&sig=q3nO3wLULv--gGj0), then follow the prompts to install it in the WorkBuddy client.
+   2. Confirm that the Skill is enabled in the installed skills list.
+
+#### First use
+
+After installation, prepare a GPX, KML, or FIT route (or start with the [public example](examples/huizhou-gucheng-100k/README.en.md)), then give your assistant the route path and finish target. In assistants that support `$name` invocation, use:
 
 ```text
 $even-effort-pace-chart
@@ -45,17 +56,27 @@ Generate an even-effort pace chart from race.gpx with a 14-hour finish target,
 writing to output/my-race/.
 ```
 
-You can also name `even-effort-pace-chart` in a natural-language request. Defaults are five plans, 30 minutes apart, a 06:00 start, SVG-only output, and segment pace in parentheses. Specifying a start time does not change the parenthesized display. Embedded CPs are preferred; supply manual CPs when usable stations are missing. FIT routes require manual CPs. Chart labels are Chinese.
+You can also name `even-effort-pace-chart` in a natural-language request.
 
-Default water amounts are only for comparing legs. To plan water around the weather and your personal needs, ask your assistant; it will request missing details such as race time, drinking experience, carrying capacity, and station water availability, then calculate from your confirmed drinking rate and leg times. Weather helps you confirm the rate; the program does not adjust it automatically. See [water and weather](skills/even-effort-pace-chart/references/configuration.en.md#time-based-water-planning).
+Defaults:
 
-### All parameters
+- The target expands to five plans centered on it: two 30-minute steps before and after. For example, a 14:00 target produces 13:00, 13:30, 14:00, 14:30, and 15:00. These are finish durations, not clock times.
+- The default start is 06:00. Supplying a start time only affects clock-time conversion; it does not change the parenthesized segment pace to an arrival time.
+- Output is SVG only, with the completed segment pace in parentheses and Chinese chart labels.
+- Embedded CPs are preferred. When they are missing or unusable, use a manual CP list instead (the two cannot be mixed). FIT routes require manual CPs.
 
-The [complete parameter table](skills/even-effort-pace-chart/references/configuration.en.md#parameters) lists every pace-chart setting, default, and value description, including targets, stations, ascent processing, exports, water, and weather. Specify them in natural language or in `race.json`. Activity-comparison command options are covered in the [comparison reference](skills/even-effort-pace-chart/references/comparison.en.md).
+Default water amounts are calculated from equivalent distance for leg comparison only; they are not personal hydration advice. To plan water around weather and personal needs, ask your assistant. It will request the missing race date and start time, drinking experience, carrying capacity, and station water availability, then calculate from your confirmed drinking rate and leg times. Weather only helps confirm the rate; the program does not adjust it automatically. See [water and weather](skills/even-effort-pace-chart/references/configuration.en.md#time-based-water-planning).
 
-### CLI quick start
+### Command line use
 
-Run these commands from the root of a cloned repository. Save this as `race.json`:
+No Skill installation is needed. Clone the repository first:
+
+```bash
+git clone https://github.com/yihouzenmeban/trail-running-pace.git
+cd trail-running-pace
+```
+
+Run the following commands from the repository root. Save this as `race.json`:
 
 ```json
 {
@@ -63,6 +84,8 @@ Run these commands from the root of a cloned repository. Save this as `race.json
   "target": "14:00"
 }
 ```
+
+`target` is a finish duration (14 hours here), not a start time.
 
 Inspect the public example route, then generate the chart:
 
@@ -75,7 +98,11 @@ python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate \
   --config race.json --output-dir output/my-race
 ```
 
-This produces five plans for 13:00, 13:30, 14:00, 14:30, and 15:00 in `output/my-race/pace-chart.svg`. Git ignores `output/`; use `--overwrite` to replace existing results. When using your own route, resolve any route or checkpoint ambiguities reported by inspection first.
+This produces five finish targets (13:00, 13:30, 14:00, 14:30, and 15:00; all are finish durations) and writes the chart to `output/my-race/pace-chart.svg`. `output/` is Git-ignored; use `--overwrite` to replace existing results.
+
+`inspect` only reports route, CP, and diagnostic information; it does not write files, and `generate` re-reads the route. When you switch to your own route, run `inspect` on that file first, resolve any route or CP ambiguities, then run `generate`.
+
+Both usage modes share the same configuration. The [complete parameter table](skills/even-effort-pace-chart/references/configuration.en.md#parameters) lists every pace-chart setting, default, and value description, including targets, stations, ascent processing, exports, water, and weather. Specify them in natural language or in `race.json`. Activity-comparison command options are covered in the [comparison reference](skills/even-effort-pace-chart/references/comparison.en.md).
 
 ## Post-race activity comparison
 
@@ -83,7 +110,9 @@ This produces five plans for 13:00, 13:30, 14:00, 14:30, and 15:00 in `output/my
 
 This excerpt uses the recorded FIT route and the 16-hour plan. The [full comparison](examples/huizhou-gucheng-100k/garmin-comparison2.svg) includes 15h, 16h, and 17h plans plus segment ascent and descent. The [Dajingmen MGW50K notes](examples/大境门/DGW50K/README.en.md#post-race-activity-comparison) also include both pre-race-GPX and recorded-FIT comparisons, showing how the route input changes the plans.
 
-Give your assistant the race route, pace configuration, and recorded FIT activity:
+There are two ways to run the comparison:
+
+**Use it in an AI assistant**: give your assistant the race route, pace configuration, and recorded FIT activity:
 
 ```text
 Use even-effort-pace-chart to compare activity.fit with race.gpx and race.json.
@@ -91,17 +120,21 @@ Use exact targets of 15, 16, and 17 hours, include elapsed times between adjacen
 checkpoints, and write to output/comparison/.
 ```
 
-For the CLI, install the FIT dependency, then generate offline:
+**Use the command line**: install the FIT dependency, then inspect and generate offline (run these commands from the root of the cloned repository):
 
 ```bash
 python3 -m pip install -r skills/even-effort-pace-chart/scripts/requirements-comparison.txt
+
+python3 skills/even-effort-pace-chart/scripts/compare_activity.py inspect race.gpx \
+  --config race.json --fit activity.fit \
+  --targets 15:00 16:00 17:00
 
 python3 skills/even-effort-pace-chart/scripts/compare_activity.py generate race.gpx \
   --config race.json --fit activity.fit \
   --targets 15:00 16:00 17:00 --output-dir output/comparison
 ```
 
-The default output is `garmin-comparison.svg`. FIT and single-activity FIT ZIP are supported without online credentials. Resolve ambiguous checkpoint matches before generating. See the [activity comparison reference](skills/even-effort-pace-chart/references/comparison.en.md) for reading charts, platform totals, rebuilding routes from FIT, and optional Garmin downloads.
+The default output is `garmin-comparison.svg`. FIT and single-activity FIT ZIP are supported without online credentials. `inspect` only reports activity totals, checkpoint matches, and diagnostics; it does not write files. Resolve ambiguous checkpoint matches before running `generate`. Use `--overwrite` to replace existing results. See the [activity comparison reference](skills/even-effort-pace-chart/references/comparison.en.md) for reading charts, platform totals, rebuilding routes from FIT, and optional Garmin downloads.
 
 ## Documentation
 
@@ -120,7 +153,7 @@ Ascent statistics and display smoothing are independent. Results depend on sourc
 
 ## Development and tests
 
-Run the Skill functionality tests and release workflow tests respectively:
+Run the Skill functionality tests and release workflow tests from the repository root:
 
 ```bash
 python3 -m unittest discover -s skills/even-effort-pace-chart/tests -v
