@@ -108,7 +108,7 @@ The default output is `garmin-comparison.svg`. FIT and single-activity FIT ZIP a
 | Why no averaging + 10 m is the default, and how to switch | [Ascent methods and historical experiments](skills/even-effort-pace-chart/references/ascent-options.en.md) |
 | AI assistant workflow | [SKILL.md](skills/even-effort-pace-chart/SKILL.md) |
 
-Ascent statistics and display smoothing are independent. Results depend on source elevations and processing parameters and may differ from event or other platform statistics. Water values compare relative segment demand.
+Ascent statistics and display smoothing are independent. Results depend on source elevations and processing parameters and may differ from event or other platform statistics. Default water values compare equivalent-distance demand; an optional time-based mode estimates carry amounts from a target schedule and personal drinking rate. Automatic weather previews require network access and user confirmation. See [time-based water planning](skills/even-effort-pace-chart/references/configuration.en.md#time-based-water-planning).
 
 ## Development and tests
 

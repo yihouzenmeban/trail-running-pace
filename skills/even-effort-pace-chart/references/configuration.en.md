@@ -2,7 +2,7 @@
 
 [简体中文](configuration.md) | [English](configuration.en.md)
 
-Run with Python 3.10+. GPX/KML pace charts use only the standard library; FIT input needs an optional dependency. Offline generation requires no credentials or online services. Paths in these examples assume the repository root. For an installed Skills package, resolve `scripts/pace_chart.py` relative to the package directory.
+Run with Python 3.10+. GPX/KML pace charts use only the standard library; FIT input needs an optional dependency. Default generation is offline; optional time-based water planning can fetch weather online or use user-confirmed manual conditions. Paths in these examples assume the repository root. For an installed Skills package, resolve `scripts/pace_chart.py` relative to the package directory.
 
 ## Defaults and overrides
 
@@ -157,14 +157,77 @@ Default `distance_alignment` is `"confirm"`: a manual finish distance differing 
 | `distance_tolerance_m` | 0 | Horizontal simplification tolerance in metres; 0 disables it; positive values can shorten real small turns |
 | `ascent_km_per_100m` | 1 | Equivalent kilometres per 100 m ascent; nonnegative |
 | `fatigue_rate` | 0.08 | Pace multiplier minus one per doubling; range 0 to 1 |
-| `water_ml_per_10km` | 700 | Comparative water per 10 equivalent km; nonnegative |
+| `water_mode` | `"distance"` | `"distance"` compares water by equivalent distance; `"time"` estimates it from moving time and confirmed personal rates |
+| `water_ml_per_10km` | 700 | Comparative water per 10 equivalent km in distance mode; nonnegative, in millilitres |
+| `water_target` | Selected automatically for one target | Reference target for time-based water; required for multiple targets and must match a displayed target |
+| `water_ml_per_hour` | Required to generate in time mode | User-confirmed default drinking rate; finite and positive, in ml/h |
+| `water_buffer_minutes` | 0 | Nonnegative extra minutes per leg in time mode |
+| `water_rate_overrides` | `{}` | Time-mode rates by departure checkpoint ID; finite and positive, in ml/h |
+| `water_timezone` | None | IANA time zone required for automatic weather, e.g. `"Asia/Shanghai"` |
+| `water_weather` | None | Confirmed forecast snapshot or manual conditions for time mode; omission starts an automatic preview |
 | `target_step_minutes` | 30 | Positive interval for five-column expansion |
 
 Unknown configuration and station fields are errors. Numbers must be finite. No measured elevation is fetched or invented; fix missing elevations in the source before generation. Sampling allows at most 2,000,000 intervals plus the exact endpoint; excessively small `sample_m` values return an input error. Positive smoothing windows too small to compute their boundaries reliably also return an error; increase the corresponding window or set it to `0` to disable smoothing.
 
 See the [model and limitations](model.en.md) for elevation filtering and timing equations.
 
-### Previous window method and explicit filtering
+## Time-based water planning
+
+The default `"water_mode": "distance"` compares water by equivalent distance and requires no network. In `"time"` mode, next-leg water is `(next-leg moving seconds / 3600 + buffer minutes / 60) * departure drinking rate`; station rest is excluded. The user confirms the rate using personal experience, weather, and station conditions. The program does not apply an automatic weather multiplier.
+
+This configuration starts an automatic weather preview. Replace the date, time, time zone, and target with the actual race details:
+
+```json
+{
+  "targets": ["14:00"],
+  "start_time": "2026-11-06 06:00",
+  "water_mode": "time",
+  "water_timezone": "Asia/Shanghai",
+  "output_formats": ["svg", "json"]
+}
+```
+
+1. First [inspect the route](#inspect) and confirm the route and stations, then run:
+
+   ```bash
+   python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate race.gpx \
+     --config race.json --output-dir output/race > water-preview.json
+   ```
+
+   On the first automatic request, stdout JSON has `status: "needs_water_confirmation"` and an empty `outputs` list; no chart has been written. `water_weather` contains a `retrieved_at` time and leg `segments` with station names, route midpoint coordinates, times, and hourly temperature (°C), relative humidity (%), wind speed (km/h), and precipitation probability (%). Timestamps are UTC. The selected reference target does not change pacing allocation.
+2. Review the forecast and confirm the personal drinking rate. Copy the **entire `water_weather` object** from `water-preview.json` into `race.json`, change its `confirmed` field to `true`, and add the user-confirmed `water_ml_per_hour`. To add a buffer or per-leg rates, use the following fields; these numbers illustrate the format and must be replaced with the user's confirmed values:
+
+   ```json
+   {
+     "water_ml_per_hour": 600,
+     "water_buffer_minutes": 15,
+     "water_rate_overrides": {"wpt:1": 750}
+   }
+   ```
+
+   Override keys are **departure checkpoint IDs** from the inspection or generation summary; the finish ID cannot be used. The start may be `start`, and manual station IDs begin with `manual:`. Other legs use the default rate. The buffer applies separately to every leg.
+3. Run the same `generate` command again to write the chart; omit `> water-preview.json` to see the generation result directly. A matching confirmed snapshot is reused without a network request. To refresh it, remove `water_weather` from the configuration, preview again, and obtain confirmation. Changes to the route, reference target, start time, time zone, or station schedule invalidate the old snapshot and return a new preview.
+
+When `target` expands to five plans or `targets` lists multiple plans, also set `"water_target": "14:00"` to a displayed target. A one-element `targets` list is selected automatically. A multi-target chart shares the selected target's water values across all columns.
+
+Automatic forecasts require a dated local `start_time` and a valid IANA `water_timezone`; cross-midnight times are converted through that zone. An ambiguous or nonexistent local time caused by daylight saving is an error. Python needs an available IANA time-zone database; install `tzdata` if the system does not provide one, or use manual weather. Requests send each leg's midpoint latitude and longitude to [Open-Meteo](https://open-meteo.com/); its free API is for non-commercial use. Forecasts cover at most 16 days and actual coverage and completeness depend on the service. Refresh before the race: mountain microclimates and conditions along a leg may differ from its midpoint.
+
+When offline, outside the forecast range, or missing forecast data, use user-confirmed manual conditions to generate directly without a race date, time zone, or network. Add these fields to a configuration with a target and time mode:
+
+```json
+{
+  "water_ml_per_hour": 600,
+  "water_weather": {
+    "source": "manual",
+    "confirmed": true,
+    "description": "User-confirmed weather and personal drinking experience"
+  }
+}
+```
+
+The example rate is not a recommendation. In either mode, verify water availability at the next station and container capacity; if a station has no water, plan the actual supply separately.
+
+## Previous window method and explicit filtering
 
 To select the previous 100 m window approach, add to an existing target configuration:
 
@@ -240,13 +303,13 @@ Available exports are listed below. Only SVG is generated by default; other file
 
 - `pace-chart.html`: reference-style race table with white background, gray rules, black graphics, yellow/red/green/blue terrain/supply columns, repeated print headers, and horizontal scrolling on small screens.
 - `pace-chart.svg`: native SVG table with text and vector segment graphics; no HTML `foreignObject` or external assets.
-- `pace-chart.csv`: UTF-8 BOM, long form with one row per CP and target. Includes raw seconds and formatted cumulative durations, incoming `segment_water_ml`, and next-leg `water_ml`. Potential formula-leading CP names are escaped for spreadsheets.
-- `pace-chart.json`: full-precision source of truth with parameters, configuration, input SHA-256, station statistics, schedule values, slope fractions, profiles, warnings, and article attribution. Schema version 2; geometry in metres, times in seconds, equivalent distances in kilometres. In version 2, `water_ml` describes the outgoing leg; `segment_water_ml` describes the incoming leg.
+- `pace-chart.csv`: UTF-8 BOM, long form with one row per CP and target. Includes raw seconds and formatted cumulative durations, incoming `segment_water_ml`, and next-leg `water_ml`. Time mode also includes the reference target, station rates, buffer, and weather source. Potential formula-leading CP names are escaped for spreadsheets.
+- `pace-chart.json`: full-precision source of truth with parameters, configuration, input SHA-256, station statistics, schedule values, slope fractions, profiles, warnings, and article attribution. Time mode also retains confirmed weather and station rates. Schema version 2; geometry in metres, times in seconds, equivalent distances in kilometres. In version 2, `water_ml` describes the outgoing leg; `segment_water_ml` describes the incoming leg.
 
 Primary cumulative times are departures, shown as `HH:MM` by truncating seconds, including durations over 24 hours. In pace modes, resting CPs also show elapsed arrival on an extra line. Arrival clock mode puts arrival in parentheses and omits that extra line. JSON/CSV include `distance_pace_seconds_per_km`, `eq_pace_seconds_per_km`, and the selected `pace_seconds_per_km`; arrival and departure remain elapsed seconds since the start, with clock times used only for chart presentation. HTML/SVG headers use `Target` and hours. CSV formatted arrival/departure retain seconds, and raw JSON/CSV values retain calculation precision. Station cells display cutoff information only when supplied; missing cutoffs remain in CLI warnings and JSON. Actual cutoff violations appear in their target cells. JSON/CSV include the status of every CP.
 
 Visible HTML/SVG content ends with the table, without explanatory footer text. Calculation parameters and warnings remain in JSON and CLI output. Source attribution is retained in HTML/SVG metadata and JSON.
 
-The water column is a station supply reference for the **next** leg: the start contains the first leg's value, each intermediate station contains the following leg's value, and the finish contains 0. Terrain statistics and parenthesized pace describe the leg just completed. Segment equivalent distance remains in CSV/JSON rather than consuming an extra visual column.
+The water column is a station supply reference for the **next** leg: the start contains the first leg's value, each intermediate station contains the following leg's value, and the finish contains 0. In time mode, each water cell displays its leg's rate; the header identifies the reference target, default rate, buffer, and weather source. Terrain statistics and parenthesized pace describe the leg just completed. Segment equivalent distance remains in CSV/JSON rather than consuming an extra visual column.
 
 The legacy CSV column `gpx_distance_km` contains cumulative distance on the selected route: coordinate-derived horizontal distance for GPX/KML, or recorded device distance for FIT. The distance-mismatch error's legacy `gpx_m` field likewise refers to the selected route total in metres. These names are retained for compatibility. Chart labels remain Chinese; bilingual documentation does not change output labels.

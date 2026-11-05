@@ -106,7 +106,7 @@ python3 skills/even-effort-pace-chart/scripts/compare_activity.py generate race.
 | 为什么默认不平滑＋10 米阈值，如何切换 | [爬升方案与历史实验](skills/even-effort-pace-chart/references/ascent-options.md) |
 | AI 助手的执行流程 | [SKILL.md](skills/even-effort-pace-chart/SKILL.md) |
 
-爬升统计和图示平滑各自独立；结果依赖输入海拔与处理参数，可能与赛事或其他平台统计不同。参考水量用于比较赛段需求。
+爬升统计和图示平滑各自独立；结果依赖输入海拔与处理参数，可能与赛事或其他平台统计不同。默认水量按等效距离比较赛段需求；也可选择按目标耗时及个人饮水速率估算携水量，自动天气预览需要联网和用户确认。完整流程见[按耗时规划携水](skills/even-effort-pace-chart/references/configuration.md#按耗时规划携水)。
 
 ## 开发与测试
 

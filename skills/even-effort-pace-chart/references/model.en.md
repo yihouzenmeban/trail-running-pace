@@ -110,6 +110,16 @@ These columns are pre-race reference schedules. Switching to an adjacent column 
 
 ## Water and uncertainty
 
-Comparative segment water is `E / 10 * water_ml_per_10km`, defaulting to 700 mL per 10 equivalent kilometres as an article-inspired baseline. `segment_water_ml` belongs to the incoming leg. The displayed `water_ml` belongs to the next leg, so it is shifted up one station and becomes zero at the finish. It communicates relative segment demand. It is not an individual hydration, medical, or race-safety recommendation.
+The default `water_mode: "distance"` compares segment water as `E / 10 * water_ml_per_10km`, with an article-inspired baseline of 700 mL per 10 equivalent kilometres. It expresses relative demand.
 
-The input route alone cannot establish an achievable finish target. Terrain surface, steep descent load, weather, congestion, altitude response, runner fitness, nutrition, and recovery are not modeled. Missing race cutoffs remain unchecked. Route-derived totals can differ from organizer statistics because of geometry, elevation source, smoothing, and distance mapping.
+The optional `water_mode: "time"` estimates carry amounts using one selected target's moving times and user-confirmed personal rates:
+
+```text
+next-leg water ml = (next-leg moving seconds / 3600 + buffer minutes / 60) * departure rate ml/h
+```
+
+Moving time runs from departure at this station to arrival at the next, excluding station rest. The buffer applies to each leg; per-station rate overrides use the departure ID. Every column of a multi-target table shares the selected target's water estimates. Automatic weather forecasts inform the user's choice of rate; they do not automatically change the rate or pacing. See [configuration](configuration.en.md#time-based-water-planning) for manual weather and the workflow.
+
+In both modes, `segment_water_ml` describes the incoming leg, while displayed `water_ml` describes the next leg and is zero at the finish. Time-based estimates depend on personal drinking needs, conditions, pace, and station supplies; they do not guarantee actual needs or replace race safety planning. Check container capacity and water availability at the next station.
+
+The input route alone cannot establish an achievable finish target. The pacing model does not account for terrain surface, steep descent load, weather, congestion, altitude response, runner fitness, nutrition, or recovery. Missing race cutoffs remain unchecked. Route-derived totals can differ from organizer statistics because of geometry, elevation source, smoothing, and distance mapping.

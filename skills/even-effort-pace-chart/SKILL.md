@@ -62,6 +62,14 @@ For example, “生成体感一致配速表，目标完赛时间 5 小时，相�
 
 This keeps the default pace display and SVG export. Ascent defaults to no window averaging (`ascent_smoothing_m: 0`), applying a 10 m peak/valley reversal threshold directly to cleaned source elevation vertices. Display smoothing is independent. An explicit positive `ascent_smoothing_m` enables ascent averaging. Consult the model for filtering choices and the explicit `window` alternative. Interpolation adds no measurement accuracy; never tune filters or rescale climbs solely to force a platform's total or claim equivalence to RunArt.Net.
 
+### Plan water by time when requested
+
+The default `water_mode: "distance"` is offline and compares equivalent-distance demand. Select `water_mode: "time"` only when requested or present in the selected configuration. Its outgoing-leg water is `(moving hours + buffer minutes / 60) * confirmed personal rate in ml/h`; station rest is excluded, the buffer applies to each leg, and the finish is zero. For multiple displayed targets, obtain `water_target` matching one of them; an explicit one-element `targets` list needs no separate selection. Do not invent the personal rate, per-leg overrides, or buffer.
+
+For automatic weather, obtain the actual local race date and time in `start_time` and the IANA zone in `water_timezone`. Explain that each leg's midpoint coordinates are sent to Open-Meteo; its free API is for non-commercial use. Run `generate` as below. When stdout returns `status: "needs_water_confirmation"`, no chart has been written: present the leg forecasts and their retrieval time, ask the user to confirm them and supply their personal `water_ml_per_hour` and any desired buffer or departure-station rate overrides. Forecast values are temperature in °C, relative humidity in %, wind speed in km/h, and precipitation probability in %. Copy the entire returned `water_weather` object into the configuration, set its `confirmed` to `true` only after confirmation, and run `generate` again. A matching confirmed snapshot is reused without another request; remove it to obtain an updated preview. Changes to route, target, start, zone, or station schedule require a new preview.
+
+Forecasts cover at most 16 days and can be unavailable or incomplete. If automatic weather is unsuitable, obtain user-confirmed conditions and use `"water_weather": {"source": "manual", "confirmed": true, "description": "..."}` with the confirmed rate; this path needs no network, race date, or time zone. Never silently substitute weather or an assumed rate. Weather informs the user's choice; the script does not apply an automatic weather multiplier. Confirm that the next stations actually supply water and that the runner's carrying capacity is adequate. Forecasts and estimates are not guarantees of conditions or hydration needs.
+
 ### Generate and verify
 
 Write the selected assumptions to a JSON file, then run:
@@ -75,4 +83,4 @@ Set `output_formats` only for explicitly selected exports (`svg`, `html`, `csv`,
 
 Before running, compare the configuration with the request. After success, read stdout `summary`: effective `parameters`, `target_source`, `targets_seconds`, route statistics, ordered `checkpoints`, and `verification`. Confirm finish targets/rest checks, review cutoff failures and warnings, and compare exported files with the request. For presentation-sensitive changes, render locally and inspect station names and target columns.
 
-Deliver output paths, route statistics, targets, and material assumptions in the user's language; chart labels remain Chinese. Water values compare next-leg demand, not individual drinking needs. Do not assess fitness from a route alone.
+Deliver output paths, route statistics, targets, and material assumptions in the user's language; chart labels remain Chinese. Explain whether next-leg water is an equivalent-distance comparison or a time estimate based on the user's confirmed rate and weather. Do not assess fitness from a route alone.

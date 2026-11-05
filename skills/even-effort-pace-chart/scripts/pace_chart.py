@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Offline GPX/KML/FIT even-effort pace charts. Python 3.10+; optional FIT dependency."""
+"""GPX/KML/FIT pace charts; optional weather forecasts and FIT dependency."""
 
 from __future__ import annotations
 
@@ -7,7 +7,7 @@ import argparse
 from bisect import bisect_left, bisect_right
 import csv
 from dataclasses import dataclass
-from datetime import datetime, time
+from datetime import datetime, time, timedelta, timezone
 import hashlib
 from html import escape
 import io
@@ -19,7 +19,11 @@ import shutil
 from statistics import median
 import sys
 import tempfile
+from urllib.error import HTTPError, URLError
+from urllib.parse import urlencode
+from urllib.request import Request, urlopen
 import xml.etree.ElementTree as ET
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 
 ARTICLE_URL = "https://mp.weixin.qq.com/s/spYCP-upbqAZN0kzUm-0ng"
@@ -40,6 +44,8 @@ CONFIG_KEYS = set(DEFAULTS) | {
     "name", "target", "targets", "track_index", "checkpoints", "cp_selection",
     "checkpoint_overrides", "distance_alignment", "start_time", "pace_basis", "secondary_display",
     "use_kml_altitudes", "output_formats", "ascent_method",
+    "water_mode", "water_target", "water_ml_per_hour", "water_buffer_minutes",
+    "water_rate_overrides", "water_timezone", "water_weather",
 }
 CP_KEYS = {"name", "distance_km", "rest_minutes", "cutoff"}
 OVERRIDE_KEYS = CP_KEYS | {"allow_off_route"}
@@ -797,8 +803,241 @@ def target_times(config: dict, step: float) -> list[float]:
     return sorted(times)
 
 
-def build_plan(path: Path, config: dict) -> dict:
+def water_options(plan: dict, config: dict, require_rate=True) -> tuple[dict, float | None, float, dict]:
+    targets = plan["targets_seconds"]
+    if "water_target" in config:
+        selected = duration(config["water_target"], "water_target")
+        if selected not in targets:
+            raise InputError("water_target must match a displayed target")
+    elif len(targets) == 1:
+        selected = targets[0]
+    else:
+        raise InputError("water_target is required when there are multiple targets")
+    schedule = next(item for item in plan["schedules"] if item["target_seconds"] == selected)
+    if "water_ml_per_hour" in config:
+        rate = number(config["water_ml_per_hour"], "water_ml_per_hour", strictly_positive=True)
+    elif require_rate:
+        raise InputError("water_ml_per_hour is required for time-based water")
+    else:
+        rate = None
+    buffer_minutes = number(config.get("water_buffer_minutes", 0), "water_buffer_minutes")
+    overrides = config.get("water_rate_overrides", {})
+    allowed = {cp["id"] for cp in plan["checkpoints"][:-1]}
+    if not isinstance(overrides, dict) or not set(overrides) <= allowed:
+        raise InputError("water_rate_overrides must reference departure checkpoint IDs")
+    rates = {key: number(value, "water_rate_overrides", strictly_positive=True)
+             for key, value in overrides.items()}
+    return schedule, rate, buffer_minutes, rates
+
+
+def water_midpoint(route: Route, distance: float) -> tuple[float, float]:
+    index = max(0, min(bisect_right(route.samples, distance, key=lambda item: item.distance_m) - 1,
+                       len(route.samples) - 2))
+    left, right = route.samples[index:index + 2]
+    ratio = (distance - left.distance_m) / (right.distance_m - left.distance_m)
+    first, second = route.points[index:index + 2]
+    latitude = first[0] + (second[0] - first[0]) * ratio
+    longitude = (first[1] + longitude_delta(first[1], second[1]) * ratio + 180) % 360 - 180
+    return round(latitude, 4), round(longitude, 4)
+
+
+def water_forecast_context(plan: dict, route: Route, config: dict) -> tuple[dict, str]:
+    schedule, _, _, _ = water_options(plan, config, require_rate=False)
+    start_text = plan["parameters"]["start_time"]
+    if not re.fullmatch(r"\d{4}-\d\d-\d\d[ T]\d\d:\d\d", start_text):
+        raise InputError("start_time must include the race date for weather; use manual water_weather otherwise")
+    zone_name = config.get("water_timezone")
+    if not isinstance(zone_name, str) or not zone_name:
+        raise InputError("water_timezone must be an IANA timezone for weather; use manual water_weather otherwise")
+    try:
+        zone = ZoneInfo(zone_name)
+    except (ZoneInfoNotFoundError, ValueError):
+        raise InputError("water_timezone must be a valid IANA timezone; use manual water_weather otherwise") from None
+    local_start = datetime.fromisoformat(start_text)
+    possibilities = {}
+    for fold in (0, 1):
+        candidate = local_start.replace(tzinfo=zone, fold=fold).astimezone(timezone.utc)
+        if candidate.astimezone(zone).replace(tzinfo=None) == local_start:
+            possibilities[candidate.timestamp()] = candidate
+    if len(possibilities) != 1:
+        raise InputError("start_time is ambiguous or nonexistent in water_timezone; use manual water_weather")
+    start_utc = next(iter(possibilities.values()))
+    segments = []
+    checkpoints = plan["checkpoints"]
+    timings = schedule["checkpoints"]
+    try:
+        for index, (departure, arrival) in enumerate(zip(checkpoints, checkpoints[1:])):
+            latitude, longitude = water_midpoint(route, (departure["distance_m"] + arrival["distance_m"]) / 2)
+            start = start_utc + timedelta(seconds=timings[index]["departure_seconds"])
+            end = start_utc + timedelta(seconds=timings[index + 1]["arrival_seconds"])
+            segments.append({
+                "from_id": departure["id"], "from_name": departure["name"],
+                "to_id": arrival["id"], "to_name": arrival["name"],
+                "latitude": latitude, "longitude": longitude,
+                "start_time": start.isoformat(), "end_time": end.isoformat(),
+            })
+    except (OverflowError, ValueError):
+        raise InputError("water forecast dates are outside the supported range; use manual water_weather") from None
+    context = {
+        "route_sha256": plan["source"]["sha256"], "target_seconds": schedule["target_seconds"],
+        "start_time": start_text, "timezone": zone_name, "segments": segments,
+    }
+    encoded = json.dumps(context, ensure_ascii=True, sort_keys=True, separators=(",", ":"), allow_nan=False)
+    return context, hashlib.sha256(encoded.encode("utf-8")).hexdigest()
+
+
+WEATHER_FIELDS = ("temperature_2m", "relative_humidity_2m", "wind_speed_10m", "precipitation_probability")
+
+
+def weather_hours(segment: dict) -> range:
+    start = datetime.fromisoformat(segment["start_time"]).timestamp()
+    end = datetime.fromisoformat(segment["end_time"]).timestamp()
+    first = math.floor(start / 3600) * 3600
+    last = (math.ceil(end / 3600) - 1) * 3600
+    if last < first or last - first > 16 * 24 * 3600:
+        raise ValueError("invalid forecast interval")
+    return range(first, last + 1, 3600)
+
+
+def weather_values(item: dict) -> dict:
+    values = {
+        "temperature_2m": number(item["temperature_2m"], "weather temperature_2m", minimum=-273.15),
+        "relative_humidity_2m": number(item["relative_humidity_2m"], "weather relative_humidity_2m"),
+        "wind_speed_10m": number(item["wind_speed_10m"], "weather wind_speed_10m"),
+        "precipitation_probability": number(item["precipitation_probability"], "weather precipitation_probability"),
+    }
+    if values["relative_humidity_2m"] > 100 or values["precipitation_probability"] > 100:
+        raise ValueError("invalid weather percentage")
+    return values
+
+
+def fetch_water_forecast(context: dict, context_sha256: str) -> dict:
+    segments = []
+    for segment in context["segments"]:
+        query = urlencode({
+            "latitude": segment["latitude"], "longitude": segment["longitude"],
+            "hourly": ",".join(WEATHER_FIELDS), "forecast_days": 16,
+            "timezone": "GMT", "timeformat": "unixtime",
+        })
+        request = Request("https://api.open-meteo.com/v1/forecast?" + query,
+                          headers={"Accept": "application/json"})
+        try:
+            with urlopen(request, timeout=10) as response:
+                payload = json.loads(response.read().decode("utf-8"))
+        except (HTTPError, URLError, TimeoutError, OSError, UnicodeError, json.JSONDecodeError):
+            raise InputError("Weather forecast unavailable; retry or provide manual water_weather") from None
+        try:
+            hourly = payload["hourly"]
+            times = hourly["time"]
+            if (not isinstance(times, list) or not times
+                    or any(isinstance(value, bool) or not isinstance(value, (int, float))
+                           or not math.isfinite(value) for value in times)
+                    or any(not isinstance(hourly[field], list) or len(hourly[field]) != len(times)
+                           for field in WEATHER_FIELDS)):
+                raise ValueError
+            by_time = {int(value): index for index, value in enumerate(times)}
+            if len(by_time) != len(times):
+                raise ValueError
+            selected = []
+            for stamp in weather_hours(segment):
+                index = by_time[stamp]
+                values = weather_values({field: hourly[field][index] for field in WEATHER_FIELDS})
+                selected.append({"time": datetime.fromtimestamp(stamp, timezone.utc).isoformat(), **values})
+            segments.append({**segment, "hourly": selected})
+        except (KeyError, TypeError, ValueError, OverflowError, OSError, InputError):
+            raise InputError("Weather forecast incomplete or outside its range; provide manual water_weather") from None
+    return {
+        "source": "open-meteo", "confirmed": False,
+        "context_sha256": context_sha256,
+        "retrieved_at": datetime.now(timezone.utc).isoformat(),
+        "timezone": context["timezone"], "target_seconds": context["target_seconds"],
+        "segments": segments,
+    }
+
+
+def validate_water_weather(plan: dict, route: Route, config: dict) -> dict:
+    weather = config.get("water_weather")
+    if not isinstance(weather, dict):
+        raise InputError("water_weather must contain confirmed forecast or manual information")
+    if weather.get("confirmed") is not True:
+        raise InputError("water_weather must be explicitly confirmed")
+    source = weather.get("source")
+    if source == "manual":
+        if not isinstance(weather.get("description"), str) or not weather["description"].strip():
+            raise InputError("manual water_weather requires a non-empty description")
+    elif source == "open-meteo":
+        context, fingerprint = water_forecast_context(plan, route, config)
+        if weather.get("context_sha256") != fingerprint:
+            raise InputError("water_weather no longer matches this route, target or start time")
+        try:
+            retrieved = datetime.fromisoformat(weather["retrieved_at"])
+            segments = weather["segments"]
+            if (retrieved.tzinfo is None or retrieved.utcoffset() is None
+                    or weather["timezone"] != context["timezone"]
+                    or weather["target_seconds"] != context["target_seconds"]
+                    or not isinstance(segments, list) or len(segments) != len(context["segments"])):
+                raise ValueError
+            for item, expected in zip(segments, context["segments"]):
+                if not isinstance(item, dict) or any(item.get(key) != expected[key] for key in expected):
+                    raise ValueError
+                hourly = item["hourly"]
+                stamps = list(weather_hours(expected))
+                if not isinstance(hourly, list) or len(hourly) != len(stamps):
+                    raise ValueError
+                for entry, stamp in zip(hourly, stamps):
+                    if not isinstance(entry, dict) or entry.get("time") != datetime.fromtimestamp(
+                        stamp, timezone.utc
+                    ).isoformat():
+                        raise ValueError
+                    weather_values(entry)
+        except (KeyError, TypeError, ValueError, OverflowError, OSError, InputError):
+            raise InputError("water_weather forecast is incomplete; request a fresh forecast")
+    else:
+        raise InputError("water_weather source must be open-meteo or manual")
+    return weather
+
+
+def apply_time_water(plan: dict, route: Route, config: dict) -> None:
+    schedule, rate, buffer_minutes, overrides = water_options(plan, config)
+    weather = validate_water_weather(plan, route, config)
+    checkpoints = plan["checkpoints"]
+    for cp in checkpoints:
+        cp["water_ml"] = 0.0
+        cp["segment_water_ml"] = 0.0
+        cp["water_rate_ml_per_hour"] = None
+    for index, cp in enumerate(checkpoints[:-1]):
+        outgoing_rate = overrides.get(cp["id"], rate)
+        hours = schedule["checkpoints"][index + 1]["moving_seconds"] / 3600 + buffer_minutes / 60
+        amount = hours * outgoing_rate
+        if not math.isfinite(amount):
+            raise InputError("time-based water amount must be finite")
+        cp["water_ml"] = amount
+        cp["water_rate_ml_per_hour"] = outgoing_rate
+        checkpoints[index + 1]["segment_water_ml"] = amount
+    plan["parameters"].update({
+        "water_mode": "time", "water_target_seconds": schedule["target_seconds"],
+        "water_ml_per_hour": rate, "water_buffer_minutes": buffer_minutes,
+        "water_rate_overrides": overrides, "water_weather_source": weather["source"],
+        "water_weather_retrieved_at": weather.get("retrieved_at"),
+    })
+    plan["water_weather"] = weather
+    plan["warnings"] = [
+        warning for warning in plan["warnings"] if warning != "水量仅供比较赛段差异，并非个人饮水建议。"
+    ]
+    plan["warnings"].append("水量按确认的速率和目标时间估算；请核实个人需要与下一站补水条件。")
+    if weather["source"] == "open-meteo":
+        plan["warnings"].append("天气为赛段中点预报，可能无法反映整段地形或实际天气；请赛前更新。")
+
+
+def build_plan(path: Path, config: dict, *, defer_water=False) -> dict:
     keys(config, CONFIG_KEYS, "configuration")
+    water_mode = config.get("water_mode", "distance")
+    if water_mode not in ("distance", "time"):
+        raise InputError("water_mode must be distance or time")
+    time_options = {"water_target", "water_ml_per_hour", "water_buffer_minutes",
+                    "water_rate_overrides", "water_timezone", "water_weather"}
+    if water_mode != "time" and time_options.intersection(config):
+        raise InputError("water_mode must be time when time-based water options are supplied")
     output_formats = config.get("output_formats", ["svg"])
     if (not isinstance(output_formats, list) or not output_formats
             or any(fmt not in ("svg", "html", "csv", "json") for fmt in output_formats)
@@ -903,7 +1142,7 @@ def build_plan(path: Path, config: dict) -> dict:
         "水量仅供比较赛段差异，并非个人饮水建议。",
         "插值不增加原始测量精度；爬升统计依赖海拔数据、过滤方法与阈值。",
     ])
-    return {
+    plan = {
         "schema_version": 2,
         "name": config.get("name", Path(path).stem),
         "source": {"filename": Path(path).name, "sha256": hashlib.sha256(Path(path).read_bytes()).hexdigest()},
@@ -918,6 +1157,9 @@ def build_plan(path: Path, config: dict) -> dict:
                   "grade_fractions": route_stats["grade_fractions"]},
         "checkpoints": cps, "targets_seconds": targets, "schedules": schedules, "warnings": warnings,
     }
+    if water_mode == "time" and not defer_water:
+        apply_time_water(plan, route, config)
+    return plan
 
 
 def inspect_route(path: Path, track_index=None, sample_m=DEFAULTS["sample_m"],
@@ -1061,7 +1303,19 @@ def table_metadata(plan) -> str:
     metadata = prefix + "括号内：" + label[plan["parameters"]["secondary_display"]]
     if (plan["route"].get("diagnostics") or {}).get("distance_source") == "fit_recorded":
         metadata += "　基于实际 FIT 路线"
+    if plan["parameters"].get("water_mode") == "time":
+        target = plan["parameters"]["water_target_seconds"]
+        label = format_chart_time(target) if target % 60 == 0 else format_duration(target)
+        metadata += f"　水量目标：{label}"
     return metadata
+
+
+def water_metadata(plan) -> str:
+    parameters = plan["parameters"]
+    override = "（含分段覆盖）" if parameters["water_rate_overrides"] else ""
+    weather = "Open-Meteo" if parameters["water_weather_source"] == "open-meteo" else "手动"
+    return (f'饮水率：{parameters["water_ml_per_hour"]:g} ml/h{override}'
+            f'　余量：{parameters["water_buffer_minutes"]:g} min　天气：{weather}')
 
 
 def display_station_name(cp) -> str:
@@ -1128,8 +1382,11 @@ def render_svg(plan: dict) -> str:
     widths = [width for _, width in BASE_COLUMNS] + [target_width] * len(plan["schedules"])
     width, margin = sum(widths) + 2, 1
     parts = [f'<rect width="{width}" height="100%" fill="#ffffff"/>']
-    parts.append(svg_text(6, 30, [table_metadata(plan)], size=23))
-    y = 50
+    metadata = [table_metadata(plan)]
+    if plan["parameters"].get("water_mode") == "time":
+        metadata.append(water_metadata(plan))
+    parts.append(svg_text(6, 30, metadata, size=23))
+    y = 50 + (34 if len(metadata) > 1 else 0)
     headers = [name.split("\n") for name, _ in BASE_COLUMNS]
     headers += [target_header(t) for t in plan["targets_seconds"]]
     x = margin
@@ -1157,8 +1414,13 @@ def render_svg(plan: dict) -> str:
                 f'fill="{color}" stroke="#bbbbbb" stroke-width="1" data-column="{column_id}"/>'
             )
             if column in numeric_cells(cp):
-                parts.append(svg_text(x + cell_width / 2, y + row_height / 2 + 8,
+                rate = cp.get("water_rate_ml_per_hour") if column == 6 else None
+                text_y = y + row_height / 2 + (8 if rate is None else -4)
+                parts.append(svg_text(x + cell_width / 2, text_y,
                                       [numeric_cells(cp)[column]], size=24, anchor="middle"))
+                if rate is not None:
+                    parts.append(svg_text(x + cell_width / 2, text_y + 25,
+                                          [f"{rate:g} ml/h"], size=15, anchor="middle"))
             elif column == 1:
                 parts.append(histogram_svg(cp["grade_fractions"], x + 10, y + row_height / 2 - 15,
                                             width=100, height=48, as_group=True))
@@ -1199,12 +1461,19 @@ def render_html(plan: dict) -> str:
     widths = [width for _, width in BASE_COLUMNS] + [target_width] * len(plan["schedules"])
     columns = "".join(f'<col style="width:{100 * width / sum(widths):.5f}%">' for width in widths)
     limits = heat_limits(plan)
+    metadata = [table_metadata(plan)]
+    if plan["parameters"].get("water_mode") == "time":
+        metadata.append(water_metadata(plan))
+    metadata_html = "<br>".join(escape(line) for line in metadata)
     rows = []
     for index, cp in enumerate(plan["checkpoints"]):
         cells = ""
         for column in range(len(BASE_COLUMNS)):
             if column in numeric_cells(cp):
                 content = numeric_cells(cp)[column]
+                rate = cp.get("water_rate_ml_per_hour") if column == 6 else None
+                if rate is not None:
+                    content += f"<small>{rate:g} ml/h</small>"
             elif column == 1:
                 content = histogram_svg(cp["grade_fractions"], width=100, height=48)
             elif column == 2:
@@ -1255,7 +1524,7 @@ thead {{ display:table-header-group; }} tr {{ break-inside:avoid; page-break-ins
 td svg {{ width:100%; height:28px; }} th {{ white-space:normal; }}
 }}
 </style></head><body><main>
-<header><p>{escape(table_metadata(plan))}</p></header>
+<header><p>{metadata_html}</p></header>
 <div class="scroll"><table aria-label="{escape(plan["name"])} 体感一致配速表"><colgroup>{columns}</colgroup>
 <thead><tr>{headers}</tr></thead><tbody>{"".join(rows)}</tbody></table></div>
 </main></body></html>
@@ -1272,6 +1541,12 @@ def csv_text(plan: dict) -> str:
         "distance_pace_seconds_per_km", "pace_seconds_per_km", "cutoff_status",
         "arrival", "departure", "eq_pace", "pace",
     ]
+    time_water = plan["parameters"].get("water_mode") == "time"
+    if time_water:
+        fields.extend([
+            "water_reference_target_seconds", "water_rate_ml_per_hour", "water_buffer_minutes",
+            "water_weather_source", "water_weather_retrieved_at",
+        ])
     writer = csv.DictWriter(stream, fieldnames=fields, lineterminator="\n")
     writer.writeheader()
     for schedule in plan["schedules"]:
@@ -1279,7 +1554,7 @@ def csv_text(plan: dict) -> str:
             name = cp["name"]
             if name.lstrip().startswith(("=", "+", "-", "@")):
                 name = "'" + name
-            writer.writerow({
+            row = {
                 "checkpoint_id": cp["id"], "checkpoint_name": name,
                 "gpx_distance_km": cp["distance_m"] / 1000,
                 "official_distance_km": cp["official_distance_km"],
@@ -1292,7 +1567,16 @@ def csv_text(plan: dict) -> str:
                 "departure": format_duration(timing["departure_seconds"]),
                 "eq_pace": format_pace(timing["eq_pace_seconds_per_km"]),
                 "pace": format_pace(timing["pace_seconds_per_km"]),
-            })
+            }
+            if time_water:
+                row.update({
+                    "water_reference_target_seconds": plan["parameters"]["water_target_seconds"],
+                    "water_rate_ml_per_hour": cp["water_rate_ml_per_hour"],
+                    "water_buffer_minutes": plan["parameters"]["water_buffer_minutes"],
+                    "water_weather_source": plan["parameters"]["water_weather_source"],
+                    "water_weather_retrieved_at": plan["parameters"]["water_weather_retrieved_at"],
+                })
+            writer.writerow(row)
     return stream.getvalue()
 
 
@@ -1410,10 +1694,40 @@ def main(argv=None) -> int:
                                    args.ascent_threshold_m, args.elevation_spike_m, args.distance_tolerance_m)
         else:
             config = json.loads(args.config.read_text(encoding="utf-8"))
-            plan = build_plan(args.route, config)
-            paths = write_outputs(plan, args.output_dir, args.overwrite)
-            result = {"outputs": [str(path) for path in paths], "warnings": plan["warnings"],
-                      "summary": plan_summary(plan)}
+            keys(config, CONFIG_KEYS, "configuration")
+            preview = None
+            if config.get("water_mode") == "time":
+                draft = build_plan(args.route, config, defer_water=True)
+                water_options(draft, config, require_rate=False)
+                weather = config.get("water_weather")
+                if weather is not None and not isinstance(weather, dict):
+                    raise InputError("water_weather must contain confirmed forecast or manual information")
+                if weather is not None and weather.get("source") not in ("manual", "open-meteo"):
+                    raise InputError("water_weather source must be open-meteo or manual")
+                if weather is None or weather["source"] == "open-meteo":
+                    parameters = draft["parameters"]
+                    route = prepare_route(
+                        load_route(args.route, config.get("track_index"), config.get("use_kml_altitudes", False)),
+                        parameters["distance_tolerance_m"], parameters["elevation_spike_m"],
+                    )
+                    context, fingerprint = water_forecast_context(draft, route, config)
+                    if weather is None or weather.get("context_sha256") != fingerprint:
+                        weather = fetch_water_forecast(context, fingerprint)
+                    if weather.get("confirmed") is not True:
+                        check = {**config, "water_weather": {**weather, "confirmed": True}}
+                        validate_water_weather(draft, route, check)
+                        preview = {
+                            "status": "needs_water_confirmation", "outputs": [],
+                            "water_weather": weather, "summary": plan_summary(draft),
+                            "warnings": ["天气为赛段中点预报，请确认后填写各段饮水速率。"],
+                        }
+            if preview is not None:
+                result = preview
+            else:
+                plan = build_plan(args.route, config)
+                paths = write_outputs(plan, args.output_dir, args.overwrite)
+                result = {"outputs": [str(path) for path in paths], "warnings": plan["warnings"],
+                          "summary": plan_summary(plan)}
         print(json.dumps(result, ensure_ascii=False, indent=2, allow_nan=False))
         return 0
     except (InputError, OSError, UnicodeError, json.JSONDecodeError) as error:

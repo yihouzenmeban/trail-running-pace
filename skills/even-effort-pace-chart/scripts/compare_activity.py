@@ -29,7 +29,7 @@ def load_plan(path: Path, config: dict, targets: list[str] | None = None) -> tup
     if targets is not None:
         config.pop("target", None)
         config["targets"] = targets
-    plan = pace.build_plan(path, config)
+    plan = pace.build_plan(path, config, defer_water=True)
     parameters = plan["parameters"]
     route = pace.prepare_route(
         pace.load_route(path, config.get("track_index"), config.get("use_kml_altitudes", False)),

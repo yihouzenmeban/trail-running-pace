@@ -2,7 +2,7 @@
 
 [简体中文](configuration.md) | [English](configuration.en.md)
 
-需要 Python 3.10+。GPX/KML 配速表仅使用标准库；FIT 输入需安装可选依赖，所有离线生成均无需凭据或在线服务。下列命令以仓库根目录为工作目录；独立安装 Skills 后，脚本路径应相对于安装包目录解析。
+需要 Python 3.10+。GPX/KML 配速表仅使用标准库；FIT 输入需安装可选依赖。默认生成离线运行；选择按耗时规划携水时，可联网获取天气或使用用户确认的手动天气。下列命令以仓库根目录为工作目录；独立安装 Skills 后，脚本路径应相对于安装包目录解析。
 
 ## 默认值与覆盖规则
 
@@ -157,14 +157,77 @@ python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate activity-or
 | `distance_tolerance_m` | 0 | 水平几何简化容差，单位米；0 不简化，正值显式启用并可能缩短真实小弯道 |
 | `ascent_km_per_100m` | 1 | 每爬升 100 米增加的等效公里数，非负 |
 | `fatigue_rate` | 0.08 | 等效距离翻倍时的平均配速倍率减一，范围 0–1 |
-| `water_ml_per_10km` | 700 | 每 10 等效公里的比较用水量，非负，单位毫升 |
+| `water_mode` | `"distance"` | `"distance"` 按等效距离比较水量；`"time"` 按移动耗时和确认的个人速率估算 |
+| `water_ml_per_10km` | 700 | 距离模式下每 10 等效公里的比较用水量，非负，单位毫升 |
+| `water_target` | 单目标时自动选中 | 耗时模式的水量参考目标；多目标时必填，须与某个展示目标一致 |
+| `water_ml_per_hour` | 耗时模式生成时必填 | 用户确认的默认饮水速率，有限正数，单位毫升/小时 |
+| `water_buffer_minutes` | 0 | 耗时模式每段额外预留分钟数，非负 |
+| `water_rate_overrides` | `{}` | 耗时模式按出发站 ID 覆盖饮水速率，值为有限正数，单位毫升/小时 |
+| `water_timezone` | 无 | 自动天气必填的 IANA 时区，例如 `"Asia/Shanghai"` |
+| `water_weather` | 无 | 耗时模式使用的已确认自动预报快照或手动天气；未提供时先获取预览 |
 | `target_step_minutes` | 30 | 自动展开五组时的相邻间隔，必须大于零，单位分钟 |
 
 未知的配置或站点字段会报错，数值必须有限。不会获取或编造实测海拔；源数据缺失时应先补全。采样最多允许 2,000,000 个区间，另含精确终点；过小的 `sample_m` 会返回输入错误。小到不足以可靠计算窗口边界的正平滑窗口也会报错，请增大对应窗口或设为 `0` 关闭平滑。
 
 海拔处理和时间分配公式见[模型与限制](model.md)。
 
-### 旧窗口口径与显式过滤
+## 按耗时规划携水
+
+默认 `"water_mode": "distance"` 按等效距离计算比较用水量，无需联网。切换为 `"time"` 后，下一段携水量为 `(下一段移动秒数 / 3600 + 每段余量分钟 / 60) * 本站出发饮水速率`；不包含站内停留。饮水速率由用户结合个人经验、天气和补给条件确认，程序不会根据天气自动套用倍率。
+
+自动天气的示例配置如下，将日期、时间、时区和目标替换为实际比赛信息：
+
+```json
+{
+  "targets": ["14:00"],
+  "start_time": "2026-11-06 06:00",
+  "water_mode": "time",
+  "water_timezone": "Asia/Shanghai",
+  "output_formats": ["svg", "json"]
+}
+```
+
+1. 先按[检查轨迹](#检查轨迹)确认路线和站点，再执行：
+
+   ```bash
+   python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate race.gpx \
+     --config race.json --output-dir output/race > water-preview.json
+   ```
+
+   首次自动查询的 stdout JSON 中，`status` 为 `"needs_water_confirmation"`，`outputs` 为空，尚未写入配速表。`water_weather` 包含获取时间 `retrieved_at` 和各段 `segments`，每段有起终站、路线中点坐标、时间及逐小时的气温（°C）、相对湿度（%）、风速（km/h）和降水概率（%）；时间戳采用 UTC。参考目标不影响配速分配。
+2. 查看预报并确认个人饮水速率后，将 `water-preview.json` 的**完整 `water_weather` 对象**复制到 `race.json`，把其中 `confirmed` 改为 `true`，并加入用户确认的 `water_ml_per_hour`。如需额外余量或分段速率，可加入下列字段；数值仅为格式示例，应替换为用户确认的值：
+
+   ```json
+   {
+     "water_ml_per_hour": 600,
+     "water_buffer_minutes": 15,
+     "water_rate_overrides": {"wpt:1": 750}
+   }
+   ```
+
+   覆盖键是**出发站 ID**，应以检查或生成摘要的实际 ID 为准，不能使用终点 ID；起点可能为 `start`，人工站点 ID 以 `manual:` 开头。没有覆盖的赛段使用默认速率。余量对每一段分别生效。
+3. 重新执行上面的 `generate` 命令即可输出配速表；如果希望直接查看生成结果，可去掉 `> water-preview.json`。匹配的已确认快照不会重复联网。需要更新预报时从配置删除 `water_weather`，重新执行预览并再次确认。路线、参考目标、发枪时间、时区或站点时程变化时，旧快照会失效并返回新预览。
+
+若使用 `target` 自动展开五个目标，或在 `targets` 中列出多个目标，必须额外指定匹配表中某列的 `"water_target": "14:00"`；单个 `targets` 则自动选中。整张多目标表共用这一个参考目标的水量。
+
+自动预报需要带日期的当地 `start_time` 和有效的 IANA `water_timezone`，跨日按时区转换后查询；夏令时造成的歧义或不存在的当地时间会报错。Python 需要可用的 IANA 时区数据库；系统未提供时可安装 `tzdata`，或使用手动天气。请求会将每个赛段中点的经纬度发送给 [Open-Meteo](https://open-meteo.com/)，其免费 API 限非商业用途。预报最多覆盖未来 16 天，实际可用范围和数据完整性取决于接口；赛前应更新预报，山地微气候和整段条件可能与中点不同。
+
+无法联网、比赛日期超出预报范围或预报不完整时，可用用户确认的手动天气直接生成，不需要比赛日期、时区或网络。在目标和耗时模式配置中加入：
+
+```json
+{
+  "water_ml_per_hour": 600,
+  "water_weather": {
+    "source": "manual",
+    "confirmed": true,
+    "description": "用户确认的天气情况和个人饮水经验"
+  }
+}
+```
+
+示例速率不是推荐值。无论哪种模式，都应核实下一站是否供水及容器容量；若某站不能补水，需要结合实际补给安排另行规划。
+
+## 旧窗口口径与显式过滤
 
 要选择原先的 100 米窗口统计思路，在已有目标配置中加入：
 
@@ -240,13 +303,13 @@ python3 skills/even-effort-pace-chart/scripts/pace_chart.py generate race.gpx \
 
 - `pace-chart.html`：白底灰线、黑色图示及黄/红/绿/蓝色地形补给列，打印重复表头，小屏可横向滚动。
 - `pace-chart.svg`：包含文字及分段矢量图的独立 SVG，不使用 HTML foreignObject 或外部资源。
-- `pace-chart.csv`：UTF-8 BOM，按 CP 和目标展开为长表，包含原始秒数、累计时长、上一段的 `segment_water_ml` 和下一段的 `water_ml`；可能被表格软件识别为公式的站名会转义。
-- `pace-chart.json`：完整精度数据，包括参数、配置、输入 SHA-256、站点统计、配速计划、坡度比例、肖像、告警和文章来源。结构版本为 2，几何单位为米，时间为秒，等效距离为公里；版本 2 的 `water_ml` 对应下一段，`segment_water_ml` 对应上一段。
+- `pace-chart.csv`：UTF-8 BOM，按 CP 和目标展开为长表，包含原始秒数、累计时长、上一段的 `segment_water_ml` 和下一段的 `water_ml`；耗时模式另含参考目标、每站速率、余量和天气来源；可能被表格软件识别为公式的站名会转义。
+- `pace-chart.json`：完整精度数据，包括参数、配置、输入 SHA-256、站点统计、配速计划、坡度比例、肖像、告警和文章来源；耗时模式还保留确认的天气和逐站速率。结构版本为 2，几何单位为米，时间为秒，等效距离为公里；版本 2 的 `water_ml` 对应下一段，`segment_water_ml` 对应上一段。
 
 累计主时间为出站时长，显示 `HH:MM`，秒数向下截断，可超过 24 小时；配速模式下，有停留的站点额外显示到站时长。到达钟点模式将本站到达信息直接放入括号，不再增加该行。JSON/CSV 同时保留 `distance_pace_seconds_per_km`、`eq_pace_seconds_per_km` 和所选的 `pace_seconds_per_km`，到站、出站仍为发枪后的累计秒数，钟点仅用于图表展示。HTML/SVG 使用 Target 与小时数作列标题；CSV 格式化累计时间保留秒，原始 JSON/CSV 保留计算精度。位置列仅展示实际提供的关门时间；缺失时仍在 CLI 和 JSON 告警，实际超时在目标单元格标示。JSON/CSV 保留每个站点的校核状态。
 
 HTML/SVG 的可见内容到表格结束，不附加说明页脚；计算参数和告警保留在 JSON 与 CLI，来源保留在 HTML/SVG 元数据及 JSON 中。
 
-水量列是从本站出发去**下一站**的参考量：起点显示首段、中间站显示下一段、终点为零。地形统计和括号内配速描述刚完成的上一段；等效距离保留在 CSV/JSON，不额外占用可见表格列。
+水量列是从本站出发去**下一站**的参考量：起点显示首段、中间站显示下一段、终点为零。耗时模式在图表水量格内显示各段速率，表头注明参考目标、默认速率、余量和天气来源。地形统计和括号内配速描述刚完成的上一段；等效距离保留在 CSV/JSON，不额外占用可见表格列。
 
 历史 CSV 字段 `gpx_distance_km` 表示所选路线的累计距离：GPX/KML 为坐标计算的水平距离，FIT 为设备记录距离。里程不匹配错误中的历史字段 `gpx_m` 同样表示所选路线总长，单位米。这些名称保留以兼容现有使用者。图表标签仍为中文，文档双语不改变输出文字。
