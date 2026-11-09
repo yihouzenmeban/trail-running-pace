@@ -13,7 +13,7 @@ license: MIT
 homepage: https://github.com/yihouzenmeban/trail-running-pace
 examples_zh: ["根据我提供的 GPX 轨迹生成越野跑体感一致配速表，目标完赛 14 小时。", "用我的 FIT 活动与赛前路线和配速方案对照，查看各站累计差距和区间耗时。"]
 examples_en: ["Create an even-effort pace chart for my GPX route with a 14-hour finish target.", "Compare my FIT activity with the race route and pacing plan, showing checkpoint gaps and segment times."]
-version: 1.0.5
+version: 1.0.6
 author: yihouzenmeban
 agent_created: true
 ---
