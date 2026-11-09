@@ -23,5 +23,7 @@ license: MIT
 homepage: https://github.com/yihouzenmeban/trail-running-pace
 icon: icon.png
 permissions:
+  - GPX/KML 配速表需要 Python 3.10+，无需第三方依赖
   - FIT 输入与活动对比需要安装 Python 可选依赖（scripts/requirements-comparison.txt）
-  - compare_activity.py 的 list/fetch 子命令会按需访问 Garmin Connect
+  - 按需获取天气预报时，会向 Open-Meteo 发送各赛段中点的经纬度
+  - compare_activity.py 的 list/fetch 子命令会按需访问 Garmin Connect 以列出或下载活动

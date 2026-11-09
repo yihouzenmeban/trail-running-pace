@@ -72,6 +72,7 @@ class ReleaseSkillTests(unittest.TestCase):
 
         self.write(FRONTMATTER, "---\nname: example\nversion: 1.0.1\n---\ncommitted skill\n")
         self.write(MANIFEST, "name: example\nversion: 1.0.1\n")
+        self.write(f"{SKILL}/LICENSE", "committed license")
         self.write(f"{SKILL}/scripts/pace_chart.py", "committed script")
         self.write(f"{SKILL}/references/model.md", "committed reference")
         self.write(f"{SKILL}/tests/test_example.py", "committed test")
@@ -135,12 +136,14 @@ class ReleaseSkillTests(unittest.TestCase):
         self.assertEqual(release["name"], "even-effort-pace-chart-v1.0.2.zip")
         self.assertIn(b"version: 1.0.2", release["files"]["even-effort-pace-chart/SKILL.md"])
         self.assertIn(b"version: 1.0.2", release["files"]["even-effort-pace-chart/manifest.yaml"])
+        self.assertEqual(release["files"]["even-effort-pace-chart/LICENSE"], b"committed license")
         self.assertEqual(release["files"]["even-effort-pace-chart/scripts/pace_chart.py"], b"updated skill")
         self.assertEqual(
             set(release["files"]),
             {
                 "even-effort-pace-chart/SKILL.md",
                 "even-effort-pace-chart/manifest.yaml",
+                "even-effort-pace-chart/LICENSE",
                 "even-effort-pace-chart/scripts/pace_chart.py",
                 "even-effort-pace-chart/references/model.md",
                 "even-effort-pace-chart/tests/test_example.py",
