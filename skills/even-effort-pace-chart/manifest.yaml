@@ -1,9 +1,9 @@
 name: even-effort-pace-chart
-displayName: 体感一致配速表
+displayName: 越野跑体感一致配速表
 slug: even-effort-pace-chart
 version: 1.0.4
-description: "基于耐力学社体感一致配速思路的独立实现。把 GPX/KML 路线或 FIT 轨迹转换成按检查点分段的体感一致越野配速表，或把 FIT 活动与 checkpoint 方案对照，查看累计差距、分段耗时与地形差异。仓库地址：https://github.com/yihouzenmeban/trail-running-pace"
-summary: "赛前生成多目标 SVG 配速表；赛后对照实际与方案，输出比较图与分段差值。"
+description: "基于耐力学社体感一致配速思路的独立实现。把 GPX/KML 路线或 FIT 轨迹转换成按检查点分段的体感一致越野跑配速表，或把 FIT 活动与 checkpoint 方案对照，查看累计差距、分段耗时与地形差异。仓库地址：https://github.com/yihouzenmeban/trail-running-pace"
+summary: "赛前生成多目标越野跑配速表（SVG）；赛后对照实际与方案，输出比较图与分段差值。"
 author: yihouzenmeban
 category: development
 tags:
@@ -16,6 +16,8 @@ tags:
 triggers:
   - 生成配速表
   - 体感一致配速表
+  - 越野跑配速表
+  - 越野跑赛后对照
   - pace chart
   - 赛后对照
   - 活动对比

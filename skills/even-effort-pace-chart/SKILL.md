@@ -1,17 +1,17 @@
 ---
 name: even-effort-pace-chart
 slug: even-effort-pace-chart
-displayName: 体感一致配速表
-display_name: 体感一致配速表
+displayName: 越野跑体感一致配速表
+display_name: 越野跑体感一致配速表
 display_name_en: Even-Effort Pace Chart
 description: "Convert GPX/KML routes or recorded FIT tracks into even-effort trail running pace charts, or compare FIT activities with checkpoint plans and segment elapsed times. Use for race pacing, SVG pace tables, or post-race actual-versus-plan comparisons. Independent implementation inspired by the even-effort pacing approach from 耐力学社. Repository: https://github.com/yihouzenmeban/trail-running-pace"
-description_zh: "基于耐力学社体感一致配速思路的独立实现。把 GPX/KML 路线或 FIT 轨迹转换成按检查点分段的体感一致越野配速表，或把 FIT 活动与检查点方案对照，查看累计差距、分段耗时与地形差异。需要 Python 3.10+；FIT 需可选依赖，天气预报和佳明活动获取按需联网。仓库地址：https://github.com/yihouzenmeban/trail-running-pace"
+description_zh: "基于耐力学社体感一致配速思路的独立实现。把 GPX/KML 路线或 FIT 轨迹转换成按检查点分段的体感一致越野跑配速表，或把 FIT 活动与检查点方案对照，查看累计差距、分段耗时与地形差异。需要 Python 3.10+；FIT 需可选依赖，天气预报和佳明活动获取按需联网。仓库地址：https://github.com/yihouzenmeban/trail-running-pace"
 description_en: "Convert GPX/KML routes or recorded FIT tracks into even-effort trail running pace charts, or compare FIT activities with checkpoint plans and segment elapsed times. Requires Python 3.10+ and an optional FIT dependency; weather forecasts and Garmin activity retrieval use the network only when requested. Independent implementation inspired by the even-effort pacing approach from 耐力学社. Repository: https://github.com/yihouzenmeban/trail-running-pace"
-summary: "赛前生成多目标 SVG 配速表；赛后对照实际与方案，输出比较图与分段差值。"
+summary: "赛前生成多目标越野跑配速表（SVG）；赛后对照实际与方案，输出比较图与分段差值。"
 tags: ["越野跑", "配速表", "GPX", "KML", "FIT", "耐力运动"]
 license: MIT
 homepage: https://github.com/yihouzenmeban/trail-running-pace
-examples_zh: ["根据我提供的 GPX 轨迹生成体感一致配速表，目标完赛 14 小时。", "用我的 FIT 活动与赛前路线和配速方案对照，查看各站累计差距和区间耗时。"]
+examples_zh: ["根据我提供的 GPX 轨迹生成越野跑体感一致配速表，目标完赛 14 小时。", "用我的 FIT 活动与赛前路线和配速方案对照，查看各站累计差距和区间耗时。"]
 examples_en: ["Create an even-effort pace chart for my GPX route with a 14-hour finish target.", "Compare my FIT activity with the race route and pacing plan, showing checkpoint gaps and segment times."]
 version: 1.0.4
 author: yihouzenmeban

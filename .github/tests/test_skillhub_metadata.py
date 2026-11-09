@@ -53,6 +53,24 @@ class SkillHubMetadataTests(unittest.TestCase):
         self.assertTrue(tags)
         self.assertEqual(tags, manifest_tags)
 
+    def test_trail_running_search_metadata(self):
+        for document, fields in (
+            (self.frontmatter, ("displayName", "summary")),
+            (self.manifest, ("displayName", "description", "summary")),
+        ):
+            for name in fields:
+                with self.subTest(field=name):
+                    self.assertIn("越野跑", self.field(document, name))
+
+        match = re.search(
+            r"(?m)^triggers:[ \t]*\r?\n((?:[ \t]+-[ \t]+[^\r\n]+\r?\n)+)",
+            self.manifest,
+        )
+        self.assertIsNotNone(match, "Expected a triggers list in manifest.yaml")
+        triggers = [line.strip()[1:].strip() for line in match.group(1).splitlines()]
+        self.assertIn("越野跑配速表", triggers)
+        self.assertIn("越野跑赛后对照", triggers)
+
 
 if __name__ == "__main__":
     unittest.main()

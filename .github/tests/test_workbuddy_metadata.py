@@ -42,6 +42,13 @@ class WorkBuddyMetadataTests(unittest.TestCase):
                 self.assertGreaterEqual(len(examples), 2)
                 self.assertTrue(all(isinstance(item, str) and item.strip() for item in examples))
 
+    def test_chinese_search_metadata_mentions_trail_running(self):
+        self.assertEqual(self.field("display_name"), self.field("displayName"))
+        self.assertIn("越野跑", self.field("display_name"))
+        self.assertIn("越野跑", self.field("description_zh"))
+        examples = json.loads(self.field("examples_zh"))
+        self.assertTrue(any("越野跑" in example for example in examples))
+
     def test_packaged_license_matches_repository_license(self):
         self.assertEqual((SKILL / "LICENSE").read_bytes(), (ROOT / "LICENSE").read_bytes())
 
