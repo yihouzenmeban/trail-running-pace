@@ -40,11 +40,9 @@ Additional trials produced 5290.0 m with a 60 m window and 10 m threshold, and 4
 
 ### Post-race FIT comparison
 
-After the October 31, 2026 race, recomputing the route from recorded FIT device distance and per-record elevations produced approximately 4783 m ascent. Garmin displayed 5019 m, versus approximately 5965 m on the pre-race GPX. Inputs or statistical definitions differ; no rescaling forces agreement.
+After the race, recomputing the route from recorded FIT device distance and per-record elevations with the same no-averaging + 10 m algorithm changed CP5→CP6 ascent from 722.6 m on the pre-race GPX to 273.0 m on the FIT. Position comparisons show multi-point oscillations on the original GPX with smaller fluctuations at corresponding FIT locations. Continuous oscillations above the threshold still count; no isolated spikes does not imply error-free input.
 
-With the same no-averaging + 10 m algorithm, CP3→CP4 ascent changed from 844.8 m on the GPX to 635.2 m on the FIT, and CP5→CP6 changed from 722.6 m to 273.0 m. Position comparisons show multi-point oscillations on the original GPX with smaller fluctuations at corresponding FIT locations. Continuous oscillations above the threshold still count; no isolated spikes does not imply error-free input.
-
-This adds comparative evidence, not surveyed elevation validation or an automatic change to defaults. See the [Huizhou Ancient City example](https://github.com/yihouzenmeban/trail-running-pace/blob/main/examples/huizhou-gucheng-100k/README.en.md#post-race-activity-comparison) for full segment ascent/descent and pacing effects. The personal FIT is not published, so that part is available for viewing and understanding metric definitions only.
+This adds comparative evidence, not surveyed elevation validation or an automatic change to defaults. See the [Huizhou Ancient City example](https://github.com/yihouzenmeban/trail-running-pace/blob/main/examples/huizhou-gucheng-100k/README.en.md#post-race-activity-comparison) for route and platform totals, full segment ascent/descent, and pacing effects. The personal FIT is not published, so that part is available for viewing and understanding metric definitions only.
 
 ## Selecting a method
 

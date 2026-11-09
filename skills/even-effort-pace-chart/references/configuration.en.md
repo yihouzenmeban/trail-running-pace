@@ -4,6 +4,13 @@
 
 Run with Python 3.10+. GPX/KML pace charts use only the standard library; FIT input needs an optional dependency. Default generation is offline; optional time-based water planning can fetch weather online or use user-confirmed manual conditions. Paths in these examples assume the repository root. For an installed Skills package, resolve `scripts/pace_chart.py` relative to the package directory.
 
+Jump to a task:
+
+- **Generate your first chart:** [inspect the route](#inspect) → [configure a target](#target-only-configuration) → [generate and export](#generate-and-outputs).
+- **Routes and stations:** [KML](#kml-input), [FIT](#fit-route-input), [CP selection](#cp-selection-and-overrides), and [manual CPs](#manual-cp-list).
+- **Adjust settings:** [parameters and defaults](#parameters), [parenthesized display](#parenthesized-display), and [legacy ascent settings](#previous-window-method-and-explicit-filtering).
+- **Water and weather:** [time-based water planning](#time-based-water-planning), including automatic forecasts and manual conditions.
+
 ## Defaults and overrides
 
 A finish target is required. Omitted optional fields use script defaults; when editing an existing configuration, other fields retain their configured values. See the [parameter table](#parameters) for all defaults.
@@ -173,16 +180,16 @@ See the [model and limitations](model.en.md) for elevation filtering and timing 
 
 ## Time-based water planning
 
-The default `"water_mode": "distance"` compares water by equivalent distance and requires no network. In `"time"` mode, next-leg water is `(next-leg moving seconds / 3600 + buffer minutes / 60) * departure drinking rate`; station rest is excluded. The user confirms the rate using personal experience, weather, and station conditions. The program does not apply an automatic weather multiplier.
+The default `"water_mode": "distance"` compares water by equivalent distance and requires no network. In `"time"` mode, next-leg water uses moving time, the per-leg buffer, and the departure drinking rate; station rest is excluded. The user confirms the rate using personal experience, weather, and station conditions. The program does not apply an automatic weather multiplier; see the [model](model.en.md#water-and-uncertainty) for the formula.
 
 The former `"water_mode": "manual"` is no longer supported. Remove it to use the default distance mode, or switch to `"time"` and supply the rate and weather as described below. Manual weather remains available.
 
-This configuration starts an automatic weather preview. Replace the date, time, time zone, and target with the actual race details:
+This configuration starts an automatic weather preview. **Before running it, replace the `start_time` placeholder with the actual future race date and local start time**, and adjust the time zone and target as needed; the placeholder is not a valid date. Forecasts cover at most the next 16 days, subject to service availability. Use the manual conditions below if the race falls outside the available range.
 
 ```json
 {
   "targets": ["14:00"],
-  "start_time": "2026-11-06 06:00",
+  "start_time": "YYYY-MM-DD HH:MM",
   "water_mode": "time",
   "water_timezone": "Asia/Shanghai",
   "output_formats": ["svg", "json"]

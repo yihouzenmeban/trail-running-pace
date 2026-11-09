@@ -46,13 +46,13 @@ Choose one of two usage modes:
    1. Open the [WorkBuddy Skill sharing page](https://www.workbuddy.cn/share/asset?shareCode=VxFVK8iJONQ7o2r3K9ffpU&sig=q3nO3wLULv--gGj0), then follow the prompts to install it in the WorkBuddy client.
    2. Confirm that the Skill is enabled in the installed skills list.
 
-4. **ClawHub**: if you use OpenClaw, install it with the ClawHub CLI; requires Node.js:
+4. **OpenClaw**: use your OpenClaw installation to install from ClawHub:
 
    ```bash
-   npx -y clawhub install @yihouzenmeban/even-effort-pace-chart
+   openclaw skills install @yihouzenmeban/even-effort-pace-chart
    ```
 
-   Installs the complete skill to `skills/@yihouzenmeban/even-effort-pace-chart/`, scripts and references included. You can also view it on [ClawHub](https://clawhub.ai/yihouzenmeban/skills/even-effort-pace-chart).
+   This installs into the selected workspace by default; add `--global` to install into the shared local skills directory. Agent visibility remains subject to configuration. You can also install with the [standalone ClawHub CLI](https://docs.openclaw.ai/clawhub/cli) or view the [ClawHub listing](https://clawhub.ai/yihouzenmeban/skills/even-effort-pace-chart).
 
 #### First use
 
@@ -175,5 +175,7 @@ Skill tests cover route processing, pacing, and activity comparisons. Real-cours
 When a commit affecting `skills/even-effort-pace-chart/` is pushed to `main`, the [release workflow](.github/workflows/release-skill.yml) runs the release tests, increments the patch version in both metadata files, and creates a version commit on `main`, a tag, and a GitHub Release with a ZIP containing only the Skill directory. Changes to Skill reference documents also trigger this workflow; sync the generated version commit before continuing development.
 
 ## Sources and copyright
+
+The project code and Skill package use the [MIT license](LICENSE). [ClawHub's publishing rules](https://docs.openclaw.ai/clawhub/skill-format#license) state that skills published on the platform use MIT-0, which differs from this project's MIT declaration. Check the platform rules and applicable permissions before publishing or updating it on ClawHub.
 
 The [article and illustration archive](docs/reference/) preserves the original source and copyright notice. Rights remain with their respective holders; use of those materials is subject to the original notice. Race-route and activity-comparison provenance is listed in each example's notes.

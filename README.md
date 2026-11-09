@@ -46,13 +46,13 @@
    1. 打开 [WorkBuddy 技能分享页](https://www.workbuddy.cn/share/asset?shareCode=VxFVK8iJONQ7o2r3K9ffpU&sig=q3nO3wLULv--gGj0)，按提示在 WorkBuddy 客户端安装。
    2. 在「专家·技能·连接器 → 技能 → 已安装」中确认该技能已启用。
 
-4. **ClawHub**：如果你使用 OpenClaw，用 ClawHub CLI 安装，需要 Node.js：
+4. **OpenClaw**：使用已安装的 OpenClaw，从 ClawHub 安装：
 
    ```bash
-   npx -y clawhub install @yihouzenmeban/even-effort-pace-chart
+   openclaw skills install @yihouzenmeban/even-effort-pace-chart
    ```
 
-   装到 `skills/@yihouzenmeban/even-effort-pace-chart/`，内容完整（脚本、参考文档都在里面）。也可以在 [ClawHub 页面](https://clawhub.ai/yihouzenmeban/skills/even-effort-pace-chart)查看。
+   默认安装到当前选定的工作区；使用 `--global` 可安装到本机共享技能目录，代理的可见性仍受其配置限制。也可通过[独立 ClawHub CLI](https://docs.openclaw.ai/clawhub/cli) 安装，或查看 [ClawHub 页面](https://clawhub.ai/yihouzenmeban/skills/even-effort-pace-chart)。
 
 #### 首次使用
 
@@ -173,5 +173,7 @@ python3 -m unittest discover -s .github/tests -v
 推送涉及 `skills/even-effort-pace-chart/` 的提交到 `main` 后，[发布工作流](.github/workflows/release-skill.yml)会运行发布测试、递增补丁版本并同步两个版本字段，再向 `main` 写入版本提交、创建标签和 GitHub Release，上传仅包含技能目录的 ZIP。技能参考文档的修改也会触发该流程；继续开发前请同步自动生成的版本提交。
 
 ## 来源与版权
+
+项目代码和技能包采用 [MIT 许可](LICENSE)。[ClawHub 发布规则](https://docs.openclaw.ai/clawhub/skill-format#license)规定通过该平台发布的技能使用 MIT-0，与本项目声明的 MIT 不同；再次向 ClawHub 发布或更新前，需核实平台规则和相关授权。
 
 [参考文章及配图归档](docs/reference/)保留原文来源与版权声明，权利归原权利人所有，使用条件以原文声明为准。比赛轨迹与活动对比的来源见各示例说明。
